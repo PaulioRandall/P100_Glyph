@@ -1,12 +1,21 @@
 <script>
+	import { Glyph } from '$lib'
+	import '../app.css'
 </script>
 
-<main>
-	<h1>&lt;page-title&gt;</h1>
-	<h2>A heading</h2>
-	<p>A paragraph...</p>
-</main>
+	<main>
+		<Glyph />
+	</main>
 
 <style>
-	
+	main {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		width: 100vw;
+		height: 100vh;
+		max-width: 100vw;
+		max-height: 100vw;
+	}
 </style>
