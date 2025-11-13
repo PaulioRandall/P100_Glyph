@@ -1,21 +1,24 @@
 import Two from 'two.js'
 import { ZUI } from 'two.js/extras/jsm/zui.js'
+import Stack from './Stack.js'
 
-export default class Canvas {
+export default class Canvas extends Stack {
+	_container
+	_two
+	_stage
+	_zui
+
 	constructor(container) {
-		const two = new Two({
+		this._container = container
+
+		this._two = new Two({
 			type: Two.Types.svg,
 			fitted: true,
 			autostart: true,
 		}).appendTo(container)
 
-		const stage = two.makeGroup()
-		const zui = new ZUI(stage)
-
-		this._container = container
-		this._two = two
-		this._stage = stage
-		this._zui = zui
+		this._stage = two.makeGroup(this._base._twoGroup)
+		this._zui = new ZUI(stage)
 	}
 
 	get container() {
@@ -34,13 +37,9 @@ export default class Canvas {
 		return this._zui
 	}
 
-	add(element) {
-		this.stage.add(element)
-	}
-
-	remove(element) {
-		this.stage.remove(element)
-	}
+	// Stack.addToTop(component, offset)
+	// Stack.addToBottom(component, offset)
+	// Stack.remove(component)
 
 	resize() {
 		this.two.fit()

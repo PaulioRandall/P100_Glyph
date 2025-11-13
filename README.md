@@ -9,10 +9,7 @@ A simple tool for creating small icons.
 ## Quick Setup
 
 ```bash
-nvm install 20
-nvm use 20
-
-git clone https://github.com/PaulioRandall/P100_glyph.git
+git clone https://github.com/PaulioRandall/P100_Glyph.git
 cd P100_glyph
 
 rm -f package-lock.json
