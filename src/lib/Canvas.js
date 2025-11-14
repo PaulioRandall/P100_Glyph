@@ -1,5 +1,6 @@
 import Two from 'two.js'
 import { ZUI } from 'two.js/extras/jsm/zui.js'
+import CanvasEvents from './CanvasEvents.js'
 
 export default class Canvas {
 	constructor(container) {
@@ -16,6 +17,8 @@ export default class Canvas {
 		this._two = two
 		this._stage = stage
 		this._zui = zui
+
+		this._canvasEvents = new CanvasEvents(this)
 	}
 
 	get container() {
@@ -34,6 +37,10 @@ export default class Canvas {
 		return this._zui
 	}
 
+	get dom() {
+		return this.two.renderer.domElement
+	}
+
 	add(element) {
 		this.stage.add(element)
 	}
@@ -46,13 +53,15 @@ export default class Canvas {
 		this.two.fit()
 	}
 
-	addEvent(type, listener, options = {}) {
-		const op = options
+	onCursorMove(func) {
+		this._canvasEvents.onCursorMove(func)
+	}
 
-		this.two.renderer.domElement.addEventListener(type, listener, op)
+	offCursorMove(func) {
+		this._canvasEvents.offCursorMove(func)
+	}
 
-		return () => {
-			this.two.renderer.domElement.removeEventListener(type, listener, op)
-		}
+	onEvent(type, listener, options = { capture: false }) {
+		this._canvasEvents.onEvent(type, listener, options)
 	}
 }
