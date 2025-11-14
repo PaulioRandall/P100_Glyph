@@ -1,7 +1,8 @@
 import Two from 'two.js'
 import GridPoint from './GridPoint.js'
+import { Stack } from "./ramen"
 
-export default class Grid extends Two.Group {
+export default class Grid extends Stack {
 	constructor(canvas) {
 		super()
 
@@ -47,7 +48,7 @@ export default class Grid extends Two.Group {
 
 	_addPoint(x, y) {
 		const p = new GridPoint(this, x, y)
-		this.add(p)
+		this.addToTop(p)
 		this._pointElements.push(p)
 	}
 }

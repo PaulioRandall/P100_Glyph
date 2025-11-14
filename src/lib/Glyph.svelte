@@ -1,5 +1,5 @@
 <script>
-	import Canvas from './Canvas.js'
+	import { Canvas } from './ramen'
 	import Two from 'two.js'
 	import { ZUI } from 'two.js/extras/jsm/zui.js'
 	import { onMount } from 'svelte'
@@ -20,7 +20,7 @@
 	function init() {
 		canvas = new Canvas(container)
 		grid = new Grid(canvas)
-		canvas.add(grid)
+		canvas.addToTop(grid)
 
 		setTimeout(resize, 1)
 
