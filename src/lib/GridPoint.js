@@ -1,13 +1,12 @@
 import Two from 'two.js'
-import { Stack } from './ramen'
+import { Feature } from './ramen'
 
-export default class GridPoint extends Stack {
-	constructor(grid, x, y) {
+export default class GridPoint extends Feature {
+	constructor(x, y) {
 		super()
 
-		this._grid = grid
 		this._shape = createShape(x, y)
-		this._base._twoGroup.add(this._shape)
+		this.group.add(this._shape)
 	}
 }
 

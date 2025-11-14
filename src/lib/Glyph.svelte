@@ -20,16 +20,9 @@
 	function init() {
 		canvas = new Canvas(container)
 		grid = new Grid(canvas)
-		canvas.addToTop(grid)
+		canvas.add(grid.group)
 
 		setTimeout(resize, 1)
-
-		canvas.onCursorMove((e) => {
-			// TODO: create GridEvents class to calc the closest
-			// grid point on mouse move.
-			const pos = { x: e.offsetX, y: e.offsetY }
-			console.log(pos)
-		})
 	}
 
 	function resize() {

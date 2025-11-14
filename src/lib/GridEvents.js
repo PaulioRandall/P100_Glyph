@@ -23,6 +23,7 @@
 	})
 */
 
+// TODO: REWRITE!!!!
 export default class CanvasEvents {
 	_canvas
 

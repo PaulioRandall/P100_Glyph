@@ -1,8 +1,8 @@
 import Two from 'two.js'
 import GridPoint from './GridPoint.js'
-import { Stack } from "./ramen"
+import { Feature } from './ramen'
 
-export default class Grid extends Stack {
+export default class Grid extends Feature {
 	constructor(canvas) {
 		super()
 
@@ -10,7 +10,7 @@ export default class Grid extends Stack {
 		this._size = 5
 
 		this._pointLocations = []
-		this._pointElements = []
+		this._points = []
 
 		this.resize()
 	}
@@ -26,8 +26,12 @@ export default class Grid extends Stack {
 	}
 
 	_clear() {
-		this._pointElements.forEach((pe) => pe.remove())
-		this._pointElements.splice(0)
+		const points = this._points
+
+		while (points.length > 0) {
+			const p = points.pop()
+			this.group.remove(p.group)
+		}
 	}
 
 	_regeneratePointLocations() {
@@ -36,20 +40,19 @@ export default class Grid extends Stack {
 			this._size,
 			0.5 // Grid padding
 		)
-		this._pointLocations.splice(0)
-		this._pointLocations.push(...locations)
+
+		this._pointLocations.splice(0, this._pointLocations.length, ...locations)
 	}
 
 	_renderPoints() {
 		for (const pl of this._pointLocations) {
-			this._addPoint(pl.x, pl.y)
+			const p = new GridPoint(pl.x, pl.y)
+			this._points.push(p)
 		}
-	}
 
-	_addPoint(x, y) {
-		const p = new GridPoint(this, x, y)
-		this.addToTop(p)
-		this._pointElements.push(p)
+		for (const p of this._points) {
+			this.group.add(p.group)
+		}
 	}
 }
 
