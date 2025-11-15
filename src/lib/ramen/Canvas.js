@@ -1,23 +1,30 @@
 import Two from 'two.js'
 import { ZUI } from 'two.js/extras/jsm/zui.js'
+import Group from './Group.js'
 
 export default class Canvas {
-	_container
-	_two
-	_stage
-	_zui
+	_container;
+	_two;
+	_stage;
+	_zui;
+
+	_isInit = false;
+
+	_loaders = [] // (canvas) => Unloader
+	_unloaders = [] // (canvas) => {}
 
 	constructor(container) {
 		this._container = container
+	}
 
+	init() {
 		this._two = new Two({
 			type: Two.Types.svg,
 			fitted: true,
 			autostart: true,
-		}).appendTo(container)
+		}).appendTo(this._container)
 
-		this._stage = this._two.makeGroup()
-		this._zui = new ZUI(this._stage)
+		this.reload()
 	}
 
 	get container() {
@@ -36,7 +43,60 @@ export default class Canvas {
 		return this.two.renderer.domElement
 	}
 
-	resize() {
+	get initialised() {
+		return this._isInit
+	}
+
+	get width() {
+		return this._two.width
+	}
+
+	get height() {
+		return this._two.height
+	}
+
+	onload(load) {
+		this._loaders.push(load)
+
+		if (this._isInit) {
+			this._doLoad(load)
+		}
+	}
+
+	_doLoad(load) {
+		const unload = load(this)
+
+		if (unload) {
+			this._unloaders.push(unload)
+		}
+	}
+
+	reload() {
+		this._unloadAll()
+
+		this._two.clear()
+		this._stage = new Group()
+		this._zui = new ZUI(this._stage)
+
+		this._two.add(this._stage)
+
+		this._loadAll()
+	}
+
+	_unloadAll() {
+		while (this._unloaders.length > 0) {
+			const unload = this._unloaders.pop()
+			unload(this)
+		}
+	}
+
+	_loadAll() {
+		for (const load of this._loaders) {
+			this._doLoad(load)
+		} 
+	}
+
+	fitToContainer() {
 		this.two.fit()
 	}
 
@@ -46,5 +106,10 @@ export default class Canvas {
 
 	remove(element) {
 		this._stage.remove(element)
+	}
+
+	clear() {
+		this._stage.clear()
+		super.clear()
 	}
 }

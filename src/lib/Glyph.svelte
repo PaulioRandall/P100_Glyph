@@ -3,54 +3,35 @@
 	import Two from 'two.js'
 	import { ZUI } from 'two.js/extras/jsm/zui.js'
 	import { onMount } from 'svelte'
-	import Grid from './Grid.js'
-
-	let windowWidth = $state(100)
-	let windowHeight = $state(100)
-	let windowPadding = 100
+	import { addGrid, removeGrid } from './grid.js'
 
 	let container = null
 	let containerSize = $state(100)
 
 	let canvas = null
-	let grid = null
 
-	onMount(init)
-
-	function init() {
+	onMount(() => {
 		canvas = new Canvas(container)
-		grid = new Grid(canvas)
-		canvas.add(grid.group)
 
-		setTimeout(resize, 1)
-	}
+		canvas.onload((c) => {
+			addGrid(c)
+			return removeGrid
+		})
 
-	function resize() {
-		containerSize = Math.min(windowWidth, windowHeight) - windowPadding
-		canvas.resize()
-		grid.resize()
-	}	
-
-	$effect(() => {
-		resize(canvas, grid, windowWidth, windowHeight)
+		canvas.init()
 	})
 </script>
 
-<svelte:window 
-	bind:innerWidth={windowWidth}
-	bind:innerHeight={windowHeight} />
-
 <div
 	bind:this={container}
-	style:width="{containerSize}px"
-	style:height="{containerSize}px"
 	class="container">
 	<!-- InnerHTML handled by Two instance -->
 </div>
 
 <style>
 	.container {
-		aspect-ratio: 1 / 1;
+		width: 480px;
+		height: 480px;
 
 		border: 1px solid black;
 	}

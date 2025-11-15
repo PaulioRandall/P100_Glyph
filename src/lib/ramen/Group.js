@@ -1,0 +1,20 @@
+import Two from 'two.js'
+
+// Extends Two.Group to add functionality such as sorting
+// and clearing.
+export default class Group extends Two.Group {
+	add(element) {
+		super.add(element)
+	}
+
+	remove(element) {
+		super.remove(element)
+	}
+
+	clear() {
+		const children = [...this.children]
+		for (const child of children) {
+			child.remove()
+		}
+	}
+}
