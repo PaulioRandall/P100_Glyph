@@ -3,9 +3,13 @@ import { Group } from './ramen'
 
 const SIZE = 5
 
-let CELLS = []
-let GROUP = new Group()
 let INIT = false
+let GROUP = new Group()
+let CELLS = []
+let LISTENERS = []
+
+let HOVERED_CELL = null
+let HIGHLIGHT_SHAPE = null
 
 export function addGrid(canvas) {
 	destroyGrid(canvas)
@@ -19,6 +23,10 @@ export function removeGrid(canvas) {
 function destroyGrid(canvas) {
 	if (INIT) {
 		INIT = false
+
+		removeEventListeners(canvas)
+
+		clearHovered()
 		canvas.remove(GROUP)
 
 		CELLS.splice(0)
@@ -29,8 +37,7 @@ function destroyGrid(canvas) {
 function createGrid(canvas) {
 	CELLS = generateCellData(canvas.width, SIZE)
 	GROUP = generateCellShapes(CELLS)
-
-	//addEventListeners(canvas, GROUP)
+	addEventListeners(canvas)
 
 	canvas.add(GROUP)
 	INIT = true
@@ -54,7 +61,9 @@ function makeCell(col, row, cellLength) {
 	const left = cellLength * col
 	const centerOffset = cellLength / 2
 
-	return {
+	const cell = {
+		col,
+		row,
 		left,
 		right: left + cellLength,
 		top,
@@ -64,10 +73,16 @@ function makeCell(col, row, cellLength) {
 		w: cellLength,
 		h: cellLength,
 	}
+
+	cell.contains = ({ x, y }) => {
+		return x > cell.left && x < cell.right && y > cell.top && y < cell.bottom
+	}
+
+	return cell
 }
 
 function generateCellShapes(cells) {
-	const g = new Two.Group()
+	const g = new Group()
 
 	for (const cell of cells) {
 		g.add(createCellShape(cell))
@@ -77,7 +92,7 @@ function generateCellShapes(cells) {
 }
 
 function createCellShape(cell) {
-	const g = new Two.Group()
+	const g = new Group()
 
 	g.add(createCellCenterPoint(cell))
 	g.add(createCellBorder(cell))
@@ -100,7 +115,7 @@ function createCellBorder({ x, y, w, h }) {
 
 	shape.fill = 'none'
 	shape.stroke = 'black'
-	shape.strokeWidth = 2
+	shape.linewidth = 2
 
 	return shape
 }
@@ -115,6 +130,68 @@ function makeCellShape(cell) {
 	return new Two.Group(point)
 }
 
-function addEventListeners(canvas) {}
+function addEventListeners(canvas) {
+	LISTENERS.push({
+		type: 'mousemove',
+		listener: newPointProximityListener(canvas),
+	})
 
-function pointProximityListener(e) {}
+	for (const l of LISTENERS) {
+		canvas.dom.addEventListener(l.type, l.listener)
+	}
+}
+
+function removeEventListeners(canvas) {
+	for (const l of LISTENERS) {
+		canvas.dom.removeEventListener(l.type, l.listener)
+	}
+	LISTENERS = []
+}
+
+function newPointProximityListener(canvas) {
+	return (e) => {
+		const cursor = {
+			x: e.offsetX,
+			y: e.offsetY,
+		}
+
+		clearHovered()
+		HOVERED_CELL = identifyHoveredCell(cursor)
+
+		if (HOVERED_CELL) {
+			HIGHLIGHT_SHAPE = createHighlightShape(HOVERED_CELL)
+			GROUP.add(HIGHLIGHT_SHAPE)
+		}
+	}
+}
+
+function clearHovered() {
+	HOVERED_CELL = null
+
+	if (HIGHLIGHT_SHAPE) {
+		GROUP.remove(HIGHLIGHT_SHAPE)
+		HIGHLIGHT_SHAPE = null
+	}
+}
+
+function identifyHoveredCell(cursor) {
+	for (const c of CELLS) {
+		if (c.contains(cursor)) {
+			return c
+		}
+	}
+
+	return null
+}
+
+function createHighlightShape({ x, y }) {
+	const radius = 16
+	const shape = new Two.Circle(x, y, radius)
+
+	shape.fill = 'none'
+	shape.stroke = 'slategrey'
+	shape.linewidth = 12
+	shape.opacity = 0.5
+
+	return shape
+}
