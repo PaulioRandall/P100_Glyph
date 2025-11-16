@@ -3,27 +3,27 @@ import { ZUI } from 'two.js/extras/jsm/zui.js'
 import Group from './Group.js'
 
 export default class Canvas {
-	_container;
-	_two;
-	_stage;
-	_zui;
+	_container
+	_two
+	_stage
+	_zui
 
-	_isInit = false;
+	_isInit = false
 
 	_loaders = [] // (canvas) => Unloader
 	_unloaders = [] // (canvas) => {}
 
-	constructor(container) {
+	init(container, twoOptions = {}) {
 		this._container = container
-	}
 
-	init() {
 		this._two = new Two({
 			type: Two.Types.svg,
 			fitted: true,
 			autostart: true,
+			...twoOptions,
 		}).appendTo(this._container)
 
+		this._isInit = true
 		this.reload()
 	}
 
@@ -72,6 +72,10 @@ export default class Canvas {
 	}
 
 	reload() {
+		if (!this._isInit) {
+			return
+		}
+
 		this._unloadAll()
 
 		this._two.clear()
@@ -93,11 +97,7 @@ export default class Canvas {
 	_loadAll() {
 		for (const load of this._loaders) {
 			this._doLoad(load)
-		} 
-	}
-
-	fitToContainer() {
-		this.two.fit()
+		}
 	}
 
 	add(element) {

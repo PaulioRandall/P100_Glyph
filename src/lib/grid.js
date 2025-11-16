@@ -1,55 +1,91 @@
 import Two from 'two.js'
 import { Group } from './ramen'
 
-const GROUP = new Group()
 const SIZE = 5
 
+let CELLS = []
+let GROUP = new Group()
+let INIT = false
+
 export function addGrid(canvas) {
-	removeGrid(canvas)
-	addGridPoints(canvas, GROUP, SIZE)
-	canvas.add(GROUP)
+	destroyGrid(canvas)
+	createGrid(canvas)
 }
 
 export function removeGrid(canvas) {
-	GROUP.clear()
-	canvas.remove(GROUP)
+	destroyGrid(canvas)
 }
 
-function addGridPoints(canvas, group, size) {
-	const totalWidth = canvas.width
-	const gridPadding = 0.5
-	const gap = gapBetweenPoints(totalWidth, size, gridPadding)
+function destroyGrid(canvas) {
+	if (INIT) {
+		INIT = false
+		canvas.remove(GROUP)
 
-	forEachSquareGridCell(
-		size,
-		(col, row) => {
-			const { x, y } = calcPointLocation(col, row, gridPadding, gap)
-			const p = createPointShape(x, y)
-			group.add(p)
-		}
-	)
+		CELLS.splice(0)
+		GROUP.clear()
+	}
 }
 
-function gapBetweenPoints(width, numberOfPoints, paddingRelativeToGap) {
-	return width / (numberOfPoints - 1 + paddingRelativeToGap * 2)
+function createGrid(canvas) {
+	CELLS = generateCellData(canvas.width, SIZE)
+	GROUP = generateCellShapes(CELLS)
+
+	//addEventListeners(canvas, GROUP)
+
+	canvas.add(GROUP)
+	INIT = true
 }
 
-function forEachSquareGridCell(size, f) {
+function generateCellData(width, size) {
+	const cellLength = width / size
+	const result = []
+
 	for (let row = 0; row < size; row++) {
 		for (let col = 0; col < size; col++) {
-			f(col, row)
+			result.push(makeCell(col, row, cellLength))
 		}
 	}
+
+	return result
 }
 
-function calcPointLocation(x, y, offset, gap) {
+function makeCell(col, row, cellLength) {
+	const top = cellLength * row
+	const left = cellLength * col
+	const centerOffset = cellLength / 2
+
 	return {
-		x: (x + offset) * gap,
-		y: (y + offset) * gap,
+		left,
+		right: left + cellLength,
+		top,
+		bottom: top + cellLength,
+		x: left + centerOffset,
+		y: top + centerOffset,
+		w: cellLength,
+		h: cellLength,
 	}
 }
 
-function createPointShape(x, y) {
+function generateCellShapes(cells) {
+	const g = new Two.Group()
+
+	for (const cell of cells) {
+		g.add(createCellShape(cell))
+	}
+
+	return g
+}
+
+function createCellShape(cell) {
+	const g = new Two.Group()
+
+	g.add(createCellCenterPoint(cell))
+	g.add(createCellBorder(cell))
+
+	return g
+}
+
+function createCellCenterPoint({ x, y }) {
 	const radius = 4
 	const shape = new Two.Circle(x, y, radius)
 
@@ -58,3 +94,27 @@ function createPointShape(x, y) {
 
 	return shape
 }
+
+function createCellBorder({ x, y, w, h }) {
+	const shape = new Two.Rectangle(x, y, w, h)
+
+	shape.fill = 'none'
+	shape.stroke = 'black'
+	shape.strokeWidth = 2
+
+	return shape
+}
+
+function makeCellShape(cell) {
+	const radius = 4
+	const point = new Two.Circle(cell.centerX, cell.centerY, radius)
+
+	point.fill = 'black'
+	point.stroke = 'none'
+
+	return new Two.Group(point)
+}
+
+function addEventListeners(canvas) {}
+
+function pointProximityListener(e) {}

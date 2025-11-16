@@ -6,19 +6,18 @@
 	import { addGrid, removeGrid } from './grid.js'
 
 	let container = null
-	let containerSize = $state(100)
 
 	let canvas = null
 
 	onMount(() => {
-		canvas = new Canvas(container)
+		canvas = new Canvas()
 
 		canvas.onload((c) => {
 			addGrid(c)
 			return removeGrid
 		})
 
-		canvas.init()
+		canvas.init(container)
 	})
 </script>
 
