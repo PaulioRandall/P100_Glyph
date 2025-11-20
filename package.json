@@ -21,10 +21,10 @@
 		"@paulio/p69-svelte": "1.0.0-rc-3",
 		"@paulio/p69-util": "1.0.0-rc-2",
 		"@sveltejs/adapter-auto": "7.0.0",
-		"@sveltejs/kit": "2.48.4",
+		"@sveltejs/kit": "2.48.5",
 		"prettier": "3.6.2",
-		"svelte": "5.43.6",
+		"svelte": "5.43.12",
 		"two.js": "0.8.21",
-		"vite": "7.2.2"
+		"vite": "7.2.4"
 	}
 }
