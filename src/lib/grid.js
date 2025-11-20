@@ -11,6 +11,11 @@ let LISTENERS = []
 let HOVERED_CELL = null
 let HIGHLIGHT_SHAPE = null
 
+let MOUSE_DOWN = null
+
+let LINES = new Group()
+let LINE = null
+
 export function addGrid(canvas) {
 	destroyGrid(canvas)
 	createGrid(canvas)
@@ -26,7 +31,7 @@ function destroyGrid(canvas) {
 
 		removeEventListeners(canvas)
 
-		clearHovered()
+		clearHovered(canvas)
 		canvas.remove(GROUP)
 
 		CELLS.splice(0)
@@ -37,6 +42,7 @@ function destroyGrid(canvas) {
 function createGrid(canvas) {
 	CELLS = generateCellData(canvas.width, SIZE)
 	GROUP = generateCellShapes(CELLS)
+	GROUP.add(LINES)
 	addEventListeners(canvas)
 
 	canvas.add(GROUP)
@@ -95,7 +101,7 @@ function createCellShape(cell) {
 	const g = new Group()
 
 	g.add(createCellCenterPoint(cell))
-	g.add(createCellBorder(cell))
+	//g.add(createCellBorder(cell))
 
 	return g
 }
@@ -131,9 +137,20 @@ function makeCellShape(cell) {
 }
 
 function addEventListeners(canvas) {
+	newCellMouseDownListener
+	LISTENERS.push({
+		type: 'mousedown',
+		listener: newCellMouseDownListener(canvas),
+	})
+
 	LISTENERS.push({
 		type: 'mousemove',
 		listener: newPointProximityListener(canvas),
+	})
+
+	LISTENERS.push({
+		type: 'mouseup',
+		listener: newCellMouseUpListener(canvas),
 	})
 
 	for (const l of LISTENERS) {
@@ -155,22 +172,82 @@ function newPointProximityListener(canvas) {
 			y: e.offsetY,
 		}
 
-		clearHovered()
+		clearHovered(canvas)
 		HOVERED_CELL = identifyHoveredCell(cursor)
 
 		if (HOVERED_CELL) {
 			HIGHLIGHT_SHAPE = createHighlightShape(HOVERED_CELL)
 			GROUP.add(HIGHLIGHT_SHAPE)
+			canvas.dom.style.cursor = 'pointer'
+		}
+
+		if (HOVERED_CELL && LINE) {
+			LINE.vertices[1].x = HOVERED_CELL.x
+			LINE.vertices[1].y = HOVERED_CELL.y
 		}
 	}
 }
 
-function clearHovered() {
+function newCellMouseDownListener(canvas) {
+	return (e) => {
+		if (!MOUSE_DOWN) {
+			MOUSE_DOWN = {
+				cell: HOVERED_CELL,
+				button: e.button,
+			}
+		}
+	}
+}
+
+function newCellMouseUpListener(canvas) {
+	return (e) => {
+		const mouseDown = MOUSE_DOWN
+		MOUSE_DOWN = null
+
+		const LEFT = 0
+		const RIGHT = 2
+
+		if (!mouseDown || mouseDown.button !== e.button) {
+			return
+		}
+
+		function newLine() {
+			LINE = createLineShape()
+
+			LINE.vertices[0].x = mouseDown.cell.x
+			LINE.vertices[0].y = mouseDown.cell.y
+			LINE.vertices[1].x = mouseDown.cell.x
+			LINE.vertices[1].y = mouseDown.cell.y
+
+			LINES.add(LINE)
+		}
+
+		if (!LINE) {
+			newLine()
+			return
+		}
+
+		if (mouseDown.button === RIGHT) {
+			LINES.remove(LINE)
+			LINE = null
+			return
+		}
+
+		if (mouseDown.button === LEFT) {
+			LINE = null
+			newLine()
+			return
+		}
+	}
+}
+
+function clearHovered(canvas) {
 	HOVERED_CELL = null
 
 	if (HIGHLIGHT_SHAPE) {
 		GROUP.remove(HIGHLIGHT_SHAPE)
 		HIGHLIGHT_SHAPE = null
+		canvas.dom.style.cursor = 'auto'
 	}
 }
 
@@ -194,4 +271,15 @@ function createHighlightShape({ x, y }) {
 	shape.opacity = 0.5
 
 	return shape
+}
+
+function createLineShape() {
+	const line = new Two.Line(0, 0, 0, 0)
+
+	line.fill = 'none'
+	line.stroke = 'indianred'
+	line.linewidth = 16
+	line.cap = 'round'
+
+	return line
 }

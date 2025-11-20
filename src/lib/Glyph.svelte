@@ -23,6 +23,7 @@
 
 <div
 	bind:this={container}
+	oncontextmenu={(e) => e.preventDefault()}
 	class="container">
 	<!-- InnerHTML handled by Two instance -->
 </div>
