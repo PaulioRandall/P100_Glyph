@@ -9,21 +9,16 @@ import GridCursorEvent from './GridCursorEvent.js'
 
 export default class Grid extends Group {
 	_canvas = null
-	_cellsPerEdge = 7
+	_cellsPerEdge = 1
 
 	_cursor = new GridCursorEvent(this)
-	_mouseDown = null
 
 	_cells = new Group()
 	_hoveredCell = new HoveredGridCell(this)
 
 	_listeners = []
 
-	// TODO: This shouldn't be in the grid class
-	_diagram = new Diagram()
-	_line = null
-
-	constructor(canvas, cellsPerEdge = 5) {
+	constructor(canvas, cellsPerEdge = 9) {
 		super()
 
 		this._canvas = canvas
@@ -31,7 +26,6 @@ export default class Grid extends Group {
 
 		this.add(this._cells)
 		this.add(this._hoveredCell)
-		this.add(this._diagram)
 
 		const cells = generateSquareGridCells(canvas.width, cellsPerEdge)
 
@@ -46,6 +40,14 @@ export default class Grid extends Group {
 
 	get canvas() {
 		return this._canvas
+	}
+
+	get cursor() {
+		return this._cursor
+	}
+
+	get hoveredCell() {
+		return this._hoveredCell
 	}
 
 	cellAt(x, y) {
@@ -65,15 +67,19 @@ export default class Grid extends Group {
 	}
 
 	_addEventListeners() {
-		const add = this.canvas.dom.addEventListener
-		add('mousedown', this._newCellMouseDownListener())
-		add('mousemove', this._newPointProximityListener())
-		add('mouseup', this._newCellMouseUpListener())
+		this._listeners.push({
+			type: 'mousemove',
+			handler: this._newPointProximityListener(),
+		})
+
+		for (const { type, handler } of this._listeners) {
+			this.canvas.dom.addEventListener(type, handler)
+		}
 	}
 
 	_removeEventListeners() {
-		ArrayUtil.removeAll(this._listeners, ({ type, listener }) => {
-			this.canvas.dom.removeEventListener(type, listener)
+		ArrayUtil.removeAll(this._listeners, ({ type, handler }) => {
+			this.canvas.dom.removeEventListener(type, handler)
 		})
 	}
 
@@ -93,55 +99,6 @@ export default class Grid extends Group {
 
 			if (hovered.cell && grid._line) {
 				grid._line.setEnd(hovered.cell)
-			}
-		}
-	}
-
-	// TODO: Shouldn't be in the grid class
-	_newCellMouseDownListener() {
-		const grid = this
-
-		return (e) => {
-			if (!grid._mouseDown) {
-				grid._mouseDown = new GridCursorEvent(grid)
-				grid._mouseDown.updateFromEvent(e)
-			}
-		}
-	}
-
-	_newCellMouseUpListener() {
-		const grid = this
-
-		return (e) => {
-			const mouseDown = grid._mouseDown
-			const diagram = grid._diagram
-
-			if (!mouseDown?.isButton(e.button)) {
-				return
-			}
-
-			grid._mouseDown = null
-
-			function newLine() {
-				grid._line = new Line(mouseDown.cell)
-				diagram.add(grid._line)
-			}
-
-			if (!grid._line) {
-				newLine()
-				return
-			}
-
-			if (mouseDown.isRightButton()) {
-				diagram.remove(grid._line)
-				grid._line = null
-				return
-			}
-
-			if (mouseDown.isLeftButton()) {
-				grid._line = null
-				newLine()
-				return
 			}
 		}
 	}
