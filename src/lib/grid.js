@@ -1,5 +1,6 @@
 import Two from 'two.js'
 import { Group } from './ramen'
+import GridCell from './GridCell.js'
 
 const SIZE = 5
 
@@ -50,41 +51,17 @@ function createGrid(canvas) {
 }
 
 function generateCellData(width, size) {
-	const cellLength = width / size
+	const length = width / size
 	const result = []
 
 	for (let row = 0; row < size; row++) {
 		for (let col = 0; col < size; col++) {
-			result.push(makeCell(col, row, cellLength))
+			const c = new GridCell(col, row, length)
+			result.push(c)
 		}
 	}
 
 	return result
-}
-
-function makeCell(col, row, cellLength) {
-	const top = cellLength * row
-	const left = cellLength * col
-	const centerOffset = cellLength / 2
-
-	const cell = {
-		col,
-		row,
-		left,
-		right: left + cellLength,
-		top,
-		bottom: top + cellLength,
-		x: left + centerOffset,
-		y: top + centerOffset,
-		w: cellLength,
-		h: cellLength,
-	}
-
-	cell.contains = ({ x, y }) => {
-		return x > cell.left && x < cell.right && y > cell.top && y < cell.bottom
-	}
-
-	return cell
 }
 
 function generateCellShapes(cells) {
@@ -253,7 +230,7 @@ function clearHovered(canvas) {
 
 function identifyHoveredCell(cursor) {
 	for (const c of CELLS) {
-		if (c.contains(cursor)) {
+		if (c.contains(cursor.x, cursor.y)) {
 			return c
 		}
 	}
