@@ -5,6 +5,7 @@ import Line from './Line.js'
 import HoveredGridCell from './HoveredGridCell.js'
 import Cursor from './Cursor.js'
 import Diagram from './Diagram.js'
+import ArrayUtil from './ArrayUtil.js'
 
 let INIT = false
 let GROUP = new Group()
@@ -17,8 +18,7 @@ let HOVERED = null
 
 let LISTENERS = []
 
-// TODO: Could be contained within a 'Diagram' class
-let LINES = new Group()
+const DIAGRAM = new Diagram()
 let LINE = null
 
 export function addGrid(canvas, cellsPerEdge = 7) {
@@ -51,7 +51,7 @@ function createGrid(canvas, cellsPerEdge) {
 	HOVERED.init()
 
 	GROUP = new Group(...CELLS)
-	GROUP.add(LINES)
+	GROUP.add(DIAGRAM)
 	GROUP.add(HOVERED)
 
 	addEventListeners(canvas)
@@ -64,13 +64,11 @@ function generateSquareGridCells(gridWidth, cellsPerEdge) {
 	const cellWidth = gridWidth / cellsPerEdge
 	const result = []
 
-	for (let row = 0; row < cellsPerEdge; row++) {
-		for (let col = 0; col < cellsPerEdge; col++) {
-			const c = new GridCell(col, row, cellWidth)
-			c.init()
-			result.push(c)
-		}
-	}
+	ArrayUtil.walkGrid(cellsPerEdge, cellsPerEdge, (col, row) => {
+		const c = new GridCell(col, row, cellWidth)
+		c.init()
+		result.push(c)
+	})
 
 	return result
 }
@@ -98,10 +96,9 @@ function addEventListeners(canvas) {
 }
 
 function removeEventListeners(canvas) {
-	for (const l of LISTENERS) {
-		canvas.dom.removeEventListener(l.type, l.listener)
-	}
-	LISTENERS = []
+	ArrayUtil.removeAll(LISTENERS, ({ type, listener }) => {
+		canvas.dom.removeEventListener(type, listener)
+	})
 }
 
 function newPointProximityListener(canvas) {
@@ -138,7 +135,7 @@ function newCellMouseUpListener(canvas) {
 
 		function newLine() {
 			LINE = new Line(mouseDown.gridCell)
-			LINES.add(LINE)
+			DIAGRAM.add(LINE)
 		}
 
 		if (!LINE) {
@@ -147,7 +144,7 @@ function newCellMouseUpListener(canvas) {
 		}
 
 		if (mouseDown.isRightButton()) {
-			LINES.remove(LINE)
+			DIAGRAM.remove(LINE)
 			LINE = null
 			return
 		}
