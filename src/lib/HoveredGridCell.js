@@ -1,7 +1,7 @@
 import Two from 'two.js'
 import { Group } from './ramen'
 
-export default class SelectedGridCell extends Group {
+export default class HoveredGridCell extends Group {
 	canvas = null
 	cell = null
 	haloShape = null
@@ -22,8 +22,8 @@ export default class SelectedGridCell extends Group {
 		return !!this.cell
 	}
 
-	select(cell) {
-		this.deselect()
+	hover(cell) {
+		this.unhover()
 
 		if (!cell) {
 			return
@@ -40,7 +40,7 @@ export default class SelectedGridCell extends Group {
 		this.canvas.dom.style.cursor = 'pointer'
 	}
 
-	deselect() {
+	unhover() {
 		if (this.cell) {
 			this.hide()
 			this.cell.isHovered = false

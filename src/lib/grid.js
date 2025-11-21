@@ -2,18 +2,22 @@ import Two from 'two.js'
 import { Group } from './ramen'
 import GridCell from './GridCell.js'
 import Line from './Line.js'
-import SelectedGridCell from './SelectedGridCell.js'
+import HoveredGridCell from './HoveredGridCell.js'
+import Cursor from './Cursor.js'
+import Diagram from './Diagram.js'
 
 let INIT = false
 let GROUP = new Group()
 
 let CELLS = []
-let SELECTED = null
+
+let CURSOR = null
+let MOUSE_DOWN = null
+let HOVERED = null
 
 let LISTENERS = []
 
-let MOUSE_DOWN = null
-
+// TODO: Could be contained within a 'Diagram' class
 let LINES = new Group()
 let LINE = null
 
@@ -32,7 +36,7 @@ function destroyGrid(canvas) {
 
 		removeEventListeners(canvas)
 
-		SELECTED.deselect()
+		HOVERED.unhover()
 		canvas.remove(GROUP)
 
 		CELLS.splice(0)
@@ -43,12 +47,12 @@ function destroyGrid(canvas) {
 function createGrid(canvas, cellsPerEdge) {
 	CELLS = generateSquareGridCells(canvas.width, cellsPerEdge)
 
-	SELECTED = new SelectedGridCell(canvas)
-	SELECTED.init()
+	HOVERED = new HoveredGridCell(canvas)
+	HOVERED.init()
 
 	GROUP = new Group(...CELLS)
 	GROUP.add(LINES)
-	GROUP.add(SELECTED)
+	GROUP.add(HOVERED)
 
 	addEventListeners(canvas)
 
@@ -102,20 +106,15 @@ function removeEventListeners(canvas) {
 
 function newPointProximityListener(canvas) {
 	return (e) => {
-		const cursor = {
-			x: e.offsetX,
-			y: e.offsetY,
+		HOVERED.unhover()
+		CURSOR = Cursor.fromEvent(e, CELLS)
+
+		if (CURSOR.gridCell) {
+			HOVERED.hover(CURSOR.gridCell)
 		}
 
-		SELECTED.deselect()
-		const hoveredCell = identifyHoveredCell(cursor)
-
-		if (hoveredCell) {
-			SELECTED.select(hoveredCell)
-		}
-
-		if (hoveredCell && LINE) {
-			LINE.setEnd(hoveredCell)
+		if (CURSOR.gridCell && LINE) {
+			LINE.setEnd(CURSOR.gridCell)
 		}
 	}
 }
@@ -123,10 +122,7 @@ function newPointProximityListener(canvas) {
 function newCellMouseDownListener(canvas) {
 	return (e) => {
 		if (!MOUSE_DOWN) {
-			MOUSE_DOWN = {
-				cell: SELECTED.cell,
-				button: e.button,
-			}
+			MOUSE_DOWN = Cursor.fromEvent(e, CELLS)
 		}
 	}
 }
@@ -136,20 +132,12 @@ function newCellMouseUpListener(canvas) {
 		const mouseDown = MOUSE_DOWN
 		MOUSE_DOWN = null
 
-		const LEFT = 0
-		const RIGHT = 2
-
-		if (!mouseDown || mouseDown.button !== e.button) {
+		if (!mouseDown || !mouseDown.isButton(e.button)) {
 			return
 		}
 
 		function newLine() {
-			LINE = new Line()
-			LINE.init()
-
-			LINE.setStart(mouseDown.cell)
-			LINE.setEnd(mouseDown.cell)
-
+			LINE = new Line(mouseDown.gridCell)
 			LINES.add(LINE)
 		}
 
@@ -158,26 +146,16 @@ function newCellMouseUpListener(canvas) {
 			return
 		}
 
-		if (mouseDown.button === RIGHT) {
+		if (mouseDown.isRightButton()) {
 			LINES.remove(LINE)
 			LINE = null
 			return
 		}
 
-		if (mouseDown.button === LEFT) {
+		if (mouseDown.isLeftButton()) {
 			LINE = null
 			newLine()
 			return
 		}
 	}
-}
-
-function identifyHoveredCell(cursor) {
-	for (const c of CELLS) {
-		if (c.contains(cursor.x, cursor.y)) {
-			return c
-		}
-	}
-
-	return null
 }

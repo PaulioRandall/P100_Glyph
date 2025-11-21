@@ -2,11 +2,13 @@ import Two from 'two.js'
 import { Group } from './ramen'
 
 export default class Line extends Group {
-	lineShape = null
+	lineShape = createLineShape()
 
-	init() {
-		this.lineShape = createLineShape()
+	constructor(start = null, end = null) {
+		super()
 		super.add(this.lineShape)
+
+		initPositionFromPoints(this, start, end)
 	}
 
 	countVertices() {
@@ -45,4 +47,15 @@ function createLineShape() {
 	line.cap = 'round'
 
 	return line
+}
+
+function initPositionFromPoints(line, start = null, end = null) {
+	if (start) {
+		line.setStart(start)
+		line.setEnd(start)
+	}
+
+	if (end) {
+		line.setEnd(end)
+	}
 }
