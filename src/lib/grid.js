@@ -2,14 +2,15 @@ import Two from 'two.js'
 import { Group } from './ramen'
 import GridCell from './GridCell.js'
 import Line from './Line.js'
+import SelectedGridCell from './SelectedGridCell.js'
 
 let INIT = false
 let GROUP = new Group()
-let CELLS = []
-let LISTENERS = []
 
-let HOVERED_CELL = null
-let HIGHLIGHT_SHAPE = null
+let CELLS = []
+let SELECTED = null
+
+let LISTENERS = []
 
 let MOUSE_DOWN = null
 
@@ -31,7 +32,7 @@ function destroyGrid(canvas) {
 
 		removeEventListeners(canvas)
 
-		clearHovered(canvas)
+		SELECTED.deselect()
 		canvas.remove(GROUP)
 
 		CELLS.splice(0)
@@ -41,8 +42,14 @@ function destroyGrid(canvas) {
 
 function createGrid(canvas, cellsPerEdge) {
 	CELLS = generateSquareGridCells(canvas.width, cellsPerEdge)
+
+	SELECTED = new SelectedGridCell(canvas)
+	SELECTED.init()
+
 	GROUP = new Group(...CELLS)
 	GROUP.add(LINES)
+	GROUP.add(SELECTED)
+
 	addEventListeners(canvas)
 
 	canvas.add(GROUP)
@@ -100,18 +107,15 @@ function newPointProximityListener(canvas) {
 			y: e.offsetY,
 		}
 
-		clearHovered(canvas)
-		HOVERED_CELL = identifyHoveredCell(cursor)
+		SELECTED.deselect()
+		const hoveredCell = identifyHoveredCell(cursor)
 
-		if (HOVERED_CELL) {
-			HOVERED_CELL.isHovered = true
-			HIGHLIGHT_SHAPE = createHighlightShape(HOVERED_CELL)
-			GROUP.add(HIGHLIGHT_SHAPE)
-			canvas.dom.style.cursor = 'pointer'
+		if (hoveredCell) {
+			SELECTED.select(hoveredCell)
 		}
 
-		if (HOVERED_CELL && LINE) {
-			LINE.setEnd(HOVERED_CELL)
+		if (hoveredCell && LINE) {
+			LINE.setEnd(hoveredCell)
 		}
 	}
 }
@@ -120,7 +124,7 @@ function newCellMouseDownListener(canvas) {
 	return (e) => {
 		if (!MOUSE_DOWN) {
 			MOUSE_DOWN = {
-				cell: HOVERED_CELL,
+				cell: SELECTED.cell,
 				button: e.button,
 			}
 		}
@@ -168,19 +172,6 @@ function newCellMouseUpListener(canvas) {
 	}
 }
 
-function clearHovered(canvas) {
-	if (HOVERED_CELL) {
-		HOVERED_CELL.isHovered = false
-		HOVERED_CELL = null
-	}
-
-	if (HIGHLIGHT_SHAPE) {
-		GROUP.remove(HIGHLIGHT_SHAPE)
-		HIGHLIGHT_SHAPE = null
-		canvas.dom.style.cursor = 'auto'
-	}
-}
-
 function identifyHoveredCell(cursor) {
 	for (const c of CELLS) {
 		if (c.contains(cursor.x, cursor.y)) {
@@ -189,16 +180,4 @@ function identifyHoveredCell(cursor) {
 	}
 
 	return null
-}
-
-function createHighlightShape({ x, y }) {
-	const radius = 16
-	const shape = new Two.Circle(x, y, radius)
-
-	shape.fill = 'none'
-	shape.stroke = 'slategrey'
-	shape.linewidth = 12
-	shape.opacity = 0.5
-
-	return shape
 }
