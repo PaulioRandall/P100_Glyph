@@ -2,20 +2,16 @@ import Two from 'two.js'
 import { Group } from './ramen'
 
 export default class HoveredGridCell extends Group {
-	canvas = null
+	_grid = null
 	cell = null
-	haloShape = null
+	haloShape = createHaloShape()
 
-	constructor(canvas) {
+	constructor(grid) {
 		super()
-
-		this.canvas = canvas
-	}
-
-	init() {
-		this.haloShape = createHaloShape()
-		this.hide()
 		super.add(this.haloShape)
+
+		this._grid = grid
+		this.hide()
 	}
 
 	isSelected() {
@@ -37,7 +33,7 @@ export default class HoveredGridCell extends Group {
 
 		// TODO: Make this nicer
 		// TODO: SHould this be here?
-		this.canvas.dom.style.cursor = 'pointer'
+		this._grid.canvas.dom.style.cursor = 'pointer'
 	}
 
 	unhover() {
@@ -48,7 +44,7 @@ export default class HoveredGridCell extends Group {
 
 			// TODO: Make this nicer
 			// TODO: SHould this be here?
-			this.canvas.dom.style.cursor = 'auto'
+			this._grid.canvas.dom.style.cursor = 'auto'
 		}
 	}
 

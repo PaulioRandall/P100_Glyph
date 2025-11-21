@@ -3,18 +3,17 @@
 	import Two from 'two.js'
 	import { ZUI } from 'two.js/extras/jsm/zui.js'
 	import { onMount } from 'svelte'
-	import { addGrid, removeGrid } from './grid.js'
+	import Grid from './Grid.js'
 
 	let container = null
-
 	let canvas = null
 
 	onMount(() => {
 		canvas = new Canvas()
 
 		canvas.onload((c) => {
-			addGrid(c)
-			return removeGrid
+			const g = new Grid(c)
+			return g.remove
 		})
 
 		canvas.init(container)
