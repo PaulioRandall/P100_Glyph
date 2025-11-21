@@ -1,6 +1,7 @@
 import Two from 'two.js'
 import { Group } from './ramen'
 import GridCell from './GridCell.js'
+import Line from './Line.js'
 
 let INIT = false
 let GROUP = new Group()
@@ -103,14 +104,14 @@ function newPointProximityListener(canvas) {
 		HOVERED_CELL = identifyHoveredCell(cursor)
 
 		if (HOVERED_CELL) {
+			HOVERED_CELL.isHovered = true
 			HIGHLIGHT_SHAPE = createHighlightShape(HOVERED_CELL)
 			GROUP.add(HIGHLIGHT_SHAPE)
 			canvas.dom.style.cursor = 'pointer'
 		}
 
 		if (HOVERED_CELL && LINE) {
-			LINE.vertices[1].x = HOVERED_CELL.x
-			LINE.vertices[1].y = HOVERED_CELL.y
+			LINE.setEnd(HOVERED_CELL)
 		}
 	}
 }
@@ -139,12 +140,11 @@ function newCellMouseUpListener(canvas) {
 		}
 
 		function newLine() {
-			LINE = createLineShape()
+			LINE = new Line()
+			LINE.init()
 
-			LINE.vertices[0].x = mouseDown.cell.x
-			LINE.vertices[0].y = mouseDown.cell.y
-			LINE.vertices[1].x = mouseDown.cell.x
-			LINE.vertices[1].y = mouseDown.cell.y
+			LINE.setStart(mouseDown.cell)
+			LINE.setEnd(mouseDown.cell)
 
 			LINES.add(LINE)
 		}
@@ -169,7 +169,10 @@ function newCellMouseUpListener(canvas) {
 }
 
 function clearHovered(canvas) {
-	HOVERED_CELL = null
+	if (HOVERED_CELL) {
+		HOVERED_CELL.isHovered = false
+		HOVERED_CELL = null
+	}
 
 	if (HIGHLIGHT_SHAPE) {
 		GROUP.remove(HIGHLIGHT_SHAPE)
@@ -198,15 +201,4 @@ function createHighlightShape({ x, y }) {
 	shape.opacity = 0.5
 
 	return shape
-}
-
-function createLineShape() {
-	const line = new Two.Line(0, 0, 0, 0)
-
-	line.fill = 'none'
-	line.stroke = 'indianred'
-	line.linewidth = 16
-	line.cap = 'round'
-
-	return line
 }

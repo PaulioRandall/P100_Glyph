@@ -19,6 +19,8 @@ export default class GridCell extends Group {
 	centerShape = null
 	borderShape = null
 
+	isHovered = false
+
 	constructor(col, row, length) {
 		super()
 
