@@ -2,8 +2,6 @@ import Two from 'two.js'
 import { Group } from './ramen'
 import GridCell from './GridCell.js'
 
-const SIZE = 5
-
 let INIT = false
 let GROUP = new Group()
 let CELLS = []
@@ -17,9 +15,9 @@ let MOUSE_DOWN = null
 let LINES = new Group()
 let LINE = null
 
-export function addGrid(canvas) {
+export function addGrid(canvas, cellsPerEdge = 7) {
 	destroyGrid(canvas)
-	createGrid(canvas)
+	createGrid(canvas, cellsPerEdge)
 }
 
 export function removeGrid(canvas) {
@@ -40,9 +38,9 @@ function destroyGrid(canvas) {
 	}
 }
 
-function createGrid(canvas) {
-	CELLS = generateCellData(canvas.width, SIZE)
-	GROUP = generateCellShapes(CELLS)
+function createGrid(canvas, cellsPerEdge) {
+	CELLS = generateSquareGridCells(canvas.width, cellsPerEdge)
+	GROUP = new Group(...CELLS)
 	GROUP.add(LINES)
 	addEventListeners(canvas)
 
@@ -50,67 +48,19 @@ function createGrid(canvas) {
 	INIT = true
 }
 
-function generateCellData(width, size) {
-	const length = width / size
+function generateSquareGridCells(gridWidth, cellsPerEdge) {
+	const cellWidth = gridWidth / cellsPerEdge
 	const result = []
 
-	for (let row = 0; row < size; row++) {
-		for (let col = 0; col < size; col++) {
-			const c = new GridCell(col, row, length)
+	for (let row = 0; row < cellsPerEdge; row++) {
+		for (let col = 0; col < cellsPerEdge; col++) {
+			const c = new GridCell(col, row, cellWidth)
+			c.init()
 			result.push(c)
 		}
 	}
 
 	return result
-}
-
-function generateCellShapes(cells) {
-	const g = new Group()
-
-	for (const cell of cells) {
-		g.add(createCellShape(cell))
-	}
-
-	return g
-}
-
-function createCellShape(cell) {
-	const g = new Group()
-
-	g.add(createCellCenterPoint(cell))
-	//g.add(createCellBorder(cell))
-
-	return g
-}
-
-function createCellCenterPoint({ x, y }) {
-	const radius = 4
-	const shape = new Two.Circle(x, y, radius)
-
-	shape.fill = 'black'
-	shape.stroke = 'none'
-
-	return shape
-}
-
-function createCellBorder({ x, y, w, h }) {
-	const shape = new Two.Rectangle(x, y, w, h)
-
-	shape.fill = 'none'
-	shape.stroke = 'black'
-	shape.linewidth = 2
-
-	return shape
-}
-
-function makeCellShape(cell) {
-	const radius = 4
-	const point = new Two.Circle(cell.centerX, cell.centerY, radius)
-
-	point.fill = 'black'
-	point.stroke = 'none'
-
-	return new Two.Group(point)
 }
 
 function addEventListeners(canvas) {

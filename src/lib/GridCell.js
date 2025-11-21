@@ -1,4 +1,7 @@
-export default class GridCell {
+import Two from 'two.js'
+import { Group } from './ramen'
+
+export default class GridCell extends Group {
 	x = 0
 	y = 0
 
@@ -13,10 +16,14 @@ export default class GridCell {
 	top = 0
 	bottom = 0
 
+	centerShape = null
+	borderShape = null
+
 	constructor(col, row, length) {
+		super()
+
 		this.col = col
 		this.row = row
-		this.length = length
 
 		this.top = row * length
 		this.left = col * length
@@ -32,7 +39,35 @@ export default class GridCell {
 		this.y = this.top + halfLength
 	}
 
+	init() {
+		this.centerShape = createCenterShape(this)
+		super.add(this.centerShape)
+
+		//this.borderShape = createBorderShape(this)
+		//super.add(this.borderShape)
+	}
+
 	contains(x, y) {
 		return x > this.left && x < this.right && y > this.top && y < this.bottom
 	}
+}
+
+function createCenterShape({ x, y }) {
+	const radius = 4
+	const shape = new Two.Circle(x, y, radius)
+
+	shape.fill = 'black'
+	shape.stroke = 'none'
+
+	return shape
+}
+
+function createBorderShape({ x, y, w, h }) {
+	const shape = new Two.Rectangle(x, y, w, h)
+
+	shape.fill = 'none'
+	shape.stroke = 'black'
+	shape.linewidth = 2
+
+	return shape
 }

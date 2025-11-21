@@ -3,6 +3,10 @@ import Two from 'two.js'
 // Extends Two.Group to add functionality such as sorting
 // and clearing.
 export default class Group extends Two.Group {
+	constructor(...children) {
+		super(...children)
+	}
+
 	add(element) {
 		super.add(element)
 	}
