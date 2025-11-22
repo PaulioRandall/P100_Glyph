@@ -1,5 +1,5 @@
 import Two from 'two.js'
-import { Group } from './ramen'
+import Group from './Group.js'
 import GridCell from './GridCell.js'
 import Line from './Line.js'
 import HoveredGridCell from './HoveredGridCell.js'

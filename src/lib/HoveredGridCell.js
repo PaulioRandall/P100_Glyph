@@ -1,5 +1,5 @@
 import Two from 'two.js'
-import { Group } from './ramen'
+import Group from './Group.js'
 
 export default class HoveredGridCell extends Group {
 	_grid = null

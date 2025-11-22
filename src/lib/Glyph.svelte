@@ -1,5 +1,5 @@
 <script>
-	import { Canvas } from './ramen'
+	import Canvas from './Canvas.js'
 	import Two from 'two.js'
 	import { ZUI } from 'two.js/extras/jsm/zui.js'
 	import { onMount } from 'svelte'

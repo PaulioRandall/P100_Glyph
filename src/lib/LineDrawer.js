@@ -1,4 +1,4 @@
-import { Group } from './ramen'
+import Group from './Group.js'
 import Diagram from './Diagram.js'
 import Line from './Line.js'
 import GridCursorEvent from './GridCursorEvent.js'
