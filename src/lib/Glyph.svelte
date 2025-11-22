@@ -4,6 +4,7 @@
 	import Canvas from './Canvas.js'
 	import Grid from './Grid.js'
 	import LineDrawer from './LineDrawer.js'
+	import CursorHandler from './CursorHandler.js'
 
 	let container = null
 	let canvas = null
@@ -11,12 +12,19 @@
 	onMount(() => {
 		canvas = new Canvas()
 
-		canvas.onload((c) => {
-			const grid = new Grid(c)
-			const drawer = new LineDrawer(canvas, grid)
+		canvas.onload((canvas) => {
+			const grid = new Grid(canvas)
+			const lineDrawer = new LineDrawer(canvas, grid)
+			
+			const cursorClickHandler = new CursorHandler(
+				canvas,
+				grid,
+				lineDrawer,
+			)
 
 			return () => {
-				drawer.destroy()
+				cursorMoveHandler.destroy()
+				lineDrawer.destroy()
 				grid.destroy()
 			}
 		})

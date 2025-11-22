@@ -14,11 +14,20 @@ export default class HoveredGridCell extends Group {
 		this.hide()
 	}
 
-	isSelected() {
-		return !!this.cell
+	get() {
+		return this.cell
+	}
+
+	cursorMoved(e) {
+		const cell = this._grid.cellAt(e.offsetX, e.offsetY)
+		this.hover(cell)
 	}
 
 	hover(cell) {
+		if (this.cell === cell) {
+			return
+		}
+
 		this.unhover()
 
 		if (!cell) {
