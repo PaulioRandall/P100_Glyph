@@ -1,8 +1,7 @@
 <script>
-	import Canvas from './Canvas.js'
-	import Two from 'two.js'
-	import { ZUI } from 'two.js/extras/jsm/zui.js'
 	import { onMount } from 'svelte'
+
+	import Canvas from './Canvas.js'
 	import Grid from './Grid.js'
 	import LineDrawer from './LineDrawer.js'
 
