@@ -4,7 +4,7 @@
 	import GridCanvas from './GridCanvas.js'
 	import HoveredCell from './HoveredCell.js'
 	import LineDrawer from './LineDrawer.js'
-	import CursorHandler from './CursorHandler.js'
+	import CursorEvents from './CursorEvents.js'
 
 	let container = null
 	let gridCanvas = null
@@ -19,7 +19,7 @@
 			canvas.add(hoveredCell)
 			canvas.add(lineDrawer)
 
-			const cursorClickHandler = new CursorHandler(
+			const cursorEvents = new CursorEvents(
 				canvas,
 				hoveredCell,
 				lineDrawer,
@@ -29,7 +29,7 @@
 				canvas.remove(lineDrawer)
 				canvas.remove(hoveredCell)
 
-				cursorMoveHandler.free()
+				cursorEvents.free()
 				lineDrawer.free()
 				hoveredCell.free()
 			}

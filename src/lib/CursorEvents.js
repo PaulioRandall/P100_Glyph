@@ -1,6 +1,6 @@
 import Cursor from './Cursor.js'
 
-export default class MouseClickHandler {
+export default class CursorEvents {
 	_removeHandlers = null
 
 	constructor(canvas, ...receivers) {
