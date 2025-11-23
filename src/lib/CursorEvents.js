@@ -47,7 +47,7 @@ export default class CursorEvents {
 		}
 	}
 
-	free() {
+	destroy() {
 		if (this._removeHandler) {
 			this._removeHandler()
 		}

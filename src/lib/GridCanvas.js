@@ -10,6 +10,9 @@ export default class GridCanvas extends Canvas {
 	_cells = new Group()
 	_hovered = null
 
+	// TODO: Options to allow xLength and yLength to be
+	//       calculated based on the other using the
+	//       width-height ratio.
 	constructor(xLength = 3, yLength = null) {
 		super()
 

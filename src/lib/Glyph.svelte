@@ -30,8 +30,6 @@
 				canvas.remove(hoveredCell)
 
 				cursorEvents.free()
-				lineDrawer.free()
-				hoveredCell.free()
 			}
 		})
 
