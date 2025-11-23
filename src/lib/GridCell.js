@@ -2,55 +2,49 @@ import Two from 'two.js'
 import Group from './Group.js'
 
 export default class GridCell extends Group {
-	x = 0
-	y = 0
+	_centerShape = null
 
-	w = 0
-	h = 0
-
-	col = 0
-	row = 0
-
-	left = 0
-	right = 0
-	top = 0
-	bottom = 0
-
-	centerShape = null
-	borderShape = null
-
-	isHovered = false
-
-	constructor(col, row, length) {
+	constructor(col, row, w, h) {
 		super()
 
-		this.col = col
-		this.row = row
+		const { x, y } = calcCenter(col, row, w, h)
 
-		this.top = row * length
-		this.left = col * length
+		const widthRadius = w / 2
+		const heightRadius = h / 2
 
-		this.bottom = this.top + length
-		this.right = this.left + length
+		generateGetters(this, {
+			col,
+			row,
+			w,
+			h,
+			x,
+			y,
+			left: x - w / 2,
+			right: x + w / 2,
+			top: y - h / 2,
+			bottom: y + h / 2,
+		})
 
-		this.w = length
-		this.h = length
-
-		const halfLength = length / 2
-		this.x = this.left + halfLength
-		this.y = this.top + halfLength
+		this._centerShape = createCenterShape(this)
 	}
 
-	init() {
-		this.centerShape = createCenterShape(this)
-		super.add(this.centerShape)
+	added() {
+		super.add(this._centerShape)
+	}
 
-		//this.borderShape = createBorderShape(this)
-		//super.add(this.borderShape)
+	removed() {
+		super.clear()
 	}
 
 	contains(x, y) {
 		return x > this.left && x < this.right && y > this.top && y < this.bottom
+	}
+}
+
+function calcCenter(col, row, w, h) {
+	return {
+		x: col * w + w / 2,
+		y: row * h + h / 2,
 	}
 }
 
@@ -64,12 +58,12 @@ function createCenterShape({ x, y }) {
 	return shape
 }
 
-function createBorderShape({ x, y, w, h }) {
-	const shape = new Two.Rectangle(x, y, w, h)
-
-	shape.fill = 'none'
-	shape.stroke = 'black'
-	shape.linewidth = 2
-
-	return shape
+function generateGetters(object, members) {
+	for (const name in members) {
+		Object.defineProperty(object, name, {
+			get: function () {
+				return members[name]
+			},
+		})
+	}
 }

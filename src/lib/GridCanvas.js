@@ -5,23 +5,25 @@ import GridCell from './GridCell.js'
 import ArrayUtil from './ArrayUtil.js'
 
 export default class GridCanvas extends Canvas {
-	_cellsPerEdge = 1
+	_xLength = 0
+	_yLength = 0
 	_cells = new Group()
 	_hovered = null
 
-	constructor(cellsPerEdge = 9) {
+	constructor(xLength = 3, yLength = null) {
 		super()
 
-		this._cellsPerEdge = cellsPerEdge
+		if (!yLength) {
+			yLength = xLength
+		}
 
+		this._xLength = xLength
+		this._yLength = yLength
+
+		const canvas = this
 		super.onload(() => {
-			const cells = generateSquareGridCells(super.width, cellsPerEdge)
-
-			for (const c of cells) {
-				this._cells.add(c)
-			}
-
-			super.add(this._cells)
+			canvas._onload()
+			return () => canvas._unload()
 		})
 	}
 
@@ -50,15 +52,34 @@ export default class GridCanvas extends Canvas {
 	cursorMove(e) {
 		this._hovered = this.cellAt(e.offsetX, e.offsetY)
 	}
+
+	_onload() {
+		const cells = generateSquareGridCells(
+			super.width,
+			super.height,
+			this._xLength,
+			this._yLength
+		)
+
+		for (const c of cells) {
+			this._cells.add(c)
+		}
+
+		super.add(this._cells)
+	}
+
+	_unload() {
+		super.clear()
+	}
 }
 
-function generateSquareGridCells(gridWidth, cellsPerEdge) {
-	const cellWidth = gridWidth / cellsPerEdge
+function generateSquareGridCells(w, h, xLength, yLength) {
+	const cellWidth = w / xLength
+	const cellHeight = h / yLength
 	const result = []
 
-	ArrayUtil.walkGrid(cellsPerEdge, cellsPerEdge, (col, row) => {
-		const c = new GridCell(col, row, cellWidth)
-		c.init()
+	ArrayUtil.walkGrid(xLength, yLength, (col, row) => {
+		const c = new GridCell(col, row, cellWidth, cellHeight)
 		result.push(c)
 	})
 

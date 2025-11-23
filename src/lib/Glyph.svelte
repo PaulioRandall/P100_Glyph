@@ -7,12 +7,12 @@
 	import CursorEvents from './CursorEvents.js'
 
 	let container = null
-	let gridCanvas = null
+	let canvas = null
 
 	onMount(() => {
-		gridCanvas = new GridCanvas()
+		canvas = new GridCanvas()
 
-		gridCanvas.onload((canvas) => {
+		canvas.onload((canvas) => {
 			const hoveredCell = new HoveredCell(canvas)
 			const lineDrawer = new LineDrawer(canvas)
 
@@ -35,7 +35,7 @@
 			}
 		})
 
-		gridCanvas.init(container)
+		canvas.init(container)
 	})
 </script>
 

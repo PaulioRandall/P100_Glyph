@@ -13,6 +13,8 @@ export default class Canvas {
 	_loaders = [] // (canvas) => Unloader
 	_unloaders = [] // (canvas) => {}
 
+	// TODO: Move to constructor
+	// TODO: Create Loadable class that this one extends
 	init(container, twoOptions = {}) {
 		this._container = container
 

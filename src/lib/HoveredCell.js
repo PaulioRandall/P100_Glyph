@@ -2,21 +2,29 @@ import Two from 'two.js'
 import Group from './Group.js'
 
 export default class HoveredCell extends Group {
-	_gridCanvas = null
+	_canvas = null
 	_cell = null
-	haloShape = createHaloShape()
+	_haloShape = createHaloShape()
 
-	constructor(gridCanvas) {
+	constructor(canvas) {
 		super()
-		super.add(this.haloShape)
 
-		this._gridCanvas = gridCanvas
-
+		this._canvas = canvas
 		this.hide()
 	}
 
+	added() {
+		super.add(this._haloShape)
+	}
+
+	removed() {
+		super.clear()
+
+		this._cell = null
+	}
+
 	cursorMove(e) {
-		this.hover(this._gridCanvas.hovered)
+		this.hover(this._canvas.hovered)
 	}
 
 	hover(cell) {
@@ -36,7 +44,7 @@ export default class HoveredCell extends Group {
 		this._cell = cell
 		this._cell.isHovered = true
 
-		this._gridCanvas.cursorStyle = 'pointer'
+		this._canvas.cursorStyle = 'pointer'
 	}
 
 	unhover() {
@@ -45,7 +53,7 @@ export default class HoveredCell extends Group {
 			this._cell.isHovered = false
 			this._cell = null
 
-			this._gridCanvas.cursorStyle = 'auto'
+			this._canvas.cursorStyle = 'auto'
 		}
 	}
 
@@ -59,16 +67,9 @@ export default class HoveredCell extends Group {
 		this.visible = false
 	}
 
-	free() {
-		this.clear()
-
-		this._cell = null
-		this._gridCanvas = null
-	}
-
 	_setHaloPosition({ x, y }) {
-		this.haloShape.position.x = x
-		this.haloShape.position.y = y
+		this._haloShape.position.x = x
+		this._haloShape.position.y = y
 	}
 }
 
@@ -77,7 +78,7 @@ function createHaloShape() {
 	const shape = new Two.Circle(0, 0, radius)
 
 	shape.fill = 'none'
-	shape.stroke = 'slategrey'
+	shape.stroke = 'blue'
 	shape.linewidth = 10
 	shape.opacity = 0.5
 

@@ -9,10 +9,18 @@ export default class Group extends Two.Group {
 
 	add(element) {
 		super.add(element)
+
+		if (element.added) {
+			element.added()
+		}
 	}
 
 	remove(element) {
 		super.remove(element)
+
+		if (element.removed) {
+			element.removed()
+		}
 	}
 
 	clear() {
