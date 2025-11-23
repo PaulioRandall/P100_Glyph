@@ -1,27 +1,40 @@
 import Two from 'two.js'
+import Canvas from './Canvas.js'
 import Group from './Group.js'
 import GridCell from './GridCell.js'
 import ArrayUtil from './ArrayUtil.js'
 
-export default class Grid extends Group {
+export default class GridCanvas extends Canvas {
 	_cellsPerEdge = 1
 	_cells = new Group()
+	_hovered = null
 
-	constructor(canvasWidth, cellsPerEdge = 9) {
+	constructor(cellsPerEdge = 9) {
 		super()
-		super.add(this._cells)
 
 		this._cellsPerEdge = cellsPerEdge
 
-		const cells = generateSquareGridCells(canvasWidth, cellsPerEdge)
+		super.onload(() => {
+			const cells = generateSquareGridCells(super.width, cellsPerEdge)
 
-		for (const c of cells) {
-			this._cells.add(c)
-		}
+			for (const c of cells) {
+				this._cells.add(c)
+			}
+
+			super.add(this._cells)
+		})
 	}
 
-	get cursor() {
-		return this._cursor
+	get hovered() {
+		return this._hovered
+	}
+
+	get cursorStyle() {
+		return this.dom.style.cursor
+	}
+
+	set cursorStyle(style) {
+		this.dom.style.cursor = style
 	}
 
 	cellAt(x, y) {
@@ -32,6 +45,10 @@ export default class Grid extends Group {
 		}
 
 		return null
+	}
+
+	cursorMove(e) {
+		this._hovered = this.cellAt(e.offsetX, e.offsetY)
 	}
 }
 

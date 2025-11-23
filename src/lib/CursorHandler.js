@@ -17,6 +17,8 @@ export default class MouseClickHandler {
 		const moveHandler = (e) => {
 			const cursor = Cursor.fromEvent(e)
 
+			canvas.cursorMove(e, cursor)
+
 			for (const r of receivers) {
 				if (r.cursorMove) {
 					r.cursorMove(e, cursor)

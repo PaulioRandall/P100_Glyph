@@ -1,30 +1,26 @@
 <script>
 	import { onMount } from 'svelte'
 
-	import Canvas from './Canvas.js'
-	import Grid from './Grid.js'
+	import GridCanvas from './GridCanvas.js'
+	import HoveredCell from './HoveredCell.js'
 	import LineDrawer from './LineDrawer.js'
 	import CursorHandler from './CursorHandler.js'
-	import HoveredCell from './HoveredCell.js'
 
 	let container = null
-	let canvas = null
+	let gridCanvas = null
 
 	onMount(() => {
-		canvas = new Canvas()
+		gridCanvas = new GridCanvas()
 
-		canvas.onload((canvas) => {
-			const grid = new Grid(canvas.width, 9)
-			const hoveredCell = new HoveredCell(grid, canvas.dom)
-			const lineDrawer = new LineDrawer(hoveredCell)
+		gridCanvas.onload((canvas) => {
+			const hoveredCell = new HoveredCell(canvas)
+			const lineDrawer = new LineDrawer(canvas)
 
-			canvas.add(grid)
 			canvas.add(hoveredCell)
 			canvas.add(lineDrawer)
 
 			const cursorClickHandler = new CursorHandler(
 				canvas,
-				grid,
 				hoveredCell,
 				lineDrawer,
 			)
@@ -32,7 +28,6 @@
 			return () => {
 				canvas.remove(lineDrawer)
 				canvas.remove(hoveredCell)
-				canvas.remove(grid)
 
 				cursorMoveHandler.free()
 				lineDrawer.free()
@@ -40,22 +35,33 @@
 			}
 		})
 
-		canvas.init(container)
+		gridCanvas.init(container)
 	})
 </script>
 
-<div
-	bind:this={container}
-	oncontextmenu={(e) => e.preventDefault()}
-	class="container">
-	<!-- InnerHTML handled by Two instance -->
+<div class="border-container">
+	<!-- 
+		Border container required as putting a border on the
+		canvas container offsets the internal coordinates by
+		the border size. Barely noticable but still nice to
+		keep things straight.
+	-->
+	<div
+		bind:this={container}
+		oncontextmenu={(e) => e.preventDefault()}
+		class="container">
+		<!-- InnerHTML handled by Two instance -->
+	</div>
 </div>
 
 <style>
 	.container {
 		width: 480px;
 		height: 480px;
+	}
 
-		border: 1px solid black;
+	.border-container {
+		border: 2px solid black;
+		border-radius: 8px;
 	}
 </style>
