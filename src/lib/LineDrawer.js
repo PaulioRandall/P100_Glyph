@@ -4,29 +4,15 @@ import Line from './Line.js'
 import Cursor from './Cursor.js'
 
 export default class LineDrawer extends Group {
-	_canvas = null
-
 	_downButton = null
-
 	_diagram = new Diagram()
 	_line = null
 
-	constructor(canvas, grid) {
+	constructor(hoveredCell) {
 		super()
+		super.add(this._diagram)
 
-		this._canvas = canvas
-		this._grid = grid
-
-		this.add(this._diagram)
-		canvas.add(this)
-	}
-
-	get canvas() {
-		return this._canvas
-	}
-
-	get grid() {
-		return this._grid
+		this._hoveredCell = hoveredCell
 	}
 
 	get diagram() {
@@ -40,7 +26,7 @@ export default class LineDrawer extends Group {
 	}
 
 	cursorMove() {
-		const cell = this._grid.hoveredCell.cell
+		const cell = this._hoveredCell.get()
 
 		if (this._line && cell) {
 			this._line.setEnd(cell)
@@ -53,7 +39,7 @@ export default class LineDrawer extends Group {
 		}
 
 		this._downButton = null
-		const cell = this._grid.hoveredCell.cell
+		const cell = this._hoveredCell.get()
 
 		if (cursor.isLeftButton()) {
 			this._newLine(cell)
@@ -66,6 +52,14 @@ export default class LineDrawer extends Group {
 		}
 	}
 
+	free() {
+		this.clear()
+
+		this._downButton = null
+		this._diagram = null
+		this._line = null
+	}
+
 	_discardLine() {
 		if (this._line) {
 			this.diagram.remove(this._line)
@@ -76,10 +70,5 @@ export default class LineDrawer extends Group {
 	_newLine(cell) {
 		this._line = new Line(cell)
 		this.diagram.add(this._line)
-	}
-
-	destroy() {
-		this._canvas.remove(this)
-		this.remove(this._diagram)
 	}
 }

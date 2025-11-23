@@ -1,30 +1,33 @@
 import Two from 'two.js'
 import Group from './Group.js'
 
-export default class HoveredGridCell extends Group {
+export default class HoveredCell extends Group {
 	_grid = null
-	cell = null
+	_cell = null
+	_dom = null
 	haloShape = createHaloShape()
 
-	constructor(grid) {
+	constructor(grid, dom) {
 		super()
 		super.add(this.haloShape)
 
 		this._grid = grid
+		this._dom = dom
+
 		this.hide()
 	}
 
 	get() {
-		return this.cell
+		return this._cell
 	}
 
-	cursorMoved(e) {
+	cursorMove(e) {
 		const cell = this._grid.cellAt(e.offsetX, e.offsetY)
 		this.hover(cell)
 	}
 
 	hover(cell) {
-		if (this.cell === cell) {
+		if (this._cell === cell) {
 			return
 		}
 
@@ -37,23 +40,23 @@ export default class HoveredGridCell extends Group {
 		this._setHaloPosition(cell)
 		this.show()
 
-		this.cell = cell
-		this.cell.isHovered = true
+		this._cell = cell
+		this._cell.isHovered = true
 
 		// TODO: Make this nicer
 		// TODO: SHould this be here?
-		this._grid.canvas.dom.style.cursor = 'pointer'
+		this._dom.style.cursor = 'pointer'
 	}
 
 	unhover() {
-		if (this.cell) {
+		if (this._cell) {
 			this.hide()
-			this.cell.isHovered = false
-			this.cell = null
+			this._cell.isHovered = false
+			this._cell = null
 
 			// TODO: Make this nicer
 			// TODO: SHould this be here?
-			this._grid.canvas.dom.style.cursor = 'auto'
+			this._dom.style.cursor = 'auto'
 		}
 	}
 
@@ -65,6 +68,14 @@ export default class HoveredGridCell extends Group {
 	hide() {
 		// super.visible
 		this.visible = false
+	}
+
+	free() {
+		this.clear()
+
+		this._grid = null
+		this._cell = null
+		this._dom = null
 	}
 
 	_setHaloPosition({ x, y }) {

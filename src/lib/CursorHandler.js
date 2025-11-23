@@ -45,7 +45,7 @@ export default class MouseClickHandler {
 		}
 	}
 
-	destroy() {
+	free() {
 		if (this._removeHandler) {
 			this._removeHandler()
 		}
