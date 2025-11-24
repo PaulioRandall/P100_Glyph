@@ -10,22 +10,16 @@ export default class GridCanvas extends Canvas {
 	_cells = new Group()
 	_hovered = null
 
-	// TODO: Options to allow xLength and yLength to be
-	//       calculated based on the other using the
-	//       width-height ratio.
-	constructor(xLength = 3, yLength = null) {
-		super()
-
-		if (!yLength) {
-			yLength = xLength
-		}
+	constructor(container, xLength = 5, yLength = 5, options = {}) {
+		super(container, options)
 
 		this._xLength = xLength
 		this._yLength = yLength
 
 		const canvas = this
+
 		super.onload(() => {
-			canvas._onload()
+			canvas._load()
 			return () => canvas._unload()
 		})
 	}
@@ -56,7 +50,7 @@ export default class GridCanvas extends Canvas {
 		this._hovered = this.cellAt(e.offsetX, e.offsetY)
 	}
 
-	_onload() {
+	_load() {
 		const cells = generateSquareGridCells(
 			super.width,
 			super.height,

@@ -7,15 +7,12 @@ export default class Canvas {
 	_two
 	_stage
 	_zui
-
-	_isInit = false
+	_store = {}
 
 	_loaders = [] // (canvas) => Unloader
 	_unloaders = [] // (canvas) => {}
 
-	// TODO: Move to constructor
-	// TODO: Create Loadable class that this one extends
-	init(container, twoOptions = {}) {
+	constructor(container, twoOptions = {}) {
 		this._container = container
 
 		this._two = new Two({
@@ -23,9 +20,8 @@ export default class Canvas {
 			fitted: true,
 			autostart: true,
 			...twoOptions,
-		}).appendTo(this._container)
+		}).appendTo(container)
 
-		this._isInit = true
 		this.reload()
 	}
 
@@ -45,10 +41,6 @@ export default class Canvas {
 		return this.two.renderer.domElement
 	}
 
-	get initialised() {
-		return this._isInit
-	}
-
 	get width() {
 		return this._two.width
 	}
@@ -57,12 +49,32 @@ export default class Canvas {
 		return this._two.height
 	}
 
+	get store() {
+		return this._store
+	}
+
 	onload(load) {
 		this._loaders.push(load)
+		this._doLoad(load)
+	}
 
-		if (this._isInit) {
-			this._doLoad(load)
-		}
+	load() {
+		this.reload()
+	}
+
+	reload() {
+		this._unloadAll()
+
+		this._two.clear()
+		this._stage = new Group()
+		this._two.add(this._stage)
+		this._zui = new ZUI(this._stage)
+
+		this._loadAll()
+	}
+
+	unload() {
+		this._unloadAll()
 	}
 
 	_doLoad(load) {
@@ -71,22 +83,6 @@ export default class Canvas {
 		if (unload) {
 			this._unloaders.push(unload)
 		}
-	}
-
-	reload() {
-		if (!this._isInit) {
-			return
-		}
-
-		this._unloadAll()
-
-		this._two.clear()
-		this._stage = new Group()
-		this._zui = new ZUI(this._stage)
-
-		this._two.add(this._stage)
-
-		this._loadAll()
 	}
 
 	_unloadAll() {

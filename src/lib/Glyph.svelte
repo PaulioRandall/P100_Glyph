@@ -10,30 +10,35 @@
 	let canvas = null
 
 	onMount(() => {
-		canvas = new GridCanvas()
+		canvas = new GridCanvas(container)
 
 		canvas.onload((canvas) => {
 			const hoveredCell = new HoveredCell(canvas)
-			const lineDrawer = new LineDrawer(canvas)
-
+		
 			canvas.add(hoveredCell)
-			canvas.add(lineDrawer)
-
-			const cursorEvents = new CursorEvents(
-				canvas,
-				hoveredCell,
-				lineDrawer,
-			)
-
-			return () => {
-				canvas.remove(lineDrawer)
-				canvas.remove(hoveredCell)
-
-				cursorEvents.free()
-			}
+			canvas.store.hoveredCell = hoveredCell
+		
+			return () => canvas.remove(hoveredCell)
 		})
 
-		canvas.init(container)
+		canvas.onload((canvas) => {
+			const lineDrawer = new LineDrawer(canvas)
+
+			canvas.add(lineDrawer)
+			canvas.store.lineDrawer = lineDrawer
+
+			return () => canvas.remove(lineDrawer)
+		})
+
+		canvas.onload((canvas) => {
+			const cursorEvents = new CursorEvents(
+				canvas,
+				canvas.store.hoveredCell,
+				canvas.store.lineDrawer,
+			)
+
+			return () => cursorEvents.free()
+		})
 	})
 </script>
 
