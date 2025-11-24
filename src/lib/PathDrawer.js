@@ -2,13 +2,15 @@ import { Group, EventUtil } from './ramen'
 import Diagram from './Diagram.js'
 import Line from './Line.js'
 
-export default class LineDrawer extends Group {
+export default class PathDrawer extends Group {
 	_canvas = null
 	_diagram = new Diagram()
 
 	_downButton = null
 	_line = null
 
+	// NEXT: Rename to PathDrawer
+	// TODO: Allow single SVG path of simple lines to be drawn
 	constructor(canvas) {
 		super()
 

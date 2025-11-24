@@ -3,7 +3,7 @@
 
 	import { GridCanvas, CursorEvents } from './ramen'
 	import HoveredCell from './HoveredCell.js'
-	import LineDrawer from './LineDrawer.js'
+	import PathDrawer from './PathDrawer.js'
 
 	let container = null
 	let canvas = null
@@ -24,18 +24,18 @@
 		}
 
 		canvas.onload((canvas) => {
-			return addStoredElement('hoveredCell', HoveredCell, canvas)
+			return addStoredElement('HoveredCell', HoveredCell, canvas)
 		})
 
 		canvas.onload((canvas) => {
-			return addStoredElement('lineDrawer', LineDrawer, canvas)
+			return addStoredElement('PathDrawer', PathDrawer, canvas)
 		})
 
 		canvas.onload((canvas) => {
 			const cursorEvents = new CursorEvents(
 				canvas,
-				canvas.store.get('hoveredCell'),
-				canvas.store.get('lineDrawer'),
+				canvas.store.get('HoveredCell'),
+				canvas.store.get('PathDrawer'),
 			)
 
 			return () => cursorEvents.free()
