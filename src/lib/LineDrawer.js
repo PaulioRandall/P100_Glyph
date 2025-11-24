@@ -1,7 +1,6 @@
-import Group from './Group.js'
+import { Group, EventUtil } from './ramen'
 import Diagram from './Diagram.js'
 import Line from './Line.js'
-import Cursor from './Cursor.js'
 
 export default class LineDrawer extends Group {
 	_canvas = null
@@ -31,13 +30,13 @@ export default class LineDrawer extends Group {
 		return this._diagram
 	}
 
-	cursorDown(e) {
+	mousedown(e) {
 		if (this._downButton === null) {
 			this._downButton = e.button
 		}
 	}
 
-	cursorMove() {
+	mousemove() {
 		const cell = this._canvas.hovered
 
 		if (this._line && cell) {
@@ -45,20 +44,19 @@ export default class LineDrawer extends Group {
 		}
 	}
 
-	cursorUp(_, cursor) {
-		if (!cursor.isButton(this._downButton)) {
+	mouseup(e) {
+		if (!EventUtil.isButton(e, this._downButton)) {
 			return
 		}
 
 		this._downButton = null
-		const cell = this._canvas.hovered
 
-		if (cursor.isLeftButton()) {
-			this._newLine(cell)
+		if (EventUtil.isLeftButton(e)) {
+			this._newLine(this._canvas.hovered)
 			return
 		}
 
-		if (cursor.isRightButton()) {
+		if (EventUtil.isRightButton(e)) {
 			this._discardLine()
 			return
 		}

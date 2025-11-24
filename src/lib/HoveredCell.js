@@ -1,5 +1,4 @@
-import Two from 'two.js'
-import Group from './Group.js'
+import { Two, Group } from './ramen'
 
 export default class HoveredCell extends Group {
 	_canvas = null
@@ -23,7 +22,7 @@ export default class HoveredCell extends Group {
 		this._cell = null
 	}
 
-	cursorMove(e) {
+	mousemove(e) {
 		this.hover(this._canvas.hovered)
 	}
 

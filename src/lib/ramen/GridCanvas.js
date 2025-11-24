@@ -2,7 +2,6 @@ import Two from 'two.js'
 import Canvas from './Canvas.js'
 import Group from './Group.js'
 import GridCell from './GridCell.js'
-import ArrayUtil from './ArrayUtil.js'
 
 export default class GridCanvas extends Canvas {
 	_xLength = 0
@@ -46,7 +45,7 @@ export default class GridCanvas extends Canvas {
 		return null
 	}
 
-	cursorMove(e) {
+	mousemove(e) {
 		this._hovered = this.cellAt(e.offsetX, e.offsetY)
 	}
 
@@ -75,10 +74,18 @@ function generateSquareGridCells(w, h, xLength, yLength) {
 	const cellHeight = h / yLength
 	const result = []
 
-	ArrayUtil.walkGrid(xLength, yLength, (col, row) => {
+	walkGrid(xLength, yLength, (col, row) => {
 		const c = new GridCell(col, row, cellWidth, cellHeight)
 		result.push(c)
 	})
 
 	return result
+}
+
+function walkGrid(numOfCols, numOfRows, forEachCell) {
+	for (let row = 0; row < numOfRows; row++) {
+		for (let col = 0; col < numOfCols; col++) {
+			forEachCell(col, row)
+		}
+	}
 }

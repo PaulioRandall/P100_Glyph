@@ -1,10 +1,9 @@
 <script>
 	import { onMount } from 'svelte'
 
-	import GridCanvas from './GridCanvas.js'
+	import { GridCanvas, CursorEvents } from './ramen'
 	import HoveredCell from './HoveredCell.js'
 	import LineDrawer from './LineDrawer.js'
-	import CursorEvents from './CursorEvents.js'
 
 	let container = null
 	let canvas = null
@@ -12,29 +11,31 @@
 	onMount(() => {
 		canvas = new GridCanvas(container)
 
+		function addStoredElement(name, Clazz, ...args) {
+			const element = new Clazz(...args)		
+
+			canvas.add(element)
+			canvas.store.put(name, element)
+
+			return () => {
+				canvas.remove(element)
+				canvas.store.del(name)
+			}
+		}
+
 		canvas.onload((canvas) => {
-			const hoveredCell = new HoveredCell(canvas)
-		
-			canvas.add(hoveredCell)
-			canvas.store.hoveredCell = hoveredCell
-		
-			return () => canvas.remove(hoveredCell)
+			return addStoredElement('hoveredCell', HoveredCell, canvas)
 		})
 
 		canvas.onload((canvas) => {
-			const lineDrawer = new LineDrawer(canvas)
-
-			canvas.add(lineDrawer)
-			canvas.store.lineDrawer = lineDrawer
-
-			return () => canvas.remove(lineDrawer)
+			return addStoredElement('lineDrawer', LineDrawer, canvas)
 		})
 
 		canvas.onload((canvas) => {
 			const cursorEvents = new CursorEvents(
 				canvas,
-				canvas.store.hoveredCell,
-				canvas.store.lineDrawer,
+				canvas.store.get('hoveredCell'),
+				canvas.store.get('lineDrawer'),
 			)
 
 			return () => cursorEvents.free()

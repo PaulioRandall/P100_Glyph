@@ -1,5 +1,4 @@
-import Two from 'two.js'
-import Group from './Group.js'
+import { Two, Group } from './ramen'
 
 export default class Line extends Group {
 	lineShape = createLineShape()

@@ -1,37 +1,29 @@
-import Cursor from './Cursor.js'
-
 export default class CursorEvents {
 	_removeHandlers = null
 
 	constructor(canvas, ...receivers) {
 		const downHandler = (e) => {
-			const cursor = Cursor.fromEvent(e)
-
 			for (const r of receivers) {
-				if (r.cursorDown) {
-					r.cursorDown(e, cursor)
+				if (r.mousedown) {
+					r.mousedown(e)
 				}
 			}
 		}
 
 		const moveHandler = (e) => {
-			const cursor = Cursor.fromEvent(e)
-
-			canvas.cursorMove(e, cursor)
+			canvas.mousemove(e)
 
 			for (const r of receivers) {
-				if (r.cursorMove) {
-					r.cursorMove(e, cursor)
+				if (r.mousemove) {
+					r.mousemove(e)
 				}
 			}
 		}
 
 		const upHandler = (e) => {
-			const cursor = Cursor.fromEvent(e)
-
 			for (const r of receivers) {
-				if (r.cursorUp) {
-					r.cursorUp(e, cursor)
+				if (r.mouseup) {
+					r.mouseup(e)
 				}
 			}
 		}
@@ -47,9 +39,10 @@ export default class CursorEvents {
 		}
 	}
 
-	destroy() {
+	free() {
 		if (this._removeHandler) {
 			this._removeHandler()
+			this._removeHandler = null
 		}
 	}
 }

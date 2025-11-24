@@ -10,7 +10,7 @@ export default class Group extends Two.Group {
 	add(element) {
 		super.add(element)
 
-		if (element.added) {
+		if (typeof element.added === 'function') {
 			element.added()
 		}
 	}
@@ -18,7 +18,7 @@ export default class Group extends Two.Group {
 	remove(element) {
 		super.remove(element)
 
-		if (element.removed) {
+		if (typeof element.removed === 'function') {
 			element.removed()
 		}
 	}
