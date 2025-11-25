@@ -7,3 +7,5 @@ export { default as Group } from './Group.js'
 
 export { default as EventUtil } from './EventUtil.js'
 export { default as CursorEvents } from './CursorEvents.js'
+
+export { default as Store } from './Store.js'

@@ -6,14 +6,9 @@ import RepeatedAction from './RepeatedAction.js'
 const ONE_SECOND = 1000
 const THIRD_OF_SECOND = 500
 
-// NEXT: Allow single SVG path of simple lines to be drawn
 export default class PathDrawer extends Group {
 	_canvas = null
-
-	// TODO: Move this to top level (Glyph.svelte).
-	//       Also need to send completed paths to the
-	//       Diagram somehow (use canvas.store.get).
-	_diagram = new Diagram()
+	_diagram = null
 
 	_downButton = null
 	_path = null
@@ -31,19 +26,12 @@ export default class PathDrawer extends Group {
 		super()
 
 		this._canvas = canvas
-	}
-
-	added() {
-		super.add(this._diagram)
+		this._diagram = canvas.store.get('Diagram')
 	}
 
 	removed() {
 		super.clear()
 		this._reset()
-	}
-
-	get diagram() {
-		return this._diagram
 	}
 
 	mousedown(e) {
@@ -117,12 +105,16 @@ export default class PathDrawer extends Group {
 
 	_startPath(cell) {
 		this._path = new Path(cell)
-		this.diagram.add(this._path)
+		super.add(this._path)
 	}
 
 	_finishPath() {
 		if (this._path) {
+			super.remove(this._path)
+
 			this._path.popVertex()
+			this._diagram.add(this._path)
+
 			this._path = null
 			this._reset()
 		}
@@ -130,7 +122,7 @@ export default class PathDrawer extends Group {
 
 	_reset() {
 		if (this._path) {
-			this.diagram.remove(this._path)
+			super.remove(this._path)
 		}
 
 		this._downTime = null
