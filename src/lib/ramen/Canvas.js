@@ -54,6 +54,22 @@ export default class Canvas {
 		return this._store
 	}
 
+	add(element) {
+		this._stage.add(element)
+	}
+
+	remove(element) {
+		this._stage.remove(element)
+	}
+
+	clear() {
+		this._stage.clear()
+		super.clear()
+	}
+
+	// class Loadable
+	// canvas.loader
+
 	onload(load) {
 		this._loaders.push(load)
 		this._doLoad(load)
@@ -99,16 +115,19 @@ export default class Canvas {
 		}
 	}
 
-	add(element) {
-		this._stage.add(element)
+	// class Events
+	// canvas.events
+
+	listen(type, callback, options) {
+		this.dom.addEventListener(type, callback, options)
+		return () => this.unlisten(type, callback, options)
 	}
 
-	remove(element) {
-		this._stage.remove(element)
+	unlisten(type, callback, options) {
+		this.dom.removeEventListener(type, callback, options)
 	}
 
-	clear() {
-		this._stage.clear()
-		super.clear()
+	dispatchEvent(event) {
+		return this.dom.dispatchEvent(event)
 	}
 }

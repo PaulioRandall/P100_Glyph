@@ -1,43 +1,5 @@
 import { Two, Group } from './ramen'
 
-/*
-class PathVertex {
-	constructor(drawer, x, y) {
-		this._drawer = drawer
-		this._x = x
-		this._y = y
-	}
-
-	get drawer() {
-		return _drawer
-	}
-
-	get x() {
-		return this._x
-	}
-
-	get y() {
-		return this._y
-	}
-
-	set x(v) {
-		this._x = v
-	}
-
-	set y(v) {
-		this._y = v
-	}
-
-	setXY(xOrStruct, yOrFalsy=null) {
-		const { x, y } = pairToObject(xOrStruct, yOrFalsy)
-
-		this._x = x
-		this._y = y
-		this._drawer.redraw()
-	}
-}
-*/
-
 export default class Path extends Group {
 	_shape = null
 
@@ -113,26 +75,4 @@ function createShape(x, y) {
 	path.join = 'round'
 
 	return path
-}
-
-function pairToObject(x, y) {
-	if (isObject(x)) {
-		return x
-	}
-
-	if (Array.isArray(x)) {
-		return {
-			x: x.x,
-			y: x.y,
-		}
-	}
-
-	return {
-		x,
-		y,
-	}
-}
-
-function isObject(object) {
-	return Object.prototype.toString.call() === '[object Object]'
 }

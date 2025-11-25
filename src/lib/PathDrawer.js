@@ -115,6 +115,9 @@ export default class PathDrawer extends Group {
 			this._path.popVertex()
 			this._diagram.add(this._path)
 
+			const event = new Event('newpath', { bubbles: false, cancelable: false })
+			this._canvas.dispatchEvent(event)
+
 			this._path = null
 			this._reset()
 		}

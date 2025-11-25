@@ -1,3 +1,6 @@
+// NEXT: Remove this class and let entities handle their
+//       subscriptions internally.
+
 export default class CursorEvents {
 	_removeHandlers = null
 
@@ -28,14 +31,14 @@ export default class CursorEvents {
 			}
 		}
 
-		canvas.dom.addEventListener('mousedown', downHandler)
-		canvas.dom.addEventListener('mousemove', moveHandler)
-		canvas.dom.addEventListener('mouseup', upHandler)
+		canvas.listen('mousedown', downHandler)
+		canvas.listen('mousemove', moveHandler)
+		canvas.listen('mouseup', upHandler)
 
 		this._removeHandler = () => {
-			canvas.dom.removeEventListener('mousedown', downHandler)
-			canvas.dom.removeEventListener('mousemove', moveHandler)
-			canvas.dom.removeEventListener('mouseup', upHandler)
+			canvas.unlisten('mousedown', downHandler)
+			canvas.unlisten('mousemove', moveHandler)
+			canvas.unlisten('mouseup', upHandler)
 		}
 	}
 

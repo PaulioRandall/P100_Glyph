@@ -1,5 +1,9 @@
 <script>
 	import { onMount } from 'svelte'
+	import { writable } from 'svelte/store'
+
+	import ElementList from './ElementList.svelte'
+	import CanvasControls from './CanvasControls.svelte'
 
 	import { GridCanvas, CursorEvents } from './ramen'
 	import HoveredCell from './HoveredCell.js'
@@ -7,10 +11,11 @@
 	import Diagram from './Diagram.js'
 
 	let container = null
-	let canvas = null
+	let canvasStore = writable(null)
 
 	onMount(() => {
-		canvas = new GridCanvas(container)
+		const canvas = new GridCanvas(container)
+		canvasStore.set(canvas)
 
 		function addStoredElement(name, Clazz, ...args) {
 			const element = new Clazz(...args)		
@@ -29,7 +34,7 @@
 		})
 
 		canvas.onload((canvas) => {
-			return addStoredElement('Diagram', Diagram)
+			return addStoredElement('Diagram', Diagram, canvas)
 		})
 
 		canvas.onload((canvas) => {
@@ -65,11 +70,11 @@
 	</div>
 
 	<div class="diagram-element-list">
-
+		<ElementList {canvasStore} />
 	</div>
 
 	<div class="canvas-controls">
-
+		<CanvasControls {canvasStore} />
 	</div>
 </div>
 
@@ -101,14 +106,9 @@
 
 	.diagram-element-list {
 		grid-area: diagram-content;
-		height: 100%;
-
-		background: lightskyblue;
 	}
 
 	.canvas-controls {
 		grid-area: canvas-controls;
-
-		background: LightCoral;
 	}
 </style>
