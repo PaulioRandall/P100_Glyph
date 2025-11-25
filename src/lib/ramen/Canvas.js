@@ -67,6 +67,31 @@ export default class Canvas {
 		super.clear()
 	}
 
+	dispatch(type, detail = {}) {
+		const event = new CustomEvent(type, {
+			bubbles: false,
+			cancelable: false,
+			detail,
+		})
+
+		return this.dom.dispatchEvent(event)
+	}
+
+	listen(type, callback, binding = null) {
+		callback = this._bindCallback(callback, binding)
+		this.dom.addEventListener(type, callback)
+		return () => this.dom.removeEventListener(type, callback)
+	}
+
+	_bindCallback(callback, binding) {
+		return binding ? callback.bind(binding) : callback
+	}
+
+	_addListener(type, callback) {
+		this.dom.addEventListener(type, callback)
+		return () => this.dom.removeEventListener(type, callback)
+	}
+
 	// class Loadable
 	// canvas.loader
 
@@ -113,21 +138,5 @@ export default class Canvas {
 		for (const load of this._loaders) {
 			this._doLoad(load)
 		}
-	}
-
-	// class Events
-	// canvas.events
-
-	listen(type, callback, options) {
-		this.dom.addEventListener(type, callback, options)
-		return () => this.unlisten(type, callback, options)
-	}
-
-	unlisten(type, callback, options) {
-		this.dom.removeEventListener(type, callback, options)
-	}
-
-	dispatchEvent(event) {
-		return this.dom.dispatchEvent(event)
 	}
 }

@@ -2,6 +2,7 @@
 <script>
 	let { canvasStore } = $props()
 
+	let unlistenDiagramupdate = null
 	const elements = $state([
 		/* {
 			id: "",
@@ -11,25 +12,19 @@
 	$effect(() => {
 		const canvas = $canvasStore
 
+		unlistenDiagramupdate?.call()
+
 		if (!canvas) {
 			return
 		}
 
-		return canvas.listen('newpath', thing)
+		unlistenDiagramupdate = canvas.listen('diagramupdate', updateElementList)
 	})
 
-	function thing(e) {
-		const canvas = $canvasStore
-
-		if (!canvas) {
-			return
-		}
-
-		const diagram = canvas.store.get('Diagram')
-
+	function updateElementList(e) {
 		elements.splice(0)
 
-		for (const child of diagram.children) {
+		for (const child of e.detail.diagram.children) {
 			elements.push({
 				id: child.id
 			})

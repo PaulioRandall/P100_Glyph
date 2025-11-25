@@ -1,5 +1,4 @@
 import { Group, EventUtil } from './ramen'
-import Diagram from './Diagram.js'
 import Path from './Path.js'
 import RepeatedAction from './RepeatedAction.js'
 
@@ -8,7 +7,6 @@ const THIRD_OF_SECOND = 500
 
 export default class PathDrawer extends Group {
 	_canvas = null
-	_diagram = null
 
 	_downButton = null
 	_path = null
@@ -26,7 +24,6 @@ export default class PathDrawer extends Group {
 		super()
 
 		this._canvas = canvas
-		this._diagram = canvas.store.get('Diagram')
 	}
 
 	removed() {
@@ -113,10 +110,10 @@ export default class PathDrawer extends Group {
 			super.remove(this._path)
 
 			this._path.popVertex()
-			this._diagram.add(this._path)
 
-			const event = new Event('newpath', { bubbles: false, cancelable: false })
-			this._canvas.dispatchEvent(event)
+			this._canvas.dispatch('newpath', {
+				path: this._path,
+			})
 
 			this._path = null
 			this._reset()

@@ -43,9 +43,6 @@ export default class CursorEvents {
 	}
 
 	free() {
-		if (this._removeHandler) {
-			this._removeHandler()
-			this._removeHandler = null
-		}
+		this._removeHandler?.call()
 	}
 }
