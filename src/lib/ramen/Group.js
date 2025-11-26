@@ -8,6 +8,10 @@ export default class Group extends Two.Group {
 	}
 
 	add(element) {
+		if (!element) {
+			return
+		}
+
 		super.add(element)
 
 		if (typeof element.added === 'function') {
@@ -16,6 +20,10 @@ export default class Group extends Two.Group {
 	}
 
 	remove(element) {
+		if (!element) {
+			return
+		}
+
 		super.remove(element)
 
 		if (typeof element.removed === 'function') {

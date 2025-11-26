@@ -20,10 +20,17 @@
 		function addElement(name, Clazz) {
 			const element = new Clazz(canvas)		
 			canvas.add(element)
-			return () => canvas.remove(element)
+
+			return () => {
+				canvas.remove(element)
+				
+				if (element.free) {
+					element.free()
+				}
+			}
 		}
 		
-		canvas.onload((canvas) => {
+		canvas.load((canvas) => {
 			function listenAndLog(type) {
 				canvas.listen(type, () => console.log(type))	
 			}
@@ -39,17 +46,19 @@
 			}
 		})
 
-		canvas.onload((canvas) => {
+		canvas.load((canvas) => {
 			return addElement('HoveredCell', HoveredCell)
 		})
 
-		canvas.onload((canvas) => {
+		canvas.load((canvas) => {
 			return addElement('Diagram', Diagram)
 		})
 
-		canvas.onload((canvas) => {
+		canvas.load((canvas) => {
 			return addElement('PathDrawer', PathDrawer)
 		})
+
+		setTimeout(() => canvas.reload(), 5000)
 	})
 </script>
 

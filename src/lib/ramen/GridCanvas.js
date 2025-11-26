@@ -17,30 +17,20 @@ export default class GridCanvas extends Canvas {
 
 		const canvas = this
 
-		super.onload(() => {
-			canvas._load()
-			const unlisten = canvas.listen(
-				'mousemove',
-				canvas._mousemove.bind(canvas)
-			)
+		this.load(() => {
+			this._load()
+
+			const unlisten = this.listen('mousemove', this._mousemove.bind(this))
 
 			return () => {
-				unlisten?.call(canvas)
-				canvas._unload()
+				unlisten()
+				this._unload()
 			}
 		})
 	}
 
 	get hovered() {
 		return this._hovered
-	}
-
-	get cursorStyle() {
-		return this.dom.style.cursor
-	}
-
-	set cursorStyle(style) {
-		this.dom.style.cursor = style
 	}
 
 	cellAt(x, y) {

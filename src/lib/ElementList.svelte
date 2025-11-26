@@ -2,7 +2,7 @@
 <script>
 	let { canvasStore } = $props()
 
-	let unlistenDiagramupdate = null
+	let unlisten = null
 	const elements = $state([
 		/* {
 			id: "",
@@ -12,13 +12,15 @@
 	$effect(() => {
 		const canvas = $canvasStore
 
-		unlistenDiagramupdate?.call()
+		if (unlisten) {
+			unlisten()
+		}
 
 		if (!canvas) {
 			return
 		}
 
-		unlistenDiagramupdate = canvas.listen(
+		unlisten = canvas.listen(
 			'diagramupdate',
 			updateElementList,
 		)

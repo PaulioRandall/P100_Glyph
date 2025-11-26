@@ -3,20 +3,18 @@ import { ZUI } from 'two.js/extras/jsm/zui.js'
 import Group from './Group.js'
 import Store from './Store.js'
 import Eventor from './Eventor.js'
+import Loader from './Loader.js'
 
-export default class Canvas {
+export default class Canvas extends Group {
 	_container
 	_two
-	_stage
 	_zui
 	_store = new Store()
-
-	_loaders = [] // (canvas) => Unloader
-	_unloaders = [] // (canvas) => {}
-
-	// TODO: this class could extend Group to become the stage?
+	_loader = new Loader(this)
 
 	constructor(container, twoOptions = {}) {
+		super()
+
 		this._container = container
 
 		this._two = new Two({
@@ -26,7 +24,16 @@ export default class Canvas {
 			...twoOptions,
 		}).appendTo(container)
 
-		this.reload()
+		this._zui = new ZUI(this)
+
+		this.load(() => {
+			this._two.add(this)
+
+			return () => {
+				this._two.clear()
+				this._zui.reset()
+			}
+		})
 	}
 
 	get container() {
@@ -42,7 +49,7 @@ export default class Canvas {
 	}
 
 	get dom() {
-		return this.two.renderer.domElement
+		return this._two.renderer.domElement
 	}
 
 	get width() {
@@ -57,17 +64,12 @@ export default class Canvas {
 		return this._store
 	}
 
-	add(element) {
-		this._stage.add(element)
+	get cursorStyle() {
+		return this.dom.style.cursor
 	}
 
-	remove(element) {
-		this._stage.remove(element)
-	}
-
-	clear() {
-		this._stage.clear()
-		super.clear()
+	set cursorStyle(style) {
+		this.dom.style.cursor = style
 	}
 
 	dispatch(type, detail = {}) {
@@ -89,55 +91,15 @@ export default class Canvas {
 		return new Eventor(this, binding)
 	}
 
-	// class Loadable
-	// canvas.loader
-
-	onload(load) {
-		this._loaders.push(load)
-		this._doLoad(load)
-	}
-
-	load() {
-		this.reload()
+	load(loadFunc) {
+		this._loader.load(loadFunc)
 	}
 
 	reload() {
-		this._unloadAll()
-
-		this._two.clear()
-		this._stage = new Group()
-		this._two.add(this._stage)
-		this._zui = new ZUI(this._stage)
-
-		this._loadAll()
-	}
-
-	unload() {
-		this._unloadAll()
+		this._loader.reload()
 	}
 
 	free() {
-		this.unload()
-	}
-
-	_doLoad(load) {
-		const unload = load(this)
-
-		if (unload) {
-			this._unloaders.push(unload)
-		}
-	}
-
-	_unloadAll() {
-		while (this._unloaders.length > 0) {
-			const unload = this._unloaders.pop()
-			unload(this)
-		}
-	}
-
-	_loadAll() {
-		for (const load of this._loaders) {
-			this._doLoad(load)
-		}
+		this._loader.free()
 	}
 }
