@@ -31,7 +31,7 @@ export default class RepeatedAction {
 	}
 
 	start(startDelay = null) {
-		this.stop()
+		this.pause()
 		this._active = true
 		this._repeat(startDelay || this._delay)
 	}
@@ -46,16 +46,30 @@ export default class RepeatedAction {
 
 		if (this._active && this._action()) {
 			this._repeat(this._delay)
+		} else {
+			this.pause()
 		}
 	}
 
-	stop() {
-		const count = this._count
+	pause() {
+		clearTimeout(this._id)
 
 		this._active = false
 		this._id = null
+
+		return this._count
+	}
+
+	stop() {
+		this.pause()
+
+		const count = this._count
 		this._count = 0
 
 		return count
+	}
+
+	reset() {
+		this.stop()
 	}
 }
