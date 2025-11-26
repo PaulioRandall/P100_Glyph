@@ -12,7 +12,7 @@ export default class HoveredCell extends Group {
 
 		this._canvas = canvas
 
-		this._unlisten = this._canvas.listen('hoveringcell', this._hover, this)
+		this._unlisten = this._canvas.listen('hoveringcell', this._hover.bind(this))
 
 		this.hide()
 	}

@@ -19,7 +19,15 @@ export default class GridCanvas extends Canvas {
 
 		super.onload(() => {
 			canvas._load()
-			return () => canvas._unload()
+			const unlisten = canvas.listen(
+				'mousemove',
+				canvas._mousemove.bind(canvas)
+			)
+
+			return () => {
+				unlisten?.call(canvas)
+				canvas._unload()
+			}
 		})
 	}
 
@@ -45,7 +53,7 @@ export default class GridCanvas extends Canvas {
 		return null
 	}
 
-	mousemove(e) {
+	_mousemove(e) {
 		const oldCell = this._hovered
 		const cell = this.cellAt(e.offsetX, e.offsetY)
 

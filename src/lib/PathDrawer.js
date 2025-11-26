@@ -2,11 +2,12 @@ import { Group, EventUtil } from './ramen'
 import Path from './Path.js'
 import RepeatedAction from './RepeatedAction.js'
 
-const ONE_SECOND = 1000
-const THIRD_OF_SECOND = 500
+const THREE_QUARTERS_OF_SECOND = 750
+const THIRD_OF_SECOND = 333
 
 export default class PathDrawer extends Group {
 	_canvas = null
+	_unlisten = []
 
 	_downButton = null
 	_path = null
@@ -24,6 +25,12 @@ export default class PathDrawer extends Group {
 		super()
 
 		this._canvas = canvas
+
+		this._unlisten.push(
+			canvas.listen('mousedown', this._mousedown.bind(this)),
+			canvas.listen('mousemove', this._mousemove.bind(this)),
+			canvas.listen('mouseup', this._mouseup.bind(this))
+		)
 	}
 
 	removed() {
@@ -31,7 +38,7 @@ export default class PathDrawer extends Group {
 		this._reset()
 	}
 
-	mousedown(e) {
+	_mousedown(e) {
 		if (this._downButton !== null) {
 			return
 		}
@@ -39,11 +46,11 @@ export default class PathDrawer extends Group {
 		this._downButton = e.button
 
 		if (EventUtil.isMiddleButton(e)) {
-			this._repeatedUndo.start(ONE_SECOND)
+			this._repeatedUndo.start(THREE_QUARTERS_OF_SECOND)
 		}
 	}
 
-	mousemove() {
+	_mousemove() {
 		const cell = this._canvas.hovered
 
 		if (this._path && cell) {
@@ -51,7 +58,7 @@ export default class PathDrawer extends Group {
 		}
 	}
 
-	mouseup(e) {
+	_mouseup(e) {
 		if (!EventUtil.isButton(e, this._downButton)) {
 			return
 		}

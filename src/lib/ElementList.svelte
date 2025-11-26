@@ -18,7 +18,10 @@
 			return
 		}
 
-		unlistenDiagramupdate = canvas.listen('diagramupdate', updateElementList)
+		unlistenDiagramupdate = canvas.listen(
+			'diagramupdate',
+			updateElementList,
+		)
 	})
 
 	function updateElementList(e) {

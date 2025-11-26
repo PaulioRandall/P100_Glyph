@@ -5,7 +5,7 @@
 	import ElementList from './ElementList.svelte'
 	import CanvasControls from './CanvasControls.svelte'
 
-	import { GridCanvas, CursorEvents } from './ramen'
+	import { GridCanvas } from './ramen'
 	import HoveredCell from './HoveredCell.js'
 	import PathDrawer from './PathDrawer.js'
 	import Diagram from './Diagram.js'
@@ -62,15 +62,6 @@
 
 		canvas.onload((canvas) => {
 			return addStoredElement('PathDrawer', PathDrawer, canvas)
-		})
-
-		canvas.onload((canvas) => {
-			const cursorEvents = new CursorEvents(
-				canvas,
-				canvas.store.get('PathDrawer'),
-			)
-
-			return () => cursorEvents.free()
 		})
 	})
 </script>

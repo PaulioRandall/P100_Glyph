@@ -9,7 +9,10 @@ export default class Diagram extends Group {
 
 		this._canvas = canvas
 
-		this._unlistenNewpath = canvas.listen('newpath', this._addElement, this)
+		this._unlistenNewpath = canvas.listen(
+			'newpath',
+			this._addElement.bind(this)
+		)
 	}
 
 	destroy() {

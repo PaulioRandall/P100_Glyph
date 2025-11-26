@@ -77,19 +77,9 @@ export default class Canvas {
 		return this.dom.dispatchEvent(event)
 	}
 
-	listen(type, callback, binding = null) {
-		callback = this._bindCallback(callback, binding)
-		this.dom.addEventListener(type, callback)
-		return () => this.dom.removeEventListener(type, callback)
-	}
-
-	_bindCallback(callback, binding) {
-		return binding ? callback.bind(binding) : callback
-	}
-
-	_addListener(type, callback) {
-		this.dom.addEventListener(type, callback)
-		return () => this.dom.removeEventListener(type, callback)
+	listen(type, callback, options) {
+		this.dom.addEventListener(type, callback, options)
+		return () => this.dom.removeEventListener(type, callback, options)
 	}
 
 	// class Loadable
