@@ -7,14 +7,6 @@ export default Object.freeze({
 		return event.offsetY
 	},
 
-	button(event) {
-		return event.button
-	},
-
-	isButton(event, button) {
-		return event.button === button
-	},
-
 	isLeftButton(event) {
 		return event.button === 0
 	},

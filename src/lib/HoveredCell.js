@@ -2,7 +2,7 @@ import { Two, Group, EventUtil } from './ramen'
 
 export default class HoveredCell extends Group {
 	_canvas = null
-	_unlisten = null
+	_eventor = null
 
 	_cell = null
 	_haloShape = createHaloShape()
@@ -12,7 +12,8 @@ export default class HoveredCell extends Group {
 
 		this._canvas = canvas
 
-		this._unlisten = this._canvas.listen('hoveringcell', this._hover.bind(this))
+		this._eventor = canvas.eventor(this)
+		this._eventor.listen('hoveringcell', this._hover)
 
 		this.hide()
 	}
@@ -48,6 +49,11 @@ export default class HoveredCell extends Group {
 		this._canvas.cursorStyle = 'pointer'
 	}
 
+	_setHaloPosition({ x, y }) {
+		this._haloShape.position.x = x
+		this._haloShape.position.y = y
+	}
+
 	_unhover() {
 		if (this._cell) {
 			this.hide()
@@ -68,12 +74,7 @@ export default class HoveredCell extends Group {
 	}
 
 	free() {
-		this._unlisten?.call(null)
-	}
-
-	_setHaloPosition({ x, y }) {
-		this._haloShape.position.x = x
-		this._haloShape.position.y = y
+		this._eventor.free()
 	}
 }
 

@@ -7,7 +7,7 @@ const THIRD_OF_SECOND = 333
 
 export default class PathDrawer extends Group {
 	_canvas = null
-	_unlisten = []
+	_eventor = null
 
 	_downButton = null
 	_path = null
@@ -26,11 +26,10 @@ export default class PathDrawer extends Group {
 
 		this._canvas = canvas
 
-		this._unlisten.push(
-			canvas.listen('mousedown', this._mousedown.bind(this)),
-			canvas.listen('mousemove', this._mousemove.bind(this)),
-			canvas.listen('mouseup', this._mouseup.bind(this))
-		)
+		this._eventor = canvas.eventor(this)
+		this._eventor.listen('mousedown', this._mousedown)
+		this._eventor.listen('mousemove', this._mousemove)
+		this._eventor.listen('mouseup', this._mouseup)
 	}
 
 	removed() {
@@ -59,7 +58,7 @@ export default class PathDrawer extends Group {
 	}
 
 	_mouseup(e) {
-		if (!EventUtil.isButton(e, this._downButton)) {
+		if (!e.button === this._downButton) {
 			return
 		}
 
@@ -150,5 +149,9 @@ export default class PathDrawer extends Group {
 		this._path = null
 
 		this._canvas.dispatch('resetpath')
+	}
+
+	free() {
+		this._eventor.free()
 	}
 }

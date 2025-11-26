@@ -2,6 +2,7 @@ import Two from 'two.js'
 import { ZUI } from 'two.js/extras/jsm/zui.js'
 import Group from './Group.js'
 import Store from './Store.js'
+import Eventor from './Eventor.js'
 
 export default class Canvas {
 	_container
@@ -12,6 +13,8 @@ export default class Canvas {
 
 	_loaders = [] // (canvas) => Unloader
 	_unloaders = [] // (canvas) => {}
+
+	// TODO: this class could extend Group to become the stage?
 
 	constructor(container, twoOptions = {}) {
 		this._container = container
@@ -82,6 +85,10 @@ export default class Canvas {
 		return () => this.dom.removeEventListener(type, callback, options)
 	}
 
+	eventor(binding) {
+		return new Eventor(this, binding)
+	}
+
 	// class Loadable
 	// canvas.loader
 
@@ -107,6 +114,10 @@ export default class Canvas {
 
 	unload() {
 		this._unloadAll()
+	}
+
+	free() {
+		this.unload()
 	}
 
 	_doLoad(load) {

@@ -22,20 +22,7 @@
 			canvas.add(element)
 			return () => canvas.remove(element)
 		}
-
-		// TODO: Remove
-		function addStoredElement(name, Clazz, ...args) {
-			const element = new Clazz(...args)		
-
-			canvas.add(element)
-			canvas.store.put(name, element)
-
-			return () => {
-				canvas.remove(element)
-				canvas.store.del(name)
-			}
-		}
-
+		
 		canvas.onload((canvas) => {
 			function listenAndLog(type) {
 				canvas.listen(type, () => console.log(type))	
@@ -53,15 +40,15 @@
 		})
 
 		canvas.onload((canvas) => {
-			addElement('HoveredCell', HoveredCell)
+			return addElement('HoveredCell', HoveredCell)
 		})
 
 		canvas.onload((canvas) => {
-			addElement('Diagram', Diagram)
+			return addElement('Diagram', Diagram)
 		})
 
 		canvas.onload((canvas) => {
-			return addStoredElement('PathDrawer', PathDrawer, canvas)
+			return addElement('PathDrawer', PathDrawer)
 		})
 	})
 </script>
