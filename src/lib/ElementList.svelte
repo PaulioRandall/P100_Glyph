@@ -1,5 +1,7 @@
 
 <script>
+	// NOTE: Under development
+
 	let { canvasStore } = $props()
 
 	let unlisten = null

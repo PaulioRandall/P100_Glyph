@@ -58,7 +58,7 @@
 			return addElement('PathDrawer', PathDrawer)
 		})
 
-		setTimeout(() => canvas.reload(), 5000)
+		//setTimeout(() => canvas.reload(), 4000)
 	})
 </script>
 

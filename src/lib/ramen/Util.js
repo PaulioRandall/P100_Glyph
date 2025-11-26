@@ -2,7 +2,9 @@ function removeArrayItem(array, item) {
 	const i = array.indexOf(item)
 	if (i > -1) {
 		array.spilce(i, 1)
+		return true
 	}
+	return false
 }
 
 function clearArray(array, cleanUpItem = null) {

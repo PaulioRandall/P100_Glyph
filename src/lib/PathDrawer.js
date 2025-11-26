@@ -8,9 +8,9 @@ const THIRD_OF_SECOND = 333
 export default class PathDrawer extends Group {
 	_canvas = null
 	_eventor = null
+	_path = null
 
 	_downButton = null
-	_path = null
 
 	_repeatedUndo = new RepeatedAction(() => {
 		if (!this._path) {
@@ -81,7 +81,11 @@ export default class PathDrawer extends Group {
 		}
 
 		if (EventUtil.isRightButton(e)) {
-			this._finishPath()
+			if (this._path.countVertices() > 2) {
+				this._finishPath()
+			} else {
+				this._reset()
+			}
 			return
 		}
 	}

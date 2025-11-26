@@ -73,6 +73,8 @@ export default class Canvas extends Group {
 	}
 
 	dispatch(type, detail = {}) {
+		// IDEA: Can attach things to the detail.
+
 		const event = new CustomEvent(type, {
 			bubbles: false,
 			cancelable: false,

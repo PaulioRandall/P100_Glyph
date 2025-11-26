@@ -1,3 +1,11 @@
+import Util from './Util.js'
+
+// IDEA: Intead of binding, could pass an object that has
+//       functions like '_event_mousedown'. Listeners and
+//       unlisteners are created for these functions with
+//       the object as binding (allowing this keyword to
+//       function as normal).
+
 export default class Eventor {
 	_canvas = null
 	_binding = null
@@ -15,15 +23,19 @@ export default class Eventor {
 
 	_listen(type, callback, options) {
 		const unlisten = this._canvas.listen(type, callback, options)
-		this._unlisteners.push(unlisten)
+
+		this._unlisteners.push(() => {
+			const removed = Util.removeArrayItem(this._unlisteners, unlisten)
+			if (removed) {
+				unlisten()
+			}
+		})
+
 		return unlisten
 	}
 
 	free() {
-		while (this._unlisteners.length > 0) {
-			const unlisten = this._unlisteners.pop()
-			unlisten()
-		}
+		this._unlisteners.forEach((ul) => ul())
 	}
 }
 
