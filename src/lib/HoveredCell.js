@@ -1,4 +1,4 @@
-import { Two, Group, EventUtil } from './ramen'
+import { Two, Group } from './ramen'
 
 export default class HoveredCell extends Group {
 	_canvas = null

@@ -1,4 +1,4 @@
-import Util from './Util.js'
+import List from './List.js'
 
 // IDEA: Intead of binding, could pass an object that has
 //       functions like '_event_mousedown'. Listeners and
@@ -9,7 +9,7 @@ import Util from './Util.js'
 export default class Eventor {
 	_canvas = null
 	_binding = null
-	_unlisteners = []
+	_unlisteners = new List()
 
 	constructor(canvas, binding) {
 		this._canvas = canvas
@@ -25,8 +25,7 @@ export default class Eventor {
 		const unlisten = this._canvas.listen(type, callback, options)
 
 		this._unlisteners.push(() => {
-			const removed = Util.removeArrayItem(this._unlisteners, unlisten)
-			if (removed) {
+			if (this._unlisteners.remove(unlisten)) {
 				unlisten()
 			}
 		})

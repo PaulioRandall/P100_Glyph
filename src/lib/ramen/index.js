@@ -5,6 +5,6 @@ export { default as GridCanvas } from './GridCanvas.js'
 
 export { default as Group } from './Group.js'
 
-export { default as EventUtil } from './EventUtil.js'
+export { default as EventMasque } from './EventMasque.js'
 
 export { default as Store } from './Store.js'

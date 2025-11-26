@@ -1,4 +1,4 @@
-import { Group, EventUtil } from './ramen'
+import { Group, EventMasque } from './ramen'
 import Path from './Path.js'
 import RepeatedAction from './RepeatedAction.js'
 
@@ -44,7 +44,7 @@ export default class PathDrawer extends Group {
 
 		this._downButton = e.button
 
-		if (EventUtil.isMiddleButton(e)) {
+		if (EventMasque.isMiddleButton(e)) {
 			this._repeatedUndo.start(THREE_QUARTERS_OF_SECOND)
 		}
 	}
@@ -62,9 +62,10 @@ export default class PathDrawer extends Group {
 			return
 		}
 
+		const masque = new EventMasque(e)
 		this._downButton = null
 
-		if (EventUtil.isLeftButton(e)) {
+		if (masque.isLeftButton()) {
 			this._newVertex(this._canvas.hovered)
 			return
 		}
@@ -73,14 +74,14 @@ export default class PathDrawer extends Group {
 			return
 		}
 
-		if (EventUtil.isMiddleButton(e)) {
+		if (masque.isMiddleButton()) {
 			if (this._repeatedUndo.stop() === 0) {
 				this._undoNewVertex(this._canvas.hovered)
 			}
 			return
 		}
 
-		if (EventUtil.isRightButton(e)) {
+		if (masque.isRightButton()) {
 			if (this._path.countVertices() > 2) {
 				this._finishPath()
 			} else {
