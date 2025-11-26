@@ -88,6 +88,11 @@ export default class PathDrawer extends Group {
 
 		this._path.setEnd(cell)
 		this._path.pushVertex()
+
+		this._canvas.dispatch('newpathvertex', {
+			vertexCell: cell,
+			path: this._path,
+		})
 	}
 
 	_undoNewVertex(cell) {
@@ -96,13 +101,21 @@ export default class PathDrawer extends Group {
 			return
 		}
 
-		this._path.popVertex()
+		const point = this._path.popVertex()
 		this._path.setEnd(cell)
+		this._canvas.dispatch('undopathvertex', {
+			vertex: point,
+			path: this._path,
+		})
 	}
 
 	_startPath(cell) {
 		this._path = new Path(cell)
 		super.add(this._path)
+		this._canvas.dispatch('startpath', {
+			cell,
+			path: this._path,
+		})
 	}
 
 	_finishPath() {
@@ -128,5 +141,7 @@ export default class PathDrawer extends Group {
 		this._downTime = null
 		this._downButton = null
 		this._path = null
+
+		this._canvas.dispatch('resetpath')
 	}
 }

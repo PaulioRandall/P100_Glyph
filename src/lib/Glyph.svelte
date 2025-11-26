@@ -17,6 +17,13 @@
 		const canvas = new GridCanvas(container)
 		canvasStore.set(canvas)
 
+		function addElement(name, Clazz) {
+			const element = new Clazz(canvas)		
+			canvas.add(element)
+			return () => canvas.remove(element)
+		}
+
+		// TODO: Remove
 		function addStoredElement(name, Clazz, ...args) {
 			const element = new Clazz(...args)		
 
@@ -30,11 +37,27 @@
 		}
 
 		canvas.onload((canvas) => {
-			return addStoredElement('HoveredCell', HoveredCell, canvas)
+			function listenAndLog(type) {
+				canvas.listen(type, () => console.log(type))	
+			}
+
+			if (true) {
+				listenAndLog('hoveringcell')
+				listenAndLog('startpath')
+				listenAndLog('newpathvertex')
+				listenAndLog('undopathvertex')
+				listenAndLog('resetpath')
+				listenAndLog('newpath')
+				listenAndLog('diagramupdate')
+			}
 		})
 
 		canvas.onload((canvas) => {
-			return addStoredElement('Diagram', Diagram, canvas)
+			addElement('HoveredCell', HoveredCell)
+		})
+
+		canvas.onload((canvas) => {
+			addElement('Diagram', Diagram)
 		})
 
 		canvas.onload((canvas) => {
@@ -44,7 +67,6 @@
 		canvas.onload((canvas) => {
 			const cursorEvents = new CursorEvents(
 				canvas,
-				canvas.store.get('HoveredCell'),
 				canvas.store.get('PathDrawer'),
 			)
 

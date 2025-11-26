@@ -46,11 +46,19 @@ export default class GridCanvas extends Canvas {
 	}
 
 	mousemove(e) {
+		const oldCell = this._hovered
 		const cell = this.cellAt(e.offsetX, e.offsetY)
 
-		if (cell) {
+		if (cell && cell !== oldCell) {
 			this._hovered = cell
+			this._dispatchHoveredCellChange(cell)
 		}
+	}
+
+	_dispatchHoveredCellChange(cell) {
+		super.dispatch('hoveringcell', {
+			cell,
+		})
 	}
 
 	_load() {

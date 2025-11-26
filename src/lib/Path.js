@@ -49,7 +49,11 @@ export default class Path extends Group {
 	}
 
 	popVertex() {
-		this._shape.vertices.pop()
+		const vert = this._shape.vertices.pop()
+		return {
+			x: vert.x,
+			y: vert.y,
+		}
 	}
 }
 
