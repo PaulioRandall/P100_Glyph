@@ -1,5 +1,6 @@
 
 <script>
+	import { onMount, onDestroy } from 'svelte'
 	// NOTE: Under development
 
 	let { canvas } = $props()
@@ -10,10 +11,10 @@
 		} */
 	])
 
-	const unlisten = canvas.listen(
+	onDestroy(canvas.listen(
 		'diagram_updated',
 		diagram_updated,
-	)
+	))
 
 	function diagram_updated(e) {
 		elements.splice(0)

@@ -21,14 +21,7 @@
 		function addElement(name, Clazz) {
 			const element = new Clazz(canvas)		
 			canvas.add(element)
-
-			return () => {
-				canvas.remove(element)
-				
-				if (element.free) {
-					element.free()
-				}
-			}
+			return () => canvas.remove(element)
 		}
 		
 		canvas.load((canvas) => {

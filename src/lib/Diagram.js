@@ -8,15 +8,23 @@ export default class Diagram extends Group {
 		super()
 
 		this._canvas = canvas
-		this._unlisten = this._canvas.listen(this)
 
 		canvas.dispatch('diagram_init', {
 			diagram: this,
 		})
 	}
 
-	free() {
-		this._unlisten()
+	_group_added() {
+		if (!this._unlisten) {
+			this._unlisten = this._canvas.listen(this)
+		}
+	}
+
+	_group_removed() {
+		if (this._unlisten) {
+			this._unlisten()
+			this._unlisten = null
+		}
 	}
 
 	_event_path_created(e) {

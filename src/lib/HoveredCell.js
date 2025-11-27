@@ -11,23 +11,10 @@ export default class HoveredCell extends Group {
 		super()
 
 		this._canvas = canvas
-		this._unlisten = this._canvas.listen(this)
-
-		this.hide()
 
 		canvas.dispatch('hovering_cell_init', {
 			hoveringCell: this,
 		})
-	}
-
-	_group_added() {
-		super.add(this._haloShape)
-	}
-
-	_group_removed() {
-		super.clear()
-
-		this._cell = null
 	}
 
 	show() {
@@ -40,8 +27,24 @@ export default class HoveredCell extends Group {
 		this.visible = false
 	}
 
-	free() {
-		this._unlisten()
+	_group_added() {
+		this.hide()
+		super.add(this._haloShape)
+
+		if (!this._unlisten) {
+			this._unlisten = this._canvas.listen(this)
+		}
+	}
+
+	_group_removed() {
+		if (this._unlisten) {
+			this._unlisten()
+			this._unlisten = null
+		}
+
+		this._cell = null
+
+		super.clear()
 	}
 
 	_event_grid_cell_focus(e) {

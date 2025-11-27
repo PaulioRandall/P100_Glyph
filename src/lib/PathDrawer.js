@@ -7,25 +7,30 @@ const THIRD_OF_SECOND = 333
 export default class PathDrawer extends Group {
 	_canvas = null
 	_unlisten = null
-	_eventor = null
 	_path = null
 
 	constructor(canvas) {
 		super()
 
 		this._canvas = canvas
-		this._unlisten = canvas.listen(this)
 
 		canvas.dispatch('path_drawer_init', {
 			pathDrawer: this,
 		})
 	}
 
-	free() {
-		this._unlisten()
+	_group_added() {
+		if (!this._unlisten) {
+			this._unlisten = this._canvas.listen(this)
+		}
 	}
 
 	_group_removed() {
+		if (this._unlisten) {
+			this._unlisten()
+			this._unlisten = null
+		}
+
 		super.clear()
 		this._resetPath()
 	}
