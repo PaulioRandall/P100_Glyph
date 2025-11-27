@@ -5,89 +5,30 @@
 	import ElementList from './ElementList.svelte'
 	import CanvasControls from './CanvasControls.svelte'
 
-	import { GridCanvas, EventUtil } from './ramen'
-	import HoveredCell from './HoveredCell.js'
-	import PathDrawer from './PathDrawer.js'
-	import Diagram from './Diagram.js'
-
+	import { GridCanvas, EventUtil } from '$ramen'
+	import EventLogger from './EventLogger.js'
+	import ClickSimplifier from './ClickSimplifier.js'
+	import { Diagram, HoveredCell, PathDrawer } from './elements'
+	
 	let container = null
 	let canvas = $state(null)
-	let canvasStore = writable(null)
 
-	onMount(() => {
-		canvas = new GridCanvas(container, 7, 7)
-		canvasStore.set(canvas)
-
-		function addElement(name, Clazz) {
+	function addElement(Clazz) {
+		canvas.load(() => {
 			const element = new Clazz(canvas)		
 			canvas.add(element)
 			return () => canvas.remove(element)
-		}
+		})
+	}
+
+	onMount(() => {
+		canvas = new GridCanvas(container, 7, 7)
 		
-		canvas.load((canvas) => {
-			function listenAndLog(type) {
-				canvas.listen(type, () => console.log(type))	
-			}
-
-			if (true) {
-				listenAndLog('grid_cell_focus')
-
-				listenAndLog('left_click')
-				listenAndLog('middle_click')
-				listenAndLog('right_click')
-
-				listenAndLog('hovering_cell_init')
-
-				listenAndLog('diagram_init')
-				listenAndLog('diagram_updated')
-
-				listenAndLog('path_drawer_init')
-				listenAndLog('path_started')
-				listenAndLog('path_vertex_added')
-				listenAndLog('path_vertex_removed')
-				listenAndLog('path_reset')
-				listenAndLog('path_created')
-			}
-		})
-
-		canvas.load((canvas) => {
-			let pointerId = null
-
-			canvas.listen('pointerdown', (e) => {
-				pointerId = e.pointerId
-			})
-
-			canvas.listen('pointerup', (e) => {
-				if (pointerId !== e.pointerId) {
-					return
-				}
-
-				pointerId = null
-
-				const eu = new EventUtil(e)
-				const detail = { originalEvent: e }
-
-				if (eu.isLeftButton()) {
-					canvas.dispatch('left_click', detail)
-				} else if (eu.isMiddleButton()) {
-					canvas.dispatch('middle_click', detail)
-				} else if (eu.isRightButton()) {
-					canvas.dispatch('right_click', detail)
-				}
-			})
-		})
-
-		canvas.load((canvas) => {
-			return addElement('HoveredCell', HoveredCell)
-		})
-
-		canvas.load((canvas) => {
-			return addElement('Diagram', Diagram)
-		})
-
-		canvas.load((canvas) => {
-			return addElement('PathDrawer', PathDrawer)
-		})
+		addElement(EventLogger)
+		addElement(ClickSimplifier)
+		addElement(HoveredCell)
+		addElement(Diagram)
+		addElement(PathDrawer)
 
 		//setTimeout(() => canvas.reload(), 4000)
 

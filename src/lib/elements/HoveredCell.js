@@ -1,4 +1,4 @@
-import { Two, CanvasGroup } from './ramen'
+import { Two, CanvasGroup } from '$ramen'
 
 export default class HoveredCell extends CanvasGroup {
 	_cell = null

@@ -1,8 +1,6 @@
 import Two from 'two.js'
 import { ZUI } from 'two.js/extras/jsm/zui.js'
 import Group from './Group.js'
-import Store from './Store.js'
-import Eventor from './Eventor.js'
 import Loader from './Loader.js'
 
 export default class Canvas extends Group {
@@ -10,7 +8,6 @@ export default class Canvas extends Group {
 	_two
 	_zui
 
-	_store = new Store()
 	_loader = new Loader(this)
 
 	constructor(container, twoOptions = {}) {
@@ -59,10 +56,6 @@ export default class Canvas extends Group {
 
 	get height() {
 		return this._two.height
-	}
-
-	get store() {
-		return this._store
 	}
 
 	get cursorStyle() {
@@ -129,10 +122,6 @@ export default class Canvas extends Group {
 	_listenWithCallback(type, callback, options) {
 		this.dom.addEventListener(type, callback, options)
 		return () => this.dom.removeEventListener(type, callback, options)
-	}
-
-	eventor(binding) {
-		return new Eventor(this, binding)
 	}
 
 	load(loadFunc) {

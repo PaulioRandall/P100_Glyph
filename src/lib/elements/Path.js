@@ -1,4 +1,4 @@
-import { Two, Group } from './ramen'
+import { Two, Group } from '$ramen'
 
 // TODO: Refactor so it works with grid cells.
 //       Perhaps holds a list of grid cells representing

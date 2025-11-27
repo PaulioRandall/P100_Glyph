@@ -1,4 +1,4 @@
-import { Two, CanvasGroup } from './ramen'
+import { Two, CanvasGroup } from '$ramen'
 
 export default class Diagram extends CanvasGroup {
 	constructor(canvas) {

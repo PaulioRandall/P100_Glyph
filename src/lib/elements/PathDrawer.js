@@ -1,8 +1,5 @@
-import { CanvasGroup, EventUtil } from './ramen'
+import { CanvasGroup } from '$ramen'
 import Path from './Path.js'
-
-const THREE_QUARTERS_OF_SECOND = 750
-const THIRD_OF_SECOND = 333
 
 export default class PathDrawer extends CanvasGroup {
 	_path = null

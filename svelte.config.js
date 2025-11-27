@@ -5,6 +5,7 @@ export default {
 	kit: {
 		adapter: adapter(),
 		alias: {
+			$ramen: path.resolve('./src/lib/ramen'),
 			//$lib: path.resolve('./src/lib'),
 		},
 	},
