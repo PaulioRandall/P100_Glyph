@@ -5,16 +5,17 @@
 	import ElementList from './ElementList.svelte'
 	import CanvasControls from './CanvasControls.svelte'
 
-	import { GridCanvas } from './ramen'
+	import { GridCanvas, EventUtil } from './ramen'
 	import HoveredCell from './HoveredCell.js'
 	import PathDrawer from './PathDrawer.js'
 	import Diagram from './Diagram.js'
 
 	let container = null
+	let canvas = $state(null)
 	let canvasStore = writable(null)
 
 	onMount(() => {
-		const canvas = new GridCanvas(container)
+		canvas = new GridCanvas(container, 7, 7)
 		canvasStore.set(canvas)
 
 		function addElement(name, Clazz) {
@@ -36,14 +37,51 @@
 			}
 
 			if (true) {
-				listenAndLog('hoveringcell')
-				listenAndLog('startpath')
-				listenAndLog('newpathvertex')
-				listenAndLog('undopathvertex')
-				listenAndLog('resetpath')
-				listenAndLog('newpath')
-				listenAndLog('diagramupdate')
+				listenAndLog('grid_cell_focus')
+
+				listenAndLog('left_click')
+				listenAndLog('middle_click')
+				listenAndLog('right_click')
+
+				listenAndLog('hovering_cell_init')
+
+				listenAndLog('diagram_init')
+				listenAndLog('diagram_updated')
+
+				listenAndLog('path_drawer_init')
+				listenAndLog('path_started')
+				listenAndLog('path_vertex_added')
+				listenAndLog('path_vertex_removed')
+				listenAndLog('path_reset')
+				listenAndLog('path_created')
 			}
+		})
+
+		canvas.load((canvas) => {
+			let pointerId = null
+
+			canvas.listen('pointerdown', (e) => {
+				pointerId = e.pointerId
+			})
+
+			canvas.listen('pointerup', (e) => {
+				if (pointerId !== e.pointerId) {
+					return
+				}
+
+				pointerId = null
+
+				const eu = new EventUtil(e)
+				const detail = { originalEvent: e }
+
+				if (eu.isLeftButton()) {
+					canvas.dispatch('left_click', detail)
+				} else if (eu.isMiddleButton()) {
+					canvas.dispatch('middle_click', detail)
+				} else if (eu.isRightButton()) {
+					canvas.dispatch('right_click', detail)
+				}
+			})
 		})
 
 		canvas.load((canvas) => {
@@ -59,6 +97,11 @@
 		})
 
 		//setTimeout(() => canvas.reload(), 4000)
+
+		return () => {
+			canvas.free()
+			canvas = null
+		}
 	})
 </script>
 
@@ -79,11 +122,15 @@
 	</div>
 
 	<div class="diagram-element-list">
-		<ElementList {canvasStore} />
+		{#if canvas}
+			<ElementList {canvas} />
+		{/if}
 	</div>
 
 	<div class="canvas-controls">
-		<CanvasControls {canvasStore} />
+		{#if canvas}
+			<CanvasControls {canvas} />
+		{/if}
 	</div>
 </div>
 

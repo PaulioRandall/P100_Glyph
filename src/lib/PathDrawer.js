@@ -1,6 +1,5 @@
-import { Group, EventMasque } from './ramen'
+import { Group, EventUtil } from './ramen'
 import Path from './Path.js'
-import RepeatedAction from './RepeatedAction.js'
 
 const THREE_QUARTERS_OF_SECOND = 750
 const THIRD_OF_SECOND = 333
@@ -10,84 +9,56 @@ export default class PathDrawer extends Group {
 	_eventor = null
 	_path = null
 
-	_downButton = null
-
-	_repeatedUndo = new RepeatedAction(() => {
-		if (!this._path) {
-			return false
-		}
-
-		this._undoNewVertex(this._canvas.hovered)
-		return !!this._path
-	}, THIRD_OF_SECOND)
-
 	constructor(canvas) {
 		super()
 
 		this._canvas = canvas
 
 		this._eventor = canvas.eventor(this)
-		this._eventor.listen('mousedown', this._mousedown)
-		this._eventor.listen('mousemove', this._mousemove)
-		this._eventor.listen('mouseup', this._mouseup)
+		this._eventor.listen('grid_cell_focus', this._grid_cell_focus)
+		this._eventor.listen('left_click', this._left_click)
+		this._eventor.listen('middle_click', this._middle_click)
+		this._eventor.listen('right_click', this._right_click)
+
+		canvas.dispatch('path_drawer_init', {
+			pathDrawer: this,
+		})
 	}
 
 	removed() {
 		super.clear()
-		this._reset()
+		this._resetPath()
 	}
 
-	_mousedown(e) {
-		if (this._downButton !== null) {
-			return
-		}
-
-		this._downButton = e.button
-
-		if (EventMasque.isMiddleButton(e)) {
-			this._repeatedUndo.start(THREE_QUARTERS_OF_SECOND)
-		}
-	}
-
-	_mousemove() {
-		const cell = this._canvas.hovered
+	_grid_cell_focus(e) {
+		const cell = e.detail.cell
 
 		if (this._path && cell) {
 			this._path.setEnd(cell)
 		}
 	}
 
-	_mouseup(e) {
-		if (!e.button === this._downButton) {
-			return
-		}
+	_left_click() {
+		this._newVertex(this._canvas.hovered)
+	}
 
-		const masque = new EventMasque(e)
-		this._downButton = null
-
-		if (masque.isLeftButton()) {
-			this._newVertex(this._canvas.hovered)
-			return
-		}
-
+	_middle_click() {
 		if (!this._path) {
 			return
 		}
 
-		if (masque.isMiddleButton()) {
-			if (this._repeatedUndo.stop() === 0) {
-				this._undoNewVertex(this._canvas.hovered)
-			}
+		this._undoNewVertex(this._canvas.hovered)
+	}
+
+	_right_click() {
+		if (!this._path) {
 			return
 		}
 
-		if (masque.isRightButton()) {
-			if (this._path.countVertices() > 2) {
-				this._finishPath()
-			} else {
-				this._reset()
-			}
-			return
+		if (this._path.countVertices() > 2) {
+			this._finishPath()
+		} else {
+			this._resetPath()
 		}
 	}
 
@@ -100,7 +71,7 @@ export default class PathDrawer extends Group {
 		this._path.setEnd(cell)
 		this._path.pushVertex()
 
-		this._canvas.dispatch('newpathvertex', {
+		this._canvas.dispatch('path_vertex_added', {
 			vertexCell: cell,
 			path: this._path,
 		})
@@ -108,13 +79,14 @@ export default class PathDrawer extends Group {
 
 	_undoNewVertex(cell) {
 		if (this._path.isSimple()) {
-			this._reset()
+			this._resetPath()
 			return
 		}
 
 		const point = this._path.popVertex()
 		this._path.setEnd(cell)
-		this._canvas.dispatch('undopathvertex', {
+
+		this._canvas.dispatch('path_vertex_removed', {
 			vertex: point,
 			path: this._path,
 		})
@@ -123,7 +95,8 @@ export default class PathDrawer extends Group {
 	_startPath(cell) {
 		this._path = new Path(cell)
 		super.add(this._path)
-		this._canvas.dispatch('startpath', {
+
+		this._canvas.dispatch('path_started', {
 			cell,
 			path: this._path,
 		})
@@ -134,26 +107,22 @@ export default class PathDrawer extends Group {
 			super.remove(this._path)
 
 			this._path.popVertex()
-
-			this._canvas.dispatch('newpath', {
+			this._canvas.dispatch('path_created', {
 				path: this._path,
 			})
 
 			this._path = null
-			this._reset()
+			this._resetPath()
 		}
 	}
 
-	_reset() {
+	_resetPath() {
 		if (this._path) {
 			super.remove(this._path)
 		}
 
-		this._downTime = null
-		this._downButton = null
 		this._path = null
-
-		this._canvas.dispatch('resetpath')
+		this._canvas.dispatch('path_reset')
 	}
 
 	free() {

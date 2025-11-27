@@ -1,5 +1,14 @@
 import { Two, Group } from './ramen'
 
+// TODO: Refactor so it works with grid cells.
+//       Perhaps holds a list of grid cells representing
+//       vertices. When the list changes, the shape is
+//       recreated.
+//       This is probably needed for the next set of
+//       features. It will be much easier to recreate the
+//       shape on each change than try to apply all the
+//       user changes directly to a static Two.Path.
+
 export default class Path extends Group {
 	_shape = null
 

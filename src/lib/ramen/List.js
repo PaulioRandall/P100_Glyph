@@ -1,17 +1,12 @@
 export default class List extends Array {
-	constructor(...args) {
-		super(...args)
-	}
-
-	// Removes the specified item from the list if it's
+	// Removes the specified item from the array if it's
 	// present. Returns true if the item was removed and
-	// false if the list did not contain the item.
-	remove(item) {
-		const list = this
-		const i = list.indexOf(item)
+	// false if the array did not contain the item.
+	static remove(array, item) {
+		const i = array.indexOf(item)
 
 		if (i > -1) {
-			list.spilce(i, 1)
+			array.spilce(i, 1)
 			return true
 		}
 
@@ -19,9 +14,9 @@ export default class List extends Array {
 	}
 
 	// Removes all items from the list.
-	clear() {
+	static clear(array) {
 		// TODO: Is there a better way?
-		this.splice(0)
+		array.splice(0)
 	}
 
 	// Returns a map (object) of the items.
@@ -35,16 +30,31 @@ export default class List extends Array {
 	//
 	// If no keyGenerator is passed, item indexes are used as
 	// keys.
-	toMap(keyGenerator = (v, i) => i) {
-		const list = this
+	static toMap(array, keyGenerator = (v, i) => i) {
 		const map = {}
 
-		for (let i = 0; i < list.length; i++) {
-			const value = list[i]
+		for (let i = 0; i < array.length; i++) {
+			const value = array[i]
 			const key = keyGenerator(value, i)
 			map[key] = value
 		}
 
 		return map
+	}
+
+	constructor(...args) {
+		super(...args)
+	}
+
+	remove(item) {
+		return List.remove(this, item)
+	}
+
+	clear() {
+		List.clear(this)
+	}
+
+	toMap(keyGenerator) {
+		return List.toMap(this, keyGenerator)
 	}
 }

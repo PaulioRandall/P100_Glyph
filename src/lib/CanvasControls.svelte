@@ -1,14 +1,20 @@
 
-	<div class="canvas-controls">
+<script>
+	// NOTE: Under development
 
-	</div>
+	let { canvas } = $props()
+</script>
 
-	<style>
-		.canvas-controls {
-			background: LightCoral;
+<div class="canvas-controls">
 
-			width: 100%;
-			height: 100%;
-		}
-	</style>
+</div>
+
+<style>
+	.canvas-controls {
+		background: LightCoral;
+
+		width: 100%;
+		height: 100%;
+	}
+</style>
 

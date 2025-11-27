@@ -10,17 +10,21 @@ export default class Diagram extends Group {
 		this._canvas = canvas
 
 		this._eventor = canvas.eventor(this)
-		this._eventor.listen('newpath', this._addElement)
+		this._eventor.listen('path_created', this._path_created)
+
+		canvas.dispatch('diagram_init', {
+			diagram: this,
+		})
 	}
 
 	free() {
 		this._eventor.free()
 	}
 
-	_addElement(e) {
+	_path_created(e) {
 		super.add(e.detail.path)
 
-		this._canvas.dispatch('diagramupdate', {
+		this._canvas.dispatch('diagram_updated', {
 			diagram: this,
 		})
 	}

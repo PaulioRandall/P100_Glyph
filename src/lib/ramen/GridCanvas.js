@@ -7,7 +7,7 @@ export default class GridCanvas extends Canvas {
 	_xLength = 0
 	_yLength = 0
 	_cells = new Group()
-	_hovered = null
+	_focus = null
 
 	constructor(container, xLength = 5, yLength = 5, options = {}) {
 		super(container, options)
@@ -30,7 +30,7 @@ export default class GridCanvas extends Canvas {
 	}
 
 	get hovered() {
-		return this._hovered
+		return this._focus
 	}
 
 	cellAt(x, y) {
@@ -44,17 +44,17 @@ export default class GridCanvas extends Canvas {
 	}
 
 	_mousemove(e) {
-		const oldCell = this._hovered
+		const oldCell = this._focus
 		const cell = this.cellAt(e.offsetX, e.offsetY)
 
 		if (cell && cell !== oldCell) {
-			this._hovered = cell
+			this._focus = cell
 			this._dispatchHoveredCellChange(cell)
 		}
 	}
 
 	_dispatchHoveredCellChange(cell) {
-		super.dispatch('hoveringcell', {
+		super.dispatch('grid_cell_focus', {
 			cell,
 		})
 	}

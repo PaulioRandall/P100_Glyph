@@ -13,9 +13,13 @@ export default class HoveredCell extends Group {
 		this._canvas = canvas
 
 		this._eventor = canvas.eventor(this)
-		this._eventor.listen('hoveringcell', this._hover)
+		this._eventor.listen('grid_cell_focus', this._grid_cell_focus)
 
 		this.hide()
+
+		canvas.dispatch('hovering_cell_init', {
+			hoveringCell: this,
+		})
 	}
 
 	added() {
@@ -28,7 +32,7 @@ export default class HoveredCell extends Group {
 		this._cell = null
 	}
 
-	_hover(e) {
+	_grid_cell_focus(e) {
 		const cell = e.detail.cell
 
 		if (this._cell === cell) {

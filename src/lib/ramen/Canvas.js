@@ -9,6 +9,7 @@ export default class Canvas extends Group {
 	_container
 	_two
 	_zui
+
 	_store = new Store()
 	_loader = new Loader(this)
 
@@ -84,6 +85,13 @@ export default class Canvas extends Group {
 		return this.dom.dispatchEvent(event)
 	}
 
+	// NEXT: Redesign.
+	//       ALSO allow an object to be passed containing
+	//       functions like '_event_mousemove' that are auto
+	//       registered. The returned unlisten func unlistens
+	//       to all the object's registered events at once.
+	//
+	//       Then remove the eventor function.
 	listen(type, callback, options) {
 		this.dom.addEventListener(type, callback, options)
 		return () => this.dom.removeEventListener(type, callback, options)

@@ -1,4 +1,8 @@
-export default class EventMasque {
+export default class EventUtil {
+	static LEFT_BUTTON = 0
+	static MIDDLE_BUTTON = 1
+	static RIGHT_BUTTON = 2
+
 	static x(event) {
 		return event.offsetX
 	}
@@ -8,15 +12,15 @@ export default class EventMasque {
 	}
 
 	static isLeftButton(event) {
-		return event.button === 0
+		return event.button === EventUtil.LEFT_BUTTON
 	}
 
 	static isMiddleButton(event) {
-		return event.button === 1
+		return event.button === EventUtil.MIDDLE_BUTTON
 	}
 
 	static isRightButton(event) {
-		return event.button === 2
+		return event.button === EventUtil.RIGHT_BUTTON
 	}
 
 	_event = null
@@ -35,22 +39,22 @@ export default class EventMasque {
 	}
 
 	x() {
-		return EventMasque.x(this._event)
+		return EventUtil.x(this._event)
 	}
 
 	y() {
-		return EventMasque.y(this._event)
+		return EventUtil.y(this._event)
 	}
 
 	isLeftButton() {
-		return EventMasque.isLeftButton(this._event)
+		return EventUtil.isLeftButton(this._event)
 	}
 
 	isMiddleButton() {
-		return EventMasque.isMiddleButton(this._event)
+		return EventUtil.isMiddleButton(this._event)
 	}
 
 	isRightButton() {
-		return EventMasque.isRightButton(this._event)
+		return EventUtil.isRightButton(this._event)
 	}
 }
