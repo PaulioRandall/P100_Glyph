@@ -1,36 +1,21 @@
-import { Group, EventUtil } from './ramen'
+import { CanvasGroup, EventUtil } from './ramen'
 import Path from './Path.js'
 
 const THREE_QUARTERS_OF_SECOND = 750
 const THIRD_OF_SECOND = 333
 
-export default class PathDrawer extends Group {
-	_canvas = null
-	_unlisten = null
+export default class PathDrawer extends CanvasGroup {
 	_path = null
 
 	constructor(canvas) {
-		super()
-
-		this._canvas = canvas
+		super(canvas)
 
 		canvas.dispatch('path_drawer_init', {
 			pathDrawer: this,
 		})
 	}
 
-	_group_added() {
-		if (!this._unlisten) {
-			this._unlisten = this._canvas.listen(this)
-		}
-	}
-
 	_group_removed() {
-		if (this._unlisten) {
-			this._unlisten()
-			this._unlisten = null
-		}
-
 		super.clear()
 		this._resetPath()
 	}
@@ -44,7 +29,7 @@ export default class PathDrawer extends Group {
 	}
 
 	_event_left_click() {
-		this._newVertex(this._canvas.hovered)
+		this._newVertex(this.canvas.hovered)
 	}
 
 	_event_middle_click() {
@@ -52,7 +37,7 @@ export default class PathDrawer extends Group {
 			return
 		}
 
-		this._undoNewVertex(this._canvas.hovered)
+		this._undoNewVertex(this.canvas.hovered)
 	}
 
 	_event_right_click() {
@@ -76,7 +61,7 @@ export default class PathDrawer extends Group {
 		this._path.setEnd(cell)
 		this._path.pushVertex()
 
-		this._canvas.dispatch('path_vertex_added', {
+		this.canvas.dispatch('path_vertex_added', {
 			vertexCell: cell,
 			path: this._path,
 		})
@@ -91,7 +76,7 @@ export default class PathDrawer extends Group {
 		const point = this._path.popVertex()
 		this._path.setEnd(cell)
 
-		this._canvas.dispatch('path_vertex_removed', {
+		this.canvas.dispatch('path_vertex_removed', {
 			vertex: point,
 			path: this._path,
 		})
@@ -101,7 +86,7 @@ export default class PathDrawer extends Group {
 		this._path = new Path(cell)
 		super.add(this._path)
 
-		this._canvas.dispatch('path_started', {
+		this.canvas.dispatch('path_started', {
 			cell,
 			path: this._path,
 		})
@@ -112,7 +97,7 @@ export default class PathDrawer extends Group {
 			super.remove(this._path)
 
 			this._path.popVertex()
-			this._canvas.dispatch('path_created', {
+			this.canvas.dispatch('path_created', {
 				path: this._path,
 			})
 
@@ -127,6 +112,6 @@ export default class PathDrawer extends Group {
 		}
 
 		this._path = null
-		this._canvas.dispatch('path_reset')
+		this.canvas.dispatch('path_reset')
 	}
 }

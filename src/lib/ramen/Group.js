@@ -31,10 +31,6 @@ export default class Group extends Two.Group {
 		}
 	}
 
-	listen(canvas, typeOfObject, callbackOrOptions, options) {
-		// TODO
-	}
-
 	clear() {
 		const children = [...this.children]
 		for (const child of children) {

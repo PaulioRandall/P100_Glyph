@@ -1,36 +1,18 @@
-import { Two, Group } from './ramen'
+import { Two, CanvasGroup } from './ramen'
 
-export default class Diagram extends Group {
-	_canvas = null
-	_unlisten = null
-
+export default class Diagram extends CanvasGroup {
 	constructor(canvas) {
-		super()
-
-		this._canvas = canvas
+		super(canvas)
 
 		canvas.dispatch('diagram_init', {
 			diagram: this,
 		})
 	}
 
-	_group_added() {
-		if (!this._unlisten) {
-			this._unlisten = this._canvas.listen(this)
-		}
-	}
-
-	_group_removed() {
-		if (this._unlisten) {
-			this._unlisten()
-			this._unlisten = null
-		}
-	}
-
 	_event_path_created(e) {
 		super.add(e.detail.path)
 
-		this._canvas.dispatch('diagram_updated', {
+		this.canvas.dispatch('diagram_updated', {
 			diagram: this,
 		})
 	}
