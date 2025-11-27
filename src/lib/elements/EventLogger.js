@@ -23,7 +23,9 @@ export default class EventLogger extends CanvasGroup {
 
 	_group_added() {
 		for (const type of EVENTS) {
-			this.canvas.listen(type, () => console.log(type))
+			this._unlisten = this.canvas.listen(type, (e) =>
+				console.log(type, e.detail)
+			)
 		}
 	}
 }

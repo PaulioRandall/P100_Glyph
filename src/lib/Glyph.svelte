@@ -6,9 +6,13 @@
 	import CanvasControls from './CanvasControls.svelte'
 
 	import { GridCanvas, EventUtil } from '$ramen'
-	import EventLogger from './EventLogger.js'
-	import ClickSimplifier from './ClickSimplifier.js'
-	import { Diagram, HoveredCell, PathDrawer } from './elements'
+	import {
+		EventLogger,
+		ClickSimplifier,
+		Diagram,
+		HoveredCell,
+		PathDrawer,
+	} from './elements'
 	
 	let container = null
 	let canvas = $state(null)
