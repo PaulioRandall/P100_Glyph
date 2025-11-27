@@ -1,10 +1,6 @@
 import List from './List.js'
 
-// IDEA: Intead of binding, could pass an object that has
-//       functions like '_event_mousedown'. Listeners and
-//       unlisteners are created for these functions with
-//       the object as binding (allowing this keyword to
-//       function as normal).
+// TODO: Delete?
 
 export default class Eventor {
 	_canvas = null

@@ -6,6 +6,7 @@ const THIRD_OF_SECOND = 333
 
 export default class PathDrawer extends Group {
 	_canvas = null
+	_unlisten = null
 	_eventor = null
 	_path = null
 
@@ -13,24 +14,23 @@ export default class PathDrawer extends Group {
 		super()
 
 		this._canvas = canvas
-
-		this._eventor = canvas.eventor(this)
-		this._eventor.listen('grid_cell_focus', this._grid_cell_focus)
-		this._eventor.listen('left_click', this._left_click)
-		this._eventor.listen('middle_click', this._middle_click)
-		this._eventor.listen('right_click', this._right_click)
+		this._unlisten = canvas.listen(this)
 
 		canvas.dispatch('path_drawer_init', {
 			pathDrawer: this,
 		})
 	}
 
-	removed() {
+	free() {
+		this._unlisten()
+	}
+
+	_group_removed() {
 		super.clear()
 		this._resetPath()
 	}
 
-	_grid_cell_focus(e) {
+	_event_grid_cell_focus(e) {
 		const cell = e.detail.cell
 
 		if (this._path && cell) {
@@ -38,11 +38,11 @@ export default class PathDrawer extends Group {
 		}
 	}
 
-	_left_click() {
+	_event_left_click() {
 		this._newVertex(this._canvas.hovered)
 	}
 
-	_middle_click() {
+	_event_middle_click() {
 		if (!this._path) {
 			return
 		}
@@ -50,7 +50,7 @@ export default class PathDrawer extends Group {
 		this._undoNewVertex(this._canvas.hovered)
 	}
 
-	_right_click() {
+	_event_right_click() {
 		if (!this._path) {
 			return
 		}
@@ -123,9 +123,5 @@ export default class PathDrawer extends Group {
 
 		this._path = null
 		this._canvas.dispatch('path_reset')
-	}
-
-	free() {
-		this._eventor.free()
 	}
 }

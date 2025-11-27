@@ -14,8 +14,8 @@ export default class Group extends Two.Group {
 
 		super.add(element)
 
-		if (typeof element.added === 'function') {
-			element.added()
+		if (typeof element._group_added === 'function') {
+			element._group_added()
 		}
 	}
 
@@ -26,9 +26,13 @@ export default class Group extends Two.Group {
 
 		super.remove(element)
 
-		if (typeof element.removed === 'function') {
-			element.removed()
+		if (typeof element._group_removed === 'function') {
+			element._group_removed()
 		}
+	}
+
+	listen(canvas, typeOfObject, callbackOrOptions, options) {
+		// TODO
 	}
 
 	clear() {
@@ -36,5 +40,9 @@ export default class Group extends Two.Group {
 		for (const child of children) {
 			child.remove()
 		}
+	}
+
+	free() {
+		this.clear()
 	}
 }

@@ -2,7 +2,7 @@ import { Two, Group } from './ramen'
 
 export default class HoveredCell extends Group {
 	_canvas = null
-	_eventor = null
+	_unlisten = null
 
 	_cell = null
 	_haloShape = createHaloShape()
@@ -11,9 +11,7 @@ export default class HoveredCell extends Group {
 		super()
 
 		this._canvas = canvas
-
-		this._eventor = canvas.eventor(this)
-		this._eventor.listen('grid_cell_focus', this._grid_cell_focus)
+		this._unlisten = this._canvas.listen(this)
 
 		this.hide()
 
@@ -22,17 +20,31 @@ export default class HoveredCell extends Group {
 		})
 	}
 
-	added() {
+	_group_added() {
 		super.add(this._haloShape)
 	}
 
-	removed() {
+	_group_removed() {
 		super.clear()
 
 		this._cell = null
 	}
 
-	_grid_cell_focus(e) {
+	show() {
+		// super.visible
+		this.visible = true
+	}
+
+	hide() {
+		// super.visible
+		this.visible = false
+	}
+
+	free() {
+		this._unlisten()
+	}
+
+	_event_grid_cell_focus(e) {
 		const cell = e.detail.cell
 
 		if (this._cell === cell) {
@@ -65,20 +77,6 @@ export default class HoveredCell extends Group {
 
 			this._canvas.cursorStyle = 'auto'
 		}
-	}
-
-	show() {
-		// super.visible
-		this.visible = true
-	}
-
-	hide() {
-		// super.visible
-		this.visible = false
-	}
-
-	free() {
-		this._eventor.free()
 	}
 }
 

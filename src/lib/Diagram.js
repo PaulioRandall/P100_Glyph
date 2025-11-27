@@ -2,15 +2,13 @@ import { Two, Group } from './ramen'
 
 export default class Diagram extends Group {
 	_canvas = null
-	_eventor = null
+	_unlisten = null
 
 	constructor(canvas) {
 		super()
 
 		this._canvas = canvas
-
-		this._eventor = canvas.eventor(this)
-		this._eventor.listen('path_created', this._path_created)
+		this._unlisten = this._canvas.listen(this)
 
 		canvas.dispatch('diagram_init', {
 			diagram: this,
@@ -18,10 +16,10 @@ export default class Diagram extends Group {
 	}
 
 	free() {
-		this._eventor.free()
+		this._unlisten()
 	}
 
-	_path_created(e) {
+	_event_path_created(e) {
 		super.add(e.detail.path)
 
 		this._canvas.dispatch('diagram_updated', {

@@ -85,14 +85,48 @@ export default class Canvas extends Group {
 		return this.dom.dispatchEvent(event)
 	}
 
-	// NEXT: Redesign.
-	//       ALSO allow an object to be passed containing
-	//       functions like '_event_mousemove' that are auto
-	//       registered. The returned unlisten func unlistens
-	//       to all the object's registered events at once.
-	//
-	//       Then remove the eventor function.
-	listen(type, callback, options) {
+	listen(typeOrObject, callbackOrOptions, options) {
+		if (isObject(typeOrObject)) {
+			return this._listenWithObject(typeOrObject, callbackOrOptions)
+		} else {
+			return this._listenWithCallback(typeOrObject, callbackOrOptions, options)
+		}
+	}
+
+	// TODO: Refactor
+	_listenWithObject(obj, options) {
+		const prefix = '_event_'
+		const unlisteners = {}
+
+		const proto = Object.getPrototypeOf(obj)
+		const props = Object.getOwnPropertyNames(proto)
+
+		for (const propName of props) {
+			if (propName.startsWith(prefix)) {
+				const prop = proto[propName]
+
+				if (typeof prop === 'function') {
+					const eventType = propName.slice(prefix.length)
+					const callback = prop.bind(obj)
+					unlisteners[eventType] = this._listenWithCallback(
+						eventType,
+						callback,
+						options
+					)
+				}
+			}
+		}
+
+		return () => {
+			for (const eventName in unlisteners) {
+				const unlisten = unlisteners[eventName]
+				delete unlisteners[eventName]
+				unlisten()
+			}
+		}
+	}
+
+	_listenWithCallback(type, callback, options) {
 		this.dom.addEventListener(type, callback, options)
 		return () => this.dom.removeEventListener(type, callback, options)
 	}
@@ -112,4 +146,8 @@ export default class Canvas extends Group {
 	free() {
 		this._loader.free()
 	}
+}
+
+function isObject(v) {
+	return v !== null && typeof v === 'object' && !Array.isArray(v)
 }
