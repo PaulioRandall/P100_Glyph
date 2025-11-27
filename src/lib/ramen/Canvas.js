@@ -7,6 +7,7 @@ export default class Canvas extends Group {
 	_container
 	_two
 	_zui
+	_store = new Map()
 
 	_loader = new Loader(this)
 
@@ -48,6 +49,10 @@ export default class Canvas extends Group {
 
 	get dom() {
 		return this._two.renderer.domElement
+	}
+
+	get store() {
+		return this._store
 	}
 
 	get width() {

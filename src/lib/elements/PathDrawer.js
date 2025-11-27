@@ -6,10 +6,6 @@ export default class PathDrawer extends CanvasGroup {
 
 	constructor(canvas) {
 		super(canvas)
-
-		canvas.dispatch('path_drawer_init', {
-			pathDrawer: this,
-		})
 	}
 
 	_group_removed() {

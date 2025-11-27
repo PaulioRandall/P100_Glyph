@@ -64,6 +64,22 @@ export default class Path extends Group {
 			y: vert.y,
 		}
 	}
+
+	select() {
+		this._shape.stroke = 'blue'
+	}
+
+	unselect() {
+		this._shape.stroke = 'indianred'
+	}
+
+	highlight() {
+		this._shape.stroke = 'orange'
+	}
+
+	unhighlight() {
+		this._shape.stroke = 'indianred'
+	}
 }
 
 function createShape(x, y) {

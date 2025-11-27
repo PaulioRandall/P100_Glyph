@@ -6,10 +6,6 @@ export default class HoveredCell extends CanvasGroup {
 
 	constructor(canvas) {
 		super(canvas)
-
-		canvas.dispatch('hovering_cell_init', {
-			hoveringCell: this,
-		})
 	}
 
 	show() {
@@ -30,6 +26,14 @@ export default class HoveredCell extends CanvasGroup {
 	_group_removed() {
 		this._cell = null
 		super.clear()
+	}
+
+	_event_pointerenter() {
+		this.show()
+	}
+
+	_event_pointerleave() {
+		this.hide()
 	}
 
 	_event_grid_cell_focus(e) {

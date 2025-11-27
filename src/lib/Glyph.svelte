@@ -12,6 +12,7 @@
 		Diagram,
 		HoveredCell,
 		PathDrawer,
+		EditElement,
 	} from './elements'
 	
 	let container = null
@@ -33,6 +34,7 @@
 		addElement(HoveredCell)
 		addElement(Diagram)
 		addElement(PathDrawer)
+		addElement(EditElement)
 
 		//setTimeout(() => canvas.reload(), 4000)
 

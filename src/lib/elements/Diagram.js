@@ -3,10 +3,6 @@ import { Two, CanvasGroup } from '$ramen'
 export default class Diagram extends CanvasGroup {
 	constructor(canvas) {
 		super(canvas)
-
-		canvas.dispatch('diagram_init', {
-			diagram: this,
-		})
 	}
 
 	_event_path_created(e) {
