@@ -1,5 +1,8 @@
 import { CanvasGroup } from '$ramen'
 
+// TODO: This functionality probably shouldn't be here but
+//       no idea where it should go yet.
+
 export default class EditElement extends CanvasGroup {
 	_focused = null
 	_selected = null

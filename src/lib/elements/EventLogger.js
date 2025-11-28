@@ -15,6 +15,7 @@ const EVENTS = [
 	//'element_unfocus',
 	//'element_select',
 	//'element_unselect',
+	'element_delete',
 ]
 
 export default class EventLogger extends CanvasGroup {

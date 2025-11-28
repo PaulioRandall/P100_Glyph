@@ -13,6 +13,14 @@ export default class Diagram extends CanvasGroup {
 		})
 	}
 
+	_event_element_delete(e) {
+		super.remove(e.detail.element)
+
+		this.canvas.dispatch('diagram_updated', {
+			diagram: this,
+		})
+	}
+
 	// TODO: toJson()
 	// TODO: new class 'DiagramFormatter' that accepts JSON
 	//       and converts to SVG, JPG, PNG, etc

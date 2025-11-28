@@ -1,4 +1,3 @@
-
 <script>
 	import { onDestroy } from 'svelte'
 
@@ -63,7 +62,7 @@
 		const element = elements.get(this)
 
 		if (oldSelect !== element) {
-			selected = null
+			selected = element
 
 			canvas.store.set('selected', selected)
 			canvas.dispatch('element_select', {
@@ -72,6 +71,30 @@
 			})
 		}
 	}
+
+	function deleteElement(e) {
+		e.stopPropagation()
+
+		const oldFocus = canvas.store.get('focused')
+		const oldSelect = canvas.store.get('selected')
+		const element = elements.get(this)
+
+		if (focused === element) {
+			canvas.dispatch('element_unfocus', {
+				oldFocus,
+				element,
+			})
+		}
+
+		if (selected === element) {
+			canvas.dispatch('element_unselect', {
+				oldSelect,
+				element,
+			})
+		}
+
+		canvas.dispatch('element_delete', { element })
+	} 
 </script>
 
 <div class="element-list">
@@ -80,10 +103,15 @@
 			class="element"
 			class:focused={id === focused?.id}
 			class:selected={id === selected?.id}
-			on:mouseenter={focusListedElement.bind(id)}
-			on:mouseleave={unfocusListedElement.bind(id)}
-			on:click={selectListedElement.bind(id)}>
-			<span>ID: {id}</span>
+			onmouseenter={focusListedElement.bind(id)}
+			onmouseleave={unfocusListedElement.bind(id)}
+			onclick={selectListedElement.bind(id)}>
+			<span class="element-id">ID: {id}</span>
+			<button
+				class="delete-button" 
+				onclick={deleteElement.bind(id)}>
+				Delete
+			</button>
 		</div>
 	{/each}
 </div>
@@ -97,11 +125,16 @@
 	}
 
 	.element {
-		padding: 0.5rem;
 		border: 1px solid black;
 
 		background: #DDD;
 		cursor: pointer;
+
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		height: 40px;
 	}
 
 	.focused {
@@ -111,5 +144,25 @@
 	.selected {
 		background: blue;
 		color: white;
+	}
+
+	.element-id {
+		padding: 0.5rem;
+	}
+
+	.delete-button {
+		height: 100%;
+		padding: 0 1rem;
+
+		cursor: pointer;
+
+		background: #555555;
+		color: white;
+
+		border-left: 2px solid black;
+
+		&:hover {
+			background: darkred;
+		}
 	}
 </style>
