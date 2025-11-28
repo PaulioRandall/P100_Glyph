@@ -106,7 +106,7 @@
 			onmouseenter={focusListedElement.bind(id)}
 			onmouseleave={unfocusListedElement.bind(id)}
 			onclick={selectListedElement.bind(id)}>
-			<span class="element-id">ID: {id}</span>
+			<span class="element-id">Path</span>
 			<button
 				class="delete-button" 
 				onclick={deleteElement.bind(id)}>
@@ -118,9 +118,6 @@
 
 <style>
 	.element-list {
-		background: lightskyblue;
-
-		width: 100%;
 		height: 100%;
 	}
 

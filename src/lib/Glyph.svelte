@@ -46,6 +46,14 @@
 </script>
 
 <div class="glyph">
+	<div class="button-bar-top">
+
+	</div>
+
+	<div class="button-bar-left">
+
+	</div>
+
 	<div class="canvas-border-container">
 		<!-- 
 			Border container required as putting a border on the
@@ -61,13 +69,13 @@
 		</div>
 	</div>
 
-	<div class="diagram-element-list">
+	<div class="content-pane">
 		{#if canvas}
 			<ElementList {canvas} />
 		{/if}
 	</div>
 
-	<div class="canvas-controls">
+	<div class="button-bar-bottom">
 		{#if canvas}
 			<CanvasControls {canvas} />
 		{/if}
@@ -75,36 +83,64 @@
 </div>
 
 <style>
+	/*
+		TODO: Use JS to resize 
+	*/
 	.glyph {
-		--canvas-size: 400px;
+		--content-width: calc(100vw - 250px); 
+		--content-height: calc(100vh - 100px);
+		--content-size: min(var(--content-width), var(--content-height));
 
 		display: grid;
 		grid-template-areas:
-			"canvas diagram-content"
-			"canvas-controls diagram-content";
-		grid-template-rows: var(--canvas-size) 1fr;
-		grid-template-columns: var(--canvas-size) 1fr;
+			"button-bar-left button-bar-top content-pane"
+			"button-bar-left content content-pane"
+			"button-bar-left button-bar-bottom content-pane";
+		grid-template-rows: 50px var(--content-size) 50px;
+		grid-template-columns: 50px var(--content-size) 200px;
+
+		width: 100%;
+		height: 100%;
+
+		background: #222222;
+	}
+
+.button-bar-top {
+		grid-area: button-bar-top;
+
+		background: indianred;
+	}
+
+	.button-bar-left {
+		grid-area: button-bar-left;
+
+		background: forestgreen;
+	}
+
+	.canvas-border-container {
+		grid-area: content;
+
+		background: white;
+		border: 2px solid black;
 
 		width: 100%;
 		height: 100%;
 	}
 
-	.canvas-border-container {
-		grid-area: canvas;
-
-		border: 2px solid black;
-	}
-
 	.canvas-container {
-		width: var(--canvas-size);
-		height: var(--canvas-size);
+		width: 100%;
+		height: 100%;
 	}
 
-	.diagram-element-list {
-		grid-area: diagram-content;
+	.content-pane {
+		grid-area: content-pane;
+
+		background: dodgerblue;
 	}
 
-	.canvas-controls {
-		grid-area: canvas-controls;
+	.button-bar-bottom {
+		grid-area: button-bar-bottom;
+
+				background: indianred;
 	}
 </style>
