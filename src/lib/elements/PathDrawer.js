@@ -3,10 +3,7 @@ import Path from './Path.js'
 
 export default class PathDrawer extends CanvasGroup {
 	_path = null
-
-	constructor(canvas) {
-		super(canvas)
-	}
+	_diagram = null
 
 	_group_removed() {
 		super.clear()
@@ -15,9 +12,10 @@ export default class PathDrawer extends CanvasGroup {
 
 	_event_grid_cell_focus(e) {
 		const cell = e.detail.cell
+		const path = this._path
 
-		if (this._path && cell) {
-			this._path.setEnd(cell)
+		if (path && cell) {
+			path.setEnd(cell)
 		}
 	}
 
@@ -34,11 +32,13 @@ export default class PathDrawer extends CanvasGroup {
 	}
 
 	_event_right_click() {
-		if (!this._path) {
+		const path = this._path
+
+		if (!path) {
 			return
 		}
 
-		if (this._path.countVertices() > 2) {
+		if (path.countVertices() > 2) {
 			this._finishPath()
 		} else {
 			this._resetPath()
@@ -46,53 +46,58 @@ export default class PathDrawer extends CanvasGroup {
 	}
 
 	_newVertex(cell) {
-		if (!this._path) {
+		const path = this._path
+
+		if (!path) {
 			this._startPath(cell)
 			return
 		}
 
-		this._path.setEnd(cell)
-		this._path.pushVertex()
+		path.setEnd(cell)
+		path.pushVertex()
 
 		this.canvas.dispatch('path_vertex_added', {
-			vertexCell: cell,
-			path: this._path,
+			cell,
+			path,
 		})
 	}
 
 	_undoNewVertex(cell) {
-		if (this._path.isSimple()) {
+		const path = this._path
+
+		if (path.isSimple()) {
 			this._resetPath()
 			return
 		}
 
-		const point = this._path.popVertex()
-		this._path.setEnd(cell)
+		const point = path.popVertex()
+		path.setEnd(cell)
 
 		this.canvas.dispatch('path_vertex_removed', {
 			vertex: point,
-			path: this._path,
+			path,
 		})
 	}
 
 	_startPath(cell) {
-		this._path = new Path(cell)
-		super.add(this._path)
+		const path = new Path(cell)
+		super.add(path)
 
+		this._path = path
 		this.canvas.dispatch('path_started', {
 			cell,
-			path: this._path,
+			path: path,
 		})
 	}
 
 	_finishPath() {
-		if (this._path) {
-			super.remove(this._path)
+		const path = this._path
 
-			this._path.popVertex()
-			this.canvas.dispatch('path_created', {
-				path: this._path,
-			})
+		if (path) {
+			super.remove(path)
+
+			path.popVertex()
+			this.canvas.dispatch('path_created', { path })
 
 			this._path = null
 			this._resetPath()
@@ -100,8 +105,10 @@ export default class PathDrawer extends CanvasGroup {
 	}
 
 	_resetPath() {
-		if (this._path) {
-			super.remove(this._path)
+		const path = this._path
+
+		if (path) {
+			super.remove(path)
 		}
 
 		this._path = null

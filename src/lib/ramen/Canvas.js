@@ -11,6 +11,9 @@ export default class Canvas extends Group {
 
 	_loader = new Loader(this)
 
+	// TODO: reset on window resize
+	//       window.addEventListener("resize", myFunction)
+
 	constructor(container, twoOptions = {}) {
 		super()
 

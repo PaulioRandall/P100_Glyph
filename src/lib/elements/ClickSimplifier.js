@@ -3,10 +3,6 @@ import { CanvasGroup, EventUtil } from '$ramen'
 export default class ClickSimplifier extends CanvasGroup {
 	_pointerId = null
 
-	constructor(canvas) {
-		super(canvas)
-	}
-
 	_group_removed() {
 		this._pointerId = null
 	}

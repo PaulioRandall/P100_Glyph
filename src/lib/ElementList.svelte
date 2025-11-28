@@ -1,96 +1,80 @@
 <script>
 	import { onDestroy } from 'svelte'
+	import { List } from '$ramen'
 
 	// NOTE: Under development
 
 	let { canvas } = $props()
 
-	let elements = $state(new Map(
-		/* {
-			id: "",
-		} */
-	))
+	const lastFocused = canvas.store.get('lastFocused')
+	const lastSelected = canvas.store.get('lastSelected')
+	const focused = canvas.store.get('focused')
+	const selected = canvas.store.get('selected')
+	const elementStore = canvas.store.get('elements')
 
-	let focused = $state(null)
-	let selected = $state(null)
-
-	onDestroy(canvas.listen(
-		'diagram_updated',
-		diagram_updated,
-	))
-
-	function diagram_updated(e) {
-		elements = new Map()
-
-		for (const child of e.detail.diagram.children) {
-			elements.set(child.id, child)
+	function setFocused(element) {
+		if ($focused && $focused !== $selected) {
+			$focused.unhighlight()
 		}
+
+		lastFocused.set($focused)
+
+		if (element && element !== $selected) {
+			element.highlight()
+		}
+
+		focused.set(element)
+	}
+
+	function setSelected(element) {
+		if ($selected) {
+			$selected.unselect()
+		}
+
+		lastSelected.set($selected)
+		
+		if (element) {
+			element.select()
+		}
+
+		selected.set(element)
 	}
 
 	function focusListedElement() {
-		const oldFocus = canvas.store.get('focused')
-		const element = elements.get(this)
+		const element = $elementStore.get(this)
 
-		if (oldFocus !== element) {
-			focused = element
-
-			canvas.store.set('focused', element)
-			canvas.dispatch('element_focus', {
-				oldFocus,
-				element,
-			})
+		if ($focused !== element) {
+			setFocused(element)
 		}
 	}
 
 	function unfocusListedElement(e) {
-		const oldFocus = canvas.store.get('focused')
-		const element = elements.get(this)
+		const element = $elementStore.get(this)
 
-		if (oldFocus === element) {
-			focused = null
-
-			canvas.store.set('focused', null)
-			canvas.dispatch('element_unfocus', {
-				oldFocus,
-				element,
-			})
+		if ($focused === element) {
+			setFocused(null)
 		}
 	}
 
 	function selectListedElement(e) {
-		const oldSelect = canvas.store.get('selected')
-		const element = elements.get(this)
+		const element = $elementStore.get(this)
 
-		if (oldSelect !== element) {
-			selected = element
-
-			canvas.store.set('selected', selected)
-			canvas.dispatch('element_select', {
-				oldSelect,
-				element,
-			})
+		if ($selected !== element) {
+			setSelected(element)
 		}
 	}
 
 	function deleteElement(e) {
 		e.stopPropagation()
 
-		const oldFocus = canvas.store.get('focused')
-		const oldSelect = canvas.store.get('selected')
-		const element = elements.get(this)
+		const element = $elementStore.get(this)
 
-		if (focused === element) {
-			canvas.dispatch('element_unfocus', {
-				oldFocus,
-				element,
-			})
+		if ($focused === element) {
+			setFocused(null)
 		}
 
-		if (selected === element) {
-			canvas.dispatch('element_unselect', {
-				oldSelect,
-				element,
-			})
+		if ($selected === element) {
+			setSelected(null)
 		}
 
 		canvas.dispatch('element_delete', { element })
@@ -98,11 +82,11 @@
 </script>
 
 <div class="element-list">
-	{#each elements as [ id, value ] (id)}
+	{#each $elementStore as [id, element] (id)}
 		<div
 			class="element"
-			class:focused={id === focused?.id}
-			class:selected={id === selected?.id}
+			class:focused={id === $focused?.id}
+			class:selected={id === $selected?.id}
 			onmouseenter={focusListedElement.bind(id)}
 			onmouseleave={unfocusListedElement.bind(id)}
 			onclick={selectListedElement.bind(id)}>

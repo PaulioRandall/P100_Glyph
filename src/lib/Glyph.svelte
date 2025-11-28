@@ -3,17 +3,16 @@
 	import { writable } from 'svelte/store'
 
 	import ElementList from './ElementList.svelte'
-	import CanvasControls from './CanvasControls.svelte'
+	import ButtonBar from './ButtonBar.svelte'
 
-	import { GridCanvas, EventUtil } from '$ramen'
+	import { GridCanvas, EventUtil, List } from '$ramen'
 	import {
 		EventLogger,
 		ClickSimplifier,
 		Diagram,
 		HoveredCell,
 		PathDrawer,
-		EditElement,
-	} from './elements'
+			} from './elements'
 	
 	let container = null
 	let canvas = $state(null)
@@ -28,13 +27,18 @@
 
 	onMount(() => {
 		canvas = new GridCanvas(container, 7, 7)
+
+		canvas.store.set('lastFocused', writable(null))
+		canvas.store.set('lastSelected', writable(null))
+		canvas.store.set('focused', writable(null))
+		canvas.store.set('selected', writable(null))
+		canvas.store.set('elements', writable(new Map()))
 		
 		addElement(EventLogger)
 		addElement(ClickSimplifier)
 		addElement(HoveredCell)
 		addElement(Diagram)
 		addElement(PathDrawer)
-		addElement(EditElement)
 
 		//setTimeout(() => canvas.reload(), 4000)
 
@@ -47,11 +51,15 @@
 
 <div class="glyph">
 	<div class="button-bar-top">
+<ButtonBar>
 
+			</ButtonBar>
 	</div>
 
 	<div class="button-bar-left">
+<ButtonBar>
 
+			</ButtonBar>
 	</div>
 
 	<div class="canvas-border-container">
@@ -77,15 +85,14 @@
 
 	<div class="button-bar-bottom">
 		{#if canvas}
-			<CanvasControls {canvas} />
+			<ButtonBar>
+
+			</ButtonBar>
 		{/if}
 	</div>
 </div>
 
 <style>
-	/*
-		TODO: Use JS to resize 
-	*/
 	.glyph {
 		--content-width: calc(100vw - 250px); 
 		--content-height: calc(100vh - 100px);
@@ -141,6 +148,6 @@
 	.button-bar-bottom {
 		grid-area: button-bar-bottom;
 
-				background: indianred;
+		background: indianred;
 	}
 </style>

@@ -7,3 +7,5 @@ export { default as Group } from './Group.js'
 export { default as CanvasGroup } from './CanvasGroup.js'
 
 export { default as EventUtil } from './EventUtil.js'
+
+export { default as List } from './List.js'

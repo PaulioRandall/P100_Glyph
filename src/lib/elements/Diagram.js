@@ -1,23 +1,33 @@
 import { Two, CanvasGroup } from '$ramen'
 
 export default class Diagram extends CanvasGroup {
+	_elementStore = null
+
 	constructor(canvas) {
 		super(canvas)
+
+		this._elementStore = canvas.store.get('elements')
 	}
 
 	_event_path_created(e) {
-		super.add(e.detail.path)
+		const element = e.detail.path
 
-		this.canvas.dispatch('diagram_updated', {
-			diagram: this,
+		super.add(element)
+
+		this._elementStore.update((elements) => {
+			elements.set(element.id, element)
+			return elements
 		})
 	}
 
 	_event_element_delete(e) {
-		super.remove(e.detail.element)
+		const element = e.detail.element
 
-		this.canvas.dispatch('diagram_updated', {
-			diagram: this,
+		super.remove(element)
+
+		this._elementStore.update((elements) => {
+			elements.delete(element.id)
+			return elements
 		})
 	}
 

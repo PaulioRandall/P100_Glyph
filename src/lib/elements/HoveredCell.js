@@ -4,10 +4,6 @@ export default class HoveredCell extends CanvasGroup {
 	_cell = null
 	_haloShape = createHaloShape()
 
-	constructor(canvas) {
-		super(canvas)
-	}
-
 	show() {
 		// super.visible
 		this.visible = true
