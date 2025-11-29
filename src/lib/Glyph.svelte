@@ -12,7 +12,7 @@
 		Diagram,
 		HoveredCell,
 		PathDrawer,
-			} from './elements'
+	} from './elements'
 	
 	let container = null
 	let canvas = $state(null)
@@ -28,11 +28,11 @@
 	onMount(() => {
 		canvas = new GridCanvas(container, 7, 7)
 
-		canvas.store.set('lastFocused', writable(null))
-		canvas.store.set('lastSelected', writable(null))
-		canvas.store.set('focused', writable(null))
-		canvas.store.set('selected', writable(null))
-		canvas.store.set('elements', writable(new Map()))
+		canvas.store.set('lastFocusedStore', writable(null))
+		canvas.store.set('lastSelectedStore', writable(null))
+		canvas.store.set('focusedStore', writable(null))
+		canvas.store.set('selectedStore', writable(null))
+		canvas.store.set('elementStore', writable(new Map()))
 		
 		addElement(EventLogger)
 		addElement(ClickSimplifier)

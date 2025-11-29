@@ -6,11 +6,11 @@
 
 	let { canvas } = $props()
 
-	const lastFocused = canvas.store.get('lastFocused')
-	const lastSelected = canvas.store.get('lastSelected')
-	const focused = canvas.store.get('focused')
-	const selected = canvas.store.get('selected')
-	const elementStore = canvas.store.get('elements')
+	const lastFocused = canvas.store.get('lastFocusedStore')
+	const lastSelected = canvas.store.get('lastSelectedStore')
+	const focused = canvas.store.get('focusedStore')
+	const selected = canvas.store.get('selectedStore')
+	const elements = canvas.store.get('elementStore')
 
 	function setFocused(element) {
 		if ($focused && $focused !== $selected) {
@@ -41,7 +41,7 @@
 	}
 
 	function focusListedElement() {
-		const element = $elementStore.get(this)
+		const element = $elements.get(this)
 
 		if ($focused !== element) {
 			setFocused(element)
@@ -49,7 +49,7 @@
 	}
 
 	function unfocusListedElement(e) {
-		const element = $elementStore.get(this)
+		const element = $elements.get(this)
 
 		if ($focused === element) {
 			setFocused(null)
@@ -57,7 +57,7 @@
 	}
 
 	function selectListedElement(e) {
-		const element = $elementStore.get(this)
+		const element = $elements.get(this)
 
 		if ($selected !== element) {
 			setSelected(element)
@@ -67,7 +67,7 @@
 	function deleteElement(e) {
 		e.stopPropagation()
 
-		const element = $elementStore.get(this)
+		const element = $elements.get(this)
 
 		if ($focused === element) {
 			setFocused(null)
@@ -77,12 +77,15 @@
 			setSelected(null)
 		}
 
-		canvas.dispatch('element_delete', { element })
+		elements.update((map) => {
+			map.delete(element.id)
+			return map
+		})
 	} 
 </script>
 
 <div class="element-list">
-	{#each $elementStore as [id, element] (id)}
+	{#each $elements as [id, element] (id)}
 		<div
 			class="element"
 			class:focused={id === $focused?.id}

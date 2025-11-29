@@ -4,6 +4,13 @@ import Path from './Path.js'
 export default class PathDrawer extends CanvasGroup {
 	_path = null
 	_diagram = null
+	_elements = null
+
+	constructor(canvas) {
+		super(canvas)
+
+		this._elements = canvas.store.get('elementStore')
+	}
 
 	_group_removed() {
 		super.clear()
@@ -97,6 +104,10 @@ export default class PathDrawer extends CanvasGroup {
 			super.remove(path)
 
 			path.popVertex()
+			this._elements.update((map) => {
+				map.set(path.id, path)
+				return map
+			})
 			this.canvas.dispatch('path_created', { path })
 
 			this._path = null
