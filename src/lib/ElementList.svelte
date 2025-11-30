@@ -1,9 +1,4 @@
 <script>
-	import { onDestroy } from 'svelte'
-	import { List } from '$ramen'
-
-	// NOTE: Under development
-
 	let { canvas } = $props()
 
 	const lastFocused = canvas.store.get('lastFocusedStore')

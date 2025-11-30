@@ -1,54 +1,32 @@
 
 <script>
-	import { onMount } from 'svelte'
-
 	let { canvas } = $props()
-	let element = $tate(null)
 
-	onMount(() => {
-		const unlistenSelect = canvas.listen('element_select', (e) => {
-			element = e.detail.element
-		})
-
-		const unlistenUnselect = canvas.listen('element_unselect', (e) => {
-			element = null
-		})
-
-		return () => {
-			unlistenSelect()
-			unlistenUnselect()
-		}
-	}
+	const elementStore = canvas.store.get('elementStore')
+	const selected = canvas.store.get('selectedStore')
 
 	function deleteElement() {
-		const oldFocus = canvas.store.get('focused')
-		const oldSelect = canvas.store.get('selected')
-
-		if (!element) {
-			// Should never occur!
+		if (!$selected) {
 			return 
 		}
 
-		if (focused === element) {
-			canvas.dispatch('element_unfocus', {
-				oldFocus,
-				element,
-			})
-		}
+		const element = $selected
 
-		if (selected === element) {
-			canvas.dispatch('element_unselect', {
-				oldSelect,
-				element,
-			})
-		}
+		// TODO: Unselect
+		// TODO: Create 'Elements extends Map' class that
+		//       stores focused and selected state. It also
+		//       provides functions for focusing, unfocusing,
+		//       selecting, and unselecting elements.
 
-		canvas.dispatch('element_delete', { element })
+		elementStore.update((elements) => {
+			elements.delete(element.id)
+			return elements
+		})
 	}
 </script>
 
 <button
-	disabled={element}
+	disabled={!$selected}
 	class="delete-element-button" 
 	onclick={deleteElement}>
 	Delete
@@ -57,5 +35,11 @@
 <style>
 	.delete-element-button {
 		height: 40px;
+
+		cursor: pointer;
+
+		&:disabled {
+			cursor: not-allowed; 
+		}
 	}
 </style>

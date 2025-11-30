@@ -63,10 +63,7 @@ export default class PathDrawer extends CanvasGroup {
 		path.setEnd(cell)
 		path.pushVertex()
 
-		this.canvas.dispatch('path_vertex_added', {
-			cell,
-			path,
-		})
+		this.canvas.dispatch('path_vertex_added', { cell, path })
 	}
 
 	_undoNewVertex(cell) {
@@ -77,13 +74,10 @@ export default class PathDrawer extends CanvasGroup {
 			return
 		}
 
-		const point = path.popVertex()
+		const vertex = path.popVertex()
 		path.setEnd(cell)
 
-		this.canvas.dispatch('path_vertex_removed', {
-			vertex: point,
-			path,
-		})
+		this.canvas.dispatch('path_vertex_removed', { vertex, path })
 	}
 
 	_startPath(cell) {
@@ -91,10 +85,7 @@ export default class PathDrawer extends CanvasGroup {
 		super.add(path)
 
 		this._path = path
-		this.canvas.dispatch('path_started', {
-			cell,
-			path: path,
-		})
+		this.canvas.dispatch('path_started', { cell, path })
 	}
 
 	_finishPath() {
@@ -108,7 +99,7 @@ export default class PathDrawer extends CanvasGroup {
 				map.set(path.id, path)
 				return map
 			})
-			this.canvas.dispatch('path_created', { path })
+			this.canvas.dispatch('path_finished', { path })
 
 			this._path = null
 			this._resetPath()

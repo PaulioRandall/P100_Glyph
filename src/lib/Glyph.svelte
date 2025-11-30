@@ -4,6 +4,7 @@
 
 	import ElementList from './ElementList.svelte'
 	import ButtonBar from './ButtonBar.svelte'
+	import DeleteElementButton from './DeleteElementButton.svelte'
 
 	import { GridCanvas, EventUtil, List } from '$ramen'
 	import {
@@ -51,10 +52,10 @@
 
 <div class="glyph">
 	<div class="button-bar-top">
-<ButtonBar>
-
+			<ButtonBar>
+				NEXT: Draw path button, which requires a 'mode' (because later we will be allowing selection)
 			</ButtonBar>
-	</div>
+				</div>
 
 	<div class="button-bar-left">
 <ButtonBar>
@@ -86,7 +87,7 @@
 	<div class="button-bar-bottom">
 		{#if canvas}
 			<ButtonBar>
-
+				<DeleteElementButton {canvas} />
 			</ButtonBar>
 		{/if}
 	</div>

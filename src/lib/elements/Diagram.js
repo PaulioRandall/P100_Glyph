@@ -17,9 +17,6 @@ export default class Diagram extends CanvasGroup {
 
 			if (!elements.get(child.id)) {
 				this.remove(child)
-				this.canvas.dispatch('element_removed', {
-					element: child,
-				})
 			}
 		}
 
@@ -28,9 +25,6 @@ export default class Diagram extends CanvasGroup {
 			// Add any new elements
 			if (!childIds.includes(element.id)) {
 				this.add(element)
-				this.canvas.dispatch('element_added', {
-					element,
-				})
 			}
 		}
 	}
