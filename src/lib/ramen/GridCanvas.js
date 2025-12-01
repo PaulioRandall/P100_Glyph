@@ -15,18 +15,8 @@ export default class GridCanvas extends Canvas {
 		this._xLength = xLength
 		this._yLength = yLength
 
-		const canvas = this
-
-		this.load(() => {
-			this._load()
-
-			const unlisten = this.listen('mousemove', this._mousemove.bind(this))
-
-			return () => {
-				unlisten()
-				this._unload()
-			}
-		})
+		this._addCells()
+		this.listen('mousemove', this._mousemove.bind(this))
 	}
 
 	get hovered() {
@@ -59,7 +49,7 @@ export default class GridCanvas extends Canvas {
 		})
 	}
 
-	_load() {
+	_addCells() {
 		const cells = generateSquareGridCells(
 			super.width,
 			super.height,
@@ -72,10 +62,6 @@ export default class GridCanvas extends Canvas {
 		}
 
 		super.add(this._cells)
-	}
-
-	_unload() {
-		super.clear()
 	}
 }
 

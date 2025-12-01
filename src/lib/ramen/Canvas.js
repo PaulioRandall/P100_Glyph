@@ -1,7 +1,6 @@
 import Two from 'two.js'
 import { ZUI } from 'two.js/extras/jsm/zui.js'
 import Group from './Group.js'
-import Loader from './Loader.js'
 
 // TODO: Remove loader feature
 
@@ -10,7 +9,6 @@ export default class Canvas extends Group {
 	_two
 	_zui
 	_store = new Map()
-	_loader = new Loader(this)
 
 	// TODO: reset on window resize
 	//       window.addEventListener("resize", myFunction)
@@ -28,15 +26,7 @@ export default class Canvas extends Group {
 		}).appendTo(container)
 
 		this._zui = new ZUI(this)
-
-		this.load(() => {
-			this._two.add(this)
-
-			return () => {
-				this._two.clear()
-				this._zui.reset()
-			}
-		})
+		this._two.add(this)
 	}
 
 	get container() {
@@ -129,18 +119,6 @@ export default class Canvas extends Group {
 	_listenWithCallback(type, callback, options) {
 		this.dom.addEventListener(type, callback, options)
 		return () => this.dom.removeEventListener(type, callback, options)
-	}
-
-	load(loadFunc) {
-		this._loader.load(loadFunc)
-	}
-
-	reload() {
-		this._loader.reload()
-	}
-
-	free() {
-		this._loader.free()
 	}
 }
 

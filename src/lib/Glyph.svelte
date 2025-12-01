@@ -14,7 +14,6 @@
 
 	onMount(() => {
 		canvas = new GlyphCanvas(container, 7, 7)
-		return () => canvas.free()
 	})
 </script>
 
