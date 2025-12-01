@@ -1,5 +1,5 @@
 import { CanvasGroup } from '$ramen'
-import Path from './Path.js'
+import { Path } from '../elements'
 
 export default class PathDrawer extends CanvasGroup {
 	_path = null

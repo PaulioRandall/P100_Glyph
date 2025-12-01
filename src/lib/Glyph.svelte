@@ -1,63 +1,21 @@
 <script>
 	import { onMount } from 'svelte'
 
-	import ElementList from './ElementList.svelte'
-	import ButtonBar from './ButtonBar.svelte'
+	import GlyphCanvas from './GlyphCanvas.svelte.js'
 
 	import {
-		GlyphCanvas,
-		EventLogger,
-		ClickSimplifier,
-		Diagram,
-		HoveredCell,
-		PathDrawer,
+		ElementList,
+		ButtonBar,
 		DeleteElementButton,
 		EnterSelectModeButton,
-	} from './elements'
+	} from './components'
 	
 	let container = null
-
 	let canvas = $state(null)
-	let diagram = $state(null)
-	let pathDrawer = $state(null)
-
-	function createAddElement(Clazz) {
-		canvas.load(() => {
-			const element = new Clazz(canvas)		
-			canvas.add(element)
-			return () => canvas.remove(element)
-		})
-	}
-
-	function addElement(name, element) {
-		canvas.load(() => {		
-			canvas.add(element)
-			canvas.store.set(name, diagram)
-
-			return () => {
-				canvas.store.delete(name)
-				canvas.remove(element)
-			}
-		})
-	}
 
 	onMount(() => {
 		canvas = new GlyphCanvas(container, 7, 7)
-		diagram = new Diagram(canvas)
-		pathDrawer = new PathDrawer(canvas)
-
-		createAddElement(EventLogger)
-		createAddElement(ClickSimplifier)
-		createAddElement(HoveredCell)
-		addElement('diagram', diagram)
-		addElement('pathDrawer', pathDrawer)
-
-		//setTimeout(() => canvas.reload(), 4000)
-
-		return () => {
-			canvas.free()
-			canvas = null
-		}
+		return () => canvas.free()
 	})
 </script>
 

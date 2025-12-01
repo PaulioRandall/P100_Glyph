@@ -1,6 +1,6 @@
 import { Two, CanvasGroup } from '$ramen'
 
-export default class HoveredCell extends CanvasGroup {
+export default class CellHighlighter extends CanvasGroup {
 	_cell = null
 	_haloShape = createHaloShape()
 

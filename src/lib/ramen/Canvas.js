@@ -3,6 +3,8 @@ import { ZUI } from 'two.js/extras/jsm/zui.js'
 import Group from './Group.js'
 import Loader from './Loader.js'
 
+// TODO: Remove loader feature
+
 export default class Canvas extends Group {
 	_container
 	_two

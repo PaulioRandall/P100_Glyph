@@ -6,7 +6,7 @@
 
 <div class="element-list">
 		{#each diagram.elements as element (element.id)}
-			<div
+			<button
 				class="element"
 				class:focused={diagram.focused === element}
 				class:selected={diagram.selected === element}
@@ -14,7 +14,7 @@
 				onmouseleave={() => diagram.unfocus(element)}
 				onclick={() => diagram.select(element)}>
 				Path
-			</div>
+			</button>
 		{/each}
 </div>
 
@@ -34,6 +34,7 @@
 		align-items: center;
 
 		height: 40px;
+		width: 100%;
 
 		padding: 0.5rem;
 	}
