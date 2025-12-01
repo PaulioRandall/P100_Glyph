@@ -66,7 +66,7 @@
 
 <style>
 	.glyph {
-		--content-width: calc(100vw - 250px); 
+		--content-width: calc(100vw - 252px); 
 		--content-height: calc(100vh - 100px);
 		--content-size: min(var(--content-width), var(--content-height));
 
@@ -75,8 +75,8 @@
 			"top-button-bar top-button-bar elements-pane"
 			"canvas-pane right-button-bar elements-pane"
 			"bottom-button-bar bottom-button-bar elements-pane";
-		grid-template-rows: 50px var(--content-size) 50px;
-		grid-template-columns: var(--content-size) 50px 200px;
+		grid-template-rows: 52px var(--content-size) 52px;
+		grid-template-columns: var(--content-size) 52px 200px;
 
 		width: 100%;
 		height: 100%;

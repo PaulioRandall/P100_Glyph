@@ -25,6 +25,4 @@
 	.column {
 		flex-direction: column;
 	}
-
-
 </style>

@@ -1,5 +1,7 @@
 
 <script>
+	import IconButton from './IconButton.svelte'
+
 	let { canvas } = $props()
 
 	const diagram = canvas.store.get('diagram')
@@ -11,22 +13,6 @@
 	}
 </script>
 
-<button
-	disabled={!diagram.selected}
-	class="delete-element-button" 
-	onclick={deleteElement}>
+<IconButton disabled={!diagram.selected} onclick={deleteElement}>
 	Del
-</button>
-
-<style>
-	.delete-element-button {
-		width: 40px;
-		height: 40px;
-
-		cursor: pointer;
-
-		&:disabled {
-			cursor: not-allowed; 
-		}
-	}
-</style>
+</IconButton>
