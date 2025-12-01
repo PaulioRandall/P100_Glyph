@@ -1,24 +1,27 @@
 <script>
 	import { onMount } from 'svelte'
-	import { writable } from 'svelte/store'
 
 	import ElementList from './ElementList.svelte'
 	import ButtonBar from './ButtonBar.svelte'
-	import DeleteElementButton from './DeleteElementButton.svelte'
 
-	import { GridCanvas, EventUtil, List } from '$ramen'
 	import {
+		GlyphCanvas,
 		EventLogger,
 		ClickSimplifier,
 		Diagram,
 		HoveredCell,
 		PathDrawer,
+		DeleteElementButton,
+		EnterSelectModeButton,
 	} from './elements'
 	
 	let container = null
-	let canvas = $state(null)
 
-	function addElement(Clazz) {
+	let canvas = $state(null)
+	let diagram = $state(null)
+	let pathDrawer = $state(null)
+
+	function createAddElement(Clazz) {
 		canvas.load(() => {
 			const element = new Clazz(canvas)		
 			canvas.add(element)
@@ -26,26 +29,28 @@
 		})
 	}
 
-	onMount(() => {
-		canvas = new GridCanvas(container, 7, 7)
-
-		const diagram = new Diagram(canvas)
-
-		canvas.load(() => {
-			canvas.add(diagram)
-			canvas.store.set('diagram', diagram)
+	function addElement(name, element) {
+		canvas.load(() => {		
+			canvas.add(element)
+			canvas.store.set(name, diagram)
 
 			return () => {
-				canvas.store.delete('diagram')
-				canvas.remove(diagram)
+				canvas.store.delete(name)
+				canvas.remove(element)
 			}
 		})
-		
-		addElement(EventLogger)
-		addElement(ClickSimplifier)
-		addElement(HoveredCell)
-		addElement(Diagram)
-		addElement(PathDrawer)
+	}
+
+	onMount(() => {
+		canvas = new GlyphCanvas(container, 7, 7)
+		diagram = new Diagram(canvas)
+		pathDrawer = new PathDrawer(canvas)
+
+		createAddElement(EventLogger)
+		createAddElement(ClickSimplifier)
+		createAddElement(HoveredCell)
+		addElement('diagram', diagram)
+		addElement('pathDrawer', pathDrawer)
 
 		//setTimeout(() => canvas.reload(), 4000)
 
@@ -60,6 +65,9 @@
 	<div class="button-bar-top">
 			<ButtonBar>
 				NEXT: Draw path button, which requires a 'mode' (because later we will be allowing selection)
+				{#if canvas}
+					<EnterSelectModeButton {canvas} />
+				{/if}
 			</ButtonBar>
 				</div>
 

@@ -30,5 +30,6 @@ export default class CanvasGroup extends Group {
 		for (const func of this._onFree) {
 			func()
 		}
+		super.free()
 	}
 }

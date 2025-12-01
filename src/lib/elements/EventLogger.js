@@ -10,7 +10,6 @@ const EVENTS = [
 	//'path_vertex_removed',
 	//'path_reset',
 	//'path_created'
-	//'element_delete',
 ]
 
 export default class EventLogger extends CanvasGroup {

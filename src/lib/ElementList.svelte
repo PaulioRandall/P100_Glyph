@@ -12,7 +12,7 @@
 				class:selected={diagram.selected === element}
 				onmouseenter={() => diagram.focus(element)}
 				onmouseleave={() => diagram.unfocus(element)}
-				onclick={() => diagram.delete(element)}>
+				onclick={() => diagram.select(element)}>
 				Path
 			</div>
 		{/each}

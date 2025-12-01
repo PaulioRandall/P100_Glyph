@@ -8,7 +8,6 @@ export default class Canvas extends Group {
 	_two
 	_zui
 	_store = new Map()
-
 	_loader = new Loader(this)
 
 	// TODO: reset on window resize
@@ -75,8 +74,6 @@ export default class Canvas extends Group {
 	}
 
 	dispatch(type, detail = {}) {
-		// IDEA: Can attach things to the detail.
-
 		const event = new CustomEvent(type, {
 			bubbles: false,
 			cancelable: false,

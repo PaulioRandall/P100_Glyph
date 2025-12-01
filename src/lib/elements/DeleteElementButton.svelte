@@ -5,17 +5,9 @@
 	const diagram = canvas.store.get('diagram')
 
 	function deleteElement() {
-		if (!diagram.selected) {
-			return 
+		if (diagram.selected) {
+			diagram.remove(diagram.selected) 
 		}
-
-		// TODO: Unselect
-		// TODO: Create 'Elements extends Map' class that
-		//       stores focused and selected state. It also
-		//       provides functions for focusing, unfocusing,
-		//       selecting, and unselecting elements.
-
-		diagram.remove(diagram.selected)
 	}
 </script>
 
