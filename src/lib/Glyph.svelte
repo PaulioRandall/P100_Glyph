@@ -29,12 +29,6 @@
 	onMount(() => {
 		canvas = new GridCanvas(container, 7, 7)
 
-		canvas.store.set('lastFocusedStore', writable(null))
-		canvas.store.set('lastSelectedStore', writable(null))
-		canvas.store.set('focusedStore', writable(null))
-		canvas.store.set('selectedStore', writable(null))
-		canvas.store.set('elementStore', writable(new Map()))
-
 		const diagram = new Diagram(canvas)
 
 		canvas.load(() => {

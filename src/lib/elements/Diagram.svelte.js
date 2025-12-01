@@ -1,8 +1,7 @@
-import { writable, get } from 'svelte/store'
 import { CanvasGroup, List } from '$ramen'
 
 export default class Diagram extends CanvasGroup {
-	_elementsStore = writable(new List())
+	_elements = $state([])
 
 	_lastFocused = $state(null)
 	_focused = $state(null)
@@ -10,18 +9,8 @@ export default class Diagram extends CanvasGroup {
 	_lastSelected = $state(null)
 	_selected = $state(null)
 
-	constructor(canvas) {
-		super(canvas)
-
-		const unsub = this._elementsStore.subscribe(
-			this._elementsChanged.bind(this)
-		)
-
-		this.onFree(unsub)
-	}
-
-	get elementsStore() {
-		return this._elementsStore
+	get elements() {
+		return this._elements
 	}
 
 	get lastFocused() {
@@ -47,10 +36,10 @@ export default class Diagram extends CanvasGroup {
 			return
 		}
 
-		this._elementsStore.update((elements) => {
-			elements.push(element)
-			return elements
-		})
+		this._elements.push(element)
+		super.add(element)
+
+		this.select(element)
 	}
 
 	remove(element) {
@@ -58,29 +47,14 @@ export default class Diagram extends CanvasGroup {
 			return
 		}
 
-		this._elementsStore.update((elements) => {
-			elements.remove(element)
-			return elements
-		})
+		this.unfocusIfElement(element)
+		this.unselectIfElement(element)
+
+		List.remove(this._elements, element)
+		super.remove(element)
 	}
 
-	_elementsChanged(elements) {
-		const children = this.children
-
-		for (const child of children) {
-			if (!elements.includes(child)) {
-				super.remove(child)
-			}
-		}
-
-		for (const element of elements) {
-			if (!children.includes(element)) {
-				super.add(element)
-			}
-		}
-	}
-
-	// Focusing and selecting
+	// Focus and selection
 
 	focus(element) {
 		this._focus(element)
@@ -111,9 +85,7 @@ export default class Diagram extends CanvasGroup {
 	}
 
 	_focus(element = null) {
-		const elements = get(this.elementsStore)
-
-		if (element && !elements.includes(element)) {
+		if (element && !this._elements.includes(element)) {
 			throw new Error('Element not in diagram')
 		}
 
@@ -131,9 +103,7 @@ export default class Diagram extends CanvasGroup {
 	}
 
 	_select(element = null) {
-		const elements = get(this.elementsStore)
-
-		if (element && !elements.includes(element)) {
+		if (element && !this._elements.includes(element)) {
 			throw new Error('Element not in diagram')
 		}
 

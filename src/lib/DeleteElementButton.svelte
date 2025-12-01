@@ -2,15 +2,12 @@
 <script>
 	let { canvas } = $props()
 
-	const elementStore = canvas.store.get('elementStore')
-	const selected = canvas.store.get('selectedStore')
+	const diagram = canvas.store.get('diagram')
 
 	function deleteElement() {
-		if (!$selected) {
+		if (!diagram.selected) {
 			return 
 		}
-
-		const element = $selected
 
 		// TODO: Unselect
 		// TODO: Create 'Elements extends Map' class that
@@ -18,15 +15,12 @@
 		//       provides functions for focusing, unfocusing,
 		//       selecting, and unselecting elements.
 
-		elementStore.update((elements) => {
-			elements.delete(element.id)
-			return elements
-		})
+		diagram.remove(diagram.selected)
 	}
 </script>
 
 <button
-	disabled={!$selected}
+	disabled={!diagram.selected}
 	class="delete-element-button" 
 	onclick={deleteElement}>
 	Delete

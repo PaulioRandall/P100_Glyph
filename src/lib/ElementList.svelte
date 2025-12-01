@@ -2,30 +2,17 @@
 	let { canvas } = $props()
 
 	const diagram = canvas.store.get('diagram')
-	const elementsStore = diagram.elementsStore
-
-	function focusElement() {
-		diagram.focus(this)
-	}
-
-	function unfocusElement() {
-		diagram.unfocusIfElement(this)
-	}
-
-	function selectElement() {
-		diagram.select(this)
-	}
 </script>
 
 <div class="element-list">
-		{#each $elementsStore as element (element.id)}
+		{#each diagram.elements as element (element.id)}
 			<div
 				class="element"
 				class:focused={diagram.focused === element}
 				class:selected={diagram.selected === element}
-				onmouseenter={focusElement.bind(element)}
-				onmouseleave={unfocusElement.bind(element)}
-				onclick={selectElement.bind(element)}>
+				onmouseenter={() => diagram.focus(element)}
+				onmouseleave={() => diagram.unfocus(element)}
+				onclick={() => diagram.delete(element)}>
 				Path
 			</div>
 		{/each}
