@@ -34,6 +34,7 @@
 			keep things straight.
 		-->
 		<div
+			role="application"
 			bind:this={container}
 			oncontextmenu={(e) => e.preventDefault()}
 			class="canvas-container">
@@ -93,7 +94,7 @@
 	.right-button-bar {
 		grid-area: right-button-bar;
 
-		background: forestgreen;
+		background: indianred;
 	}
 
 	.canvas-pane {

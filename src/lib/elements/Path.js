@@ -1,68 +1,54 @@
 import { Two, Group } from '$ramen'
 
-// TODO: Refactor so it works with grid cells.
-//       Perhaps holds a list of grid cells representing
-//       vertices. When the list changes, the shape is
-//       recreated.
-//       This is probably needed for the next set of
-//       features. It will be much easier to recreate the
-//       shape on each change than try to apply all the
-//       user changes directly to a static Two.Path.
-
 export default class Path extends Group {
+	_commands = []
 	_shape = null
 
-	constructor({ x, y }) {
+	constructor(cell) {
 		super()
 
-		this._shape = createShape(x, y)
-		super.add(this._shape)
+		this._addCommands(newMoveCommand(cell), newLineCommand(cell))
 	}
 
-	get start() {
-		return this.getVert(0)
+	get commands() {
+		return this._commands
 	}
 
-	get end() {
-		return this.getVert(this.countVertices() - 1)
+	isMultiPoint() {
+		return this._commands.length > 2
 	}
 
-	countVertices() {
-		return this._shape.vertices.length
+	moveTo(cell) {
+		this._addCommands(newMoveCommand(cell))
 	}
 
-	getVert(index) {
-		return this._shape.vertices[index]
+	lineTo(cell) {
+		this._addCommands(newLineCommand(cell))
 	}
 
-	isSimple() {
-		return this.countVertices() <= 2
+	removeLastPoint() {
+		this._commands.pop()
+		this._updateShape()
 	}
 
-	isComplex() {
-		return !this.isSimple()
+	updateLastPoint(cell) {
+		const lastIndex = this._commands.length - 1
+		this._commands[lastIndex].to = cell
+		this._updateShape()
 	}
 
-	setStart({ x, y }) {
-		this.start.x = x
-		this.start.y = y
+	_addCommands(...cmds) {
+		this._commands.push(...cmds)
+		this._updateShape()
 	}
 
-	setEnd({ x, y }) {
-		this.end.x = x
-		this.end.y = y
-	}
+	_updateShape() {
+		const newShape = createPathFromCommands(this._commands)
 
-	pushVertex() {
-		this._shape.vertices.push(this.end.clone())
-	}
+		this.remove(this._shape)
+		this.add(newShape)
 
-	popVertex() {
-		const vert = this._shape.vertices.pop()
-		return {
-			x: vert.x,
-			y: vert.y,
-		}
+		this._shape = newShape
 	}
 
 	select() {
@@ -82,16 +68,23 @@ export default class Path extends Group {
 	}
 }
 
-function createShape(x, y) {
+function newMoveCommand(to) {
+	return {
+		type: 'move',
+		to,
+	}
+}
+
+function newLineCommand(to) {
+	return {
+		type: 'line',
+		to,
+	}
+}
+
+function createPathFromCommands(cmds) {
 	const path = new Two.Path(
-		[
-			// Start by moving to the { x, y }
-			new Two.Anchor(x, y, x, y, x, y, 'move'),
-			// Draws a line, but since we don't yet know where
-			// the user wants the end of the line we'll just keep
-			// it as the same as the start point for now.
-			new Two.Anchor(x, y, x, y, x, y, 'line'),
-		],
+		makeAnchors(cmds),
 		false, // Not closed path
 		false, // Not curved
 		false // Two.js controls plotting
@@ -104,4 +97,33 @@ function createShape(x, y) {
 	path.join = 'round'
 
 	return path
+}
+
+function makeAnchors(cmds) {
+	const anchors = []
+
+	for (const cmd of cmds) {
+		anchors.push(makeAnchor(cmd))
+	}
+
+	return anchors
+}
+
+function makeAnchor(cmd) {
+	// NOTE: Left and right control point handles of a
+	//       Two.Anchor are relative to its position
+	//       (i.e. x and y).
+	//
+	//       https://two.js.org/docs/anchor/
+
+	const { x, y } = cmd.to
+
+	switch (cmd.type) {
+		case 'move':
+			return new Two.Anchor(x, y, 0, 0, 0, 0, 'move')
+		case 'line':
+			return new Two.Anchor(x, y, 0, 0, 0, 0, 'line')
+		default:
+			throw new Error(`Unknown command type '${cmd.type}'`)
+	}
 }

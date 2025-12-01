@@ -15,12 +15,12 @@ export default class PathDrawer extends CanvasGroup {
 		const path = this._path
 
 		if (path && cell) {
-			path.setEnd(cell)
+			path.updateLastPoint(cell)
 		}
 	}
 
 	_event_left_click() {
-		this._newVertex(this.canvas.hovered)
+		this._addPoint(this.canvas.hovered)
 	}
 
 	_event_middle_click() {
@@ -28,7 +28,7 @@ export default class PathDrawer extends CanvasGroup {
 			return
 		}
 
-		this._undoNewVertex(this.canvas.hovered)
+		this._removeLastPoint(this.canvas.hovered)
 	}
 
 	_event_right_click() {
@@ -38,14 +38,14 @@ export default class PathDrawer extends CanvasGroup {
 			return
 		}
 
-		if (path.countVertices() > 2) {
+		if (path.isMultiPoint()) {
 			this._finishPath()
 		} else {
 			this._resetPath()
 		}
 	}
 
-	_newVertex(cell) {
+	_addPoint(cell) {
 		const path = this._path
 
 		if (!path) {
@@ -53,24 +53,24 @@ export default class PathDrawer extends CanvasGroup {
 			return
 		}
 
-		path.setEnd(cell)
-		path.pushVertex()
+		path.updateLastPoint(cell)
+		path.lineTo(cell)
 
-		this.canvas.dispatch('path_vertex_added', { cell, path })
+		this.canvas.dispatch('path_point_added', { cell, path })
 	}
 
-	_undoNewVertex(cell) {
+	_removeLastPoint(cell) {
 		const path = this._path
 
-		if (path.isSimple()) {
+		if (!path.isMultiPoint()) {
 			this._resetPath()
 			return
 		}
 
-		const vertex = path.popVertex()
-		path.setEnd(cell)
+		path.removeLastPoint()
+		path.updateLastPoint(cell)
 
-		this.canvas.dispatch('path_vertex_removed', { vertex, path })
+		this.canvas.dispatch('path_point_removed', { path })
 	}
 
 	_startPath(cell) {
@@ -87,7 +87,7 @@ export default class PathDrawer extends CanvasGroup {
 		if (path) {
 			super.remove(path)
 
-			path.popVertex()
+			path.removeLastPoint()
 
 			this.canvas.store.get('diagram').add(path)
 			this.canvas.dispatch('path_finished', { path })
