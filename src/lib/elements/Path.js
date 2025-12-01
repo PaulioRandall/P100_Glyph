@@ -2,7 +2,12 @@ import { Two, Group } from '$ramen'
 
 export default class Path extends Group {
 	_commands = []
+
 	_shape = null
+	_nodes = []
+
+	_highlighted = false
+	_selected = false
 
 	constructor(cell) {
 		super()
@@ -28,43 +33,59 @@ export default class Path extends Group {
 
 	removeLastPoint() {
 		this._commands.pop()
-		this._updateShape()
+		this._updatePath()
 	}
 
 	updateLastPoint(cell) {
 		const lastIndex = this._commands.length - 1
 		this._commands[lastIndex].to = cell
-		this._updateShape()
+		this._updatePath()
+	}
+
+	select(state = true) {
+		this._selected = state
+		this._updateLookAndFeel()
+	}
+
+	highlight(state = true) {
+		this._highlighted = state
+		this._updateLookAndFeel()
 	}
 
 	_addCommands(...cmds) {
 		this._commands.push(...cmds)
-		this._updateShape()
+		this._updatePath()
 	}
 
-	_updateShape() {
-		const newShape = createPathFromCommands(this._commands)
+	_updatePath() {
+		const newShape = makePath(this._commands)
+		const newNodes = makeNodes(this._commands)
 
+		this._nodes.forEach((n) => this.remove(n))
 		this.remove(this._shape)
+
 		this.add(newShape)
+		newNodes.forEach((n) => this.add(n))
 
 		this._shape = newShape
+		this._nodes = newNodes
+
+		this._updateLookAndFeel()
 	}
 
-	select() {
-		this._shape.stroke = 'blue'
-	}
+	_updateLookAndFeel() {
+		const sel = this._selected
+		const high = this._highlighted
 
-	unselect() {
-		this._shape.stroke = 'indianred'
-	}
+		if (sel) {
+			this._shape.stroke = 'blue'
+		} else if (high) {
+			this._shape.stroke = 'orange'
+		} else {
+			this._shape.stroke = 'indianred'
+		}
 
-	highlight() {
-		this._shape.stroke = 'orange'
-	}
-
-	unhighlight() {
-		this._shape.stroke = 'indianred'
+		this._nodes.forEach((n) => (n.visible = sel))
 	}
 }
 
@@ -82,7 +103,7 @@ function newLineCommand(to) {
 	}
 }
 
-function createPathFromCommands(cmds) {
+function makePath(cmds) {
 	const path = new Two.Path(
 		makeAnchors(cmds),
 		false, // Not closed path
@@ -126,4 +147,28 @@ function makeAnchor(cmd) {
 		default:
 			throw new Error(`Unknown command type '${cmd.type}'`)
 	}
+}
+
+function makeNodes(cmds) {
+	const nodes = []
+
+	for (const cmd of cmds) {
+		nodes.push(makeNode(cmd))
+	}
+
+	return nodes
+}
+
+function makeNode(cmd) {
+	const radius = 16
+	const { x, y } = cmd.to
+
+	const circle = new Two.Circle(x, y, radius)
+
+	circle.visible = false
+	circle.fill = 'lightblue'
+	circle.stroke = 'black'
+	circle.linewidth = 4
+
+	return circle
 }

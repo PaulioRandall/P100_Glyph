@@ -15,7 +15,6 @@ export default class List extends Array {
 
 	// Removes all items from the list.
 	static clear(array) {
-		// TODO: Is there a better way?
 		array.splice(0)
 	}
 

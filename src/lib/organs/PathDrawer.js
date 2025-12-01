@@ -1,6 +1,13 @@
 import { CanvasGroup } from '$ramen'
 import { Path } from '../elements'
 
+// TODO: Double left click to add first point.
+//       Other drawer interactions should be ignored until
+//       First point is created through double left click.
+
+// TODO: Prevent the same point being used in two
+//       consecutive commands.
+
 export default class PathDrawer extends CanvasGroup {
 	_path = null
 

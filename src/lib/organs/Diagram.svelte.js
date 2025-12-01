@@ -89,17 +89,10 @@ export default class Diagram extends CanvasGroup {
 			throw new Error('Element not in diagram')
 		}
 
-		if (this._focused && this._focused !== this._selected) {
-			this._focused.unhighlight()
-		}
-
+		this._focused?.highlight(false)
 		this._lastFocused = this._focused
-
-		if (element && element !== this._selected) {
-			element.highlight()
-		}
-
 		this._focused = element
+		this._focused?.highlight(true)
 	}
 
 	_select(element = null) {
@@ -107,17 +100,10 @@ export default class Diagram extends CanvasGroup {
 			throw new Error('Element not in diagram')
 		}
 
-		if (this._selected) {
-			this._selected.unselect()
-		}
-
+		this._selected?.select(false)
 		this._lastSelected = this._selected
-
-		if (element) {
-			element.select()
-		}
-
 		this._selected = element
+		this._selected?.select(true)
 	}
 
 	// TODO: toJson()
