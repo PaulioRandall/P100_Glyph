@@ -3,9 +3,9 @@ import { CanvasGroup, EventUtil } from '$ramen'
 export default class ClickSimplifier extends CanvasGroup {
 	_pointerId = null
 
-	_group_removed() {
+	group_removed() {
 		this._pointerId = null
-		super._group_removed()
+		super.group_removed()
 	}
 
 	_event_pointerdown(e) {

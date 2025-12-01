@@ -4,10 +4,10 @@ import { Path } from '../elements'
 export default class PathDrawer extends CanvasGroup {
 	_path = null
 
-	_group_removed() {
+	group_removed() {
 		super.clear()
 		this._resetPath()
-		super._group_removed()
+		super.group_removed()
 	}
 
 	_event_grid_cell_focus(e) {

@@ -14,16 +14,16 @@ export default class CellHighlighter extends CanvasGroup {
 		this.visible = false
 	}
 
-	_group_added() {
+	group_added() {
 		this.hide()
 		super.add(this._haloShape)
-		super._group_added()
+		super.group_added()
 	}
 
-	_group_removed() {
-		this._cell = null
+	group_removed() {
+		super.group_removed()
 		super.clear()
-		super._group_removed()
+		this._cell = null
 	}
 
 	_event_pointerenter() {

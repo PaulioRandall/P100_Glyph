@@ -9,26 +9,30 @@ export default class Group extends Two.Group {
 
 	add(element) {
 		if (!element) {
-			return
+			return false
 		}
 
 		super.add(element)
 
-		if (typeof element._group_added === 'function') {
-			element._group_added()
+		if (typeof element.group_added === 'function') {
+			element.group_added()
 		}
+
+		return true
 	}
 
 	remove(element) {
 		if (!element) {
-			return
+			return false
 		}
 
 		super.remove(element)
 
-		if (typeof element._group_removed === 'function') {
-			element._group_removed()
+		if (typeof element.group_removed === 'function') {
+			element.group_removed()
 		}
+
+		return true
 	}
 
 	clear() {
@@ -36,17 +40,5 @@ export default class Group extends Two.Group {
 		for (const child of children) {
 			child.remove()
 		}
-	}
-
-	free() {
-		this.clear()
-	}
-
-	_group_added() {
-		// Declaration
-	}
-
-	_group_removed() {
-		// Declaration
 	}
 }

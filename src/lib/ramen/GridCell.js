@@ -28,11 +28,11 @@ export default class GridCell extends Group {
 		this._centerShape = createCenterShape(this)
 	}
 
-	_group_added() {
+	group_added() {
 		super.add(this._centerShape)
 	}
 
-	_group_removed() {
+	group_removed() {
 		super.clear()
 	}
 
