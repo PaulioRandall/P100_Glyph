@@ -34,6 +34,18 @@
 		canvas.store.set('focusedStore', writable(null))
 		canvas.store.set('selectedStore', writable(null))
 		canvas.store.set('elementStore', writable(new Map()))
+
+		const diagram = new Diagram(canvas)
+
+		canvas.load(() => {
+			canvas.add(diagram)
+			canvas.store.set('diagram', diagram)
+
+			return () => {
+				canvas.store.delete('diagram')
+				canvas.remove(diagram)
+			}
+		})
 		
 		addElement(EventLogger)
 		addElement(ClickSimplifier)

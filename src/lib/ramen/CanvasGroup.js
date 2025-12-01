@@ -1,24 +1,34 @@
 import Group from './Group.js'
+import List from './List.js'
 
 export default class CanvasGroup extends Group {
 	_canvas = null
-	_unlistener = null
+	_onFree = null
 
 	constructor(canvas, ...children) {
 		super(...children)
 
 		this._canvas = canvas
-		this._unlistener = canvas.listen(this)
+		this._onFree = new List()
+
+		this.onFree(canvas.listen(this))
 	}
 
 	get canvas() {
 		return this._canvas
 	}
 
-	_unlisten() {
-		if (this._unlistener) {
-			this._unlistener()
-			this._unlistener = null
+	onFree(func) {
+		if (!func || typeof func !== 'function') {
+			throw new Error(`onFree(function) only accepts a non-null function`)
+		}
+
+		this._onFree.push(func)
+	}
+
+	free() {
+		for (const func of this._onFree) {
+			func()
 		}
 	}
 }

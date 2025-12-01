@@ -41,7 +41,17 @@ export default class Elements extends Map {
 	}
 
 	focus(element) {
-		// TODO
+		if ($focused && $focused !== $selected) {
+			$focused.unhighlight()
+		}
+
+		lastFocused.set($focused)
+
+		if (element && element !== $selected) {
+			element.highlight()
+		}
+
+		focused.set(element)
 	}
 
 	unfocus() {
