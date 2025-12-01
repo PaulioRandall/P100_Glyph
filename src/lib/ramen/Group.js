@@ -41,4 +41,12 @@ export default class Group extends Two.Group {
 	free() {
 		this.clear()
 	}
+
+	_group_added() {
+		// Declaration
+	}
+
+	_group_removed() {
+		// Declaration
+	}
 }

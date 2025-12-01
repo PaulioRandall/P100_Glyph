@@ -6,7 +6,7 @@
 		ElementList,
 		ButtonBar,
 		DeleteElementButton,
-		EnterSelectModeButton,
+		TogglePathDrawerButton,
 	} from './components'
 	
 	let container = null
@@ -21,9 +21,8 @@
 <div class="glyph">
 	<div class="top-button-bar">
 			<ButtonBar>
-				NEXT: Draw path button, which requires a 'mode' (because later we will be allowing selection)
 				{#if canvas}
-					<EnterSelectModeButton {canvas} />
+					<TogglePathDrawerButton {canvas} />
 				{/if}
 			</ButtonBar>
 				</div>

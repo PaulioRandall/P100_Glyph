@@ -3,16 +3,12 @@ import { GridCanvas } from '$ramen'
 import { ClickSimplifier, CellHighlighter, Diagram, PathDrawer } from './organs'
 
 export default class GlyphCanvas extends GridCanvas {
-	static MODE_DRAW = 'draw'
-	static MODE_SELECT = 'select'
-	static MODES = [GlyphCanvas.MODE_DRAW, GlyphCanvas.MODE_SELECT]
-
-	_mode = $state(GlyphCanvas.MODE_DRAW)
-
 	_clickSimplifier = new ClickSimplifier(this)
 	_cellHighlighter = new CellHighlighter(this)
 	_diagram = new Diagram(this)
 	_pathDrawer = new PathDrawer(this)
+
+	_pathDrawing = $state(false)
 
 	constructor(container, xLength, yLength, options = {}) {
 		super(container, xLength, yLength, (options = {}))
@@ -20,7 +16,8 @@ export default class GlyphCanvas extends GridCanvas {
 		this._addOrgan('clickSimplifier', this._clickSimplifier)
 		this._addOrgan('cellHighlighter', this._cellHighlighter)
 		this._addOrgan('diagram', this._diagram)
-		this._addOrgan('pathDrawer', this._pathDrawer)
+
+		this.pathDrawing = true
 	}
 
 	_addOrgan(name, organ) {
@@ -28,27 +25,22 @@ export default class GlyphCanvas extends GridCanvas {
 		this.store.set(name, organ)
 	}
 
-	get mode() {
-		return this._mode
+	_removeOrgan(name, organ) {
+		this.remove(organ)
+		this.store.delete(name)
 	}
 
-	_changeMode(newMode) {
-		if (!GlyphCanvas.MODES.includes(newMode)) {
-			throw new Error(`Unknown mode '${newMode}'`)
+	get pathDrawing() {
+		return this._pathDrawing
+	}
+
+	set pathDrawing(newState = true) {
+		this._pathDrawing = newState
+
+		if (this._pathDrawing) {
+			this._addOrgan('pathDrawer', this._pathDrawer)
+		} else {
+			this._removeOrgan('pathDrawer', this._pathDrawer)
 		}
-
-		this._mode = newMode
-	}
-
-	enterDrawMode() {
-		this._changeMode(GlyphCanvas.MODE_DRAW)
-
-		// TODO
-	}
-
-	enterSelectMode() {
-		this._changeMode(GlyphCanvas.MODE_SELECT)
-
-		// TODO
 	}
 }

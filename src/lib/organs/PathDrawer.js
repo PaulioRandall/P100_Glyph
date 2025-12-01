@@ -7,6 +7,7 @@ export default class PathDrawer extends CanvasGroup {
 	_group_removed() {
 		super.clear()
 		this._resetPath()
+		super._group_removed()
 	}
 
 	_event_grid_cell_focus(e) {

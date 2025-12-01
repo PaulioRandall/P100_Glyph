@@ -5,6 +5,7 @@ export default class ClickSimplifier extends CanvasGroup {
 
 	_group_removed() {
 		this._pointerId = null
+		super._group_removed()
 	}
 
 	_event_pointerdown(e) {

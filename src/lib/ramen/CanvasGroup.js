@@ -4,14 +4,13 @@ import List from './List.js'
 export default class CanvasGroup extends Group {
 	_canvas = null
 	_onFree = null
+	_unlisten = null
 
 	constructor(canvas, ...children) {
 		super(...children)
 
 		this._canvas = canvas
 		this._onFree = new List()
-
-		this.onFree(canvas.listen(this))
 	}
 
 	get canvas() {
@@ -31,5 +30,13 @@ export default class CanvasGroup extends Group {
 			func()
 		}
 		super.free()
+	}
+
+	_group_added() {
+		this._unlisten = this.canvas.listen(this)
+	}
+
+	_group_removed() {
+		this._unlisten()
 	}
 }
