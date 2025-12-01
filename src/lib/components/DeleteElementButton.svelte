@@ -15,11 +15,12 @@
 	disabled={!diagram.selected}
 	class="delete-element-button" 
 	onclick={deleteElement}>
-	Delete
+	Del
 </button>
 
 <style>
 	.delete-element-button {
+		width: 40px;
 		height: 40px;
 
 		cursor: pointer;

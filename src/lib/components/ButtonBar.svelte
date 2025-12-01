@@ -1,11 +1,10 @@
 
 <script>
-	let { row=true, column=false, children } = $props()
+	let { column=false, children } = $props()
 </script>
 
 <div
 	class="button-bar"
-	class:row
 	class:column>
 	{@render children?.()}
 </div>
@@ -13,6 +12,8 @@
 <style>
 	.button-bar {
 		display: inline-flex;		
+		justify-content: flex-start;
+		align-items: center;
 
 		width: 100%;
 		height: 100%;
@@ -23,11 +24,7 @@
 
 	.column {
 		flex-direction: column;
-		justify-content: center;
 	}
 
-	.row {
-		flex-direction: row;
-		align-items: center;
-	}
+
 </style>

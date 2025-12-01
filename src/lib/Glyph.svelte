@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte'
 
 	import GlyphCanvas from './GlyphCanvas.svelte.js'
-
 	import {
 		ElementList,
 		ButtonBar,
@@ -20,7 +19,7 @@
 </script>
 
 <div class="glyph">
-	<div class="button-bar-top">
+	<div class="top-button-bar">
 			<ButtonBar>
 				NEXT: Draw path button, which requires a 'mode' (because later we will be allowing selection)
 				{#if canvas}
@@ -29,13 +28,7 @@
 			</ButtonBar>
 				</div>
 
-	<div class="button-bar-left">
-<ButtonBar>
-
-			</ButtonBar>
-	</div>
-
-	<div class="canvas-border-container">
+	<div class="canvas-pane">
 		<!-- 
 			Border container required as putting a border on the
 			canvas container offsets the internal coordinates by
@@ -50,16 +43,24 @@
 		</div>
 	</div>
 
-	<div class="content-pane">
+	<div class="right-button-bar">
+		{#if canvas}
+			<ButtonBar column>
+					<DeleteElementButton {canvas} />
+			</ButtonBar>
+			{/if}
+	</div>
+
+	<div class="elements-pane">
 		{#if canvas}
 			<ElementList {canvas} />
 		{/if}
 	</div>
 
-	<div class="button-bar-bottom">
+	<div class="bottom-button-bar">
 		{#if canvas}
 			<ButtonBar>
-				<DeleteElementButton {canvas} />
+
 			</ButtonBar>
 		{/if}
 	</div>
@@ -73,11 +74,11 @@
 
 		display: grid;
 		grid-template-areas:
-			"button-bar-left button-bar-top content-pane"
-			"button-bar-left content content-pane"
-			"button-bar-left button-bar-bottom content-pane";
+			"top-button-bar top-button-bar elements-pane"
+			"canvas-pane right-button-bar elements-pane"
+			"bottom-button-bar bottom-button-bar elements-pane";
 		grid-template-rows: 50px var(--content-size) 50px;
-		grid-template-columns: 50px var(--content-size) 200px;
+		grid-template-columns: var(--content-size) 50px 200px;
 
 		width: 100%;
 		height: 100%;
@@ -85,20 +86,20 @@
 		background: #222222;
 	}
 
-.button-bar-top {
-		grid-area: button-bar-top;
+.top-button-bar {
+		grid-area: top-button-bar;
 
 		background: indianred;
 	}
 
-	.button-bar-left {
-		grid-area: button-bar-left;
+	.right-button-bar {
+		grid-area: right-button-bar;
 
 		background: forestgreen;
 	}
 
-	.canvas-border-container {
-		grid-area: content;
+	.canvas-pane {
+		grid-area: canvas-pane;
 
 		background: white;
 		border: 2px solid black;
@@ -112,14 +113,14 @@
 		height: 100%;
 	}
 
-	.content-pane {
-		grid-area: content-pane;
+	.elements-pane {
+		grid-area: elements-pane;
 
 		background: dodgerblue;
 	}
 
-	.button-bar-bottom {
-		grid-area: button-bar-bottom;
+	.bottom-button-bar {
+		grid-area: bottom-button-bar;
 
 		background: indianred;
 	}
