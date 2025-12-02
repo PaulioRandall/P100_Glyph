@@ -9,3 +9,4 @@ export { default as CanvasGroup } from './CanvasGroup.js'
 export { default as EventUtil } from './EventUtil.js'
 
 export { default as List } from './List.js'
+export { default as ClickTracker } from './ClickTracker.js'

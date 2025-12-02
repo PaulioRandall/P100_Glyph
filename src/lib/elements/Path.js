@@ -31,13 +31,18 @@ export default class Path extends Group {
 		this._addCommands(newLineCommand(cell))
 	}
 
+	getLastShapePoint() {
+		const lastIndex = this._lastShapePointIndex()
+		return this._commands[lastIndex].to
+	}
+
 	removeLastPoint() {
 		this._commands.pop()
 		this._updatePath()
 	}
 
 	updateLastPoint(cell) {
-		const lastIndex = this._commands.length - 1
+		const lastIndex = this._lastPointIndex()
 		this._commands[lastIndex].to = cell
 		this._updatePath()
 	}
@@ -50,6 +55,14 @@ export default class Path extends Group {
 	highlight(state = true) {
 		this._highlighted = state
 		this._updateLookAndFeel()
+	}
+
+	_lastPointIndex() {
+		return this._commands.length - 1
+	}
+
+	_lastShapePointIndex() {
+		return this._commands.length - 2
 	}
 
 	_addCommands(...cmds) {

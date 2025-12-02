@@ -1,15 +1,9 @@
-import { CanvasGroup } from '$ramen'
+import { CanvasGroup, ClickTracker } from '$ramen'
 import { Path } from '../elements'
-
-// TODO: Double left click to add first point.
-//       Other drawer interactions should be ignored until
-//       First point is created through double left click.
-
-// TODO: Prevent the same point being used in two
-//       consecutive commands.
 
 export default class PathDrawer extends CanvasGroup {
 	_path = null
+	_clickTracker = new ClickTracker()
 
 	group_removed() {
 		super.clear()
@@ -27,36 +21,44 @@ export default class PathDrawer extends CanvasGroup {
 	}
 
 	_event_left_click() {
-		this._addPoint(this.canvas.hovered)
-	}
+		const clickCount = this._clickTracker.click()
+		const doubleClick = clickCount >= 2
 
-	_event_middle_click() {
-		if (!this._path) {
+		if (this._path) {
+			if (doubleClick) {
+				this._finishPath()
+			} else {
+				this._addPoint(this.canvas.hovered)
+			}
+
 			return
 		}
 
-		this._removeLastPoint(this.canvas.hovered)
+		if (doubleClick) {
+			this._clickTracker.reset()
+			this._startPath(this.canvas.hovered)
+			return
+		}
 	}
 
 	_event_right_click() {
-		const path = this._path
-
-		if (!path) {
-			return
+		if (this._path) {
+			this._removeLastPoint(this.canvas.hovered)
 		}
+	}
 
-		if (path.isMultiPoint()) {
-			this._finishPath()
-		} else {
-			this._resetPath()
-		}
+	_startPath(cell) {
+		const path = new Path(cell)
+		super.add(path)
+
+		this._path = path
+		this.canvas.dispatch('path_started', { cell, path })
 	}
 
 	_addPoint(cell) {
 		const path = this._path
 
-		if (!path) {
-			this._startPath(cell)
+		if (path.getLastShapePoint() === cell) {
 			return
 		}
 
@@ -80,12 +82,18 @@ export default class PathDrawer extends CanvasGroup {
 		this.canvas.dispatch('path_point_removed', { path })
 	}
 
-	_startPath(cell) {
-		const path = new Path(cell)
-		super.add(path)
+	_finishOrResetPath() {
+		const path = this._path
 
-		this._path = path
-		this.canvas.dispatch('path_started', { cell, path })
+		if (!path) {
+			return
+		}
+
+		if (path.isMultiPoint()) {
+			this._finishPath()
+		} else {
+			this._resetPath()
+		}
 	}
 
 	_finishPath() {
@@ -112,6 +120,8 @@ export default class PathDrawer extends CanvasGroup {
 		}
 
 		this._path = null
+		this._clickTracker.reset()
+
 		this.canvas.dispatch('path_reset')
 	}
 }
