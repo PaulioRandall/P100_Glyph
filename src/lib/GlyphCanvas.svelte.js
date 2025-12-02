@@ -12,7 +12,7 @@ export default class GlyphCanvas extends GridCanvas {
 		GlyphCanvas.MODE_EDITING,
 	]
 
-	_mode = $state(GlyphCanvas.MODE_IDLE)
+	_mode = GlyphCanvas.MODE_IDLE
 
 	_clickSimplifier = new ClickSimplifier(this)
 	_cellHighlighter = new CellHighlighter(this)
@@ -40,9 +40,14 @@ export default class GlyphCanvas extends GridCanvas {
 		}
 
 		this._mode = mode
+
+		this.dispatch('canvas_mode_changed', {
+			canvas: this,
+			mode,
+		})
 	}
 
-	resetMode() {
+	idleMode() {
 		this.changeMode(GlyphCanvas.MODE_IDLE)
 	}
 

@@ -136,7 +136,7 @@ export default class Diagram extends CanvasGroup {
 		if (this._selected) {
 			this.canvas.editMode()
 		} else {
-			this.canvas.resetMode()
+			this.canvas.idleMode()
 		}
 	}
 }

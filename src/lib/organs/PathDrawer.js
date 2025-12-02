@@ -110,7 +110,7 @@ export default class PathDrawer extends CanvasGroup {
 
 		if (path) {
 			super.remove(path)
-			this.canvas.resetMode()
+			this.canvas.idleMode()
 
 			path.removeLastPoint()
 			path.tidy()
