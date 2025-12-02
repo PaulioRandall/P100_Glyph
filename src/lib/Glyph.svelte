@@ -7,6 +7,7 @@
 		ButtonBar,
 		DeleteElementButton,
 		ModeDisplay,
+		TogglePathClosure,
 	} from './components'
 	
 	let container = null
@@ -28,6 +29,7 @@
 			-->
 			{#if canvas}
 				<ModeDisplay {canvas} />
+				<TogglePathClosure {canvas} />
 			{/if}
 		</ButtonBar>
 	</div>

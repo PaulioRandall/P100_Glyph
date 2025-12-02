@@ -124,11 +124,7 @@ export default class PathDrawer extends CanvasGroup {
 	}
 
 	_resetPath() {
-		const path = this._path
-
-		if (path) {
-			super.remove(path)
-		}
+		super.clear()
 
 		this._path = null
 		this._clickTracker.reset()

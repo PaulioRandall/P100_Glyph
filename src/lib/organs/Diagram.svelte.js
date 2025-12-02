@@ -43,6 +43,10 @@ export default class Diagram extends CanvasGroup {
 		this._elements.push(element)
 		super.add(element)
 
+		this.canvas.dispatch('diagram_element_added', {
+			diagram: this,
+			element,
+		})
 		this.select(element)
 	}
 
@@ -56,6 +60,11 @@ export default class Diagram extends CanvasGroup {
 
 		List.remove(this._elements, element)
 		super.remove(element)
+
+		this.canvas.dispatch('diagram_element_removed', {
+			diagram: this,
+			element,
+		})
 	}
 
 	// Focus and selection
@@ -76,6 +85,12 @@ export default class Diagram extends CanvasGroup {
 
 	select(element) {
 		this._select(element)
+	}
+
+	reselect() {
+		const selected = this._selected
+		this._selected = undefined
+		this._selected = selected
 	}
 
 	unselect() {
@@ -108,6 +123,11 @@ export default class Diagram extends CanvasGroup {
 		this._lastSelected = this._selected
 		this._selected = element
 		this._selected?.select(true)
+
+		this.canvas.dispatch('diagram_element_selected', {
+			lastSelected: this._lastSelected,
+			selected: this._selected,
+		})
 
 		this._updateMode()
 	}

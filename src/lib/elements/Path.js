@@ -28,6 +28,20 @@ export default class Path extends Group {
 		return this._commands
 	}
 
+	get closed() {
+		return this._closed
+	}
+
+	open() {
+		this._closed = false
+		this._updatePath()
+	}
+
+	close() {
+		this._closed = true
+		this._updatePath()
+	}
+
 	isMultiPoint() {
 		return this._commands.length > 2
 	}
@@ -93,6 +107,8 @@ export default class Path extends Group {
 	}
 
 	_updatePath() {
+		this.clear()
+
 		const newShape = makePath(this._commands)
 		const newNodes = makeNodes(this._commands)
 
@@ -101,14 +117,11 @@ export default class Path extends Group {
 			newShape.fill = newShape.stroke
 		}
 
-		this._nodes.forEach((n) => this.remove(n))
-		this.remove(this._shape)
-
-		this.add(newShape)
-		newNodes.forEach((n) => this.add(n))
-
 		this._shape = newShape
 		this._nodes = newNodes
+
+		this.add(this._shape)
+		this._nodes.forEach((n) => this.add(n))
 
 		this._updateLookAndFeel()
 	}
