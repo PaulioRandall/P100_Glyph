@@ -1,6 +1,11 @@
 import { GridCanvas } from '$ramen'
 
-import { ClickSimplifier, CellHighlighter, Diagram, PathDrawer } from './organs'
+import ClickSimplifier from './ClickSimplifier.js'
+import CellHighlighter from './CellHighlighter.js'
+import Diagram from './Diagram.js'
+import PathDrawer from './PathDrawer.js'
+
+// TODO: Create class to hold and manage mode
 
 export default class GlyphCanvas extends GridCanvas {
 	static MODE_IDLE = 'Idle'

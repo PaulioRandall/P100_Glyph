@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte'
 
-	import GlyphCanvas from './GlyphCanvas.js'
+	import { GlyphCanvas } from './canvas'
 	import {
 		ElementList,
 		ButtonBar,

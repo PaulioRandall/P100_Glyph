@@ -1,8 +1,5 @@
 import { CanvasGroup, List } from '$ramen'
 
-// TODO: Merge API with GlyphCanvas and split functionality
-//       into specific classes which GlyphCanvas acts as a
-//       unifying adapter for.
 // TODO: toJson()
 // TODO: new class 'DiagramFormatter' that accepts JSON
 //       and converts to SVG, JPG, PNG, etc
