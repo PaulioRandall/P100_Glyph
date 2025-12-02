@@ -108,5 +108,15 @@ export default class Diagram extends CanvasGroup {
 		this._lastSelected = this._selected
 		this._selected = element
 		this._selected?.select(true)
+
+		this._updateMode()
+	}
+
+	_updateMode() {
+		if (this._selected) {
+			this.canvas.editMode()
+		} else {
+			this.canvas.resetMode()
+		}
 	}
 }

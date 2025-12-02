@@ -52,6 +52,8 @@ export default class PathDrawer extends CanvasGroup {
 		super.add(path)
 
 		this._path = path
+
+		this.canvas.drawMode()
 		this.canvas.dispatch('path_started', { cell, path })
 	}
 
@@ -101,6 +103,7 @@ export default class PathDrawer extends CanvasGroup {
 
 		if (path) {
 			super.remove(path)
+			this.canvas.resetMode()
 
 			path.removeLastPoint()
 			path.tidy()

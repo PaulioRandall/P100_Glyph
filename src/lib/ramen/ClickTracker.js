@@ -3,7 +3,7 @@ export default class ClickTracker {
 	_count = 0
 	_timeoutId = null
 
-	constructor(delay = 400) {
+	constructor(delay = 300) {
 		this._delay = delay
 	}
 

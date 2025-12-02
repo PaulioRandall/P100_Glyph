@@ -6,7 +6,7 @@
 		ElementList,
 		ButtonBar,
 		DeleteElementButton,
-		TogglePathDrawerButton,
+		ModeDisplay,
 	} from './components'
 	
 	let container = null
@@ -19,17 +19,18 @@
 
 <div class="glyph">
 	<div class="top-button-bar">
-			<ButtonBar>
-				<!--
-					TODO: Allow user to select line join type.
-					TODO: Allow user to select line cap type.
-					TODO: Allow user to open and close the path.
-				-->
-				{#if canvas}
-					<TogglePathDrawerButton {canvas} />
-				{/if}
-			</ButtonBar>
-				</div>
+		<ButtonBar>
+			<!--
+				TODO: Allow user to edit points on existing shape.
+				TODO: Allow user to select line join type.
+				TODO: Allow user to select line cap type.
+				TODO: Allow user to open and close the path.
+			-->
+			{#if canvas}
+				<ModeDisplay {canvas} />
+			{/if}
+		</ButtonBar>
+	</div>
 
 	<div class="canvas-pane">
 		<!-- 

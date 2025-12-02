@@ -4,6 +4,9 @@ import { Two, Group } from '$ramen'
 //       point is confusing. Create standalone point for
 //       use in path drawing so '_commands' only contains
 //       user specified shape commands.
+// TODO: Visual nodes show be controlled by an organ made
+//       specifically for it. This way it will always be
+//       rendered above all components.
 
 export default class Path extends Group {
 	_commands = []

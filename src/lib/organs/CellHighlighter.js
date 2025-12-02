@@ -75,7 +75,7 @@ function createHaloShape() {
 	const shape = new Two.Circle(0, 0, radius)
 
 	shape.fill = 'none'
-	shape.stroke = 'blue'
+	shape.stroke = 'lightgrey'
 	shape.linewidth = 10
 	shape.opacity = 0.5
 
