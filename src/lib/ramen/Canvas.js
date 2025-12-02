@@ -73,16 +73,19 @@ export default class Canvas extends Group {
 		return this.dom.dispatchEvent(event)
 	}
 
-	listen(typeOrObject, callbackOrOptions, options) {
-		if (isObject(typeOrObject)) {
-			return this._listenWithObject(typeOrObject, callbackOrOptions)
-		} else {
-			return this._listenWithCallback(typeOrObject, callbackOrOptions, options)
-		}
+	on(type, callback, options) {
+		this.dom.addEventListener(type, callback, options)
+		return () => this.off(type, callback, options)
 	}
 
-	// TODO: Refactor
-	_listenWithObject(obj, options) {
+	off(type, callback, options) {
+		this.dom.removeEventListener(type, callback, options)
+	}
+
+	// TODO: Move Eventor functionality to its own class
+	//       that accepts a canvas and object instance.
+	// TODO: Refactor this mess.
+	onEventor(obj, options) {
 		const prefix = '_event_'
 		const unlisteners = {}
 

@@ -31,7 +31,7 @@
 	}
 
 	onMount(() => {
-		return canvas.listen('diagram_element_selected', (e) => {
+		return canvas.on('diagram_element_selected', (e) => {
 			updateSelected(e.detail.selected)
 		})
 	})

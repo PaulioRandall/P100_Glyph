@@ -16,7 +16,7 @@ export default class GridCanvas extends Canvas {
 		this._yLength = yLength
 
 		this._addCells()
-		this.listen('mousemove', this._mousemove.bind(this))
+		this.on('mousemove', this._mousemove.bind(this))
 	}
 
 	get hovered() {

@@ -2,7 +2,7 @@ import Group from './Group.js'
 
 export default class CanvasGroup extends Group {
 	_canvas = null
-	_unlisten = null
+	_offEventor = null
 
 	constructor(canvas, ...children) {
 		super(...children)
@@ -15,10 +15,10 @@ export default class CanvasGroup extends Group {
 	}
 
 	group_added() {
-		this._unlisten = this.canvas.listen(this)
+		this._offEventor = this.canvas.onEventor(this)
 	}
 
 	group_removed() {
-		this._unlisten()
+		this._offEventor()
 	}
 }
