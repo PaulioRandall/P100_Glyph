@@ -110,16 +110,14 @@ export default class PathDrawer extends CanvasGroup {
 
 		if (path) {
 			super.remove(path)
+			this._resetPath()
 			this.canvas.idleMode()
 
 			path.removeLastPoint()
 			path.tidy()
 
-			this.canvas.store.get('diagram').add(path)
 			this.canvas.dispatch('path_finished', { path })
-
-			this._path = null
-			this._resetPath()
+			this.canvas.addElement(path)
 		}
 	}
 

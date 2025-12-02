@@ -4,10 +4,7 @@
 	import TextButton from './TextButton.svelte'
 
 	let { canvas } = $props()
-
-	const diagram = canvas.store.get('diagram')
-
-	let selected = $state(diagram.selected)
+	let selected = $state(canvas.selected)
 
 	function updateSelected(element) {
 		// Assigning undefined is required because assigning

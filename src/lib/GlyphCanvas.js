@@ -24,7 +24,7 @@ export default class GlyphCanvas extends GridCanvas {
 
 		this._addOrgan('clickSimplifier', this._clickSimplifier)
 		this._addOrgan('cellHighlighter', this._cellHighlighter)
-		this._addOrgan('diagram', this._diagram)
+		super.add(this._diagram)
 		this._addOrgan('pathDrawer', this._pathDrawer)
 	}
 
@@ -57,13 +57,69 @@ export default class GlyphCanvas extends GridCanvas {
 		this.changeMode(GlyphCanvas.MODE_EDITING)
 	}
 
+	// Focus and selection
+
+	get elements() {
+		return this._diagram.elements
+	}
+
+	get lastFocused() {
+		return this._diagram.lastFocused
+	}
+
+	get focused() {
+		return this._diagram.focused
+	}
+
+	get lastSelected() {
+		return this._diagram.lastSelected
+	}
+
+	get selected() {
+		return this._diagram.selected
+	}
+
+	addElement(element) {
+		this._diagram.addElement(element)
+	}
+
+	removeElement(element) {
+		this._diagram.removeElement(element)
+	}
+
+	focus(element) {
+		this._diagram.focus(element)
+	}
+
+	unfocus() {
+		this._diagram.unfocus()
+	}
+
+	unfocusIfElement(element) {
+		this._diagram.unfocusIfElement(element)
+	}
+
+	select(element) {
+		this._diagram.select(element)
+	}
+
+	unselect() {
+		this._diagram.unselect()
+	}
+
+	unselectIfElement(element) {
+		this._diagram.unselectIfElement(element)
+	}
+
+	// Dead
+
 	_addOrgan(name, organ) {
-		this.add(organ)
+		super.add(organ)
 		this.store.set(name, organ)
 	}
 
 	_removeOrgan(name, organ) {
-		this.remove(organ)
+		super.remove(organ)
 		this.store.delete(name)
 	}
 }

@@ -1,5 +1,8 @@
 import { CanvasGroup, List } from '$ramen'
 
+// TODO: Merge API with GlyphCanvas and split functionality
+//       into specific classes which GlyphCanvas acts as a
+//       unifying adapter for.
 // TODO: toJson()
 // TODO: new class 'DiagramFormatter' that accepts JSON
 //       and converts to SVG, JPG, PNG, etc
@@ -33,9 +36,7 @@ export default class Diagram extends CanvasGroup {
 		return this._selected
 	}
 
-	// Adding and removing
-
-	add(element) {
+	addElement(element) {
 		if (!element) {
 			return
 		}
@@ -50,7 +51,7 @@ export default class Diagram extends CanvasGroup {
 		})
 	}
 
-	remove(element) {
+	removeElement(element) {
 		if (!element) {
 			return
 		}
@@ -67,8 +68,6 @@ export default class Diagram extends CanvasGroup {
 			removed: element,
 		})
 	}
-
-	// Focus and selection
 
 	focus(element) {
 		this._focus(element)

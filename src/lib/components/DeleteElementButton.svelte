@@ -4,13 +4,11 @@
 	import IconButton from './IconButton.svelte'
 
 	let { canvas } = $props()
-
-	const diagram = canvas.store.get('diagram')
-	let selected = $state(diagram.selected)
+	let selected = $state(null)
 
 	function deleteElement() {
 		if (selected) {
-			diagram.remove(selected) 
+			canvas.removeElement(selected) 
 		}
 	}
 

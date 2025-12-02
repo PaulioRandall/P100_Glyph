@@ -2,12 +2,10 @@
 	import { onMount } from 'svelte'
 
 	let { canvas } = $props()
-
-	const diagram = canvas.store.get('diagram')
 	
-	let elements = $state(diagram.elements)
-	let focused = $state(diagram.focused)
-	let selected = $state(diagram.selected)
+	let elements = $state(canvas.elements)
+	let focused = $state(canvas.focused)
+	let selected = $state(canvas.selected)
 
 	onMount(() => {
 		return canvas.on('elements_changed', (e) => {
@@ -16,15 +14,15 @@
 	})
 
 	onMount(() => {
-	return canvas.on('element_focused', (e) => {
-		focused = e.detail.focused
-	})
+		return canvas.on('element_focused', (e) => {
+			focused = e.detail.focused
+		})
 	})
 
 	onMount(() => {
-	return canvas.on('element_selected', (e) => {
-		selected = e.detail.selected
-	})
+		return canvas.on('element_selected', (e) => {
+			selected = e.detail.selected
+		})
 	})
 </script>
 
@@ -34,9 +32,9 @@
 				class="element"
 				class:focused={focused === element}
 				class:selected={selected === element}
-				onmouseenter={() => diagram.focus(element)}
-				onmouseleave={() => diagram.unfocus(element)}
-				onclick={() => diagram.select(element)}>
+				onmouseenter={() => canvas.focus(element)}
+				onmouseleave={() => canvas.unfocus(element)}
+				onclick={() => canvas.select(element)}>
 				Path
 			</button>
 		{/each}
