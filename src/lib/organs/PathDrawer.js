@@ -25,7 +25,7 @@ export default class PathDrawer extends CanvasGroup {
 		const doubleClick = clickCount >= 2
 
 		if (this._path) {
-			if (doubleClick) {
+			if (doubleClick && this._isHoveringLastPoint()) {
 				this._finishPath()
 			} else {
 				this._addPoint(this.canvas.hovered)
@@ -45,6 +45,13 @@ export default class PathDrawer extends CanvasGroup {
 		if (this._path) {
 			this._removeLastPoint(this.canvas.hovered)
 		}
+	}
+
+	_isHoveringLastPoint(cell) {
+		if (this._path) {
+			return this.canvas.hovered === this._path.getLastShapePoint()
+		}
+		return false
 	}
 
 	_startPath(cell) {
