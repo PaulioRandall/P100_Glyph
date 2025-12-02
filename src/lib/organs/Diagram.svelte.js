@@ -1,5 +1,9 @@
 import { CanvasGroup, List } from '$ramen'
 
+// TODO: toJson()
+// TODO: new class 'DiagramFormatter' that accepts JSON
+//       and converts to SVG, JPG, PNG, etc
+
 export default class Diagram extends CanvasGroup {
 	_elements = $state([])
 
@@ -105,8 +109,4 @@ export default class Diagram extends CanvasGroup {
 		this._selected = element
 		this._selected?.select(true)
 	}
-
-	// TODO: toJson()
-	// TODO: new class 'DiagramFormatter' that accepts JSON
-	//       and converts to SVG, JPG, PNG, etc
 }

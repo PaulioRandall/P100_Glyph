@@ -20,6 +20,11 @@
 <div class="glyph">
 	<div class="top-button-bar">
 			<ButtonBar>
+				<!--
+					TODO: Allow user to select line join type.
+					TODO: Allow user to select line cap type.
+					TODO: Allow user to open and close the path.
+				-->
 				{#if canvas}
 					<TogglePathDrawerButton {canvas} />
 				{/if}

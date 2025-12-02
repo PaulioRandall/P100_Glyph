@@ -1,9 +1,15 @@
 import { Two, Group } from '$ramen'
 
+// TODO: Using last point as the visual clue for the next
+//       point is confusing. Create standalone point for
+//       use in path drawing so '_commands' only contains
+//       user specified shape commands.
+
 export default class Path extends Group {
 	_commands = []
 
 	_shape = null
+	_closed = false
 	_nodes = []
 
 	_highlighted = false
@@ -47,6 +53,19 @@ export default class Path extends Group {
 		this._updatePath()
 	}
 
+	tidy() {
+		const firstPoint = this._commands[0].to
+		const lastPoint = this._commands[this._lastPointIndex()].to
+		this._closed = false
+
+		if (firstPoint === lastPoint) {
+			this.removeLastPoint()
+			this._closed = true
+		}
+
+		this._updatePath()
+	}
+
 	select(state = true) {
 		this._selected = state
 		this._updateLookAndFeel()
@@ -74,6 +93,11 @@ export default class Path extends Group {
 		const newShape = makePath(this._commands)
 		const newNodes = makeNodes(this._commands)
 
+		newShape.closed = this._closed
+		if (newShape.closed) {
+			newShape.fill = newShape.stroke
+		}
+
 		this._nodes.forEach((n) => this.remove(n))
 		this.remove(this._shape)
 
@@ -91,14 +115,21 @@ export default class Path extends Group {
 		const high = this._highlighted
 
 		if (sel) {
-			this._shape.stroke = 'blue'
+			this._updateColor('blue')
 		} else if (high) {
-			this._shape.stroke = 'orange'
+			this._updateColor('orange')
 		} else {
-			this._shape.stroke = 'indianred'
+			this._updateColor('indianred')
 		}
 
 		this._nodes.forEach((n) => (n.visible = sel))
+	}
+
+	_updateColor(color) {
+		this._shape.stroke = color
+		if (this._shape.closed) {
+			this._shape.fill = color
+		}
 	}
 }
 
