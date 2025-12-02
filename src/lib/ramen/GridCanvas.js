@@ -44,7 +44,7 @@ export default class GridCanvas extends Canvas {
 	}
 
 	_dispatchHoveredCellChange(cell) {
-		super.dispatch('grid_cell_focus', {
+		super.dispatch('grid_cell_hover', {
 			cell,
 		})
 	}

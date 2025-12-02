@@ -1,15 +1,39 @@
 <script>
+	import { onMount } from 'svelte'
+
 	let { canvas } = $props()
 
 	const diagram = canvas.store.get('diagram')
+	
+	let elements = $state(diagram.elements)
+	let focused = $state(diagram.focused)
+	let selected = $state(diagram.selected)
+
+	onMount(() => {
+		return canvas.on('elements_changed', (e) => {
+			elements = e.detail.elements
+		})
+	})
+
+	onMount(() => {
+	return canvas.on('element_focused', (e) => {
+		focused = e.detail.focused
+	})
+	})
+
+	onMount(() => {
+	return canvas.on('element_selected', (e) => {
+		selected = e.detail.selected
+	})
+	})
 </script>
 
 <div class="element-list">
-		{#each diagram.elements as element (element.id)}
+		{#each elements as element (element.id)}
 			<button
 				class="element"
-				class:focused={diagram.focused === element}
-				class:selected={diagram.selected === element}
+				class:focused={focused === element}
+				class:selected={selected === element}
 				onmouseenter={() => diagram.focus(element)}
 				onmouseleave={() => diagram.unfocus(element)}
 				onclick={() => diagram.select(element)}>

@@ -5,13 +5,13 @@ import { CanvasGroup, List } from '$ramen'
 //       and converts to SVG, JPG, PNG, etc
 
 export default class Diagram extends CanvasGroup {
-	_elements = $state([])
+	_elements = []
 
-	_lastFocused = $state(null)
-	_focused = $state(null)
+	_lastFocused = null
+	_focused = null
 
-	_lastSelected = $state(null)
-	_selected = $state(null)
+	_lastSelected = null
+	_selected = null
 
 	get elements() {
 		return this._elements
@@ -43,11 +43,11 @@ export default class Diagram extends CanvasGroup {
 		this._elements.push(element)
 		super.add(element)
 
-		this.canvas.dispatch('diagram_element_added', {
-			diagram: this,
-			element,
+		this.canvas.dispatch('elements_changed', {
+			elements: this._elements,
+			added: element,
+			removed: null,
 		})
-		this.select(element)
 	}
 
 	remove(element) {
@@ -61,9 +61,10 @@ export default class Diagram extends CanvasGroup {
 		List.remove(this._elements, element)
 		super.remove(element)
 
-		this.canvas.dispatch('diagram_element_removed', {
-			diagram: this,
-			element,
+		this.canvas.dispatch('elements_changed', {
+			elements: this._elements,
+			added: null,
+			removed: element,
 		})
 	}
 
@@ -87,12 +88,6 @@ export default class Diagram extends CanvasGroup {
 		this._select(element)
 	}
 
-	reselect() {
-		const selected = this._selected
-		this._selected = undefined
-		this._selected = selected
-	}
-
 	unselect() {
 		this._select(null)
 	}
@@ -112,6 +107,13 @@ export default class Diagram extends CanvasGroup {
 		this._lastFocused = this._focused
 		this._focused = element
 		this._focused?.highlight(true)
+
+		this.canvas.dispatch('element_focused', {
+			lastfocused: this._lastfocused,
+			focused: this._focused,
+			lastSelected: this._lastSelected,
+			selected: this._selected,
+		})
 	}
 
 	_select(element = null) {
@@ -124,7 +126,9 @@ export default class Diagram extends CanvasGroup {
 		this._selected = element
 		this._selected?.select(true)
 
-		this.canvas.dispatch('diagram_element_selected', {
+		this.canvas.dispatch('element_selected', {
+			lastfocused: this._lastfocused,
+			focused: this._focused,
 			lastSelected: this._lastSelected,
 			selected: this._selected,
 		})

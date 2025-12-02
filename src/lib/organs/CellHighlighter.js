@@ -34,7 +34,7 @@ export default class CellHighlighter extends CanvasGroup {
 		this.hide()
 	}
 
-	_event_grid_cell_focus(e) {
+	_event_grid_cell_hover(e) {
 		const cell = e.detail.cell
 
 		if (this._cell === cell) {

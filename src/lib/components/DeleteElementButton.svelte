@@ -8,17 +8,17 @@
 	const diagram = canvas.store.get('diagram')
 	let selected = $state(diagram.selected)
 
-	onMount(() => {
-		return canvas.on('diagram_element_selected', (e) => {
-			selected = e.detail.selected
-		})
-	})
-
 	function deleteElement() {
 		if (selected) {
 			diagram.remove(selected) 
 		}
 	}
+
+	onMount(() => {
+		return canvas.on('element_selected', (e) => {
+			selected = e.detail.selected
+		})
+	})
 </script>
 
 <IconButton disabled={!selected} onclick={deleteElement}>

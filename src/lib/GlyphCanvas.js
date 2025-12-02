@@ -26,8 +26,6 @@ export default class GlyphCanvas extends GridCanvas {
 		this._addOrgan('cellHighlighter', this._cellHighlighter)
 		this._addOrgan('diagram', this._diagram)
 		this._addOrgan('pathDrawer', this._pathDrawer)
-
-		this.pathDrawing = true
 	}
 
 	get mode() {

@@ -11,7 +11,7 @@ export default class PathDrawer extends CanvasGroup {
 		super.group_removed()
 	}
 
-	_event_grid_cell_focus(e) {
+	_event_grid_cell_hover(e) {
 		const cell = e.detail.cell
 		const path = this._path
 
@@ -55,7 +55,7 @@ export default class PathDrawer extends CanvasGroup {
 	}
 
 	_startPath(cell) {
-		const path = new Path(cell)
+		const path = new Path(this.canvas, cell)
 		super.add(path)
 
 		this._path = path

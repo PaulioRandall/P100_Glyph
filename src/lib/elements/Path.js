@@ -1,4 +1,4 @@
-import { Two, Group } from '$ramen'
+import { Two, CanvasGroup } from '$ramen'
 
 // TODO: Using last point as the visual clue for the next
 //       point is confusing. Create standalone point for
@@ -7,8 +7,10 @@ import { Two, Group } from '$ramen'
 // TODO: Visual nodes show be controlled by an organ made
 //       specifically for it. This way it will always be
 //       rendered above all components.
+// TODO: Split into two classes. A PathBuilder for building
+//       and editing paths. And Path, for finished paths.
 
-export default class Path extends Group {
+export default class Path extends CanvasGroup {
 	_commands = []
 
 	_shape = null
@@ -18,8 +20,8 @@ export default class Path extends Group {
 	_highlighted = false
 	_selected = false
 
-	constructor(cell) {
-		super()
+	constructor(canvas, cell) {
+		super(canvas)
 
 		this._addCommands(newMoveCommand(cell), newLineCommand(cell))
 	}
@@ -35,11 +37,19 @@ export default class Path extends Group {
 	open() {
 		this._closed = false
 		this._updatePath()
+
+		this.canvas.dispatch('element_updated', {
+			element: this,
+		})
 	}
 
 	close() {
 		this._closed = true
 		this._updatePath()
+
+		this.canvas.dispatch('element_updated', {
+			element: this,
+		})
 	}
 
 	isMultiPoint() {

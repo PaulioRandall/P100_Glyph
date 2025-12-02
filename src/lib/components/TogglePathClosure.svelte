@@ -7,13 +7,15 @@
 
 	const diagram = canvas.store.get('diagram')
 
-	let selected = $state(null)
-	let closed = $state(null)
-	updateSelected(diagram.selected)
+	let selected = $state(diagram.selected)
 
 	function updateSelected(element) {
+		// Assigning undefined is required because assigning
+		// the same element passes Svelte 5's equality check
+		// which ignores the asssignment and won't trigger
+		// reactivity.  
+		selected = undefined
 		selected = element
-		closed = element ? element.closed : null
 	}
 
 	function open() {
@@ -31,13 +33,23 @@
 	}
 
 	onMount(() => {
-		return canvas.on('diagram_element_selected', (e) => {
+		return canvas.on('element_selected', (e) => {
 			updateSelected(e.detail.selected)
+		})
+	})
+
+	onMount(() => {
+		return canvas.on('element_updated', (e) => {
+			const element = e.detail.element
+
+			if (selected === element) {
+				updateSelected(element)
+			}
 		})
 	})
 </script>
 
-{#if closed}
+{#if selected?.closed}
 	<TextButton disabled={!selected} onclick={open}>
 		Convert<br/> to Line
 	</TextButton>
