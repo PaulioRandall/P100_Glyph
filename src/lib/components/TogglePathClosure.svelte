@@ -15,18 +15,10 @@
 		selected = element
 	}
 
-	function open() {
-		if (selected) { 
-			selected.open()
-			updateSelected(selected)
-		}
-	}
-
-	function close() {
-		if (selected) { 
-			selected.close()
-			updateSelected(selected)
-		}
+	function setPathClosed(state) {
+		canvas.dispatch('request_edit_of_selected_element', {
+			closed: state,
+		})
 	}
 
 	onMount(() => {
@@ -46,12 +38,13 @@
 	})
 </script>
 
-{#if selected?.closed}
-	<TextButton disabled={!selected} onclick={open}>
-		Convert<br/> to Line
-	</TextButton>
-{:else}
-	<TextButton disabled={!selected} onclick={close}>
-		Convert<br/> to Shape
-	</TextButton>
-{/if}
+<TextButton
+	disabled={!selected}
+	onclick={() => setPathClosed(!selected.closed)}>
+	Convert<br/> to
+	{#if selected?.closed}
+		Line
+	{:else}
+		Shape
+	{/if}
+</TextButton>

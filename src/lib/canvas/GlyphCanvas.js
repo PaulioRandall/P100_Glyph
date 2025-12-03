@@ -106,4 +106,7 @@ export default class GlyphCanvas extends GridCanvas {
 
 	// PathDrawer
 	// No exposed functions
+
+	// ActiveElements
+	// No exposed functions
 }
