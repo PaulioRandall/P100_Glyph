@@ -5,12 +5,12 @@ export default class PathDrawer extends EventGroup {
 	_builder = null
 	_clickTracker = new ClickTracker()
 
-	_group_removed() {
-		super._group_removed()
+	__group__removed() {
+		super.__group__removed()
 		this._resetPath()
 	}
 
-	_event_grid_cell_hover(e) {
+	__on__grid_cell_hover(e) {
 		const builder = this._builder
 		const cell = this.canvas.hovered
 
@@ -19,7 +19,7 @@ export default class PathDrawer extends EventGroup {
 		}
 	}
 
-	_event_left_click() {
+	__on__left_click() {
 		const hoveredCell = this.canvas.hovered
 		const builder = this._builder
 		const clickCount = this._clickTracker.click()
@@ -42,7 +42,7 @@ export default class PathDrawer extends EventGroup {
 		}
 	}
 
-	_event_right_click() {
+	__on__right_click() {
 		if (this._builder) {
 			this._removeLastCommand()
 		}

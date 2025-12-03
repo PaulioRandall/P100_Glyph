@@ -14,27 +14,27 @@ export default class GridCellHighlighter extends EventGroup {
 		this.visible = false
 	}
 
-	_group_added() {
+	__group__added() {
 		this.hide()
 		super.add(this._haloShape)
-		super._group_added()
+		super.__group__added()
 	}
 
-	_group_removed() {
-		super._group_removed()
+	__group__removed() {
+		super.__group__removed()
 		super.clear()
 		this._cell = null
 	}
 
-	_event_pointerenter() {
+	__on__pointerenter() {
 		this.show()
 	}
 
-	_event_pointerleave() {
+	__on__pointerleave() {
 		this.hide()
 	}
 
-	_event_grid_cell_hover(e) {
+	__on__grid_cell_hover(e) {
 		const cell = e.detail.cell
 
 		if (this._cell === cell) {

@@ -1,15 +1,15 @@
 import CanvasGroup from './CanvasGroup.js'
 
-const EVENT_FUNC_PREFIX = '_event_'
+const EVENT_FUNC_PREFIX = '__on__'
 
 export default class EventGroup extends CanvasGroup {
 	_unlisteners = []
 
-	_group_added() {
+	__group__added() {
 		this._addObjectEventListeners()
 	}
 
-	_group_removed() {
+	__group__removed() {
 		while (this._unlisteners.length > 0) {
 			const unlisten = this._unlisteners.pop()
 			unlisten()

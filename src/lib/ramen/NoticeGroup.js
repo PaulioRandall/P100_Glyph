@@ -1,8 +1,8 @@
 import BaseGroup from './BaseGroup.js'
 
-// Extends BaseGroup by calling '_group_added' and
-// '_group_removed' functions on elements added and removed
-// from itself.
+// Extends BaseGroup by calling '__group__added' and
+// '__group__removed' functions on elements added and
+// removed from itself.
 export default class NoticeGroup extends BaseGroup {
 	add(element) {
 		if (!element) {
@@ -11,8 +11,8 @@ export default class NoticeGroup extends BaseGroup {
 
 		super.add(element)
 
-		if (typeof element._group_added === 'function') {
-			element._group_added()
+		if (typeof element.__group__added === 'function') {
+			element.__group__added()
 		}
 
 		return true
@@ -25,8 +25,8 @@ export default class NoticeGroup extends BaseGroup {
 
 		super.remove(element)
 
-		if (typeof element._group_removed === 'function') {
-			element._group_removed()
+		if (typeof element.__group__removed === 'function') {
+			element.__group__removed()
 		}
 
 		return true
