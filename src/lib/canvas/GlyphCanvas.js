@@ -3,25 +3,14 @@ import { GridCanvas } from '$ramen'
 import ClickSimplifier from './ClickSimplifier.js'
 import CellHighlighter from './CellHighlighter.js'
 import Diagram from './Diagram.js'
+import CanvasMode from './CanvasMode.js'
 import PathDrawer from './PathDrawer.js'
 
-// TODO: Create class to hold and manage mode
-
 export default class GlyphCanvas extends GridCanvas {
-	static MODE_IDLE = 'Idle'
-	static MODE_DRAWING = 'Drawing'
-	static MODE_EDITING = 'Editing'
-	static MODES = [
-		GlyphCanvas.MODE_IDLE,
-		GlyphCanvas.MODE_DRAWING,
-		GlyphCanvas.MODE_EDITING,
-	]
-
-	_mode = GlyphCanvas.MODE_IDLE
-
 	_clickSimplifier = new ClickSimplifier(this)
 	_cellHighlighter = new CellHighlighter(this)
 	_diagram = new Diagram(this)
+	_canvasMode = new CanvasMode(this)
 	_pathDrawer = new PathDrawer(this)
 
 	constructor(container, xLength, yLength, options = {}) {
@@ -30,36 +19,24 @@ export default class GlyphCanvas extends GridCanvas {
 		this._addOrgan('clickSimplifier', this._clickSimplifier)
 		this._addOrgan('cellHighlighter', this._cellHighlighter)
 		super.add(this._diagram)
+		super.add(this._canvasMode)
 		this._addOrgan('pathDrawer', this._pathDrawer)
 	}
 
 	get mode() {
-		return this._mode
-	}
-
-	changeMode(mode) {
-		if (!GlyphCanvas.MODES.includes(mode)) {
-			throw new Error(`Unknown mode '${mode}'`)
-		}
-
-		this._mode = mode
-
-		this.dispatch('canvas_mode_changed', {
-			canvas: this,
-			mode,
-		})
+		return this._canvasMode.current
 	}
 
 	idleMode() {
-		this.changeMode(GlyphCanvas.MODE_IDLE)
+		this._canvasMode.switchTo('Idle')
 	}
 
 	drawMode() {
-		this.changeMode(GlyphCanvas.MODE_DRAWING)
+		this._canvasMode.switchTo('Drawing')
 	}
 
 	editMode() {
-		this.changeMode(GlyphCanvas.MODE_EDITING)
+		this._canvasMode.switchTo('Editing')
 	}
 
 	// Focus and selection

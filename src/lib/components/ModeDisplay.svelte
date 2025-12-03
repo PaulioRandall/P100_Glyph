@@ -6,8 +6,8 @@
 	let mode = $state(canvas.mode)
 
 	onMount(() => {
-		return canvas.on('canvas_mode_changed', (e) => {
-			mode = e.detail.mode
+		return canvas.on('canvas_mode_changed', () => {
+			mode = canvas.mode
 		})
 	})
 </script>
