@@ -1,8 +1,9 @@
-import Group from './Group.js'
+import NoticeGroup from './NoticeGroup.js'
 
-export default class CanvasGroup extends Group {
+// Extends NoticeGroup by allowing a canvas to be passed
+// on construction which is available through a getter.
+export default class CanvasGroup extends NoticeGroup {
 	_canvas = null
-	_offEventor = null
 
 	constructor(canvas, ...children) {
 		super(...children)
@@ -12,13 +13,5 @@ export default class CanvasGroup extends Group {
 
 	get canvas() {
 		return this._canvas
-	}
-
-	group_added() {
-		this._offEventor = this.canvas.onEventor(this)
-	}
-
-	group_removed() {
-		this._offEventor()
 	}
 }

@@ -1,14 +1,13 @@
-import { CanvasGroup, ClickTracker } from '$ramen'
+import { EventGroup, ClickTracker } from '$ramen'
 import { Path } from '../elements'
 
-export default class PathDrawer extends CanvasGroup {
+export default class PathDrawer extends EventGroup {
 	_path = null
 	_clickTracker = new ClickTracker()
 
-	group_removed() {
-		super.clear()
+	_group_removed() {
+		super._group_removed()
 		this._resetPath()
-		super.group_removed()
 	}
 
 	_event_grid_cell_hover(e) {

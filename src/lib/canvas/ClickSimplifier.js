@@ -1,11 +1,11 @@
-import { CanvasGroup, EventUtil } from '$ramen'
+import { EventGroup, EventUtil } from '$ramen'
 
-export default class ClickSimplifier extends CanvasGroup {
+export default class ClickSimplifier extends EventGroup {
 	_pointerId = null
 
-	group_removed() {
-		this._pointerId = null
+	_group_removed() {
 		super.group_removed()
+		this._pointerId = null
 	}
 
 	_event_pointerdown(e) {

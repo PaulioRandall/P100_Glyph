@@ -1,7 +1,7 @@
 import Two from 'two.js'
-import Group from './Group.js'
+import BaseGroup from './BaseGroup.js'
 
-export default class GridCell extends Group {
+export default class GridCell extends BaseGroup {
 	_centerShape = null
 
 	constructor(col, row, w, h) {
@@ -26,14 +26,7 @@ export default class GridCell extends Group {
 		})
 
 		this._centerShape = createCenterShape(this)
-	}
-
-	group_added() {
 		super.add(this._centerShape)
-	}
-
-	group_removed() {
-		super.clear()
 	}
 
 	contains(x, y) {

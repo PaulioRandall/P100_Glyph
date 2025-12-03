@@ -1,8 +1,8 @@
 import Two from 'two.js'
 import { ZUI } from 'two.js/extras/jsm/zui.js'
-import Group from './Group.js'
+import EventGroup from './EventGroup.js'
 
-export default class Canvas extends Group {
+export default class Canvas extends EventGroup {
 	_container
 	_two
 	_zui
@@ -63,15 +63,7 @@ export default class Canvas extends Group {
 		this.dom.style.cursor = style
 	}
 
-	dispatch(type, detail = {}) {
-		const event = new CustomEvent(type, {
-			bubbles: false,
-			cancelable: false,
-			detail,
-		})
-
-		return this.dom.dispatchEvent(event)
-	}
+	// Events
 
 	on(type, callback, options) {
 		this.dom.addEventListener(type, callback, options)
@@ -82,47 +74,13 @@ export default class Canvas extends Group {
 		this.dom.removeEventListener(type, callback, options)
 	}
 
-	// TODO: Move Eventor functionality to its own class
-	//       that accepts a canvas and object instance.
-	// TODO: Refactor this mess.
-	onEventor(obj, options) {
-		const prefix = '_event_'
-		const unlisteners = {}
+	dispatch(type, detail = {}) {
+		const event = new CustomEvent(type, {
+			bubbles: false,
+			cancelable: false,
+			detail,
+		})
 
-		const proto = Object.getPrototypeOf(obj)
-		const props = Object.getOwnPropertyNames(proto)
-
-		for (const propName of props) {
-			if (propName.startsWith(prefix)) {
-				const prop = proto[propName]
-
-				if (typeof prop === 'function') {
-					const eventType = propName.slice(prefix.length)
-					const callback = prop.bind(obj)
-					unlisteners[eventType] = this._listenWithCallback(
-						eventType,
-						callback,
-						options
-					)
-				}
-			}
-		}
-
-		return () => {
-			for (const eventName in unlisteners) {
-				const unlisten = unlisteners[eventName]
-				delete unlisteners[eventName]
-				unlisten()
-			}
-		}
+		return this.dom.dispatchEvent(event)
 	}
-
-	_listenWithCallback(type, callback, options) {
-		this.dom.addEventListener(type, callback, options)
-		return () => this.dom.removeEventListener(type, callback, options)
-	}
-}
-
-function isObject(v) {
-	return v !== null && typeof v === 'object' && !Array.isArray(v)
 }

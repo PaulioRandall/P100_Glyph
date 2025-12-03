@@ -9,29 +9,25 @@ import PathDrawer from './PathDrawer.js'
 export default class GlyphCanvas extends GridCanvas {
 	_clickSimplifier = new ClickSimplifier(this)
 	_gridCellHighlighter = new GridCellHighlighter(this)
-	_diagram = new Diagram(this)
 	_canvasMode = new CanvasMode(this)
+	_diagram = new Diagram(this)
 	_pathDrawer = new PathDrawer(this)
 
 	constructor(container, xLength, yLength, options = {}) {
-		super(container, xLength, yLength, (options = {}))
+		super(container, xLength, yLength, options)
 
-		this._addOrgan('clickSimplifier', this._clickSimplifier)
-		super.add(this._gridCellHighlighter)
-		super.add(this._canvasMode)
-		super.add(this._diagram)
-		this._addOrgan('pathDrawer', this._pathDrawer)
+		this.add(this._clickSimplifier)
+		this.add(this._gridCellHighlighter)
+		this.add(this._canvasMode)
+		this.add(this._diagram)
+		this.add(this._pathDrawer)
 	}
+
+	// ClickSimplifier
+	// No exposed functions
 
 	// GridCellHighlighter
-
-	enableGridCellHighlight() {
-		this._gridCellHighlighter.show()
-	}
-
-	disableGridCellHighlight() {
-		this._gridCellHighlighter.hide()
-	}
+	// No exposed functions
 
 	// CanvasMode
 
@@ -51,7 +47,7 @@ export default class GlyphCanvas extends GridCanvas {
 		this._canvasMode.switchTo('Editing')
 	}
 
-	// Focus and selection
+	// Diagram
 
 	get elements() {
 		return this._diagram.elements
@@ -72,8 +68,6 @@ export default class GlyphCanvas extends GridCanvas {
 	get selected() {
 		return this._diagram.selected
 	}
-
-	// Diagram
 
 	addElement(element) {
 		this._diagram.addElement(element)
@@ -107,15 +101,6 @@ export default class GlyphCanvas extends GridCanvas {
 		this._diagram.unselectIfElement(element)
 	}
 
-	// Dead
-
-	_addOrgan(name, organ) {
-		super.add(organ)
-		this.store.set(name, organ)
-	}
-
-	_removeOrgan(name, organ) {
-		super.remove(organ)
-		this.store.delete(name)
-	}
+	// PathDrawer
+	// No exposed functions
 }

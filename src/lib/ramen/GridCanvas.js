@@ -1,13 +1,13 @@
 import Two from 'two.js'
 import Canvas from './Canvas.js'
-import Group from './Group.js'
+import BaseGroup from './BaseGroup.js'
 import GridCell from './GridCell.js'
 
 export default class GridCanvas extends Canvas {
 	_xLength = 0
 	_yLength = 0
-	_cells = new Group()
-	_focus = null
+	_cells = new BaseGroup()
+	_hovered = null
 
 	constructor(container, xLength = 5, yLength = 5, options = {}) {
 		super(container, options)
@@ -16,11 +16,12 @@ export default class GridCanvas extends Canvas {
 		this._yLength = yLength
 
 		this._addCells()
+
 		this.on('mousemove', this._mousemove.bind(this))
 	}
 
 	get hovered() {
-		return this._focus
+		return this._hovered
 	}
 
 	cellAt(x, y) {
@@ -34,19 +35,16 @@ export default class GridCanvas extends Canvas {
 	}
 
 	_mousemove(e) {
-		const oldCell = this._focus
+		const oldCell = this._hovered
 		const cell = this.cellAt(e.offsetX, e.offsetY)
 
 		if (cell && cell !== oldCell) {
-			this._focus = cell
-			this._dispatchHoveredCellChange(cell)
-		}
-	}
+			this._hovered = cell
 
-	_dispatchHoveredCellChange(cell) {
-		super.dispatch('grid_cell_hover', {
-			cell,
-		})
+			super.dispatch('grid_cell_hover', {
+				cell,
+			})
+		}
 	}
 
 	_addCells() {

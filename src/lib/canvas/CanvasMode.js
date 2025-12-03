@@ -4,12 +4,11 @@ export default class CanvasMode {
 	static MODES = ['Idle', 'Drawing', 'Editing']
 
 	_canvas = null
+	_current = 'Idle'
 
 	constructor(canvas) {
 		this._canvas = canvas
 	}
-
-	_current = 'Idle'
 
 	get modes() {
 		return CanvasMode.MODES

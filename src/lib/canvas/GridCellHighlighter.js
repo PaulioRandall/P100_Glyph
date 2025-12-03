@@ -1,6 +1,6 @@
-import { Two, CanvasGroup } from '$ramen'
+import { Two, EventGroup } from '$ramen'
 
-export default class GridCellHighlighter extends CanvasGroup {
+export default class GridCellHighlighter extends EventGroup {
 	_cell = null
 	_haloShape = createHaloShape()
 
@@ -14,14 +14,14 @@ export default class GridCellHighlighter extends CanvasGroup {
 		this.visible = false
 	}
 
-	group_added() {
+	_group_added() {
 		this.hide()
 		super.add(this._haloShape)
-		super.group_added()
+		super._group_added()
 	}
 
-	group_removed() {
-		super.group_removed()
+	_group_removed() {
+		super._group_removed()
 		super.clear()
 		this._cell = null
 	}

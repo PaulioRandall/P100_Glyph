@@ -27,7 +27,8 @@
 		width: 88px;
 		height: 44px;
 
-		background: lightgrey;
+		color: white;
+		background: #222222;
 	}
 
 	p {
