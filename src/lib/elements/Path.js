@@ -12,10 +12,9 @@ import { Two, CanvasGroup } from '$ramen'
 
 export default class Path extends CanvasGroup {
 	_commands = []
+	_closed = false
 
 	_shape = null
-	_closed = false
-	_nodes = []
 
 	_highlighted = false
 	_selected = false
@@ -69,7 +68,6 @@ export default class Path extends CanvasGroup {
 		this.clear()
 
 		const newShape = makePath(this._commands)
-		const newNodes = makeNodes(this._commands)
 
 		newShape.closed = this._closed
 		if (newShape.closed) {
@@ -77,10 +75,8 @@ export default class Path extends CanvasGroup {
 		}
 
 		this._shape = newShape
-		this._nodes = newNodes
 
 		this.add(this._shape)
-		this._nodes.forEach((n) => this.add(n))
 
 		this._updateLookAndFeel()
 	}
@@ -96,8 +92,6 @@ export default class Path extends CanvasGroup {
 		} else {
 			this._updateColor('indianred')
 		}
-
-		this._nodes.forEach((n) => (n.visible = sel))
 	}
 
 	_updateColor(color) {
@@ -152,28 +146,4 @@ function makeAnchor(cmd) {
 		default:
 			throw new Error(`Unknown command type '${cmd.type}'`)
 	}
-}
-
-function makeNodes(cmds) {
-	const nodes = []
-
-	for (const cmd of cmds) {
-		nodes.push(makeNode(cmd))
-	}
-
-	return nodes
-}
-
-function makeNode(cmd) {
-	const radius = 16
-	const { x, y } = cmd.to
-
-	const circle = new Two.Circle(x, y, radius)
-
-	circle.visible = false
-	circle.fill = 'lightblue'
-	circle.stroke = 'black'
-	circle.linewidth = 4
-
-	return circle
 }

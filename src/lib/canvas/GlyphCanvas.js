@@ -5,6 +5,7 @@ import GridCellHighlighter from './GridCellHighlighter.js'
 import CanvasMode from './CanvasMode.js'
 import Diagram from './Diagram.js'
 import PathDrawer from './PathDrawer.js'
+import SelectedElement from './SelectedElement.js'
 
 export default class GlyphCanvas extends GridCanvas {
 	_clickSimplifier = new ClickSimplifier(this)
@@ -12,6 +13,7 @@ export default class GlyphCanvas extends GridCanvas {
 	_canvasMode = new CanvasMode(this)
 	_diagram = new Diagram(this)
 	_pathDrawer = new PathDrawer(this)
+	_selectedElement = new SelectedElement(this)
 
 	constructor(container, xLength, yLength, options = {}) {
 		super(container, xLength, yLength, options)
@@ -21,6 +23,7 @@ export default class GlyphCanvas extends GridCanvas {
 		super.add(this._canvasMode)
 		super.add(this._diagram)
 		super.add(this._pathDrawer)
+		super.add(this._selectedElement)
 	}
 
 	// ClickSimplifier
