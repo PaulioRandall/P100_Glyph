@@ -4,7 +4,6 @@ export default class ClickSimplifier extends EventGroup {
 	_pointerId = null
 
 	__group__removed() {
-		super.group_removed()
 		this._pointerId = null
 	}
 
@@ -19,20 +18,19 @@ export default class ClickSimplifier extends EventGroup {
 
 		this._pointerId = null
 
-		const eu = new EventUtil(e)
 		const detail = { originalEvent: e }
 
-		if (eu.isLeftButton()) {
+		if (EventUtil.isLeftButton(e)) {
 			this.canvas.dispatch('left_click', detail)
 			return
 		}
 
-		if (eu.isMiddleButton()) {
+		if (EventUtil.isMiddleButton(e)) {
 			this.canvas.dispatch('middle_click', detail)
 			return
 		}
 
-		if (eu.isRightButton()) {
+		if (EventUtil.isRightButton(e)) {
 			this.canvas.dispatch('right_click', detail)
 			return
 		}

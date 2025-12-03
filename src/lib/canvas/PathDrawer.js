@@ -6,11 +6,10 @@ export default class PathDrawer extends EventGroup {
 	_clickTracker = new ClickTracker()
 
 	__group__removed() {
-		super.__group__removed()
-		this._resetPath()
+		this._reset()
 	}
 
-	__on__grid_cell_hover(e) {
+	__on__grid_cell_hover() {
 		const builder = this._builder
 		const cell = this.canvas.hovered
 

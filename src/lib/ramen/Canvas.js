@@ -1,8 +1,8 @@
 import Two from 'two.js'
 import { ZUI } from 'two.js/extras/jsm/zui.js'
-import EventGroup from './EventGroup.js'
+import NoticeGroup from './NoticeGroup.js'
 
-export default class Canvas extends EventGroup {
+export default class Canvas extends NoticeGroup {
 	_container
 	_two
 	_zui

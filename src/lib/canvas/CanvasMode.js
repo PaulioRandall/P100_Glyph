@@ -1,14 +1,9 @@
 import { CanvasGroup } from '$ramen'
 
-export default class CanvasMode {
+export default class CanvasMode extends CanvasGroup {
 	static MODES = ['Idle', 'Drawing', 'Editing']
 
-	_canvas = null
 	_current = 'Idle'
-
-	constructor(canvas) {
-		this._canvas = canvas
-	}
 
 	get modes() {
 		return CanvasMode.MODES
@@ -26,9 +21,17 @@ export default class CanvasMode {
 		const previous = this._current
 		this._current = mode
 
-		this._canvas.dispatch('canvas_mode_changed', {
+		this.canvas.dispatch('canvas_mode_changed', {
 			previous,
 			current: mode,
 		})
+	}
+
+	__group__added() {
+		this._current = 'Idle'
+	}
+
+	__group__removed() {
+		this._current = 'Idle'
 	}
 }

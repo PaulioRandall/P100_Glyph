@@ -12,7 +12,7 @@ export default class NoticeGroup extends BaseGroup {
 		super.add(element)
 
 		if (typeof element.__group__added === 'function') {
-			element.__group__added()
+			invokeNoticeFuncs(element, '__group__added')
 		}
 
 		return true
@@ -26,9 +26,45 @@ export default class NoticeGroup extends BaseGroup {
 		super.remove(element)
 
 		if (typeof element.__group__removed === 'function') {
-			element.__group__removed()
+			invokeNoticeFuncs(element, '__group__removed')
 		}
 
 		return true
 	}
+}
+
+function invokeNoticeFuncs(obj, funcName) {
+	const funcs = getNoticeFuncs(obj, funcName)
+
+	//funcs.reverse()
+
+	for (const f of funcs) {
+		f.call(obj)
+	}
+}
+
+function getNoticeFuncs(obj, funcName) {
+	const funcs = []
+	let proto = getProto(obj)
+
+	// TODO: Currently runs the whole proto chain.
+	//       Optimise so it only chains elements within
+	//       this library.
+	while (proto) {
+		if (hasOwnFuncName(proto, funcName)) {
+			funcs.push(proto[funcName])
+		}
+
+		proto = getProto(proto)
+	}
+
+	return funcs
+}
+
+function getProto(obj) {
+	return Object.getPrototypeOf(obj)
+}
+
+function hasOwnFuncName(proto, funcName) {
+	return Object.getOwnPropertyNames(proto).includes(funcName)
 }

@@ -16,11 +16,11 @@ export default class GlyphCanvas extends GridCanvas {
 	constructor(container, xLength, yLength, options = {}) {
 		super(container, xLength, yLength, options)
 
-		this.add(this._clickSimplifier)
-		this.add(this._gridCellHighlighter)
-		this.add(this._canvasMode)
-		this.add(this._diagram)
-		this.add(this._pathDrawer)
+		super.add(this._clickSimplifier)
+		super.add(this._gridCellHighlighter)
+		super.add(this._canvasMode)
+		super.add(this._diagram)
+		super.add(this._pathDrawer)
 	}
 
 	// ClickSimplifier
