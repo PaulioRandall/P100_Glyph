@@ -1,14 +1,14 @@
 import { Two, CanvasGroup } from '$ramen'
 
-// TODO: Using last point as the visual clue for the next
-//       point is confusing. Create standalone point for
-//       use in path drawing so '_commands' only contains
-//       user specified shape commands.
+// TODO: Abstract 'PathRenderer' so 'Path' and
+//       'PathBuilder' have the same mechanics for
+//       rendering paths.
+// TODO: Clean up and optimise.
 // TODO: Visual nodes show be controlled by an organ made
 //       specifically for it. This way it will always be
 //       rendered above all components.
-// TODO: Split into two classes. A PathBuilder for building
-//       and editing paths. And Path, for finished paths.
+// TODO: Add 'canBeShape' func that returns true if shape
+//       has more than two points.
 
 export default class Path extends CanvasGroup {
 	_commands = []
@@ -20,10 +20,13 @@ export default class Path extends CanvasGroup {
 	_highlighted = false
 	_selected = false
 
-	constructor(canvas, cell) {
+	constructor(canvas, commands, closed) {
 		super(canvas)
 
-		this._addCommands(newMoveCommand(cell), newLineCommand(cell))
+		this._commands = commands
+		this._closed = closed
+
+		this._updatePath()
 	}
 
 	get commands() {
@@ -52,47 +55,6 @@ export default class Path extends CanvasGroup {
 		})
 	}
 
-	isMultiPoint() {
-		return this._commands.length > 2
-	}
-
-	moveTo(cell) {
-		this._addCommands(newMoveCommand(cell))
-	}
-
-	lineTo(cell) {
-		this._addCommands(newLineCommand(cell))
-	}
-
-	getLastShapePoint() {
-		const lastIndex = this._lastShapePointIndex()
-		return this._commands[lastIndex].to
-	}
-
-	removeLastPoint() {
-		this._commands.pop()
-		this._updatePath()
-	}
-
-	updateLastPoint(cell) {
-		const lastIndex = this._lastPointIndex()
-		this._commands[lastIndex].to = cell
-		this._updatePath()
-	}
-
-	tidy() {
-		const firstPoint = this._commands[0].to
-		const lastPoint = this._commands[this._lastPointIndex()].to
-		this._closed = false
-
-		if (firstPoint === lastPoint) {
-			this.removeLastPoint()
-			this._closed = true
-		}
-
-		this._updatePath()
-	}
-
 	select(state = true) {
 		this._selected = state
 		this._updateLookAndFeel()
@@ -101,19 +63,6 @@ export default class Path extends CanvasGroup {
 	highlight(state = true) {
 		this._highlighted = state
 		this._updateLookAndFeel()
-	}
-
-	_lastPointIndex() {
-		return this._commands.length - 1
-	}
-
-	_lastShapePointIndex() {
-		return this._commands.length - 2
-	}
-
-	_addCommands(...cmds) {
-		this._commands.push(...cmds)
-		this._updatePath()
 	}
 
 	_updatePath() {
@@ -156,20 +105,6 @@ export default class Path extends CanvasGroup {
 		if (this._shape.closed) {
 			this._shape.fill = color
 		}
-	}
-}
-
-function newMoveCommand(to) {
-	return {
-		type: 'move',
-		to,
-	}
-}
-
-function newLineCommand(to) {
-	return {
-		type: 'line',
-		to,
 	}
 }
 

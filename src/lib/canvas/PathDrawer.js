@@ -1,8 +1,8 @@
 import { EventGroup, ClickTracker } from '$ramen'
-import { Path } from '../elements'
+import { PathBuilder } from '../elements'
 
 export default class PathDrawer extends EventGroup {
-	_path = null
+	_builder = null
 	_clickTracker = new ClickTracker()
 
 	_group_removed() {
@@ -11,121 +11,75 @@ export default class PathDrawer extends EventGroup {
 	}
 
 	_event_grid_cell_hover(e) {
-		const cell = e.detail.cell
-		const path = this._path
+		const builder = this._builder
+		const cell = this.canvas.hovered
 
-		if (path && cell) {
-			path.updateLastPoint(cell)
+		if (builder && cell) {
+			builder.moveCursorTo(cell)
 		}
 	}
 
 	_event_left_click() {
+		const hoveredCell = this.canvas.hovered
+		const builder = this._builder
 		const clickCount = this._clickTracker.click()
 		const doubleClick = clickCount >= 2
 
-		if (this._path) {
-			if (doubleClick && this._isHoveringLastPoint()) {
-				this._finishPath()
-			} else {
-				this._addPoint(this.canvas.hovered)
-			}
-
+		if (!builder && doubleClick) {
+			this._clickTracker.reset()
+			this._startPath(hoveredCell)
 			return
 		}
 
-		if (doubleClick) {
-			this._clickTracker.reset()
-			this._startPath(this.canvas.hovered)
+		if (builder && !doubleClick) {
+			this._builder.lineTo(hoveredCell)
+			return
+		}
+
+		if (builder && doubleClick) {
+			this._finishPath()
 			return
 		}
 	}
 
 	_event_right_click() {
-		if (this._path) {
-			this._removeLastPoint(this.canvas.hovered)
+		if (this._builder) {
+			this._removeLastCommand()
 		}
-	}
-
-	_isHoveringLastPoint(cell) {
-		if (this._path) {
-			return this.canvas.hovered === this._path.getLastShapePoint()
-		}
-		return false
 	}
 
 	_startPath(cell) {
-		const path = new Path(this.canvas, cell)
-		super.add(path)
-
-		this._path = path
+		this._builder = new PathBuilder(this.canvas, cell)
+		super.add(this._builder)
 
 		this.canvas.drawMode()
-		this.canvas.dispatch('path_started', { cell, path })
+		this.canvas.dispatch('path_drawer_started')
 	}
 
-	_addPoint(cell) {
-		const path = this._path
+	_removeLastCommand() {
+		this._builder._removeLastCommand()
 
-		if (path.getLastShapePoint() === cell) {
-			return
-		}
-
-		path.updateLastPoint(cell)
-		path.lineTo(cell)
-
-		this.canvas.dispatch('path_point_added', { cell, path })
-	}
-
-	_removeLastPoint(cell) {
-		const path = this._path
-
-		if (!path.isMultiPoint()) {
-			this._resetPath()
-			return
-		}
-
-		path.removeLastPoint()
-		path.updateLastPoint(cell)
-
-		this.canvas.dispatch('path_point_removed', { path })
-	}
-
-	_finishOrResetPath() {
-		const path = this._path
-
-		if (!path) {
-			return
-		}
-
-		if (path.isMultiPoint()) {
-			this._finishPath()
-		} else {
-			this._resetPath()
+		if (this._builder.isEmpty()) {
+			this._reset()
 		}
 	}
 
 	_finishPath() {
-		const path = this._path
+		const path = this._builder.build()
 
-		if (path) {
-			super.remove(path)
-			this._resetPath()
-			this.canvas.idleMode()
+		this.canvas.dispatch('path_drawer_finished')
+		this.canvas.addElement(path)
 
-			path.removeLastPoint()
-			path.tidy()
-
-			this.canvas.dispatch('path_finished', { path })
-			this.canvas.addElement(path)
-		}
+		this._reset()
 	}
 
-	_resetPath() {
+	_reset() {
 		super.clear()
+		this.canvas.idleMode()
 
-		this._path = null
+		this._builder = null
 		this._clickTracker.reset()
 
-		this.canvas.dispatch('path_reset')
+		this.canvas.dispatch('path_drawer_reset')
 	}
 }
