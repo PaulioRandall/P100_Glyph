@@ -36,7 +36,7 @@ export default class PathDrawer extends EventGroup {
 		}
 
 		if (builder && doubleClick) {
-			this._finishPath()
+			this._finishPath(hoveredCell)
 			return
 		}
 	}
@@ -56,14 +56,18 @@ export default class PathDrawer extends EventGroup {
 	}
 
 	_removeLastCommand() {
-		this._builder._removeLastCommand()
+		this._builder.removeLastCommand()
 
 		if (this._builder.isEmpty()) {
 			this._reset()
 		}
 	}
 
-	_finishPath() {
+	_finishPath(cell) {
+		if (!this._builder.isDuplicatePoint(cell)) {
+			return
+		}
+
 		const path = this._builder.build()
 
 		this.canvas.dispatch('path_drawer_finished')

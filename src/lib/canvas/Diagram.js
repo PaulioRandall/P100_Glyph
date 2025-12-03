@@ -99,10 +99,8 @@ export default class Diagram extends CanvasGroup {
 			throw new Error('Element not in diagram')
 		}
 
-		this._focused?.highlight(false)
 		this._lastFocused = this._focused
 		this._focused = element
-		this._focused?.highlight(true)
 
 		this.canvas.dispatch('element_focused', {
 			lastfocused: this._lastfocused,
@@ -117,10 +115,8 @@ export default class Diagram extends CanvasGroup {
 			throw new Error('Element not in diagram')
 		}
 
-		this._selected?.select(false)
 		this._lastSelected = this._selected
 		this._selected = element
-		this._selected?.select(true)
 
 		this.canvas.dispatch('element_selected', {
 			lastfocused: this._lastfocused,
