@@ -1,14 +1,14 @@
 import { GridCanvas } from '$ramen'
 
 import ClickSimplifier from './ClickSimplifier.js'
-import CellHighlighter from './CellHighlighter.js'
-import Diagram from './Diagram.js'
+import GridCellHighlighter from './GridCellHighlighter.js'
 import CanvasMode from './CanvasMode.js'
+import Diagram from './Diagram.js'
 import PathDrawer from './PathDrawer.js'
 
 export default class GlyphCanvas extends GridCanvas {
 	_clickSimplifier = new ClickSimplifier(this)
-	_cellHighlighter = new CellHighlighter(this)
+	_gridCellHighlighter = new GridCellHighlighter(this)
 	_diagram = new Diagram(this)
 	_canvasMode = new CanvasMode(this)
 	_pathDrawer = new PathDrawer(this)
@@ -17,11 +17,23 @@ export default class GlyphCanvas extends GridCanvas {
 		super(container, xLength, yLength, (options = {}))
 
 		this._addOrgan('clickSimplifier', this._clickSimplifier)
-		this._addOrgan('cellHighlighter', this._cellHighlighter)
-		super.add(this._diagram)
+		super.add(this._gridCellHighlighter)
 		super.add(this._canvasMode)
+		super.add(this._diagram)
 		this._addOrgan('pathDrawer', this._pathDrawer)
 	}
+
+	// GridCellHighlighter
+
+	enableGridCellHighlight() {
+		this._gridCellHighlighter.show()
+	}
+
+	disableGridCellHighlight() {
+		this._gridCellHighlighter.hide()
+	}
+
+	// CanvasMode
 
 	get mode() {
 		return this._canvasMode.current
@@ -60,6 +72,8 @@ export default class GlyphCanvas extends GridCanvas {
 	get selected() {
 		return this._diagram.selected
 	}
+
+	// Diagram
 
 	addElement(element) {
 		this._diagram.addElement(element)
