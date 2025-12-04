@@ -1,12 +1,37 @@
-import { Two, EventGroup } from '$ramen'
-import { PathEditor } from '../elements'
+import { Two, EventGroup, NoticeGroup } from '$ramen'
+import { ElementNode, PathEditor } from '../elements'
 
 export default class ActiveElements extends EventGroup {
 	_pathEditor = null
+	_nodes = new NoticeGroup()
+	_hovered = null
+
+	clear() {
+		super.clear()
+		this._nodes.clear()
+		this._hovered = null
+	}
 
 	__group__removed() {
-		super.clear()
+		this.clear()
 		this._pathEditor = null
+	}
+
+	__on__grid_cell_hover() {
+		if (!this._pathEditor) {
+			return
+		}
+
+		const hovered = this.canvas.hovered
+
+		for (const n of this._nodes.children) {
+			if (n.cell === hovered) {
+				this._setHoveredNode(n)
+				return
+			}
+		}
+
+		this._setHoveredNode(null)
 	}
 
 	__on__selected_element_edit_request(e) {
@@ -32,34 +57,44 @@ export default class ActiveElements extends EventGroup {
 	}
 
 	__on__element_selected(e) {
-		super.clear()
+		this.clear()
 		this._pathEditor = null
 
 		const selected = this.canvas.selected
 
 		if (selected) {
 			this._pathEditor = new PathEditor(this.canvas, selected)
-			super.add(this._pathEditor)
+			this.add(this._pathEditor)
 
 			selected.commands //
-				.map((cmd) => makeNode(cmd)) //
-				.forEach((n) => super.add(n)) //
+				.map((cmd) => new ElementNode(this.canvas, cmd.to)) //
+				.forEach((n) => this._nodes.add(n)) //
+
+			this.add(this._nodes)
 		}
 
 		this.canvas.lastSelected?.updateStyle()
 		this.canvas.selected?.updateStyle()
 	}
-}
 
-function makeNode(cmd) {
-	const radius = 16
-	const { x, y } = cmd.to
+	_setHoveredNode(newNode = null) {
+		if (this._hovered) {
+			const oldNode = this._hovered
+			this._hovered.disableEditing()
+			this._hovered = null
 
-	const circle = new Two.Circle(x, y, radius)
+			this.canvas.dispatch('element_node_edit_start', {
+				node: oldNode,
+			})
+		}
 
-	circle.fill = 'lightblue'
-	circle.stroke = 'black'
-	circle.linewidth = 4
+		if (newNode) {
+			this._hovered = newNode
+			this._hovered.enableEditing()
 
-	return circle
+			this.canvas.dispatch('element_node_edit_end', {
+				node: newNode,
+			})
+		}
+	}
 }

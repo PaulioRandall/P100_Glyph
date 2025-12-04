@@ -30,8 +30,8 @@ export default class EventGroup extends CanvasGroup {
 
 	_removeObjectListeners() {
 		while (this._unlisteners.length > 0) {
-			const unlisten = this._unlisteners.pop()
-			unlisten()
+			this._unlisteners[0]()
+			this._unlisteners.pop()
 		}
 	}
 }
