@@ -27,10 +27,10 @@ export default class GlyphCanvas extends GridCanvas {
 	}
 
 	// ClickSimplifier
-	// No exposed functions
+	// No exposed functions.
 
 	// GridCellHighlighter
-	// No exposed functions
+	// No exposed functions.
 
 	// CanvasMode
 
@@ -105,8 +105,8 @@ export default class GlyphCanvas extends GridCanvas {
 	}
 
 	// PathDrawer
-	// No exposed functions
+	// No exposed functions.
 
 	// ActiveElements
-	// No exposed functions
+	// No exposed functions.
 }

@@ -2,7 +2,7 @@ import Two from 'two.js'
 import BaseGroup from './BaseGroup.js'
 
 export default class GridCell extends BaseGroup {
-	_centerShape = null
+	_shape = null
 
 	constructor(col, row, w, h) {
 		super()
@@ -25,8 +25,8 @@ export default class GridCell extends BaseGroup {
 			bottom: y + h / 2,
 		})
 
-		this._centerShape = createCenterShape(this)
-		super.add(this._centerShape)
+		this._shape = createCenterShape(this)
+		super.add(this._shape)
 	}
 
 	contains(x, y) {

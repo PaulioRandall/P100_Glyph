@@ -4,24 +4,29 @@ import BaseGroup from './BaseGroup.js'
 import GridCell from './GridCell.js'
 
 export default class GridCanvas extends Canvas {
-	_xLength = 0
-	_yLength = 0
+	_gridWidth = 9
+	_gridHeight = 9
 	_cells = new BaseGroup()
 	_hovered = null
+	_onmousemove = this._cursorMovement.bind(this)
 
-	constructor(container, xLength = 5, yLength = 5, options = {}) {
+	constructor(container, options = {}) {
 		super(container, options)
 
-		this._xLength = xLength
-		this._yLength = yLength
+		super.add(this._cells)
+		this.updateGrid()
 
-		this._addCells()
-
-		this.on('mousemove', this._mousemove.bind(this))
+		this.on('mousemove', this._onmousemove)
 	}
 
 	get hovered() {
 		return this._hovered
+	}
+
+	setGridSize(w, h) {
+		this._gridWidth = w
+		this._gridHeight = h
+		this.updateGrid()
 	}
 
 	cellAt(x, y) {
@@ -34,32 +39,28 @@ export default class GridCanvas extends Canvas {
 		return null
 	}
 
-	_mousemove(e) {
+	updateGrid() {
+		this._cells.clear()
+
+		const cells = generateSquareGridCells(
+			super.width,
+			super.height,
+			this._gridWidth,
+			this._gridHeight
+		)
+
+		cells.forEach((c) => this._cells.add(c))
+	}
+
+	_cursorMovement(e) {
 		const oldCell = this._hovered
 		const cell = this.cellAt(e.offsetX, e.offsetY)
 
 		if (cell && cell !== oldCell) {
 			this._hovered = cell
 
-			super.dispatch('grid_cell_hover', {
-				cell,
-			})
+			super.dispatch('grid_cell_hover', { cell })
 		}
-	}
-
-	_addCells() {
-		const cells = generateSquareGridCells(
-			super.width,
-			super.height,
-			this._xLength,
-			this._yLength
-		)
-
-		for (const c of cells) {
-			this._cells.add(c)
-		}
-
-		super.add(this._cells)
 	}
 }
 

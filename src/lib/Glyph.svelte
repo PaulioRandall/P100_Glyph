@@ -14,7 +14,8 @@
 	let canvas = $state(null)
 
 	onMount(() => {
-		canvas = new GlyphCanvas(container, 7, 7)
+		canvas = new GlyphCanvas(container)
+		canvas.setGridSize(5, 5)
 	})
 </script>
 

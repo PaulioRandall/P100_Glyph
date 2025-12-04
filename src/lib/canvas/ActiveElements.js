@@ -9,7 +9,7 @@ export default class ActiveElements extends EventGroup {
 		this._pathEditor = null
 	}
 
-	__on__request_edit_of_selected_element(e) {
+	__on__selected_element_edit_request(e) {
 		if (!this._pathEditor) {
 			return
 		}
