@@ -51,7 +51,9 @@ export default class PathDrawer extends EventGroup {
 		this._builder = new PathBuilder(this.canvas, cell)
 		super.add(this._builder)
 
-		this.canvas.drawMode()
+		this.canvas.dispatch('canvas_mode_request', {
+			mode: 'Drawing',
+		})
 		this.canvas.dispatch('path_drawer_started')
 	}
 
@@ -78,11 +80,13 @@ export default class PathDrawer extends EventGroup {
 
 	_reset() {
 		super.clear()
-		this.canvas.idleMode()
 
 		this._builder = null
 		this._clickTracker.reset()
 
+		this.canvas.dispatch('canvas_mode_request', {
+			mode: 'Idle',
+		})
 		this.canvas.dispatch('path_drawer_reset')
 	}
 }

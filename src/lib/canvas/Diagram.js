@@ -125,14 +125,8 @@ export default class Diagram extends CanvasGroup {
 			selected: this._selected,
 		})
 
-		this._updateMode()
-	}
-
-	_updateMode() {
-		if (this._selected) {
-			this.canvas.editMode()
-		} else {
-			this.canvas.idleMode()
-		}
+		this.canvas.dispatch('canvas_mode_request', {
+			mode: this._selected ? 'Editing' : 'Idle',
+		})
 	}
 }

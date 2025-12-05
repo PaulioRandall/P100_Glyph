@@ -7,6 +7,9 @@ import Diagram from './Diagram.js'
 import PathDrawer from './path/PathDrawer.js'
 import Nodes from './nodes/Nodes.js'
 
+// TODO: __when__added_to_group
+// TODO: __when__removed_from_group
+
 export default class GlyphCanvas extends GridCanvas {
 	_clickSimplifier = new ClickSimplifier(this)
 	_gridCell = new GridCell(this)
@@ -36,18 +39,6 @@ export default class GlyphCanvas extends GridCanvas {
 
 	get mode() {
 		return this._canvasMode.current
-	}
-
-	idleMode() {
-		this._canvasMode.switchTo('Idle')
-	}
-
-	drawMode() {
-		this._canvasMode.switchTo('Drawing')
-	}
-
-	editMode() {
-		this._canvasMode.switchTo('Editing')
 	}
 
 	// Diagram
