@@ -16,8 +16,10 @@
 	}
 
 	function setPathClosed(state) {
-		canvas.dispatch('selected_element_edit_request', {
-			closed: state,
+		selected.setClosed(state)
+
+		canvas.dispatch('element_updated', {
+			element: selected,
 		})
 	}
 

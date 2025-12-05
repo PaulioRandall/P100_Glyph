@@ -1,5 +1,5 @@
 import { EventGroup, ClickTracker } from '$ramen'
-import { PathBuilder } from '../elements'
+import PathBuilder from './PathBuilder.js'
 
 export default class PathDrawer extends EventGroup {
 	_builder = null

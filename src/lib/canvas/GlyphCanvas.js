@@ -4,7 +4,7 @@ import ClickSimplifier from './ClickSimplifier.js'
 import GridCell from './GridCell.js'
 import CanvasMode from './CanvasMode.js'
 import Diagram from './Diagram.js'
-import PathDrawer from './PathDrawer.js'
+import PathDrawer from './path/PathDrawer.js'
 import Nodes from './nodes/Nodes.js'
 
 export default class GlyphCanvas extends GridCanvas {

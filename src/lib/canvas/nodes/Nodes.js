@@ -12,7 +12,19 @@ export default class Nodes extends EventGroup {
 		this.clear()
 	}
 
-	__on__element_selected(e) {
+	__on__element_selected() {
+		this._updatedNodesToSelected()
+	}
+
+	__on__element_updated(e) {
+		const updatedElement = e.detail.element
+
+		if (updatedElement === this.canvas.selected) {
+			this._updatedNodesToSelected()
+		}
+	}
+
+	_updatedNodesToSelected() {
 		const selected = this.canvas.selected
 
 		this._nodes.clear()

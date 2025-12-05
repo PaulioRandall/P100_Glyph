@@ -18,8 +18,9 @@ export default class BasePath extends PathRenderer {
 		return this._closed
 	}
 
-	set closed(v) {
+	setClosed(v) {
 		this._closed = v
+		this.updateShape()
 	}
 
 	updateShape() {
