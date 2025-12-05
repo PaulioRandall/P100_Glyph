@@ -33,7 +33,7 @@ export default class GridCellHighlighter extends EventGroup {
 	}
 
 	__on__grid_cell_hover(e) {
-		const cell = e.detail.cell
+		const cell = this.canvas.hovered
 
 		if (this._cell === cell) {
 			return
@@ -41,21 +41,33 @@ export default class GridCellHighlighter extends EventGroup {
 
 		this._unhover()
 
-		if (!cell) {
-			return
+		if (cell) {
+			this._hover(cell)
 		}
+	}
 
-		this._setHaloPosition(cell)
-		this.show()
+	__on__element_focused(e) {
+		this.canvas.lastFocused?.updateStyle()
+		this.canvas.focused?.updateStyle()
+	}
 
-		this._cell = cell
-
-		this.canvas.cursorStyle = 'pointer'
+	__on__element_selected(e) {
+		this.canvas.lastSelected?.updateStyle()
+		this.canvas.selected?.updateStyle()
 	}
 
 	_setHaloPosition({ x, y }) {
 		this._haloShape.position.x = x
 		this._haloShape.position.y = y
+	}
+
+	_hover(cell) {
+		this._cell = cell
+
+		this._setHaloPosition(cell)
+		this.show()
+
+		this.canvas.cursorStyle = 'pointer'
 	}
 
 	_unhover() {

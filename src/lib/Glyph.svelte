@@ -17,6 +17,9 @@
 		canvas = new GlyphCanvas(container)
 		canvas.setGridSize(5, 5)
 	})
+
+	// TODO: Canvas to cover wwhole screen and elements list
+	//       and controls will be overlays.
 </script>
 
 <div class="glyph">

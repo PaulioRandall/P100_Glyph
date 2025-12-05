@@ -1,6 +1,6 @@
-import { Two, CanvasGroup } from '$ramen'
+import { Two, EventGroup } from '$ramen'
 
-export default class ElementNode extends CanvasGroup {
+export default class Node extends EventGroup {
 	_cell = null
 	_shape = null
 
@@ -14,14 +14,6 @@ export default class ElementNode extends CanvasGroup {
 		return this._cell
 	}
 
-	enableEditing() {
-		this._shape.fill = 'orange'
-	}
-
-	disableEditing() {
-		this._shape.fill = 'lightblue'
-	}
-
 	__group__added() {
 		this._shape = makeShape(this._cell)
 		this.add(this._shape)
@@ -30,6 +22,22 @@ export default class ElementNode extends CanvasGroup {
 	__group__removed() {
 		this.clear()
 		this._shape = null
+	}
+
+	__on__grid_cell_hover() {
+		if (this._cell === this.canvas.hovered) {
+			this._highlight()
+		} else {
+			this._unhighlight()
+		}
+	}
+
+	_highlight() {
+		this._shape.fill = 'orange'
+	}
+
+	_unhighlight() {
+		this._shape.fill = 'lightblue'
 	}
 }
 
