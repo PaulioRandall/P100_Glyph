@@ -13,11 +13,11 @@ export default class CanvasMode extends EventGroup {
 		return this._current
 	}
 
-	__group__added() {
+	__when__added_to_group() {
 		this._current = 'Idle'
 	}
 
-	__group__removed() {
+	__when__removed_from_group() {
 		this._current = 'Idle'
 	}
 

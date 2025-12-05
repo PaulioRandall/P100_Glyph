@@ -4,11 +4,11 @@ import Node from './Node.js'
 export default class Nodes extends EventGroup {
 	_nodes = new EventGroup()
 
-	__group__added() {
+	__when__added_to_group() {
 		this.add(this._nodes)
 	}
 
-	__group__removed() {
+	__when__removed_from_group() {
 		this.clear()
 	}
 

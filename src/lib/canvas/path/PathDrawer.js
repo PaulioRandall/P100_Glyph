@@ -5,7 +5,7 @@ export default class PathDrawer extends EventGroup {
 	_builder = null
 	_clickTracker = new ClickTracker()
 
-	__group__removed() {
+	__when__removed_from_group() {
 		this._reset()
 	}
 

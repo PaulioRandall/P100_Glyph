@@ -14,12 +14,12 @@ export default class GridCellHighlighter extends EventGroup {
 		this.visible = false
 	}
 
-	__group__added() {
+	__when__added_to_group() {
 		this.hide()
 		super.add(this._haloShape)
 	}
 
-	__group__removed() {
+	__when__removed_from_group() {
 		super.clear()
 		this._cell = null
 	}

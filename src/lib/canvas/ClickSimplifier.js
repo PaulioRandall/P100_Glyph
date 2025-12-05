@@ -3,7 +3,7 @@ import { EventGroup, EventUtil } from '$ramen'
 export default class ClickSimplifier extends EventGroup {
 	_pointerId = null
 
-	__group__removed() {
+	__when__removed_from_group() {
 		this._pointerId = null
 	}
 

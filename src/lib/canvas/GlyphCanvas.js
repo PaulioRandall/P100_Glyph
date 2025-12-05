@@ -7,9 +7,6 @@ import Diagram from './Diagram.js'
 import PathDrawer from './path/PathDrawer.js'
 import Nodes from './nodes/Nodes.js'
 
-// TODO: __when__added_to_group
-// TODO: __when__removed_from_group
-
 export default class GlyphCanvas extends GridCanvas {
 	_clickSimplifier = new ClickSimplifier(this)
 	_gridCell = new GridCell(this)

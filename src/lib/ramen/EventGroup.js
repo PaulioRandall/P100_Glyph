@@ -9,11 +9,11 @@ export default class EventGroup extends CanvasGroup {
 		super(...args)
 	}
 
-	__group__added() {
+	__when__added_to_group() {
 		this._addObjectListeners()
 	}
 
-	__group__removed() {
+	__when__removed_from_group() {
 		this._removeObjectListeners()
 	}
 

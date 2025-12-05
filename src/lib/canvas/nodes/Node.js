@@ -14,12 +14,12 @@ export default class Node extends EventGroup {
 		return this._cell
 	}
 
-	__group__added() {
+	__when__added_to_group() {
 		this._shape = makeShape(this._cell)
 		this.add(this._shape)
 	}
 
-	__group__removed() {
+	__when__removed_from_group() {
 		this.clear()
 		this._shape = null
 	}
