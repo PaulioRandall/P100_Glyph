@@ -1,6 +1,6 @@
 import { Two, EventGroup } from '$ramen'
 
-export default class GridCellHighlighter extends EventGroup {
+export default class GridCell extends EventGroup {
 	_cell = null
 	_haloShape = createHaloShape()
 
