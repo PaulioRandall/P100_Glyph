@@ -1,6 +1,5 @@
 import CanvasGroup from './CanvasGroup.js'
-
-const EVENT_FUNC_PREFIX = '__on__'
+import Moonfire from '$moonfire'
 
 export default class EventGroup extends CanvasGroup {
 	_unlisteners = []
@@ -18,14 +17,8 @@ export default class EventGroup extends CanvasGroup {
 	}
 
 	_addObjectListeners() {
-		const props = Object.getPrototypeOf(this)
-		const propNames = Object.getOwnPropertyNames(props)
-
-		this._unlisteners = propNames
-			.filter(hasEventFuncPrefix)
-			.map((name) => [name, props[name]])
-			.filter(isPropFunction)
-			.map(addEventListener.bind(this))
+		const funcs = Moonfire.match(this, /__on__*/)
+		this._unlisteners = funcs.map(addEventListener.bind(this))
 	}
 
 	_removeObjectListeners() {
@@ -36,16 +29,8 @@ export default class EventGroup extends CanvasGroup {
 	}
 }
 
-function hasEventFuncPrefix(name) {
-	return name.startsWith(EVENT_FUNC_PREFIX)
-}
-
-function isPropFunction([name, prop]) {
-	return typeof prop === 'function'
-}
-
-function addEventListener([name, prop]) {
-	const eventType = name.slice(EVENT_FUNC_PREFIX.length)
-	const callback = prop.bind(this)
+function addEventListener({ name, func, context }) {
+	const eventType = name.slice('__on__'.length)
+	const callback = func.bind(context)
 	return this.canvas.on(eventType, callback)
 }

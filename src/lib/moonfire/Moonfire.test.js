@@ -1,4 +1,4 @@
-import moonfire from './Moonfire.js'
+import Moonfire from './Moonfire.js'
 
 class Alpha {
 	_logCall = null // () => {}
@@ -40,18 +40,9 @@ function constructMock() {
 }
 
 describe('moonfire.js', () => {
-	test('moonfire(): 1', () => {
-		// GIVEN a function with own implementations on the
-		//       class and all its subclasses
-		// WHEN  invoking Moonfire with default capture
-		//       argument (false)
-		// THEN  all implementations are called with the
-		//       root extended class's implementation called
-		//       first and the passed class's implementation
-		//       called last
-
+	test('Moonfire.invoke(): 1', () => {
 		const [called, mock] = constructMock()
-		moonfire(mock, 'doStuff')
+		Moonfire.invoke(mock, 'doStuff')
 
 		expect(called).toEqual([
 			'Alpha.doStuff', //
@@ -60,18 +51,9 @@ describe('moonfire.js', () => {
 		])
 	})
 
-	test('moonfire(): 2', () => {
-		// GIVEN a function with own implementations on the
-		//       class and all its subclasses
-		// WHEN  invoking Moonfire with capture argument as
-		//       true
-		// THEN  all implementations are called with the
-		//       the passed class's implementation called
-		//       first and the root extended class's
-		//       implementation called last
-
+	test('Moonfire.invoke(): 2', () => {
 		const [called, mock] = constructMock()
-		moonfire(mock, 'doStuff', true)
+		Moonfire.invoke(mock, 'doStuff', true)
 
 		expect(called).toEqual([
 			'Charlie.doStuff', //
@@ -80,18 +62,25 @@ describe('moonfire.js', () => {
 		])
 	})
 
-	test('moonfire(): 3', () => {
-		// GIVEN a function with own implementations on the
-		//       class and SOME of its subclasses
-		// WHEN  invoking Moonfire with default capture
-		//       argument
-		// THEN  all implementations are called
-
+	test('Moonfire.invoke(): 3', () => {
 		const [called, mock] = constructMock()
-		moonfire(mock, 'doThing')
+		Moonfire.invoke(mock, 'doThing')
 
 		expect(called).toEqual([
 			'Alpha.doThing', //
+			'Charlie.doThing', //
+		])
+	})
+
+	test('Moonfire.invoke(): 4', () => {
+		const [called, mock] = constructMock()
+		Moonfire.invoke(mock, /do[A-Z][a-z]+/)
+
+		expect(called).toEqual([
+			'Alpha.doStuff', //
+			'Alpha.doThing', //
+			'Beta.doStuff', //
+			'Charlie.doStuff', //
 			'Charlie.doThing', //
 		])
 	})
