@@ -12,6 +12,7 @@
 	"scripts": {
 		"clean": "rm -rf .svelte-kit",
 		"fmt": "prettier --log-level warn --write .",
+		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests --testPathPatterns ./src/",
 		"build": "npm run fmt && vite build",
 		"dev": "npm run fmt && vite dev --port 3000",
 		"preview": "npm run build && vite preview --port 4000",
@@ -21,10 +22,11 @@
 		"@paulio/p69-svelte": "1.0.0-rc-3",
 		"@paulio/p69-util": "1.0.0-rc-2",
 		"@sveltejs/adapter-auto": "7.0.0",
-		"@sveltejs/kit": "2.48.5",
-		"prettier": "3.6.2",
-		"svelte": "5.43.12",
-		"two.js": "0.8.21",
-		"vite": "7.2.4"
+		"@sveltejs/kit": "2.49.1",
+		"jest": "30.2.0",
+		"prettier": "3.7.4",
+		"svelte": "5.45.6",
+		"two.js": "0.8.22",
+		"vite": "7.2.6"
 	}
 }

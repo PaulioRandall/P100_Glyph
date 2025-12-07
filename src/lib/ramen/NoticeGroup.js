@@ -1,4 +1,4 @@
-import Moonfire from '$moonfire'
+import moonfire from '$moonfire'
 import BaseGroup from './BaseGroup.js'
 
 // Extends BaseGroup by calling '__when__added_to_group' and
@@ -11,10 +11,7 @@ export default class NoticeGroup extends BaseGroup {
 		}
 
 		super.add(element)
-		Moonfire.invoke(element, '__when__added_to_group', {
-			polymorphic: false,
-			capture: true,
-		})
+		moonfire(element, '__when__added_to_group', true)
 
 		return true
 	}
@@ -25,10 +22,7 @@ export default class NoticeGroup extends BaseGroup {
 		}
 
 		super.remove(element)
-		Moonfire.invoke(element, '__when__removed_from_group', {
-			polymorphic: false,
-			capture: true,
-		})
+		moonfire(element, '__when__removed_from_group', true)
 
 		return true
 	}
