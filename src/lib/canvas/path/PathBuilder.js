@@ -1,10 +1,8 @@
 import { Two } from '$ramen'
-import PathRenderer from './PathRenderer.js'
+import BasePath from './BasePath.js'
 import Path from './Path.js'
 
-// TODO: Have _path prop instead of extending PathRenderer
-
-export default class PathBuilder extends PathRenderer {
+export default class PathBuilder extends BasePath {
 	_cursor = null
 
 	constructor(canvas, cell) {
@@ -21,7 +19,7 @@ export default class PathBuilder extends PathRenderer {
 	moveCursorTo(cell) {
 		this._cursor = cell
 
-		if (this.shape) {
+		if (this.shape && this.commands.length > 0) {
 			const { x, y } = cell
 			this._cursorVertex().set(x, y)
 		}
@@ -88,12 +86,14 @@ export default class PathBuilder extends PathRenderer {
 	updateShape() {
 		super.updateShape()
 
-		const cursorVertex = PathRenderer.makeVertex({
-			type: 'line',
-			to: this._cursor,
-		})
+		if (this._cursor) {
+			const cursorVertex = BasePath.makeVertex({
+				type: 'line',
+				to: this._cursor,
+			})
 
-		this.shape.vertices.push(cursorVertex)
+			this.shape.vertices.push(cursorVertex)
+		}
 	}
 
 	_first() {
