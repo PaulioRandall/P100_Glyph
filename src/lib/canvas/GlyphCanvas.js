@@ -1,21 +1,22 @@
 import { GridCanvas } from '$ramen'
 
-import ClickSimplifier from './ClickSimplifier.js'
-import GridCell from './GridCell.js'
-import CanvasMode from './CanvasMode.js'
+import ClickSimplifier from './misc/ClickSimplifier.js'
+import GridCell from './misc/GridCell.js'
+import CanvasMode from './misc/CanvasMode.js'
+
 import Diagram from './Diagram.js'
+
 import PathDrawer from './path/PathDrawer.js'
-import SelectedElementsEditor from './SelectedElementsEditor.js'
-import Nodes from './nodes/Nodes.js'
+import SelectedElementsEditor from './selected/SelectedElementsEditor.js'
 
 export default class GlyphCanvas extends GridCanvas {
 	_clickSimplifier = new ClickSimplifier(this)
 	_gridCell = new GridCell(this)
 	_canvasMode = new CanvasMode(this)
 	_diagram = new Diagram(this)
+
 	_pathDrawer = new PathDrawer(this)
 	_selectedElementsEditor = new SelectedElementsEditor(this)
-	_nodes = new Nodes(this)
 
 	constructor(container, xLength, yLength, options = {}) {
 		super(container, xLength, yLength, options)
@@ -26,7 +27,6 @@ export default class GlyphCanvas extends GridCanvas {
 		super.add(this._diagram)
 		super.add(this._pathDrawer)
 		super.add(this._selectedElementsEditor)
-		super.add(this._nodes)
 	}
 
 	// ClickSimplifier
