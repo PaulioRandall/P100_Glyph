@@ -20,6 +20,10 @@
 
 		gap: 4px;
 		padding: 4px;
+
+		& :global(*) {
+			pointer-events: auto;
+		}
 	}
 
 	.column {

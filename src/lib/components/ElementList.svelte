@@ -43,6 +43,10 @@
 <style>
 	.element-list {
 		height: 100%;
+
+		& :global(*) {
+			pointer-events: auto;
+		}
 	}
 
 	.element {

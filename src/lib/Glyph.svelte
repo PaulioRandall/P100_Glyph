@@ -23,7 +23,15 @@
 </script>
 
 <div class="glyph">
-	<div class="top-button-bar">
+		<div
+			role="application"
+			bind:this={container}
+			oncontextmenu={(e) => e.preventDefault()}
+			class="canvas-container">
+			<!-- InnerHTML handled by Two instance -->
+		</div>
+
+	<div class="button-bar">
 		<ButtonBar>
 			<!--
 				TODO: Allow user to edit points on existing shape.
@@ -34,32 +42,9 @@
 			{#if canvas}
 				<ModeDisplay {canvas} />
 				<TogglePathClosure {canvas} />
+				<DeleteElementButton {canvas} />
 			{/if}
 		</ButtonBar>
-	</div>
-
-	<div class="canvas-pane">
-		<!-- 
-			Border container required as putting a border on the
-			canvas container offsets the internal coordinates by
-			the border size. Barely noticable but still nice to
-			keep things straight.
-		-->
-		<div
-			role="application"
-			bind:this={container}
-			oncontextmenu={(e) => e.preventDefault()}
-			class="canvas-container">
-			<!-- InnerHTML handled by Two instance -->
-		</div>
-	</div>
-
-	<div class="right-button-bar">
-		{#if canvas}
-			<ButtonBar column>
-					<DeleteElementButton {canvas} />
-			</ButtonBar>
-			{/if}
 	</div>
 
 	<div class="elements-pane">
@@ -67,29 +52,15 @@
 			<ElementList {canvas} />
 		{/if}
 	</div>
-
-	<div class="bottom-button-bar">
-		{#if canvas}
-			<ButtonBar>
-
-			</ButtonBar>
-		{/if}
-	</div>
 </div>
 
 <style>
 	.glyph {
-		--content-width: calc(100vw - 252px); 
-		--content-height: calc(100vh - 100px);
-		--content-size: min(var(--content-width), var(--content-height));
+		--unit-height: 52px;
+		--gap: 24px;
+		--element-pane-width: 160px;
 
-		display: grid;
-		grid-template-areas:
-			"top-button-bar top-button-bar elements-pane"
-			"canvas-pane right-button-bar elements-pane"
-			"bottom-button-bar bottom-button-bar elements-pane";
-		grid-template-rows: 52px var(--content-size) 52px;
-		grid-template-columns: var(--content-size) 52px 200px;
+		position: relative;
 
 		width: 100%;
 		height: 100%;
@@ -97,42 +68,39 @@
 		background: #222222;
 	}
 
-.top-button-bar {
-		grid-area: top-button-bar;
-
-		background: indianred;
-	}
-
-	.right-button-bar {
-		grid-area: right-button-bar;
-
-		background: indianred;
-	}
-
-	.canvas-pane {
-		grid-area: canvas-pane;
-
-		background: white;
-		border: 2px solid black;
-
-		width: 100%;
-		height: 100%;
-	}
-
 	.canvas-container {
+		background: white;
+
 		width: 100%;
 		height: 100%;
 	}
 
 	.elements-pane {
-		grid-area: elements-pane;
+		position: absolute;
 
-		background: dodgerblue;
+		width: var(--element-pane-width);
+		height: calc(100% - var(--gap) - var(--gap));
+
+		top: var(--gap);
+		right: var(--gap);
+
+		background: rgba(0, 40, 80, 0.6);
+		opacity: 0.5;
+
+		pointer-events: none;
 	}
 
-	.bottom-button-bar {
-		grid-area: bottom-button-bar;
+	.button-bar {
+		position: absolute;
 
-		background: indianred;
+		width: calc(100% - var(--gap) - var(--gap) - var(--gap) - var(--element-pane-width));
+		height: var(--unit-height);
+
+		top: var(--gap);
+		left: var(--gap);
+
+		background: rgba(100, 0, 0, 0.5);
+
+		pointer-events: none;
 	}
 </style>
