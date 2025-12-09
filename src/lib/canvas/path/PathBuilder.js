@@ -2,6 +2,8 @@ import { Two } from '$ramen'
 import PathRenderer from './PathRenderer.js'
 import Path from './Path.js'
 
+// TODO: Have _path prop instead of extending PathRenderer
+
 export default class PathBuilder extends PathRenderer {
 	_cursor = null
 

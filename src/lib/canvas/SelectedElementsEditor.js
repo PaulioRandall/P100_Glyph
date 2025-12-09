@@ -9,6 +9,11 @@ export default class SelectedElementsEditor extends EventGroup {
 
 	clear() {
 		super.clear()
+		this.clearSelected()
+	}
+
+	clearSelected() {
+		this._showSelected()
 		this._selected.clear()
 	}
 
@@ -23,45 +28,27 @@ export default class SelectedElementsEditor extends EventGroup {
 	}
 
 	__when__removed_from_group() {
-		this._selected.clear()
+		this.clearSelected()
 	}
 
 	__on__element_selected(e) {
-		this._selected.clear()
+		this.clearSelected()
 		this._selected.push(e.detail.selected)
 	}
 
 	__on__modify_selected_elements(e) {
-		const edits = e.detail
-		let edited = false
+		this._selected.forEach((s) => s.edit(e.detail))
 
-		for (const editKey in e.detail) {
-			edited |= this._applyModification(editKey, edits[editKey])
-		}
-
-		this._dispatchIfEdited(edited)
+		this.canvas.dispatch('elements_updated', {
+			elements: this._selected,
+		})
 	}
 
-	_applyModification(key, value) {
-		switch (key) {
-			case 'closed':
-				this._setPathClosed(value)
-				return true
-			default:
-				console.warn(`Unknown modification key '${key}'`)
-				return false
-		}
+	_hideSelected() {
+		this._selected.forEach((s) => s.edit({ visible: false }))
 	}
 
-	_setPathClosed(value) {
-		this._selected.forEach((s) => s.setClosed(value))
-	}
-
-	_dispatchIfEdited(edited) {
-		if (edited) {
-			this.canvas.dispatch('elements_updated', {
-				elements: this._selected,
-			})
-		}
+	_showSelected() {
+		this._selected.forEach((s) => s.edit({ visible: true }))
 	}
 }

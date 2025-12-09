@@ -5,8 +5,8 @@ export default class Path extends BasePath {
 		super(canvas, commands, closed)
 	}
 
-	updateShape() {
-		super.updateShape()
+	updateShape(edits) {
+		super.updateShape(edits)
 		this.updateStyle()
 	}
 

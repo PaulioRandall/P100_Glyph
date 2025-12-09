@@ -1,33 +1,37 @@
 import PathRenderer from './PathRenderer.js'
 
-// TODO: Could be merged with PathRenderer?
+// TODO: Merge with PathRenderer
 
 export default class BasePath extends PathRenderer {
-	_closed = false
-
 	constructor(canvas, commands, closed) {
 		super(canvas)
 
 		this.commands.push(...commands)
-		this._closed = closed
-
-		this.updateShape()
+		this.updateShape({ closed })
 	}
 
-	get closed() {
-		return this._closed
+	get isClosed() {
+		return this.shape.closed
 	}
 
-	setClosed(v) {
-		this._closed = v
-		this.updateShape()
+	get isVisible() {
+		return this.shape.visible
 	}
 
-	updateShape() {
+	edit(props) {
+		this.updateShape(
+			({ closed: this.shape.closed, visible: this.shape.visible } = props)
+		)
+	}
+
+	updateShape(edits = {}) {
 		super.updateShape()
 
 		const shape = this.shape
-		shape.closed = this._closed
+
+		for (const key in edits) {
+			shape[key] = edits[key]
+		}
 
 		if (shape.closed) {
 			shape.fill = shape.stroke

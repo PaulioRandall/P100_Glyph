@@ -17,7 +17,7 @@
 
 	function toggleSelectedCloseState() {
 		canvas.dispatch('modify_selected_elements', {
-			closed: !selected.closed,
+			closed: !selected.isClosed,
 		})
 	}
 
@@ -42,7 +42,7 @@
 	disabled={!selected}
 	onclick={toggleSelectedCloseState}>
 	Convert<br/> to
-	{#if selected?.closed}
+	{#if selected?.isClosed}
 		Line
 	{:else}
 		Shape
