@@ -79,12 +79,6 @@ export default class Path extends CanvasGroup {
 			shape[key] = this._styles[key]
 		}
 
-		// TODO: This should be applied externally as a style
-		//       by some other organ.
-		if (shape.closed) {
-			shape.fill = shape.stroke
-		}
-
 		this.clear()
 
 		this._shape = shape
@@ -92,20 +86,14 @@ export default class Path extends CanvasGroup {
 	}
 
 	updateStyle() {
+		// TODO: Should be managed externally
 		if (this.canvas.selected === this) {
 			return
 		} else if (this.canvas.focused === this) {
-			this.updateColor('orange')
+			this._shape.stroke = 'orange'
 		} else {
-			this.updateColor('indianred')
+			this._shape.stroke = 'indianred'
 		}
-	}
-
-	updateColor(color) {
-		const shape = this._shape
-
-		shape.stroke = color
-		shape.fill = shape.closed ? color : 'none'
 	}
 }
 

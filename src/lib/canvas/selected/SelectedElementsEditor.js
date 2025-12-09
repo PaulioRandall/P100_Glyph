@@ -2,12 +2,8 @@ import { EventGroup, List } from '$ramen'
 import Nodes from './Nodes.js'
 
 export default class SelectedElementsEditor extends EventGroup {
-	_selected = new List()
+	_selected = null
 	_nodes = null
-
-	// TODO: Should this editor handle element deletions?
-	//       I'm thinking yes. Because it's being designed to
-	//       handle all other elemnt changes.
 
 	constructor(canvas) {
 		super(canvas)
@@ -16,30 +12,23 @@ export default class SelectedElementsEditor extends EventGroup {
 		this.add(this._nodes)
 	}
 
-	clearSelected() {
-		this._unhighlightSelected()
-		this._selected.clear()
-		this._updateNodes()
-	}
-
 	__when__removed_from_group() {
-		this.clearSelected()
+		this._reset()
 	}
 
 	__on__element_selected(e) {
-		const newSelection = e.detail.selected
+		this._reset()
 
-		this.clearSelected()
+		const newSelected = e.detail.selected
 
-		if (newSelection) {
-			this._selected.push(newSelection)
+		if (newSelected) {
+			this._selected = newSelected
+			this._highlightSelected()
+			this._updateNodes()
 		}
 
-		this._highlightSelected()
-		this._updateNodes()
-
 		this.canvas.dispatch('change_mode', {
-			mode: this._selected.length ? 'Editing' : 'Idle',
+			mode: newSelected ? 'Editing' : 'Idle',
 		})
 	}
 
@@ -48,33 +37,36 @@ export default class SelectedElementsEditor extends EventGroup {
 	}
 
 	__on__modify_selected_elements(e) {
-		this._selected.forEach((s) => s.applyStyles(e.detail))
+		this._selected.applyStyles(e.detail)
 
-		this.canvas.dispatch('elements_updated', {
-			elements: this._selected,
+		this.canvas.dispatch('element_updated', {
+			element: this._selected,
 		})
 	}
 
+	_reset() {
+		this._unhighlightSelected()
+		this._selected = null
+		this._updateNodes()
+	}
+
 	_highlightSelected() {
-		this._selected.forEach((s) =>
-			s.applyStyles({
-				stroke: 'blue',
-			})
-		)
+		this._selected?.applyStyles({
+			stroke: 'blue',
+		})
 	}
 
 	_unhighlightSelected() {
-		this._selected.forEach((s) =>
-			s.applyStyles({
-				stroke: undefined,
-			})
-		)
+		this._selected?.applyStyles({
+			stroke: undefined,
+		})
 	}
 
 	_updateNodes() {
-		const cells = this._selected //
-			.map((s) => s.geometry) //
-			.flat()
-		this._nodes.setCells(cells)
+		if (this._selected) {
+			this._nodes.setCells(this._selected.geometry)
+		} else {
+			this._nodes.reset()
+		}
 	}
 }

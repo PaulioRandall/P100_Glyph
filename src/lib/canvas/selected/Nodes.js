@@ -4,8 +4,12 @@ import Node from './Node.js'
 export default class Nodes extends EventGroup {
 	_nodes = new EventGroup()
 
-	setCells(cells) {
+	reset() {
 		this._nodes.clear()
+	}
+
+	setCells(cells) {
+		this.reset()
 
 		for (const node of cells) {
 			const n = new Node(this.canvas, node)

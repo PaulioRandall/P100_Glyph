@@ -8,7 +8,7 @@
 
 	function deleteElement() {
 		if (selected) {
-			canvas.removeElement(selected) 
+			canvas.dispatch('delete_selected_elements') 
 		}
 	}
 

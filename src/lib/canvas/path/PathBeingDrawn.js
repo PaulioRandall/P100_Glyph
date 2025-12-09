@@ -1,4 +1,4 @@
-import Path from './Path.js'
+import Path from '../shared/Path.js'
 
 export default class PathBeingDrawn extends Path {
 	get cursor() {
@@ -38,10 +38,17 @@ export default class PathBeingDrawn extends Path {
 			return null
 		}
 
-		const popAmount = this.isSealed() ? 2 : 1
-		const geometry = this.geometry.slice(0, -popAmount)
-		const styles = { closed: this.isSealed() }
-		return new Path(this.canvas, geometry, styles)
+		// Remove cursor
+		this.popNode()
+
+		const closed = this.isSealed()
+
+		if (closed) {
+			// Remove overlapping node
+			this.popNode()
+		}
+
+		return new Path(this.canvas, this.geometry, { closed })
 	}
 
 	_first() {

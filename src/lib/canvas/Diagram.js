@@ -1,10 +1,10 @@
-import { CanvasGroup, List } from '$ramen'
+import { EventGroup, List } from '$ramen'
 
 // TODO: toJson()
 // TODO: new class 'DiagramFormatter' that accepts JSON
 //       and converts to SVG, JPG, PNG, etc
 
-export default class Diagram extends CanvasGroup {
+export default class Diagram extends EventGroup {
 	_elements = []
 
 	_lastFocused = null
@@ -31,6 +31,10 @@ export default class Diagram extends CanvasGroup {
 
 	get selected() {
 		return this._selected
+	}
+
+	__on__delete_selected_elements() {
+		this.canvas.removeElement(this._selected)
 	}
 
 	addElement(element) {

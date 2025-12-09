@@ -18,7 +18,7 @@
 		canvas.setGridSize(5, 5)
 	})
 
-	// TODO: Canvas to cover wwhole screen and elements list
+	// TODO: Canvas to cover whole screen and elements list
 	//       and controls will be overlays.
 </script>
 

@@ -46,6 +46,7 @@ export default class PathDrawer extends EventGroup {
 		this._pathBeingDrawn = new PathBeingDrawn(this.canvas, cell)
 		this.add(this._pathBeingDrawn)
 
+		this.canvas.unselect()
 		this.canvas.dispatch('change_mode', {
 			mode: 'Drawing',
 		})
@@ -55,7 +56,7 @@ export default class PathDrawer extends EventGroup {
 		const drawnPath = this._pathBeingDrawn
 
 		drawnPath.popNode()
-		if (drawnPath.isEmpty()) {
+		if (!drawnPath.isValid()) {
 			this._reset()
 		}
 	}
@@ -69,6 +70,7 @@ export default class PathDrawer extends EventGroup {
 		}
 
 		this.canvas.addElement(finishedPath)
+		this.canvas.select(finishedPath)
 		this._reset()
 	}
 

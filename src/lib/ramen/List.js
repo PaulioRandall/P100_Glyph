@@ -51,6 +51,11 @@ export default class List extends Array {
 		return array.length > 0
 	}
 
+	// Returns a shallow clone of the array.
+	static clone(array) {
+		return [...array]
+	}
+
 	constructor(...args) {
 		super(...args)
 	}
@@ -73,5 +78,9 @@ export default class List extends Array {
 
 	isNotEmpty() {
 		return List.isNotEmpty(this)
+	}
+
+	clone() {
+		return List.clone(this)
 	}
 }
