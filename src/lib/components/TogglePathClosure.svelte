@@ -4,7 +4,7 @@
 	import TextButton from './TextButton.svelte'
 
 	let { canvas } = $props()
-	let selected = $state(canvas.selected)
+	let selected = $state(null)
 
 	function updateSelected(element) {
 		// Assigning undefined is required because assigning
@@ -15,11 +15,9 @@
 		selected = element
 	}
 
-	function setPathClosed(state) {
-		selected.setClosed(state)
-
-		canvas.dispatch('element_updated', {
-			element: selected,
+	function toggleSelectedCloseState() {
+		canvas.dispatch('modify_selected_elements', {
+			closed: !selected.closed,
 		})
 	}
 
@@ -30,11 +28,11 @@
 	})
 
 	onMount(() => {
-		return canvas.on('element_updated', (e) => {
-			const element = e.detail.element
+		return canvas.on('elements_updated', (e) => {
+			const elements = e.detail.elements
 
-			if (selected === element) {
-				updateSelected(element)
+			if (elements.includes(selected)) {
+				updateSelected(selected)
 			}
 		})
 	})
@@ -42,7 +40,7 @@
 
 <TextButton
 	disabled={!selected}
-	onclick={() => setPathClosed(!selected.closed)}>
+	onclick={toggleSelectedCloseState}>
 	Convert<br/> to
 	{#if selected?.closed}
 		Line

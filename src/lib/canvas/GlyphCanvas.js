@@ -5,6 +5,7 @@ import GridCell from './GridCell.js'
 import CanvasMode from './CanvasMode.js'
 import Diagram from './Diagram.js'
 import PathDrawer from './path/PathDrawer.js'
+import SelectedElementsEditor from './SelectedElementsEditor.js'
 import Nodes from './nodes/Nodes.js'
 
 export default class GlyphCanvas extends GridCanvas {
@@ -13,6 +14,7 @@ export default class GlyphCanvas extends GridCanvas {
 	_canvasMode = new CanvasMode(this)
 	_diagram = new Diagram(this)
 	_pathDrawer = new PathDrawer(this)
+	_selectedElementsEditor = new SelectedElementsEditor(this)
 	_nodes = new Nodes(this)
 
 	constructor(container, xLength, yLength, options = {}) {
@@ -23,6 +25,7 @@ export default class GlyphCanvas extends GridCanvas {
 		super.add(this._canvasMode)
 		super.add(this._diagram)
 		super.add(this._pathDrawer)
+		super.add(this._selectedElementsEditor)
 		super.add(this._nodes)
 	}
 

@@ -41,6 +41,16 @@ export default class List extends Array {
 		return map
 	}
 
+	// Returns true if the array is empty.
+	static isEmpty(array) {
+		return array.length === 0
+	}
+
+	// Returns true if the array is not empty.
+	static isNotEmpty(array) {
+		return array.length > 0
+	}
+
 	constructor(...args) {
 		super(...args)
 	}
@@ -55,5 +65,13 @@ export default class List extends Array {
 
 	toMap(keyGenerator) {
 		return List.toMap(this, keyGenerator)
+	}
+
+	isEmpty() {
+		return List.isEmpty(this)
+	}
+
+	isNotEmpty() {
+		return List.isNotEmpty(this)
 	}
 }
