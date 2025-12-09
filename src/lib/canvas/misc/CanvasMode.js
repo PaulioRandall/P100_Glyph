@@ -21,8 +21,8 @@ export default class CanvasMode extends EventGroup {
 		this._current = 'Idle'
 	}
 
-	__on__change_mode_request(e) {
-		this.switchTo(e.detail.mode)
+	__on__change_mode(e) {
+		this._switchTo(e.detail.mode)
 	}
 
 	_switchTo(mode) {

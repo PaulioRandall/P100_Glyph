@@ -3,11 +3,11 @@
 	import { onMount } from 'svelte'
 
 	let { canvas } = $props()
-	let mode = $state(canvas.mode)
+	let mode = $state('Ready')
 
 	onMount(() => {
-		return canvas.on('canvas_mode_changed', () => {
-			mode = canvas.mode
+		return canvas.on('canvas_mode_changed', (e) => {
+			mode = e.detail.current
 		})
 	})
 </script>

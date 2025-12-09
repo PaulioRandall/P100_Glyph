@@ -37,6 +37,10 @@ export default class SelectedElementsEditor extends EventGroup {
 
 		this._highlightSelected()
 		this._updateNodes()
+
+		this.canvas.dispatch('change_mode', {
+			mode: this._selected.length ? 'Editing' : 'Idle',
+		})
 	}
 
 	__on__elements_updated() {
