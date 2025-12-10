@@ -4,8 +4,8 @@ import BaseGroup from './BaseGroup.js'
 import GridCell from './GridCell.js'
 
 export default class GridCanvas extends Canvas {
-	_gridWidth = 9
-	_gridHeight = 9
+	_gridSize = 9
+	_background = new BaseGroup()
 	_cells = new BaseGroup()
 	_hovered = null
 	_onmousemove = this._cursorMovement.bind(this)
@@ -13,7 +13,12 @@ export default class GridCanvas extends Canvas {
 	constructor(container, options = {}) {
 		super(container, options)
 
-		super.add(this._cells)
+		this.dom.style.background = '#222222'
+		this.zui.addLimits(0.3, 4)
+
+		this.add(this._background)
+		this.add(this._cells)
+
 		this.updateGrid()
 
 		this.on('mousemove', this._onmousemove)
@@ -23,13 +28,30 @@ export default class GridCanvas extends Canvas {
 		return this._hovered
 	}
 
-	setGridSize(w, h) {
-		this._gridWidth = w
-		this._gridHeight = h
+	get canvasWidth() {
+		return Math.min(super.width, super.height)
+	}
+
+	get canvasHeight() {
+		return Math.min(super.width, super.height)
+	}
+
+	get shadowWidth() {
+		return Math.min(super.width, super.height) * 3
+	}
+
+	get shadowHeight() {
+		return Math.min(super.width, super.height) * 3
+	}
+
+	setGridSize(size) {
+		this._gridSize = size
 		this.updateGrid()
 	}
 
-	cellAt(x, y) {
+	cellAt(clientX, clientY) {
+		const { x, y } = this.zui.clientToSurface(clientX, clientY)
+
 		for (const cell of this._cells.children) {
 			if (cell.contains(x, y)) {
 				return cell
@@ -40,16 +62,14 @@ export default class GridCanvas extends Canvas {
 	}
 
 	updateGrid() {
+		this._background.clear()
 		this._cells.clear()
 
-		const cells = generateSquareGridCells(
-			super.width,
-			super.height,
-			this._gridWidth,
-			this._gridHeight
-		)
+		this._addShadowArea()
+		this._addCanvasArea()
+		this._addGridCells()
 
-		cells.forEach((c) => this._cells.add(c))
+		this.zui.reset()
 	}
 
 	_cursorMovement(e) {
@@ -62,25 +82,56 @@ export default class GridCanvas extends Canvas {
 			super.dispatch('grid_cell_hover', { cell })
 		}
 	}
-}
 
-function generateSquareGridCells(w, h, xLength, yLength) {
-	const cellWidth = w / xLength
-	const cellHeight = h / yLength
-	const result = []
+	_addShadowArea() {
+		const canvasLength = Math.min(super.width, super.height)
 
-	walkGrid(xLength, yLength, (col, row) => {
-		const c = new GridCell(col, row, cellWidth, cellHeight)
-		result.push(c)
-	})
+		const shape = new Two.Rectangle(
+			canvasLength / 2,
+			canvasLength / 2,
+			canvasLength * 3,
+			canvasLength * 3
+		)
 
-	return result
-}
+		shape.fill = '#CCCCCCCC'
+		shape.stroke = 'none'
 
-function walkGrid(numOfCols, numOfRows, forEachCell) {
-	for (let row = 0; row < numOfRows; row++) {
-		for (let col = 0; col < numOfCols; col++) {
-			forEachCell(col, row)
+		this._background.add(shape)
+	}
+
+	_addCanvasArea() {
+		const canvasLength = Math.min(super.width, super.height)
+
+		const shape = new Two.Rectangle(
+			canvasLength / 2,
+			canvasLength / 2,
+			canvasLength,
+			canvasLength
+		)
+
+		shape.fill = 'white'
+		shape.stroke = 'none'
+
+		this._background.add(shape)
+	}
+
+	_addGridCells() {
+		const canvasLength = Math.min(super.width, super.height)
+		const size = this._gridSize
+		const cellSpacing = canvasLength / size
+		const min = -size
+		const max = size * 2
+
+		function isShadow(col, row) {
+			return col < 0 || col >= size || row < 0 || row >= size
+		}
+
+		for (let row = min; row < max; row++) {
+			for (let col = min; col < max; col++) {
+				this._cells.add(
+					new GridCell(col, row, cellSpacing, isShadow(col, row)) //
+				)
+			}
 		}
 	}
 }

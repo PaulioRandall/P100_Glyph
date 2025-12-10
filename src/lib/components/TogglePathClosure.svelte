@@ -28,10 +28,10 @@
 	})
 
 	onMount(() => {
-		return canvas.on('elements_updated', (e) => {
-			const elements = e.detail.elements
+		return canvas.on('element_updated', (e) => {
+			const element = e.detail.element
 
-			if (elements.includes(selected)) {
+			if (element === selected) {
 				updateSelected(selected)
 			}
 		})
@@ -41,10 +41,9 @@
 <TextButton
 	disabled={!selected}
 	onclick={toggleSelectedCloseState}>
-	Convert<br/> to
 	{#if selected?.isClosed}
-		Line
+		Open<br/>Path
 	{:else}
-		Shape
+		Close<br/>Path
 	{/if}
 </TextButton>

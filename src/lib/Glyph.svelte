@@ -15,11 +15,9 @@
 
 	onMount(() => {
 		canvas = new GlyphCanvas(container)
-		canvas.setGridSize(5, 5)
+		canvas.setGridSize(9, 9)
 	})
 
-	// TODO: Canvas to cover whole screen and elements list
-	//       and controls will be overlays.
 </script>
 
 <div class="glyph">
@@ -84,8 +82,7 @@
 		top: var(--gap);
 		right: var(--gap);
 
-		background: rgba(0, 40, 80, 0.6);
-		opacity: 0.5;
+		background: rgba(0, 40, 120, 0.6);
 
 		pointer-events: none;
 	}

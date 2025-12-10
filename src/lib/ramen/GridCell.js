@@ -4,28 +4,27 @@ import BaseGroup from './BaseGroup.js'
 export default class GridCell extends BaseGroup {
 	_shape = null
 
-	constructor(col, row, w, h) {
+	constructor(col, row, length, shadow) {
 		super()
 
-		const { x, y } = calcCenter(col, row, w, h)
-
-		const widthRadius = w / 2
-		const heightRadius = h / 2
+		const { x, y } = calcCenter(col, row, length)
+		const halfLength = length / 2
 
 		generateGetters(this, {
 			col,
 			row,
-			w,
-			h,
+			w: length,
+			h: length,
 			x,
 			y,
-			left: x - w / 2,
-			right: x + w / 2,
-			top: y - h / 2,
-			bottom: y + h / 2,
+			left: x - halfLength,
+			right: x + halfLength,
+			top: y - halfLength,
+			bottom: y + halfLength,
 		})
 
-		this._shape = createCenterShape(this)
+		this._shape = createCenterShape(this, shadow)
+
 		super.add(this._shape)
 	}
 
@@ -34,15 +33,15 @@ export default class GridCell extends BaseGroup {
 	}
 }
 
-function calcCenter(col, row, w, h) {
+function calcCenter(col, row, length) {
 	return {
-		x: col * w + w / 2,
-		y: row * h + h / 2,
+		x: col * length + length / 2,
+		y: row * length + length / 2,
 	}
 }
 
-function createCenterShape({ x, y }) {
-	const radius = 4
+function createCenterShape({ x, y }, shadow) {
+	const radius = shadow ? 2 : 4
 	const shape = new Two.Circle(x, y, radius)
 
 	shape.fill = 'black'

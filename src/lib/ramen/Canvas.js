@@ -1,11 +1,13 @@
 import Two from 'two.js'
 import { ZUI } from 'two.js/extras/jsm/zui.js'
 import NoticeGroup from './NoticeGroup.js'
+import CanvasNav from './CanvasNav.js'
 
 export default class Canvas extends NoticeGroup {
 	_container
 	_two
 	_zui
+	_nav
 	_store = new Map()
 
 	// TODO: reset on window resize
@@ -24,6 +26,10 @@ export default class Canvas extends NoticeGroup {
 		}).appendTo(container)
 
 		this._zui = new ZUI(this)
+
+		this._nav = new CanvasNav(this)
+		this.add(this._nav)
+
 		this._two.add(this)
 	}
 
@@ -37,6 +43,10 @@ export default class Canvas extends NoticeGroup {
 
 	get zui() {
 		return this._zui
+	}
+
+	get nav() {
+		return this._nav
 	}
 
 	get dom() {
