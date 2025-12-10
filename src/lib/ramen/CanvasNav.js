@@ -34,40 +34,40 @@ export default class CanvasNav extends EventGroup {
 
 	_limitPanning(e) {
 		const zui = this.canvas.zui
+
+		// TODO: Probably needs to change depending if
+		//       width or height is used as min.
+		const rect = this.canvas.dom.getBoundingClientRect()
+		const sizeDiff = rect.width - rect.height
 		const scale = zui.scale
 
-		const shadowWidth = this.canvas.shadowWidth * scale
-		const shadowHeight = this.canvas.shadowHeight * scale
-
-		const windowX = window.screenX * scale
-		const windowY = window.screenY * scale
-		const coords = zui.clientToSurface(windowX, windowY)
+		const offset = zui.clientToSurface(
+			rect.x + rect.width / 2, //
+			rect.y + rect.height / 2 //
+		)
 
 		let dx = e.movementX
 		let dy = e.movementY
 
-		//	console.log(coords)
+		// Why 16-20px offset ?????? Border? Margin? Scrollbar?
+		const xBase = offset.x - sizeDiff - 18
+		const scaledWidth = scale < 1 ? rect.width * scale : rect.width
 
-		// TODO: Why (400 * scale) && (coords.x > 1490) ????
-		/*
-		if (coords.x < 400 * scale && dx > 0) {
+		if (xBase + scaledWidth < 0 && dx > 0) {
 			dx = 0
-		} else if (coords.x > 1490 * scale && dx < 0) {
+		} else if (scaledWidth - xBase < 0 && dx < 0) {
 			dx = 0
 		}
-		*/
 
-		// TODO: Something to do with shadowHeight ????
-		/*
-		if (coords.y < -640 * scale && dy > 0) {
+		const yBase = offset.y - sizeDiff
+		const adjustedHeight = rect.height + sizeDiff
+		const scaledHeight = scale < 1 ? adjustedHeight * scale : adjustedHeight
+
+		if (yBase + scaledHeight < 0 && dy > 0) {
 			dy = 0
-		} else if (coords.y > 665 * scale && dy < 0) {
+		} else if (scaledHeight - yBase < 0 && dy < 0) {
 			dy = 0
 		}
-		*/
-
-		const scene = this.canvas.two.scene
-		console.log(coords)
 
 		return [dx, dy]
 
