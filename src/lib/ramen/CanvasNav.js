@@ -5,8 +5,12 @@ export default class CanvasNav extends EventGroup {
 	_panning = false
 
 	__on__wheel(e) {
-		var dy = (e.wheelDeltaY || -e.deltaY) / 1000
-		this.canvas.zui.zoomBy(dy, e.clientX, e.clientY)
+		// Bigger number gives more precise zooming, but at the
+		// expense of needing to scroll more to zoom in and
+		// out.
+		const precision = 800
+		const dz = e.wheelDeltaY / precision
+		this.canvas.zui.zoomBy(dz, e.clientX, e.clientY)
 	}
 
 	__on__pointerdown(e) {
@@ -17,7 +21,7 @@ export default class CanvasNav extends EventGroup {
 
 	__on__pointermove(e) {
 		if (this._panning) {
-			const [dx, dy] = this._limitPanning(e)
+			const [dx, dy] = this._calcPanAmount(e)
 			this.canvas.zui.translateSurface(dx, dy)
 		}
 	}
@@ -32,52 +36,53 @@ export default class CanvasNav extends EventGroup {
 		this._panning = false
 	}
 
-	_limitPanning(e) {
-		const zui = this.canvas.zui
+	_calcPanAmount(e) {
+		const topLeftScreenPos = this._topLeftOfScreenOnCanvas()
+		const offsetFromEdge = this._offsetFromEdgeRect(topLeftScreenPos)
 
-		// TODO: Probably needs to change depending if
-		//       width or height is used as min.
-		const rect = this.canvas.dom.getBoundingClientRect()
-		const sizeDiff = rect.width - rect.height
-		const scale = zui.scale
-
-		const offset = zui.clientToSurface(
-			rect.x + rect.width / 2, //
-			rect.y + rect.height / 2 //
-		)
+		// Allow user to go off the edge of the canvas a
+		// little. 60px by default which grows as the user
+		// zooms out and shrinks as the user zooms in.
+		const buffer = Math.round(60 * (1 / this.canvas.zui.scale))
 
 		let dx = e.movementX
 		let dy = e.movementY
 
-		// Why 16-20px offset ?????? Border? Margin? Scrollbar?
-		const xBase = offset.x - sizeDiff - 18
-		const scaledWidth = scale < 1 ? rect.width * scale : rect.width
-
-		if (xBase + scaledWidth < 0 && dx > 0) {
+		if (offsetFromEdge.left < -buffer && dx > 0) {
 			dx = 0
-		} else if (scaledWidth - xBase < 0 && dx < 0) {
+		} else if (offsetFromEdge.right > buffer && dx < 0) {
 			dx = 0
 		}
 
-		const yBase = offset.y - sizeDiff
-		const adjustedHeight = rect.height + sizeDiff
-		const scaledHeight = scale < 1 ? adjustedHeight * scale : adjustedHeight
-
-		if (yBase + scaledHeight < 0 && dy > 0) {
+		if (offsetFromEdge.top < -buffer && dy > 0) {
 			dy = 0
-		} else if (scaledHeight - yBase < 0 && dy < 0) {
+		} else if (offsetFromEdge.bottom > buffer && dy < 0) {
 			dy = 0
 		}
 
 		return [dx, dy]
+	}
 
-		/*
-		if (offsideX || offsideY) {
-			this.canvas.zui.translateSurface(
-				offsideX ? -e.movementX : 0,
-				offsideY ? -e.movementY : 0,
-			)
+	_topLeftOfScreenOnCanvas() {
+		const zui = this.canvas.zui
+		const rect = this.canvas.dom.getBoundingClientRect()
+		return zui.clientToSurface(
+			rect.x, //
+			rect.y, //
+			zui.scale
+		)
+	}
+
+	_offsetFromEdgeRect(center) {
+		const scale = this.canvas.zui.scale
+		const shadowRadius = this.canvas.shadowSize * 0.5
+		const scaledShadowRadius = shadowRadius * scale
+
+		return {
+			left: Math.round(center.x + scaledShadowRadius),
+			right: Math.round(center.x - scaledShadowRadius + window.innerWidth),
+			top: Math.round(center.y + scaledShadowRadius),
+			bottom: Math.round(center.y - scaledShadowRadius + window.innerHeight),
 		}
-		*/
 	}
 }

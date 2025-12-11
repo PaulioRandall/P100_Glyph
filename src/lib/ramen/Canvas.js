@@ -10,9 +10,6 @@ export default class Canvas extends NoticeGroup {
 	_nav
 	_store = new Map()
 
-	// TODO: reset on window resize
-	//       window.addEventListener("resize", myFunction)
-
 	constructor(container, twoOptions = {}) {
 		super()
 
@@ -26,11 +23,26 @@ export default class Canvas extends NoticeGroup {
 		}).appendTo(container)
 
 		this._zui = new ZUI(this)
-
-		this._nav = new CanvasNav(this)
-		this.add(this._nav)
-
 		this._two.add(this)
+
+		setTimeout(
+			function () {
+				window.addEventListener('resize', this.two.fit.bind(this))
+
+				this._nav = new CanvasNav(this)
+				this.add(this._nav)
+
+				// Zoom out slightly so the main canvas area is
+				// fully visible.
+				this._zui.zoomSet(0.8, 0, 0)
+
+				// Move so the center of the canvas is close to the
+				// the middle of the screen, but not under the
+				// overlay.
+				this._zui.translateSurface(this.width / 2.5, this.height / 1.8)
+			}.bind(this),
+			0
+		)
 	}
 
 	get container() {

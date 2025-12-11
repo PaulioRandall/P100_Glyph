@@ -4,10 +4,10 @@ import BaseGroup from './BaseGroup.js'
 export default class GridCell extends BaseGroup {
 	_shape = null
 
-	constructor(col, row, length, shadow) {
+	constructor(col, row, size, length, shadow) {
 		super()
 
-		const { x, y } = calcCenter(col, row, length)
+		const { x, y } = calcCenter(col, row, size, length)
 		const halfLength = length / 2
 
 		generateGetters(this, {
@@ -33,10 +33,11 @@ export default class GridCell extends BaseGroup {
 	}
 }
 
-function calcCenter(col, row, length) {
+function calcCenter(col, row, size, length) {
+	const mod = Math.floor(size / 2)
 	return {
-		x: col * length + length / 2,
-		y: row * length + length / 2,
+		x: Math.round((col - mod) * length),
+		y: Math.round((row - mod) * length),
 	}
 }
 

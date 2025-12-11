@@ -28,20 +28,28 @@ export default class GridCanvas extends Canvas {
 		return this._hovered
 	}
 
-	get canvasWidth() {
+	get canvasSize() {
 		return Math.min(super.width, super.height)
+	}
+
+	get canvasWidth() {
+		return this.canvasSize
 	}
 
 	get canvasHeight() {
-		return Math.min(super.width, super.height)
+		return this.canvasSize
+	}
+
+	get shadowSize() {
+		return this.canvasSize * 3
 	}
 
 	get shadowWidth() {
-		return Math.min(super.width, super.height) * 3
+		return this.shadowSize
 	}
 
 	get shadowHeight() {
-		return Math.min(super.width, super.height) * 3
+		return this.shadowSize
 	}
 
 	setGridSize(size) {
@@ -78,7 +86,6 @@ export default class GridCanvas extends Canvas {
 
 		if (cell && cell !== oldCell) {
 			this._hovered = cell
-
 			super.dispatch('grid_cell_hover', { cell })
 		}
 	}
@@ -86,12 +93,7 @@ export default class GridCanvas extends Canvas {
 	_addShadowArea() {
 		const canvasLength = Math.min(super.width, super.height)
 
-		const shape = new Two.Rectangle(
-			canvasLength / 2,
-			canvasLength / 2,
-			canvasLength * 3,
-			canvasLength * 3
-		)
+		const shape = new Two.Rectangle(0, 0, canvasLength * 3, canvasLength * 3)
 
 		shape.fill = '#CCCCCCCC'
 		shape.stroke = 'none'
@@ -102,12 +104,7 @@ export default class GridCanvas extends Canvas {
 	_addCanvasArea() {
 		const canvasLength = Math.min(super.width, super.height)
 
-		const shape = new Two.Rectangle(
-			canvasLength / 2,
-			canvasLength / 2,
-			canvasLength,
-			canvasLength
-		)
+		const shape = new Two.Rectangle(0, 0, canvasLength, canvasLength)
 
 		shape.fill = 'white'
 		shape.stroke = 'none'
@@ -129,7 +126,7 @@ export default class GridCanvas extends Canvas {
 		for (let row = min; row < max; row++) {
 			for (let col = min; col < max; col++) {
 				this._cells.add(
-					new GridCell(col, row, cellSpacing, isShadow(col, row)) //
+					new GridCell(col, row, size, cellSpacing, isShadow(col, row)) //
 				)
 			}
 		}
