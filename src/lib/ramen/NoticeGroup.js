@@ -1,10 +1,21 @@
+import Two from 'two.js'
 import Moonfire from '$moonfire'
-import BaseGroup from './BaseGroup.js'
 
 // Extends BaseGroup by calling '__when__added_to_group' and
 // '__when__removed_from_group' functions on elements added and
 // removed from itself.
-export default class NoticeGroup extends BaseGroup {
+//
+// Also adds useful array functionality such as clearing
+// children etc.
+export default class NoticeGroup extends Two.Group {
+	clear() {
+		const children = [...this.children]
+
+		for (const child of children) {
+			this.remove(child)
+		}
+	}
+
 	add(element) {
 		if (!element) {
 			return false
@@ -30,8 +41,6 @@ export default class NoticeGroup extends BaseGroup {
 
 function invokeNoticeFuncs(obj, funcName) {
 	const funcs = getNoticeFuncs(obj, funcName)
-
-	//funcs.reverse()
 
 	for (const f of funcs) {
 		f.call(obj)

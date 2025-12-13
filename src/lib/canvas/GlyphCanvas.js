@@ -1,4 +1,4 @@
-import { GridCanvas } from '$ramen'
+import { GridCanvas } from '$ramen-grid'
 import Diagram from './Diagram.js'
 
 import ClickSimplifier from './misc/ClickSimplifier.js'

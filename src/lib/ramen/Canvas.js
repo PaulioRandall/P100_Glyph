@@ -41,7 +41,7 @@ export default class Canvas extends NoticeGroup {
 				// overlay.
 				this._zui.translateSurface(this.width / 2.5, this.height / 1.8)
 			}.bind(this),
-			0
+			0 // Do straight after DOM update.
 		)
 	}
 

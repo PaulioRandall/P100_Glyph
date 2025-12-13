@@ -1,4 +1,4 @@
-import { EventGroup, EventUtil } from '$ramen'
+import { EventGroup, EventUtil } from '$ramen-grid'
 
 export default class ClickSimplifier extends EventGroup {
 	_pointerId = null

@@ -42,19 +42,17 @@
 
 <style>
 	.element-list {
-				position: absolute;
+		position: absolute;
+		
+		top: var(--unit-height);
+		right: 0;
 
-		height: 100%;
-		border-radius: 8px;
+		width: var(--unit-width);
+		height: calc(100% - var(--unit-height));
 
-		width: var(--element-pane-width);
-		height: calc(100% - var(--gap) - var(--unit-height) - var(--gap) - var(--gap));
-
-		bottom: var(--gap);
-		right: var(--gap);
-
-		background: rgba(0, 40, 120, 0.6);
-
+		background: var(--overlay-bg);
+		border-bottom-left-radius: var(--overlay-border-radius);
+		
 		pointer-events: none;
 
 		& :global(*) {

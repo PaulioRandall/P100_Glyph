@@ -1,4 +1,4 @@
-import { EventGroup, List } from '$ramen'
+import { EventGroup, List } from '$ramen-grid'
 import Nodes from './Nodes.js'
 
 export default class SelectedElementsEditor extends EventGroup {

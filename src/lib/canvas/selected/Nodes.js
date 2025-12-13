@@ -1,4 +1,4 @@
-import { EventGroup } from '$ramen'
+import { EventGroup } from '$ramen-grid'
 import Node from './Node.js'
 
 export default class Nodes extends EventGroup {

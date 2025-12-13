@@ -1,4 +1,4 @@
-import { EventGroup, List } from '$ramen'
+import { EventGroup, List } from '$ramen-grid'
 
 // TODO: toJson()
 // TODO: new class 'DiagramFormatter' that accepts JSON

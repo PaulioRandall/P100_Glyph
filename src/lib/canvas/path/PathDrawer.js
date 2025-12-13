@@ -1,4 +1,4 @@
-import { EventGroup, ClickTracker } from '$ramen'
+import { EventGroup, ClickTracker } from '$ramen-grid'
 import PathBeingDrawn from './PathBeingDrawn.js'
 
 export default class PathDrawer extends EventGroup {

@@ -17,6 +17,13 @@
 		canvas = new GlyphCanvas(container)
 		canvas.setGridSize(9, 9)
 	})
+
+	// IDEA: There is only one canvas area, the user draws
+	//       what they want and then selects an area for the
+	//       image?
+	//       This would require merging the core and shadow
+	//       grids then adding functionality to specify the
+	//       "print" or visual area.
 </script>
 
 <div class="glyph">
@@ -48,9 +55,11 @@
 
 <style>
 	.glyph {
+		--unit-width: 160px;
 		--unit-height: 52px;
-		--gap: 24px;
-		--element-pane-width: 160px;
+		--overlay-gap: 24px;
+		--overlay-bg: rgba(0, 40, 120, 0.6);
+		--overlay-border-radius: 12px;
 
 		position: relative;
 

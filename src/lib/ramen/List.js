@@ -1,3 +1,5 @@
+// TODO: Move this to its own project.
+
 export default class List extends Array {
 	// Removes the specified item from the array if it's
 	// present. Returns true if the item was removed and
@@ -13,9 +15,12 @@ export default class List extends Array {
 		return false
 	}
 
-	// Removes all items from the list.
+	// Removes all items from the list returning the number
+	// of items cleared.
 	static clear(array) {
+		const len = array.length
 		array.splice(0)
+		return len
 	}
 
 	// Returns a map (object) of the items.
@@ -56,16 +61,12 @@ export default class List extends Array {
 		return [...array]
 	}
 
-	constructor(...args) {
-		super(...args)
-	}
-
 	remove(item) {
 		return List.remove(this, item)
 	}
 
 	clear() {
-		List.clear(this)
+		return List.clear(this)
 	}
 
 	toMap(keyGenerator) {

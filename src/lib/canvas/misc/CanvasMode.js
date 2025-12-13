@@ -1,4 +1,4 @@
-import { EventGroup } from '$ramen'
+import { EventGroup } from '$ramen-grid'
 
 export default class CanvasMode extends EventGroup {
 	static MODES = ['Idle', 'Drawing', 'Editing']

@@ -1,12 +1,15 @@
-import Two from 'two.js'
-import Canvas from './Canvas.js'
-import BaseGroup from './BaseGroup.js'
+import {
+	Two, //
+	Canvas, //
+	NoticeGroup, //
+} from '$ramen'
+
 import GridCell from './GridCell.js'
 
 export default class GridCanvas extends Canvas {
 	_gridSize = 9
-	_background = new BaseGroup()
-	_cells = new BaseGroup()
+	_background = new NoticeGroup()
+	_cells = new NoticeGroup()
 	_hovered = null
 	_onmousemove = this._cursorMovement.bind(this)
 

@@ -1,7 +1,9 @@
-import Two from 'two.js'
-import BaseGroup from './BaseGroup.js'
+import {
+	Two, //
+	NoticeGroup, //
+} from '$ramen'
 
-export default class GridCell extends BaseGroup {
+export default class GridCell extends NoticeGroup {
 	_shape = null
 
 	constructor(col, row, size, length, shadow) {

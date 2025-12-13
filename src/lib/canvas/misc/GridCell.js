@@ -1,4 +1,4 @@
-import { Two, EventGroup } from '$ramen'
+import { Two, EventGroup } from '$ramen-grid'
 
 export default class GridCell extends EventGroup {
 	_cell = null

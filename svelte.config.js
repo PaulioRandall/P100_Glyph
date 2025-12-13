@@ -7,7 +7,7 @@ export default {
 		alias: {
 			$moonfire: path.resolve('./src/lib/moonfire'),
 			$ramen: path.resolve('./src/lib/ramen'),
-			//$lib: path.resolve('./src/lib'),
+			'$ramen-grid': path.resolve('./src/lib/ramen-grid'),
 		},
 	},
 }

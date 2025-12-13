@@ -1,4 +1,4 @@
-import { Two, CanvasGroup } from '$ramen'
+import { Two, CanvasGroup } from '$ramen-grid'
 
 export default class Path extends CanvasGroup {
 	static makeVertex(cell) {

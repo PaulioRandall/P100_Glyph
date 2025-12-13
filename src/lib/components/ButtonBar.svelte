@@ -11,11 +11,14 @@
 	.button-bar {
 		position: absolute;
 
-		width: calc(100% - var(--gap) - var(--gap));
+		top: 0;
+		left: 0;
+
+		width: 100%;
 		height: calc(var(--unit-height));
 
-		top: 0;
-		left: var(--gap);
+		background: var(--overlay-bg);		
+		border-bottom-left-radius: var(--overlay-border-radius);
 
 		display: inline-flex;		
 		justify-content: flex-start;
@@ -23,9 +26,6 @@
 
 		gap: 4px;
 		padding: 4px;
-
-		background: rgba(100, 0, 0, 0.5);
-		border-radius: 8px;
 
 		pointer-events: none;
 
