@@ -48,6 +48,10 @@ export default class CanvasNav extends EventGroup {
 		//
 		//       'ramen-grid' package should pass the
 		//       parameters based on its grid size.
+		//
+		//       Try:
+		//       const pos = zui.position.x + dx
+		//       clamp(min, pos, max)
 
 		const topLeftScreenPos = this._topLeftOfScreenOnCanvas()
 		const bottomRightScreenPos = this._bottomRightOfScreenOnCanvas()
