@@ -1,6 +1,5 @@
 <script>
 	import { onMount } from 'svelte'
-
 	import { GlyphCanvas } from './canvas'
 	import {
 		ElementList,
@@ -15,7 +14,7 @@
 
 	onMount(() => {
 		canvas = new GlyphCanvas(container)
-		canvas.setGridSize(9, 9)
+		canvas.setGridSize(5, 5)
 	})
 
 	// IDEA: There is only one canvas area, the user draws

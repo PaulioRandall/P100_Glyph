@@ -38,8 +38,8 @@ export default class GridCell extends NoticeGroup {
 function calcCenter(col, row, size, length) {
 	const mod = Math.floor(size / 2)
 	return {
-		x: Math.round((col - mod) * length),
-		y: Math.round((row - mod) * length),
+		x: col * length,
+		y: row * length,
 	}
 }
 

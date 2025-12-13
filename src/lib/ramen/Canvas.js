@@ -36,6 +36,8 @@ export default class Canvas extends NoticeGroup {
 				// fully visible.
 				this._zui.zoomSet(0.8, 0, 0)
 
+				// TODO: This needs to be moved to GridCanvas.
+				//
 				// Move so the center of the canvas is close to the
 				// the middle of the screen, but not under the
 				// overlay.

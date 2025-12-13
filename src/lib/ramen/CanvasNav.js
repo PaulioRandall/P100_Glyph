@@ -37,8 +37,20 @@ export default class CanvasNav extends EventGroup {
 	}
 
 	_calcPanAmount(e) {
+		// TODO: Finally figured this out.
+		//
+		//       The grid width is needed but is not part of
+		//       the lib.
+		//
+		//       In this class the boundary should be relative
+		//       to { x: 0, y: 0 } and parameters passed to
+		//       specify min and max for both x and y.
+		//
+		//       'ramen-grid' package should pass the
+		//       parameters based on its grid size.
+
 		const topLeftScreenPos = this._topLeftOfScreenOnCanvas()
-		const offsetFromEdge = this._offsetFromEdgeRect(topLeftScreenPos)
+		const bottomRightScreenPos = this._bottomRightOfScreenOnCanvas()
 
 		// Allow user to go off the edge of the canvas a
 		// little. 60px by default which grows as the user
@@ -48,15 +60,15 @@ export default class CanvasNav extends EventGroup {
 		let dx = e.movementX
 		let dy = e.movementY
 
-		if (offsetFromEdge.left < -buffer && dx > 0) {
+		if (topLeftScreenPos.x > 0 && dx < 0) {
 			dx = 0
-		} else if (offsetFromEdge.right > buffer && dx < 0) {
+		} else if (bottomRightScreenPos.x < 0 && dx > 0) {
 			dx = 0
 		}
 
-		if (offsetFromEdge.top < -buffer && dy > 0) {
+		if (topLeftScreenPos.y > 0 && dy < 0) {
 			dy = 0
-		} else if (offsetFromEdge.bottom > buffer && dy < 0) {
+		} else if (bottomRightScreenPos.y < 0 && dy > 0) {
 			dy = 0
 		}
 
@@ -67,22 +79,17 @@ export default class CanvasNav extends EventGroup {
 		const zui = this.zui
 		const rect = this.canvas.dom.getBoundingClientRect()
 		return zui.clientToSurface(
-			rect.x, //
-			rect.y, //
-			zui.scale
+			rect.left, //
+			rect.top //
 		)
 	}
 
-	_offsetFromEdgeRect(center) {
-		const scale = this.zui.scale
-		const shadowRadius = this.canvas.shadowSize * 0.5
-		const scaledShadowRadius = shadowRadius * scale
-
-		return {
-			left: Math.round(center.x + scaledShadowRadius),
-			right: Math.round(center.x - scaledShadowRadius + window.innerWidth),
-			top: Math.round(center.y + scaledShadowRadius),
-			bottom: Math.round(center.y - scaledShadowRadius + window.innerHeight),
-		}
+	_bottomRightOfScreenOnCanvas() {
+		const zui = this.zui
+		const rect = this.canvas.dom.getBoundingClientRect()
+		return zui.clientToSurface(
+			rect.right, //
+			rect.bottom //
+		)
 	}
 }

@@ -24,7 +24,7 @@ export default class GridCanvas extends Canvas {
 
 		this.updateGrid()
 
-		this.on('mousemove', this._onmousemove)
+		this.on('pointermove', this._onmousemove)
 	}
 
 	get hovered() {
@@ -41,18 +41,6 @@ export default class GridCanvas extends Canvas {
 
 	get canvasHeight() {
 		return this.canvasSize
-	}
-
-	get shadowSize() {
-		return this.canvasSize * 3
-	}
-
-	get shadowWidth() {
-		return this.shadowSize
-	}
-
-	get shadowHeight() {
-		return this.shadowSize
 	}
 
 	setGridSize(size) {
@@ -76,7 +64,6 @@ export default class GridCanvas extends Canvas {
 		this._background.clear()
 		this._cells.clear()
 
-		this._addShadowArea()
 		this._addCanvasArea()
 		this._addGridCells()
 
@@ -93,21 +80,15 @@ export default class GridCanvas extends Canvas {
 		}
 	}
 
-	_addShadowArea() {
-		const canvasLength = Math.min(super.width, super.height)
-
-		const shape = new Two.Rectangle(0, 0, canvasLength * 3, canvasLength * 3)
-
-		shape.fill = '#CCCCCCCC'
-		shape.stroke = 'none'
-
-		this._background.add(shape)
-	}
-
 	_addCanvasArea() {
 		const canvasLength = Math.min(super.width, super.height)
 
-		const shape = new Two.Rectangle(0, 0, canvasLength, canvasLength)
+		const shape = new Two.Rectangle(
+			canvasLength / 2,
+			canvasLength / 2, //
+			canvasLength,
+			canvasLength //
+		)
 
 		shape.fill = 'white'
 		shape.stroke = 'none'
@@ -118,18 +99,12 @@ export default class GridCanvas extends Canvas {
 	_addGridCells() {
 		const canvasLength = Math.min(super.width, super.height)
 		const size = this._gridSize
-		const cellSpacing = canvasLength / size
-		const min = -size
-		const max = size * 2
+		const cellSpacing = canvasLength / (size - 1)
 
-		function isShadow(col, row) {
-			return col < 0 || col >= size || row < 0 || row >= size
-		}
-
-		for (let row = min; row < max; row++) {
-			for (let col = min; col < max; col++) {
+		for (let row = 0; row < size; row++) {
+			for (let col = 0; col < size; col++) {
 				this._cells.add(
-					new GridCell(col, row, size, cellSpacing, isShadow(col, row)) //
+					new GridCell(col, row, size, cellSpacing) //
 				)
 			}
 		}

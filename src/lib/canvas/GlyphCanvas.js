@@ -7,6 +7,8 @@ import CanvasMode from './misc/CanvasMode.js'
 import PathDrawer from './path/PathDrawer.js'
 import SelectedElementsEditor from './selected/SelectedElementsEditor.js'
 
+// IDEA: Remove areas. Allow user to specify the area for
+//       export.
 export default class GlyphCanvas extends GridCanvas {
 	_diagram = new Diagram(this)
 
