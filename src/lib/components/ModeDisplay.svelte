@@ -29,6 +29,7 @@
 
 		color: white;
 		background: #222222;
+		border-radius: 8px;
 	}
 
 	p {

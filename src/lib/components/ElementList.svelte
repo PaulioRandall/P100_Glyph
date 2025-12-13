@@ -42,7 +42,20 @@
 
 <style>
 	.element-list {
+				position: absolute;
+
 		height: 100%;
+		border-radius: 8px;
+
+		width: var(--element-pane-width);
+		height: calc(100% - var(--gap) - var(--unit-height) - var(--gap) - var(--gap));
+
+		bottom: var(--gap);
+		right: var(--gap);
+
+		background: rgba(0, 40, 120, 0.6);
+
+		pointer-events: none;
 
 		& :global(*) {
 			pointer-events: auto;

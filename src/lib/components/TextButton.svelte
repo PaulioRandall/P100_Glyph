@@ -17,6 +17,8 @@
 		padding: 0 0.5rem;
 		margin: 0;
 
+		border-radius: 8px;
+
 		&:disabled {
 			cursor: not-allowed; 
 		}

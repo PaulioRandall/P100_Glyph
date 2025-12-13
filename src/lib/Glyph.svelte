@@ -21,35 +21,31 @@
 </script>
 
 <div class="glyph">
-		<div
-			role="application"
-			bind:this={container}
-			oncontextmenu={(e) => e.preventDefault()}
-			class="canvas-container">
-			<!-- InnerHTML handled by Two instance -->
-		</div>
-
-	<div class="button-bar">
-		<ButtonBar>
-			<!--
-				TODO: Allow user to edit points on existing shape.
-				TODO: Allow user to select line join type.
-				TODO: Allow user to select line cap type.
-				TODO: Allow user to open and close the path.
-			-->
-			{#if canvas}
-				<ModeDisplay {canvas} />
-				<TogglePathClosure {canvas} />
-				<DeleteElementButton {canvas} />
-			{/if}
-		</ButtonBar>
+	<div
+		role="application"
+		bind:this={container}
+		oncontextmenu={(e) => e.preventDefault()}
+		class="canvas-container">
+		<!-- InnerHTML handled by Two instance -->
 	</div>
 
-	<div class="elements-pane">
+	<ButtonBar>
+		<!--
+			TODO: Allow user to edit points on existing shape.
+			TODO: Allow user to select line join type.
+			TODO: Allow user to select line cap type.
+			TODO: Allow user to open and close the path.
+		-->
 		{#if canvas}
-			<ElementList {canvas} />
+			<ModeDisplay {canvas} />
+			<TogglePathClosure {canvas} />
+			<DeleteElementButton {canvas} />
 		{/if}
-	</div>
+	</ButtonBar>
+
+	{#if canvas}
+		<ElementList {canvas} />
+	{/if}
 </div>
 
 <style>
@@ -71,33 +67,5 @@
 
 		width: 100%;
 		height: 100%;
-	}
-
-	.elements-pane {
-		position: absolute;
-
-		width: var(--element-pane-width);
-		height: calc(100% - var(--gap) - var(--gap));
-
-		top: var(--gap);
-		right: var(--gap);
-
-		background: rgba(0, 40, 120, 0.6);
-
-		pointer-events: none;
-	}
-
-	.button-bar {
-		position: absolute;
-
-		width: calc(100% - var(--gap) - var(--gap) - var(--gap) - var(--element-pane-width));
-		height: var(--unit-height);
-
-		top: var(--gap);
-		left: var(--gap);
-
-		background: rgba(100, 0, 0, 0.5);
-
-		pointer-events: none;
 	}
 </style>

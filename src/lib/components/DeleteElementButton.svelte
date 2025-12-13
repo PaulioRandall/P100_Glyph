@@ -1,7 +1,7 @@
 
 <script>
 	import { onMount } from 'svelte'
-	import IconButton from './IconButton.svelte'
+	import TextButton from './TextButton.svelte'
 
 	let { canvas } = $props()
 	let selected = $state(null)
@@ -19,6 +19,6 @@
 	})
 </script>
 
-<IconButton disabled={!selected} onclick={deleteElement}>
+<TextButton disabled={!selected} onclick={deleteElement}>
 	Del
-</IconButton>
+</TextButton>
