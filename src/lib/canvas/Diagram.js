@@ -45,7 +45,7 @@ export default class Diagram extends EventGroup {
 		this._elements.push(element)
 		super.add(element)
 
-		this.canvas.dispatch('elements_changed', {
+		this.dispatch('elements_changed', {
 			elements: this._elements,
 			added: element,
 			removed: null,
@@ -63,7 +63,7 @@ export default class Diagram extends EventGroup {
 		List.remove(this._elements, element)
 		super.remove(element)
 
-		this.canvas.dispatch('elements_changed', {
+		this.dispatch('elements_changed', {
 			elements: this._elements,
 			added: null,
 			removed: element,
@@ -106,7 +106,7 @@ export default class Diagram extends EventGroup {
 		this._lastFocused = this._focused
 		this._focused = element
 
-		this.canvas.dispatch('element_focused', {
+		this.dispatch('element_focused', {
 			lastfocused: this._lastfocused,
 			focused: this._focused,
 			lastSelected: this._lastSelected,
@@ -122,14 +122,14 @@ export default class Diagram extends EventGroup {
 		this._lastSelected = this._selected
 		this._selected = element
 
-		this.canvas.dispatch('element_selected', {
+		this.dispatch('element_selected', {
 			lastfocused: this._lastfocused,
 			focused: this._focused,
 			lastSelected: this._lastSelected,
 			selected: this._selected,
 		})
 
-		this.canvas.dispatch('canvas_mode_request', {
+		this.dispatch('canvas_mode_request', {
 			mode: this._selected ? 'Editing' : 'Idle',
 		})
 	}

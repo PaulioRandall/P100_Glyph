@@ -10,7 +10,7 @@ export default class CanvasNav extends EventGroup {
 		// out.
 		const precision = 800
 		const dz = e.wheelDeltaY / precision
-		this.canvas.zui.zoomBy(dz, e.clientX, e.clientY)
+		this.zui.zoomBy(dz, e.clientX, e.clientY)
 	}
 
 	__on__pointerdown(e) {
@@ -22,7 +22,7 @@ export default class CanvasNav extends EventGroup {
 	__on__pointermove(e) {
 		if (this._panning) {
 			const [dx, dy] = this._calcPanAmount(e)
-			this.canvas.zui.translateSurface(dx, dy)
+			this.zui.translateSurface(dx, dy)
 		}
 	}
 
@@ -64,7 +64,7 @@ export default class CanvasNav extends EventGroup {
 	}
 
 	_topLeftOfScreenOnCanvas() {
-		const zui = this.canvas.zui
+		const zui = this.zui
 		const rect = this.canvas.dom.getBoundingClientRect()
 		return zui.clientToSurface(
 			rect.x, //
@@ -74,7 +74,7 @@ export default class CanvasNav extends EventGroup {
 	}
 
 	_offsetFromEdgeRect(center) {
-		const scale = this.canvas.zui.scale
+		const scale = this.zui.scale
 		const shadowRadius = this.canvas.shadowSize * 0.5
 		const scaledShadowRadius = shadowRadius * scale
 

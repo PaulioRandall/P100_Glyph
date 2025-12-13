@@ -32,5 +32,5 @@ export default class EventGroup extends CanvasGroup {
 function addEventListener({ name, func, context }) {
 	const eventType = name.slice('__on__'.length)
 	const callback = func.bind(context)
-	return this.canvas.on(eventType, callback)
+	return this.on(eventType, callback)
 }

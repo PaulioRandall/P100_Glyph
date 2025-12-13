@@ -47,7 +47,7 @@ export default class PathDrawer extends EventGroup {
 		this.add(this._pathBeingDrawn)
 
 		this.canvas.unselect()
-		this.canvas.dispatch('change_mode', {
+		this.dispatch('change_mode', {
 			mode: 'Drawing',
 		})
 	}
@@ -80,9 +80,9 @@ export default class PathDrawer extends EventGroup {
 		this._pathBeingDrawn = null
 		this._clickTracker.reset()
 
-		this.canvas.dispatch('change_mode', {
+		this.dispatch('change_mode', {
 			mode: 'Idle',
 		})
-		this.canvas.dispatch('path_drawer_reset')
+		this.dispatch('path_drawer_reset')
 	}
 }

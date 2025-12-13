@@ -17,7 +17,6 @@
 		canvas = new GlyphCanvas(container)
 		canvas.setGridSize(9, 9)
 	})
-
 </script>
 
 <div class="glyph">
@@ -34,7 +33,6 @@
 			TODO: Allow user to edit points on existing shape.
 			TODO: Allow user to select line join type.
 			TODO: Allow user to select line cap type.
-			TODO: Allow user to open and close the path.
 		-->
 		{#if canvas}
 			<ModeDisplay {canvas} />

@@ -21,17 +21,17 @@ export default class ClickSimplifier extends EventGroup {
 		const detail = { originalEvent: e }
 
 		if (EventUtil.isLeftButton(e)) {
-			this.canvas.dispatch('left_click', detail)
+			this.dispatch('left_click', detail)
 			return
 		}
 
 		if (EventUtil.isMiddleButton(e)) {
-			this.canvas.dispatch('middle_click', detail)
+			this.dispatch('middle_click', detail)
 			return
 		}
 
 		if (EventUtil.isRightButton(e)) {
-			this.canvas.dispatch('right_click', detail)
+			this.dispatch('right_click', detail)
 			return
 		}
 	}

@@ -33,7 +33,7 @@ export default class CanvasMode extends EventGroup {
 		const previous = this._current
 		this._current = mode
 
-		this.canvas.dispatch('canvas_mode_changed', {
+		this.dispatch('canvas_mode_changed', {
 			previous,
 			current: mode,
 		})

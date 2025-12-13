@@ -27,7 +27,7 @@ export default class SelectedElementsEditor extends EventGroup {
 			this._updateNodes()
 		}
 
-		this.canvas.dispatch('change_mode', {
+		this.dispatch('change_mode', {
 			mode: newSelected ? 'Editing' : 'Idle',
 		})
 	}
@@ -39,7 +39,7 @@ export default class SelectedElementsEditor extends EventGroup {
 	__on__modify_selected_elements(e) {
 		this._selected.applyStyles(e.detail)
 
-		this.canvas.dispatch('element_updated', {
+		this.dispatch('element_updated', {
 			element: this._selected,
 		})
 	}
