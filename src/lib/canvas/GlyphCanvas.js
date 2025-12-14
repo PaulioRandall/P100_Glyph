@@ -24,9 +24,9 @@ export default class GlyphCanvas extends GridCanvas {
 
 		this._nav.setBounds({
 			left: this.gridWidth / 2 - this.gridWidth,
-			right: this.gridWidth + this.gridWidth / 2,
+			right: this.gridWidth / 2 + this.gridWidth,
 			top: this.gridHeight / 2 - this.gridHeight,
-			bottom: this.gridHeight + this.gridHeight / 2,
+			bottom: this.gridHeight / 2 + this.gridHeight,
 		})
 		this.add(this._nav)
 
@@ -49,6 +49,8 @@ export default class GlyphCanvas extends GridCanvas {
 				// the middle of the screen, but not under the
 				// overlay.
 				this._nav.panBy(this.width / 2.5, this.height / 1.8)
+
+				this.dom.focus()
 			}.bind(this),
 			0 // Do straight after DOM update.
 		)

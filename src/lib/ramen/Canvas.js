@@ -27,6 +27,9 @@ export default class Canvas extends NoticeGroup {
 		setTimeout(
 			function () {
 				window.addEventListener('resize', this.two.fit.bind(this))
+
+				// Allow the canvas to accept key press events.
+				this.dom.tabIndex = 1
 			}.bind(this),
 			0 // Do straight after DOM update.
 		)

@@ -8,6 +8,7 @@ export default class CanvasNav extends EventGroup {
 		right: Infinity,
 		bottom: Infinity,
 	}
+
 	_panning = false
 
 	setBounds(bounds = {}) {
@@ -32,7 +33,8 @@ export default class CanvasNav extends EventGroup {
 	}
 
 	panBy(dx, dy) {
-		this.zui.translateSurface(dx, dy)
+		const [xAmount, yAmount] = this._limitToBounds(dx, dy)
+		this.zui.translateSurface(xAmount, yAmount)
 	}
 
 	// TODO: panTo()
@@ -73,6 +75,51 @@ export default class CanvasNav extends EventGroup {
 		this._panning = false
 	}
 
+	__on__keyup(e) {
+		const PAN_AMOUNT = 20 // px
+
+		switch (e.key) {
+			case 'w':
+			case 'ArrowUp':
+				this.panBy(0, PAN_AMOUNT)
+				return
+			case 's':
+			case 'ArrowDown':
+				this.panBy(0, -PAN_AMOUNT)
+				return
+			case 'a':
+			case 'ArrowLeft':
+				this.panBy(PAN_AMOUNT, 0)
+				return
+			case 'd':
+			case 'ArrowRight':
+				this.panBy(-PAN_AMOUNT, 0)
+				return
+		}
+	}
+
+	_limitToBounds(dx, dy) {
+		const scale = 1 / this.zui.scale
+		const topLeft = this._topLeftOfScreenOnCanvas()
+		const bottomRight = this._bottomRightOfScreenOnCanvas()
+
+		// TODO: Needs more work.
+
+		if (topLeft.x - dx < this._bounds.left && dx > 0) {
+			dx = 0
+		} else if (bottomRight.x + dx > this._bounds.right && dx < 0) {
+			dx = 0
+		}
+
+		if (topLeft.y - dy < this._bounds.top && dy > 0) {
+			dy = 0
+		} else if (bottomRight.y + dy > this._bounds.bottom && dy < 0) {
+			dy = 0
+		}
+
+		return [dx, dy]
+	}
+
 	_calcPanAmount(e) {
 		// TODO: Finally figured this out.
 		//
@@ -86,6 +133,13 @@ export default class CanvasNav extends EventGroup {
 		//       Try:
 		//       const pos = zui.position.x + dx
 		//       clamp(min, pos, max)
+
+		let dx = e.movementX
+		let dy = e.movementY
+
+		const topLeftScreenPos = this._topLeftOfScreenOnCanvas()
+
+		/*
 
 		const topLeftScreenPos = this._topLeftOfScreenOnCanvas()
 		const bottomRightScreenPos = this._bottomRightOfScreenOnCanvas()
@@ -109,6 +163,7 @@ export default class CanvasNav extends EventGroup {
 		} else if (bottomRightScreenPos.y < 0 && dy > 0) {
 			dy = 0
 		}
+		*/
 
 		return [dx, dy]
 	}
