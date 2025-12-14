@@ -1,4 +1,4 @@
-import { GridCanvas } from '$ramen-grid'
+import { GridCanvas, CanvasNav } from '$ramen-grid'
 import Diagram from './Diagram.js'
 
 import ClickSimplifier from './misc/ClickSimplifier.js'
@@ -10,6 +10,7 @@ import SelectedElementsEditor from './selected/SelectedElementsEditor.js'
 // IDEA: Remove areas. Allow user to specify the area for
 //       export.
 export default class GlyphCanvas extends GridCanvas {
+	_nav = new CanvasNav(this)
 	_diagram = new Diagram(this)
 
 	_clickSimplifier = new ClickSimplifier(this)
@@ -20,13 +21,37 @@ export default class GlyphCanvas extends GridCanvas {
 
 	constructor(container, xLength, yLength, options = {}) {
 		super(container, xLength, yLength, options)
-		super.add(this._diagram)
 
-		super.add(this._clickSimplifier)
-		super.add(this._gridCell)
-		super.add(this._canvasMode)
-		super.add(this._pathDrawer)
-		super.add(this._selectedElementsEditor)
+		this._nav.setBounds({
+			left: this.gridWidth / 2 - this.gridWidth,
+			right: this.gridWidth + this.gridWidth / 2,
+			top: this.gridHeight / 2 - this.gridHeight,
+			bottom: this.gridHeight + this.gridHeight / 2,
+		})
+		this.add(this._nav)
+
+		this.add(this._diagram)
+		this.add(this._clickSimplifier)
+		this.add(this._gridCell)
+		this.add(this._canvasMode)
+		this.add(this._pathDrawer)
+		this.add(this._selectedElementsEditor)
+
+		setTimeout(
+			function () {
+				// Zoom out slightly so the main canvas area is
+				// fully visible.
+				this._nav.zoomTo(0.8)
+
+				// TODO: This needs to be moved to GridCanvas.
+				//
+				// Move so the center of the canvas is close to the
+				// the middle of the screen, but not under the
+				// overlay.
+				this._nav.panBy(this.width / 2.5, this.height / 1.8)
+			}.bind(this),
+			0 // Do straight after DOM update.
+		)
 	}
 
 	get elements() {

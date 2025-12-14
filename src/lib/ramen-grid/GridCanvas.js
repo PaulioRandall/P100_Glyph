@@ -31,16 +31,19 @@ export default class GridCanvas extends Canvas {
 		return this._hovered
 	}
 
+	// TODO: Delete
 	get canvasSize() {
 		return Math.min(super.width, super.height)
 	}
 
-	get canvasWidth() {
-		return this.canvasSize
+	get gridWidth() {
+		const lastIndex = this._cells.children.length - 1
+		return this._cells.children[lastIndex].x
 	}
 
-	get canvasHeight() {
-		return this.canvasSize
+	get gridHeight() {
+		const lastIndex = this._cells.children.length - 1
+		return this._cells.children[lastIndex].y
 	}
 
 	setGridSize(size) {

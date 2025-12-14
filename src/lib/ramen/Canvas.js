@@ -7,7 +7,6 @@ export default class Canvas extends NoticeGroup {
 	_container
 	_two
 	_zui
-	_nav
 	_store = new Map()
 
 	constructor(container, twoOptions = {}) {
@@ -28,20 +27,6 @@ export default class Canvas extends NoticeGroup {
 		setTimeout(
 			function () {
 				window.addEventListener('resize', this.two.fit.bind(this))
-
-				this._nav = new CanvasNav(this)
-				this.add(this._nav)
-
-				// Zoom out slightly so the main canvas area is
-				// fully visible.
-				this._zui.zoomSet(0.8, 0, 0)
-
-				// TODO: This needs to be moved to GridCanvas.
-				//
-				// Move so the center of the canvas is close to the
-				// the middle of the screen, but not under the
-				// overlay.
-				this._zui.translateSurface(this.width / 2.5, this.height / 1.8)
 			}.bind(this),
 			0 // Do straight after DOM update.
 		)
@@ -57,10 +42,6 @@ export default class Canvas extends NoticeGroup {
 
 	get zui() {
 		return this._zui
-	}
-
-	get nav() {
-		return this._nav
 	}
 
 	get dom() {
