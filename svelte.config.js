@@ -8,6 +8,7 @@ export default {
 			$moonfire: path.resolve('./src/lib/moonfire'),
 			$ramen: path.resolve('./src/lib/ramen'),
 			'$ramen-grid': path.resolve('./src/lib/ramen-grid'),
+			$cheddar: path.resolve('./src/lib/cheddar'),
 		},
 	},
 }

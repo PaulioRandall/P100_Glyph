@@ -24,6 +24,7 @@
 		"@sveltejs/adapter-auto": "7.0.0",
 		"@sveltejs/kit": "2.49.1",
 		"jest": "30.2.0",
+		"jest-environment-jsdom": "30.2.0",
 		"prettier": "3.7.4",
 		"svelte": "5.45.6",
 		"two.js": "0.8.22",
