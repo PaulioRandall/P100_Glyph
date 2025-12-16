@@ -36,26 +36,38 @@ describe('List.js', () => {
 
 	test('beforeLast() returns null for list with 1 item', () => {
 		const list = List.from([A])
-		const item = list.beforeLast()
-		expect(item).toEqual(null)
+		expect(list.beforeLast()).toEqual(null)
 	})
 
 	test('beforeLast() returns correct item', () => {
 		const list = List.from([A, B, C])
-		const item = list.beforeLast()
-		expect(item).toEqual(B)
+		expect(list.beforeLast()).toEqual(B)
 	})
 
 	test('last() returns null for empty list', () => {
 		const list = List.from([])
-		const item = list.last()
-		expect(item).toEqual(null)
+		expect(list.last()).toEqual(null)
 	})
 
 	test('last() returns correct item', () => {
 		const list = List.from([A, B, C])
-		const item = list.last()
-		expect(item).toEqual(C)
+		expect(list.last()).toEqual(C)
+	})
+
+	test('itemBefore()', () => {
+		const list = List.from([A, B, C])
+		expect(list.itemBefore(A)).toEqual(null)
+		expect(list.itemBefore(B)).toEqual(A)
+		expect(list.itemBefore(C)).toEqual(B)
+		expect(list.itemBefore(D)).toEqual(null)
+	})
+
+	test('itemAfter()', () => {
+		const list = List.from([A, B, C])
+		expect(list.itemAfter(A)).toEqual(B)
+		expect(list.itemAfter(B)).toEqual(C)
+		expect(list.itemAfter(C)).toEqual(null)
+		expect(list.itemAfter(D)).toEqual(null)
 	})
 
 	test('insert() puts item in correct place', () => {

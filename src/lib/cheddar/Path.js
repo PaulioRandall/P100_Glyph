@@ -5,8 +5,9 @@ import PathCommand from './PathCommand.js'
 
 export default class Path extends Updateable {
 	_commands = new List()
-	_element = createElement(this._commands)
 	_closed = false
+	_element = createElement(this._commands)
+	_subPaths = new List()
 
 	constructor() {
 		super()
@@ -21,6 +22,10 @@ export default class Path extends Updateable {
 		return this._element
 	}
 
+	get subPaths() {
+		return this._subPaths
+	}
+
 	addCommand(cmd) {
 		if (this._closed) {
 			this._commands.insertBefore(this._commands.last(), cmd)
@@ -29,6 +34,7 @@ export default class Path extends Updateable {
 		}
 
 		this.update()
+		return cmd
 	}
 
 	replaceCommand() {
@@ -36,19 +42,23 @@ export default class Path extends Updateable {
 	}
 
 	moveTo(x, y) {
-		this.addCommand(PathCommand.move(x, y))
+		const cmd = PathCommand.move(x, y)
+		return this.addCommand(cmd)
 	}
 
 	lineTo(x, y) {
-		this.addCommand(PathCommand.line(x, y))
+		const cmd = PathCommand.line(x, y)
+		return this.addCommand(cmd)
 	}
 
 	quadCurveTo(cp1X, cp1Y, x, y) {
-		this.addCommand(PathCommand.quadCurve(cp1X, cp1Y, x, y))
+		const cmd = PathCommand.quadCurve(cp1X, cp1Y, x, y)
+		return this.addCommand(cmd)
 	}
 
 	cubicCurveTo(cp1X, cp1Y, cp2X, cp2Y, x, y) {
-		this.addCommand(PathCommand.cubicCurve(cp1X, cp1Y, cp2X, cp2Y, x, y))
+		const cmd = PathCommand.cubicCurve(cp1X, cp1Y, cp2X, cp2Y, x, y)
+		return this.addCommand(cmd)
 	}
 
 	close() {

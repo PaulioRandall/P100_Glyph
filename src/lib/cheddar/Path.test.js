@@ -79,4 +79,16 @@ describe('Path.js', () => {
 			new PathCommand('L', 80, 80), //
 		])
 	})
+
+	test('lines()', () => {
+		const p = new Path()
+
+		const sp1 = p.moveTo(20, 20)
+		const sp2 = p.lineTo(80, 20)
+		const sp3 = p.lineTo(80, 80)
+
+		expect(p.subPaths).toEqual([
+			//
+		])
+	})
 })

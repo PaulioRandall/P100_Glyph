@@ -13,13 +13,12 @@
 		
 		path.moveTo(20, 20)
 		path.cubicCurveTo(30, 50, 50, 70, 80, 80)
+			path.lineTo(80, 20)
+			path.close()
+
+			console.log(path.lines)
 
 		cheddar.add(path)
-
-		setTimeout(() => {
-			path.lineTo(80, 20)
-			path.quadCurveTo(60, 40, 20, 20)
-		}, 500)
 	})
 </script>
 

@@ -1,5 +1,4 @@
-// Extends Array to add utility functions for dealing with
-// arrays.
+// Extends Array to add utility functions.
 export default class List extends Array {
 	// Returns a new list populated with the content of the
 	// iterable parameter.
@@ -45,6 +44,21 @@ export default class List extends Array {
 	static last(array) {
 		const i = List.lastIndex(array)
 		return i < 0 ? null : array[i]
+	}
+
+	// Return the item before the reference item. Null if no
+	// such item.
+	static itemBefore(array, refItem) {
+		const i = array.indexOf(refItem)
+		return i <= 0 ? null : array[i - 1]
+	}
+
+	// Return the item after the reference item. Null if no
+	// such item.
+	static itemAfter(array, refItem) {
+		const i = array.indexOf(refItem)
+		const lastIndex = List.lastIndex(array)
+		return i < 0 || i >= lastIndex ? null : array[i + 1]
 	}
 
 	// Insert an item at the index location.
@@ -139,6 +153,14 @@ export default class List extends Array {
 
 	last() {
 		return List.last(this)
+	}
+
+	itemBefore(refItem) {
+		return List.itemBefore(this, refItem)
+	}
+
+	itemAfter(refItem) {
+		return List.itemAfter(this, refItem)
 	}
 
 	insert(index, item) {

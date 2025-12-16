@@ -8,10 +8,6 @@ import List from './List.js'
 //
 // Arcs and curve shortcuts are not supported, this
 // includes 'A', 'S', and 'T' command types.
-//
-// TODO: Should we have separate classes to represent each
-//       type? How would that increase and decrease
-//       usability?
 export default class PathCommand {
 	static move(x, y) {
 		return new PathCommand('M', x, y)
