@@ -48,16 +48,10 @@ export default class SVG extends Updateable {
 	}
 
 	update() {
-		const oldElement = this._element
-		const parent = oldElement?.parentElement
 		this._element = makeElement(this._id, this._viewbox)
 
 		for (const shape of this._shapes) {
 			this._element.appendChild(shape.element)
-		}
-
-		if (parent) {
-			parent.replaceChild(this._element, oldElement)
 		}
 
 		super.update()

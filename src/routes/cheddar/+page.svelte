@@ -4,10 +4,23 @@
 
 	let container = $state(null)
 	let svg = $state(null)
+	let svgElement = $state(null)
 
 	onMount(() => {
 		svg = new Cheddar.SVG() //
 			.setViewbox(0, 0, 100, 100) //
+
+		svgElement = svg.element
+		container.appendChild(svg.element)
+
+		svg.onUpdate(() => {
+			container.replaceChild(svg.element, svgElement)
+			svgElement = svg.element
+		})
+
+		svg.onNotify((svg) => {
+			console.log(svg)
+		})
 
 		const path = new Cheddar.Path() //
 			.moveTo(20, 20) //
@@ -15,9 +28,7 @@
 			.lineTo(70, 20) //
 			.close() // 
 
-			svg.add(path)
-
-		container.append(svg.element)
+		svg.add(path)
 	})
 </script>
 
