@@ -26,19 +26,25 @@ export default class Path extends Updateable {
 		return this._subPaths
 	}
 
+	containsCommand(cmd) {
+		return this._commands.includes(cmd)
+	}
+
 	addCommand(cmd) {
+		const cmds = this._commands
+
 		if (this._closed) {
-			this._commands.insertBefore(this._commands.last(), cmd)
+			cmds.insertBefore(cmds.last(), cmd)
 		} else {
-			this._commands.push(cmd)
+			cmds.push(cmd)
 		}
 
 		this.update()
 		return cmd
 	}
 
-	replaceCommand() {
-		// TODO: Test first
+	replaceCommand(currCmd, newCmd) {
+		this._commands.replace(currCmd, newCmd)
 	}
 
 	moveTo(x, y) {

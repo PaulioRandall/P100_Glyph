@@ -91,4 +91,19 @@ describe('Path.js', () => {
 			//
 		])
 	})
+
+	test('replaceCommand()', () => {
+		const p = new Path()
+
+		p.moveTo(20, 20)
+		const currCmd = p.lineTo(80, 20)
+
+		const newCmd = new PathCommand('L', 40, 40)
+		p.replaceCommand(currCmd, newCmd)
+
+		expect(p.commands).toEqual([
+			new PathCommand('M', 20, 20), //
+			new PathCommand('L', 40, 40), //
+		])
+	})
 })

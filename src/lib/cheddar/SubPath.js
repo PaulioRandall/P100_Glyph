@@ -1,25 +1,16 @@
 import Updateable from './Updateable.js'
 
+// TODO: Throw if not 'inPath' on get or set?
+
 export default class SubPath extends Updateable {
 	_path = null
-	_startCmd = null
 	_cmd = null
-	_endCmd = null
 
-	// 'startCmd' contains the start coords of the sub path.
-	// 'cmd' is the command that draws the path.
-	// 'endCmd' contains the end coords of the sub path.
-	// (endCmd is the same as cmd unless cmd type is 'Z')
-	//
-	// TODO: Just pass cmd. find the start and end cmds when
-	//       they are needed because they may change.
-	constructor(path, startCmd, cmd, endCmd) {
+	constructor(path, cmd) {
 		super()
 
 		this._path = path
-		this._startCmd = startCmd
 		this._cmd = cmd
-		this._endCmd = endCmd
 	}
 
 	get command() {
@@ -27,17 +18,23 @@ export default class SubPath extends Updateable {
 	}
 
 	get start() {
-		// TODO: get start from path, if null, return null
-		return toPoint(this._startCmd)
+		if (!this.inPath()) {
+			return null
+		}
+
+		return toPoint(getStartCommand(this._path, this._cmd))
 	}
 
 	get end() {
-		// TODO: get end from path, if null, return null
-		return toPoint(this._endCmd)
+		if (!this.inPath()) {
+			return null
+		}
+
+		return toPoint(getEndCommand(this._path, this._cmd))
 	}
 
 	inPath() {
-		return this._path.contains(this._cmd)
+		return this._path.containsCommand(this._cmd)
 	}
 
 	setStart(x, y) {
@@ -45,7 +42,10 @@ export default class SubPath extends Updateable {
 			return
 		}
 
-		// TODO
+		const currCmd = getStartCommand(this._path, this._cmd)
+		const newCmd = currCmd.withXY(x, y)
+		this._path.replaceCommand(currCmd, newCmd)
+
 		this.update()
 	}
 
@@ -54,17 +54,15 @@ export default class SubPath extends Updateable {
 			return
 		}
 
-		// TODO
-		this.update()
-	}
+		const currCmd = getEndCommand(this._path, this._cmd)
+		const newCmd = currCmd.withXY(x, y)
+		this._path.replaceCommand(currCmd, newCmd)
 
-	update() {
-		if (!this.inPath()) {
-			return
+		if (currCmd === this._cmd) {
+			this._cmd = newCmd
 		}
 
-		// TODO
-		super.update()
+		this.update()
 	}
 }
 
@@ -73,4 +71,17 @@ function toPoint(cmd) {
 		x: cmd.x,
 		y: cmd.y,
 	}
+}
+
+function getStartCommand(path, cmd) {
+	// For any valid subpath, there will always be a prior
+	// command.
+	return path.commands.itemBefore(cmd)
+}
+
+function getEndCommand(path, cmd) {
+	if (cmd.type === 'Z') {
+		return path.commands[0]
+	}
+	return cmd
 }

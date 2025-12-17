@@ -65,4 +65,10 @@ describe('PathCommand.js', () => {
 		expect(cmd.cp2X).toEqual(10)
 		expect(cmd.cp2Y).toEqual(10)
 	})
+
+	test('withXY()', () => {
+		const cmd = PathCommand.cubicCurve(5, 5, 10, 10, 20, 20)
+		const clone = cmd.withXY(50, 75)
+		expect(clone).toEqual(PathCommand.cubicCurve(5, 5, 10, 10, 50, 75))
+	})
 })

@@ -30,7 +30,7 @@ export default class PathCommand {
 	}
 
 	_type = ''
-	_parameters = new List()
+	_parameters = []
 	_string = ''
 
 	_x = null
@@ -100,7 +100,25 @@ export default class PathCommand {
 		return this._cp2Y
 	}
 
+	clone() {
+		return new PathCommand(this._type, ...this._parameters)
+	}
+
+	withXY(x, y) {
+		const params = List.from(this._parameters)
+
+		params.pop()
+		params.pop()
+		params.push(x, y)
+
+		return new PathCommand(this._type, ...params)
+	}
+
 	toString() {
 		return this._string
 	}
+}
+
+function orElse(obj, key, elseValue) {
+	return obj.hasOwn(key) ? obj[key] : elseValue
 }
