@@ -2,58 +2,74 @@ import { NAME_SPACE } from './cheddar.js'
 import Updateable from './Updateable.js'
 import Bounds from './Bounds.js'
 import List from './List.js'
-import Path from './Path.js'
 
 export default class SVG extends Updateable {
-	static Path = Path
-
-	_container = null
-	_dom = null
+	_id = 'cheddar'
+	_element = null
 	_shapes = new List()
 	_viewbox = new Bounds()
 
-	constructor(container) {
+	constructor(id = 'cheddar') {
 		super()
 
-		this._container = container
+		this._id = id
 		this.update()
 	}
 
-	get container() {
-		return this._container
+	get id() {
+		return id
 	}
 
-	get dom() {
-		return this._dom
+	get element() {
+		return this._element
 	}
 
+	setId(id) {
+		this._id = id
+		this.update()
+		return this
+	}
+
+	// TODO: Create Viewbox class to specifically handle
+	//       SVG viewbox stuff. This will be important when
+	//       doing the panning and zooming stuff.
 	setViewbox(left, top, width, height) {
 		this._viewbox.set(left, top, left + width, top + height)
-		this.update()
+		this._element.setAttribute('viewBox', viewboxToString(this._viewbox))
+		this.notify()
+		return this
 	}
 
 	add(shape) {
 		this._shapes.push(shape)
-		this.update()
+		this._element.appendChild(shape.element)
+		this.notify()
+		return this
 	}
 
 	update() {
-		this._dom = generateSvgElement(this._viewbox)
-		this.container.replaceChildren(this._dom)
+		const oldElement = this._element
+		const parent = oldElement?.parentElement
+		this._element = makeElement(this._id, this._viewbox)
 
 		for (const shape of this._shapes) {
-			this._dom.appendChild(shape.element)
+			this._element.appendChild(shape.element)
+		}
+
+		if (parent) {
+			parent.replaceChild(this._element, oldElement)
 		}
 
 		super.update()
 	}
 }
 
-function generateSvgElement(viewbox) {
+function makeElement(id, viewbox) {
 	const svg = document.createElementNS(NAME_SPACE, 'svg')
 
+	svg.setAttribute('id', id)
 	svg.setAttribute('xmlns', NAME_SPACE)
-	svg.setAttribute('viewBox', viewbox.toString())
+	svg.setAttribute('viewBox', viewboxToString(viewbox))
 	svg.setAttribute('preserveAspectRatio', 'xMaxYMax meet')
 
 	svg.style.display = 'block'
@@ -61,4 +77,13 @@ function generateSvgElement(viewbox) {
 	svg.style.height = '100%'
 
 	return svg
+}
+
+function viewboxToString(viewbox) {
+	return [
+		viewbox.left, //
+		viewbox.top, //
+		viewbox.width, //
+		viewbox.height, //
+	].join(' ')
 }

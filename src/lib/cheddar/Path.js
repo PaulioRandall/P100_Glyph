@@ -31,6 +31,10 @@ export default class Path extends Updateable {
 		return this._subPaths
 	}
 
+	get lastPath() {
+		return this._subPaths.last()
+	}
+
 	containsCommand(cmd) {
 		return this._commands.includes(cmd)
 	}

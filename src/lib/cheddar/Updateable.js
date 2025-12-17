@@ -42,6 +42,6 @@ export default class Updateable {
 	// call this function yourself if you want listeners to
 	// refresh as if an update occurred.
 	notify() {
-		this._updaters.forEach((f) => f())
+		this._updaters.forEach((f) => f.bind(this)())
 	}
 }

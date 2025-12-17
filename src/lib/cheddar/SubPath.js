@@ -64,6 +64,14 @@ export default class SubPath extends Updateable {
 
 		this.update()
 	}
+
+	quadCurveVia(cpX = null, cpY = null) {
+		// TODO: set type to 'Q'
+		// TODO: set cp1X to cpX, set cp1Y to cpY
+		// TODO: if either is null, set to cmd's X or Y coord
+
+		this.update()
+	}
 }
 
 function toPoint(cmd) {

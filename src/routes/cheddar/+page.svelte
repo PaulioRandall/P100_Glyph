@@ -3,22 +3,21 @@
 	import Cheddar from '$cheddar'
 
 	let container = $state(null)
-	let cheddar = $state(null)
+	let svg = $state(null)
 
 	onMount(() => {
-		cheddar = new Cheddar(container)
-		cheddar.setViewbox(0, 0, 100, 100)
+		svg = new Cheddar.SVG() //
+			.setViewbox(0, 0, 100, 100) //
 
-		const path = new Cheddar.Path()
-		
-		path.moveTo(20, 20)
-		path.cubicCurveTo(30, 50, 50, 70, 80, 80)
-			path.lineTo(80, 20)
-			path.close()
+		const path = new Cheddar.Path() //
+			.moveTo(20, 20) //
+			.cubicCurveTo(30, 50, 60, 40, 70, 70) //
+			.lineTo(70, 20) //
+			.close() // 
 
-			console.log(path.lines)
+			svg.add(path)
 
-		cheddar.add(path)
+		container.append(svg.element)
 	})
 </script>
 

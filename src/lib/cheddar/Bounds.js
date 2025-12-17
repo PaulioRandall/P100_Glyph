@@ -60,21 +60,25 @@ export default class Bounds extends Updateable {
 	setLeft(v) {
 		this._left = Math.round(v)
 		this.update()
+		return this
 	}
 
 	setRight(v) {
 		this._right = Math.round(v)
 		this.update()
+		return this
 	}
 
 	setTop(v) {
 		this._top = Math.round(v)
 		this.update()
+		return this
 	}
 
 	setBottom(v) {
 		this._bottom = Math.round(v)
 		this.update()
+		return this
 	}
 
 	set(left, top, right, bottom) {
@@ -83,6 +87,7 @@ export default class Bounds extends Updateable {
 		this._right = Math.round(right)
 		this._bottom = Math.round(bottom)
 		this.update()
+		return this
 	}
 
 	// Override
@@ -107,7 +112,7 @@ export default class Bounds extends Updateable {
 			x <= this._right && //
 			y >= this._top && //
 			y <= this._bottom
-		) //
+		)
 	}
 
 	// Returns true if the coords lay within the bounds. Will
@@ -121,11 +126,16 @@ export default class Bounds extends Updateable {
 			x < this._right && //
 			y > this._top && //
 			y < this._bottom
-		) //
+		)
 	}
 
 	toString() {
-		return `${this._left} ${this._top} ${this._right} ${this._bottom}`
+		return [
+			this._left, //
+			this._top, //
+			this._right, //
+			this._bottom, //
+		].join(' ')
 	}
 }
 
