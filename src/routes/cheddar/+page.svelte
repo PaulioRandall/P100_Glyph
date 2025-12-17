@@ -7,7 +7,6 @@
 
 	onMount(() => {
 		svg = new Cheddar.SVG()
-
 		svg.viewbox.set(0, 0, 100, 100)
 
 		container.appendChild(svg.element)

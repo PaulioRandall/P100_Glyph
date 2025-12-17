@@ -57,7 +57,7 @@ export default class SVG extends Updateable {
 	_updateViewbox() {
 		this._element.setAttribute(
 			'viewBox', //
-			viewboxToString(this._viewbox) //
+			this._viewbox.toViewboxString() //
 		)
 	}
 
@@ -75,7 +75,7 @@ function makeElement(id, viewbox) {
 
 	svg.setAttribute('id', id)
 	svg.setAttribute('xmlns', NAME_SPACE)
-	svg.setAttribute('viewBox', viewboxToString(viewbox))
+	svg.setAttribute('viewBox', viewbox.toViewboxString())
 	svg.setAttribute('preserveAspectRatio', 'xMaxYMax meet')
 
 	svg.style.display = 'block'
@@ -83,13 +83,4 @@ function makeElement(id, viewbox) {
 	svg.style.height = '100%'
 
 	return svg
-}
-
-function viewboxToString(viewbox) {
-	return [
-		viewbox.left, //
-		viewbox.top, //
-		viewbox.width, //
-		viewbox.height, //
-	].join(' ')
 }

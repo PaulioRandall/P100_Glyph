@@ -90,6 +90,7 @@ export default class Bounds extends Updateable {
 		this._right = this._left + w
 
 		this.update()
+		return this
 	}
 
 	setHeight(h) {
@@ -101,6 +102,7 @@ export default class Bounds extends Updateable {
 		this._bottom = this._top + h
 
 		this.update()
+		return this
 	}
 
 	setWidthFromLeft(w) {
@@ -181,6 +183,15 @@ export default class Bounds extends Updateable {
 			this._top, //
 			this._right, //
 			this._bottom, //
+		].join(' ')
+	}
+
+	toViewboxString() {
+		return [
+			this._left, //
+			this._top, //
+			this._width, //
+			this._height, //
 		].join(' ')
 	}
 }
