@@ -1,11 +1,10 @@
 import Path from './Path.js'
 import PathCommand from './PathCommand.js'
+import SubPath from './SubPath.js'
 
 describe('Path.js', () => {
 	test('moveTo(x,y)', () => {
-		const p = new Path()
-
-		p.moveTo(20, 20)
+		const p = new Path().moveTo(20, 20) // [0]
 
 		expect(p.commands).toEqual([
 			new PathCommand('M', 20, 20), //
@@ -14,9 +13,8 @@ describe('Path.js', () => {
 
 	test('lineTo()', () => {
 		const p = new Path()
-
-		p.moveTo(20, 20)
-		p.lineTo(80, 20)
+			.moveTo(20, 20) // [0]
+			.lineTo(80, 20) // [1]
 
 		expect(p.commands).toEqual([
 			new PathCommand('M', 20, 20), //
@@ -26,9 +24,8 @@ describe('Path.js', () => {
 
 	test('quadCurveTo()', () => {
 		const p = new Path()
-
-		p.moveTo(20, 20)
-		p.quadCurveTo(20, 80, 80, 80)
+			.moveTo(20, 20) // [0]
+			.quadCurveTo(20, 80, 80, 80) // [1]
 
 		expect(p.commands).toEqual([
 			new PathCommand('M', 20, 20), //
@@ -38,9 +35,8 @@ describe('Path.js', () => {
 
 	test('cubicCurveTo()', () => {
 		const p = new Path()
-
-		p.moveTo(20, 20)
-		p.cubicCurveTo(30, 50, 50, 70, 80, 80)
+			.moveTo(20, 20) // [0]
+			.cubicCurveTo(30, 50, 50, 70, 80, 80) // [1]
 
 		expect(p.commands).toEqual([
 			new PathCommand('M', 20, 20), //
@@ -50,11 +46,10 @@ describe('Path.js', () => {
 
 	test('close()', () => {
 		const p = new Path()
-
-		p.moveTo(20, 20)
-		p.lineTo(80, 20)
-		p.lineTo(80, 80)
-		p.close()
+			.moveTo(20, 20) // [0]
+			.lineTo(80, 20) // [1]
+			.lineTo(80, 80) // [2]
+			.close() // [3]
 
 		expect(p.commands).toEqual([
 			new PathCommand('M', 20, 20), //
@@ -66,12 +61,11 @@ describe('Path.js', () => {
 
 	test('open()', () => {
 		const p = new Path()
-
-		p.moveTo(20, 20)
-		p.close()
-		p.lineTo(80, 20)
-		p.lineTo(80, 80)
-		p.open()
+			.moveTo(20, 20) // [0]
+			.close() // [1]
+			.lineTo(80, 20) // [2]
+			.lineTo(80, 80) // [3]
+			.open() // [4]
 
 		expect(p.commands).toEqual([
 			new PathCommand('M', 20, 20), //
@@ -80,24 +74,24 @@ describe('Path.js', () => {
 		])
 	})
 
-	test('lines()', () => {
+	test('subPaths() when not closed', () => {
 		const p = new Path()
-
-		const sp1 = p.moveTo(20, 20)
-		const sp2 = p.lineTo(80, 20)
-		const sp3 = p.lineTo(80, 80)
+			.moveTo(20, 20) // [0]
+			.lineTo(80, 20) // [1]
+			.lineTo(80, 80) // [2]
 
 		expect(p.subPaths).toEqual([
-			//
+			new SubPath(p, p.commands[1]),
+			new SubPath(p, p.commands[2]),
 		])
 	})
 
 	test('replaceCommand()', () => {
 		const p = new Path()
+			.moveTo(20, 20) // [0]
+			.lineTo(80, 20) // [1]
 
-		p.moveTo(20, 20)
-		const currCmd = p.lineTo(80, 20)
-
+		const currCmd = p.commands[1]
 		const newCmd = new PathCommand('L', 40, 40)
 		p.replaceCommand(currCmd, newCmd)
 

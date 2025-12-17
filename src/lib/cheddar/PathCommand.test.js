@@ -2,7 +2,7 @@ import PathCommand from './PathCommand.js'
 
 describe('PathCommand.js', () => {
 	test('values calculated correctly for close command', () => {
-		const cmd = new PathCommand('Z')
+		const cmd = PathCommand.close('Z')
 
 		expect(cmd.x).toEqual(null)
 		expect(cmd.y).toEqual(null)
@@ -15,7 +15,7 @@ describe('PathCommand.js', () => {
 	})
 
 	test('values calculated correctly for move command', () => {
-		const cmd = new PathCommand('M', 20, 20)
+		const cmd = PathCommand.move(20, 20)
 
 		expect(cmd.x).toEqual(20)
 		expect(cmd.y).toEqual(20)
@@ -28,7 +28,7 @@ describe('PathCommand.js', () => {
 	})
 
 	test('values calculated correctly for line command', () => {
-		const cmd = new PathCommand('L', 20, 20)
+		const cmd = PathCommand.line(20, 20)
 
 		expect(cmd.x).toEqual(20)
 		expect(cmd.y).toEqual(20)
@@ -41,7 +41,7 @@ describe('PathCommand.js', () => {
 	})
 
 	test('values calculated correctly for quadratic command', () => {
-		const cmd = new PathCommand('Q', 5, 5, 20, 20)
+		const cmd = PathCommand.quadCurve(5, 5, 20, 20)
 
 		expect(cmd.x).toEqual(20)
 		expect(cmd.y).toEqual(20)
@@ -54,7 +54,7 @@ describe('PathCommand.js', () => {
 	})
 
 	test('values calculated correctly for cubic command', () => {
-		const cmd = new PathCommand('C', 5, 5, 10, 10, 20, 20)
+		const cmd = PathCommand.cubicCurve(5, 5, 10, 10, 20, 20)
 
 		expect(cmd.x).toEqual(20)
 		expect(cmd.y).toEqual(20)

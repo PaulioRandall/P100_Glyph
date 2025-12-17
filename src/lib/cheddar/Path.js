@@ -2,11 +2,16 @@ import { NAME_SPACE } from './cheddar.js'
 import Updateable from './Updateable.js'
 import List from './List.js'
 import PathCommand from './PathCommand.js'
+import SubPath from './SubPath.js'
 
 export default class Path extends Updateable {
+	static startingAt(x, y) {
+		return new Path().move(x, y)
+	}
+
 	_commands = new List()
 	_closed = false
-	_element = createElement(this._commands)
+	_element = null
 	_subPaths = new List()
 
 	constructor() {
@@ -40,31 +45,36 @@ export default class Path extends Updateable {
 		}
 
 		this.update()
-		return cmd
+		return this
 	}
 
 	replaceCommand(currCmd, newCmd) {
 		this._commands.replace(currCmd, newCmd)
+		return this
 	}
 
 	moveTo(x, y) {
 		const cmd = PathCommand.move(x, y)
-		return this.addCommand(cmd)
+		this.addCommand(cmd)
+		return this
 	}
 
 	lineTo(x, y) {
 		const cmd = PathCommand.line(x, y)
-		return this.addCommand(cmd)
+		this.addCommand(cmd)
+		return this
 	}
 
 	quadCurveTo(cp1X, cp1Y, x, y) {
 		const cmd = PathCommand.quadCurve(cp1X, cp1Y, x, y)
-		return this.addCommand(cmd)
+		this.addCommand(cmd)
+		return this
 	}
 
 	cubicCurveTo(cp1X, cp1Y, cp2X, cp2Y, x, y) {
 		const cmd = PathCommand.cubicCurve(cp1X, cp1Y, cp2X, cp2Y, x, y)
-		return this.addCommand(cmd)
+		this.addCommand(cmd)
+		return this
 	}
 
 	close() {
@@ -75,6 +85,8 @@ export default class Path extends Updateable {
 		this.addCommand(PathCommand.close())
 		this._closed = true
 		this.update()
+
+		return this
 	}
 
 	open() {
@@ -85,15 +97,21 @@ export default class Path extends Updateable {
 		this._closed = false
 		this._commands.pop()
 		this.update()
+
+		return this
 	}
 
 	update() {
-		this.element.setAttribute('d', this.toString())
+		this._element = createElement(this._commands)
+		this._element.setAttribute('d', this.toString())
+		this._subPaths = createSubPaths(this)
 		super.update()
 	}
 
 	toString() {
-		return this._commands.map((cmd) => cmd.toString()).join(' ')
+		return this._commands
+			.map((cmd) => cmd.toString()) //
+			.join(' ')
 	}
 }
 
@@ -106,4 +124,16 @@ function createElement(commands) {
 	path.setAttribute('fill', 'none')
 
 	return path
+}
+
+function createSubPaths(path) {
+	const result = new List()
+
+	for (const cmd of path.commands) {
+		if (cmd.type !== 'M') {
+			result.push(new SubPath(path, cmd))
+		}
+	}
+
+	return result
 }
