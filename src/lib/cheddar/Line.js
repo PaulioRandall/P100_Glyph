@@ -2,7 +2,7 @@ import Updateable from './Updateable.js'
 
 // TODO: Throw if not 'inPath' on get or set?
 
-export default class SubPath extends Updateable {
+export default class Line extends Updateable {
 	_path = null
 	_cmd = null
 

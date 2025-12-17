@@ -1,5 +1,5 @@
 import Path from './Path.js'
-import PathCommand from './PathCommand.js'
+import Command from './Command.js'
 import Line from './Line.js'
 
 describe('Path.js', () => {
@@ -7,7 +7,7 @@ describe('Path.js', () => {
 		const p = new Path().moveTo(20, 20) // [0]
 
 		expect(p.commands).toEqual([
-			new PathCommand('M', 20, 20), //
+			new Command('M', 20, 20), //
 		])
 	})
 
@@ -17,8 +17,8 @@ describe('Path.js', () => {
 			.lineTo(80, 20) // [1]
 
 		expect(p.commands).toEqual([
-			new PathCommand('M', 20, 20), //
-			new PathCommand('L', 80, 20), //
+			new Command('M', 20, 20), //
+			new Command('L', 80, 20), //
 		])
 	})
 
@@ -28,8 +28,8 @@ describe('Path.js', () => {
 			.quadCurveTo(20, 80, 80, 80) // [1]
 
 		expect(p.commands).toEqual([
-			new PathCommand('M', 20, 20), //
-			new PathCommand('Q', 20, 80, 80, 80), //
+			new Command('M', 20, 20), //
+			new Command('Q', 20, 80, 80, 80), //
 		])
 	})
 
@@ -39,8 +39,8 @@ describe('Path.js', () => {
 			.cubicCurveTo(30, 50, 50, 70, 80, 80) // [1]
 
 		expect(p.commands).toEqual([
-			new PathCommand('M', 20, 20), //
-			new PathCommand('C', 30, 50, 50, 70, 80, 80), //
+			new Command('M', 20, 20), //
+			new Command('C', 30, 50, 50, 70, 80, 80), //
 		])
 	})
 
@@ -52,10 +52,10 @@ describe('Path.js', () => {
 			.close() // [3]
 
 		expect(p.commands).toEqual([
-			new PathCommand('M', 20, 20), //
-			new PathCommand('L', 80, 20), //
-			new PathCommand('L', 80, 80), //
-			new PathCommand('Z'), //
+			new Command('M', 20, 20), //
+			new Command('L', 80, 20), //
+			new Command('L', 80, 80), //
+			new Command('Z'), //
 		])
 	})
 
@@ -68,9 +68,9 @@ describe('Path.js', () => {
 			.open() // [4]
 
 		expect(p.commands).toEqual([
-			new PathCommand('M', 20, 20), //
-			new PathCommand('L', 80, 20), //
-			new PathCommand('L', 80, 80), //
+			new Command('M', 20, 20), //
+			new Command('L', 80, 20), //
+			new Command('L', 80, 80), //
 		])
 	})
 

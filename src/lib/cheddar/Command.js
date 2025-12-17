@@ -8,25 +8,25 @@ import List from './List.js'
 //
 // Arcs and curve shortcuts are not supported, this
 // includes 'A', 'S', and 'T' command types.
-export default class PathCommand {
+export default class Command {
 	static move(x, y) {
-		return new PathCommand('M', x, y)
+		return new Command('M', x, y)
 	}
 
 	static line(x, y) {
-		return new PathCommand('L', x, y)
+		return new Command('L', x, y)
 	}
 
 	static quadCurve(cp1X, cp1Y, x, y) {
-		return new PathCommand('Q', cp1X, cp1Y, x, y)
+		return new Command('Q', cp1X, cp1Y, x, y)
 	}
 
 	static cubicCurve(cp1X, cp1Y, cp2X, cp2Y, x, y) {
-		return new PathCommand('C', cp1X, cp1Y, cp2X, cp2Y, x, y)
+		return new Command('C', cp1X, cp1Y, cp2X, cp2Y, x, y)
 	}
 
 	static close() {
-		return new PathCommand('Z')
+		return new Command('Z')
 	}
 
 	_type = ''
@@ -101,7 +101,7 @@ export default class PathCommand {
 	}
 
 	clone() {
-		return new PathCommand(this._type, ...this._parameters)
+		return new Command(this._type, ...this._parameters)
 	}
 
 	withXY(x, y) {
@@ -111,7 +111,7 @@ export default class PathCommand {
 		params.pop()
 		params.push(x, y)
 
-		return new PathCommand(this._type, ...params)
+		return new Command(this._type, ...params)
 	}
 
 	toString() {

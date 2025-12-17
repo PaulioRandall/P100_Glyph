@@ -1,7 +1,7 @@
 import { NAME_SPACE } from './cheddar.js'
 import Updateable from './Updateable.js'
 import List from './List.js'
-import PathCommand from './PathCommand.js'
+import Command from './Command.js'
 import Line from './Line.js'
 
 export default class Path extends Updateable {
@@ -55,25 +55,25 @@ export default class Path extends Updateable {
 	}
 
 	moveTo(x, y) {
-		const cmd = PathCommand.move(x, y)
+		const cmd = Command.move(x, y)
 		this.addCommand(cmd)
 		return this
 	}
 
 	lineTo(x, y) {
-		const cmd = PathCommand.line(x, y)
+		const cmd = Command.line(x, y)
 		this.addCommand(cmd)
 		return this
 	}
 
 	quadCurveTo(cp1X, cp1Y, x, y) {
-		const cmd = PathCommand.quadCurve(cp1X, cp1Y, x, y)
+		const cmd = Command.quadCurve(cp1X, cp1Y, x, y)
 		this.addCommand(cmd)
 		return this
 	}
 
 	cubicCurveTo(cp1X, cp1Y, cp2X, cp2Y, x, y) {
-		const cmd = PathCommand.cubicCurve(cp1X, cp1Y, cp2X, cp2Y, x, y)
+		const cmd = Command.cubicCurve(cp1X, cp1Y, cp2X, cp2Y, x, y)
 		this.addCommand(cmd)
 		return this
 	}
@@ -83,7 +83,7 @@ export default class Path extends Updateable {
 			return
 		}
 
-		this.addCommand(PathCommand.close())
+		this.addCommand(Command.close())
 		this._closed = true
 		this.update()
 
