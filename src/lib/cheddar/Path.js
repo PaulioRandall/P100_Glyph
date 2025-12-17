@@ -16,6 +16,8 @@ export default class Path extends Updateable {
 
 	constructor() {
 		super()
+
+		this._element = createElement(this._commands)
 		this.update()
 	}
 
@@ -33,6 +35,10 @@ export default class Path extends Updateable {
 
 	get lastPath() {
 		return this._subPaths.last()
+	}
+
+	get isClosed() {
+		return this._closed
 	}
 
 	containsCommand(cmd) {
@@ -106,7 +112,6 @@ export default class Path extends Updateable {
 	}
 
 	update() {
-		this._element = createElement(this._commands)
 		this._element.setAttribute('d', this.toString())
 		this._subPaths = createSubPaths(this)
 		super.update()

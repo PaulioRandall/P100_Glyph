@@ -9,10 +9,19 @@ export default class SVG extends Updateable {
 	_shapes = new List()
 	_viewbox = new Bounds()
 
-	constructor(id = 'cheddar') {
+	constructor(element = null) {
 		super()
 
-		this._id = id
+		if (!element) {
+			this._element = makeElement(this._id, this._viewbox)
+		} else if (element.tagName === 'SVG') {
+			this._element = element
+			this._updateId()
+			this._updateViewbox()
+		} else {
+			throw new Error('Only accepts an element with an SVG tag name')
+		}
+
 		this.update()
 	}
 
@@ -26,8 +35,13 @@ export default class SVG extends Updateable {
 
 	setId(id) {
 		this._id = id
+		this._updateId()
 		this.update()
 		return this
+	}
+
+	_updateId() {
+		this._element.setAttribute('id', this._id)
 	}
 
 	// TODO: Create Viewbox class to specifically handle
@@ -35,26 +49,24 @@ export default class SVG extends Updateable {
 	//       doing the panning and zooming stuff.
 	setViewbox(left, top, width, height) {
 		this._viewbox.set(left, top, left + width, top + height)
-		this._element.setAttribute('viewBox', viewboxToString(this._viewbox))
-		this.notify()
+		this._updateViewbox()
+		this.update()
 		return this
+	}
+
+	_updateViewbox() {
+		this._element.setAttribute(
+			'viewBox', //
+			viewboxToString(this._viewbox) //
+		)
 	}
 
 	add(shape) {
 		this._shapes.push(shape)
 		this._element.appendChild(shape.element)
-		this.notify()
+
+		this.update()
 		return this
-	}
-
-	update() {
-		this._element = makeElement(this._id, this._viewbox)
-
-		for (const shape of this._shapes) {
-			this._element.appendChild(shape.element)
-		}
-
-		super.update()
 	}
 }
 
