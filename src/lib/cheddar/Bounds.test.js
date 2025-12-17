@@ -22,17 +22,81 @@ describe('Bounds.js', () => {
 	test('centerX()', () => {
 		const cb = new Bounds()
 
-		cb.setLeft(25)
+		cb.setLeft(-25)
 		cb.setRight(125)
-		expect(cb.centerX).toEqual(75)
+
+		expect(cb.centerX).toEqual(50)
 	})
 
 	test('centerY()', () => {
 		const cb = new Bounds()
 
-		cb.setTop(25)
+		cb.setTop(-25)
 		cb.setBottom(125)
-		expect(cb.centerY).toEqual(75)
+
+		expect(cb.centerY).toEqual(50)
+	})
+
+	test('setWidth()', () => {
+		const cb = new Bounds()
+
+		cb.setLeft(0)
+		cb.setRight(100)
+		cb.setWidth(200)
+
+		expect(cb.left).toEqual(-50)
+		expect(cb.right).toEqual(150)
+	})
+
+	test('setHeight()', () => {
+		const cb = new Bounds()
+
+		cb.setTop(0)
+		cb.setBottom(100)
+		cb.setHeight(200)
+
+		expect(cb.top).toEqual(-50)
+		expect(cb.bottom).toEqual(150)
+	})
+
+	test('setWidthFromLeft()', () => {
+		const cb = new Bounds()
+
+		cb.setLeft(-25)
+		cb.setWidthFromLeft(75)
+
+		expect(cb.width).toEqual(75)
+		expect(cb.right).toEqual(50)
+	})
+
+	test('setWidthFromRight()', () => {
+		const cb = new Bounds()
+
+		cb.setRight(25)
+		cb.setWidthFromRight(75)
+
+		expect(cb.width).toEqual(75)
+		expect(cb.left).toEqual(-50)
+	})
+
+	test('setHeightFromTop()', () => {
+		const cb = new Bounds()
+
+		cb.setTop(-25)
+		cb.setHeightFromTop(75)
+
+		expect(cb.height).toEqual(75)
+		expect(cb.bottom).toEqual(50)
+	})
+
+	test('setHeightFromBottom()', () => {
+		const cb = new Bounds()
+
+		cb.setBottom(25)
+		cb.setHeightFromBottom(75)
+
+		expect(cb.height).toEqual(75)
+		expect(cb.top).toEqual(-50)
 	})
 
 	test('contains()', () => {

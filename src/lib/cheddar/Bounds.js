@@ -81,6 +81,52 @@ export default class Bounds extends Updateable {
 		return this
 	}
 
+	setWidth(w) {
+		w = Math.round(w)
+		const diff = w - this._width
+		const half = Math.round(diff / 2)
+
+		this._left -= half
+		this._right = this._left + w
+
+		this.update()
+	}
+
+	setHeight(h) {
+		h = Math.round(h)
+		const diff = h - this._height
+		const half = Math.round(diff / 2)
+
+		this._top -= half
+		this._bottom = this._top + h
+
+		this.update()
+	}
+
+	setWidthFromLeft(w) {
+		this._right = this._left + w
+		this.update()
+		return this
+	}
+
+	setWidthFromRight(w) {
+		this._left = this._right - w
+		this.update()
+		return this
+	}
+
+	setHeightFromTop(h) {
+		this._bottom = this._top + h
+		this.update()
+		return this
+	}
+
+	setHeightFromBottom(h) {
+		this._top = this._bottom - h
+		this.update()
+		return this
+	}
+
 	set(left, top, right, bottom) {
 		this._left = Math.round(left)
 		this._top = Math.round(top)

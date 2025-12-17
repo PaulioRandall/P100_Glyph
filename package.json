@@ -12,7 +12,7 @@
 	"scripts": {
 		"clean": "rm -rf .svelte-kit",
 		"fmt": "prettier --log-level warn --write .",
-		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests --testPathPatterns ./src/",
+		"test": "npm run fmt && node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests --testPathPatterns ./src/",
 		"build": "npm run fmt && vite build",
 		"dev": "npm run fmt && vite dev --port 3000",
 		"preview": "npm run build && vite preview --port 4000",

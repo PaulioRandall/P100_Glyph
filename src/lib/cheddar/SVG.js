@@ -12,6 +12,7 @@ export default class SVG extends Updateable {
 	constructor(element = null) {
 		super()
 
+		// TODO: Tidy
 		if (!element) {
 			this._element = makeElement(this._id, this._viewbox)
 		} else if (element.tagName === 'SVG') {
@@ -21,6 +22,8 @@ export default class SVG extends Updateable {
 		} else {
 			throw new Error('Only accepts an element with an SVG tag name')
 		}
+
+		this._viewbox.onUpdate(this._updateViewbox.bind(this))
 
 		this.update()
 	}
@@ -33,6 +36,13 @@ export default class SVG extends Updateable {
 		return this._element
 	}
 
+	get viewbox() {
+		return this._viewbox
+	}
+
+	// TODO: Create Group class.
+	// TODO: Create master group for the SVG
+
 	setId(id) {
 		this._id = id
 		this._updateId()
@@ -42,16 +52,6 @@ export default class SVG extends Updateable {
 
 	_updateId() {
 		this._element.setAttribute('id', this._id)
-	}
-
-	// TODO: Create Viewbox class to specifically handle
-	//       SVG viewbox stuff. This will be important when
-	//       doing the panning and zooming stuff.
-	setViewbox(left, top, width, height) {
-		this._viewbox.set(left, top, left + width, top + height)
-		this._updateViewbox()
-		this.update()
-		return this
 	}
 
 	_updateViewbox() {

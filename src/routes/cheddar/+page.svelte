@@ -6,8 +6,9 @@
 	let svg = $state(null)
 
 	onMount(() => {
-		svg = new Cheddar.SVG() //
-			.setViewbox(0, 0, 100, 100) //
+		svg = new Cheddar.SVG()
+
+		svg.viewbox.set(0, 0, 100, 100)
 
 		container.appendChild(svg.element)
 
