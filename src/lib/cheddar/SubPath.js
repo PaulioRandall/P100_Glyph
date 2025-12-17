@@ -44,7 +44,7 @@ export default class SubPath extends Updateable {
 
 		const currCmd = getStartCommand(this._path, this._cmd)
 		const newCmd = currCmd.withXY(x, y)
-		this._path.replaceCommand(currCmd, newCmd)
+		this._path.commands.replace(currCmd, newCmd)
 
 		this.update()
 	}
@@ -56,7 +56,7 @@ export default class SubPath extends Updateable {
 
 		const currCmd = getEndCommand(this._path, this._cmd)
 		const newCmd = currCmd.withXY(x, y)
-		this._path.replaceCommand(currCmd, newCmd)
+		this._path.commands.replace(currCmd, newCmd)
 
 		if (currCmd === this._cmd) {
 			this._cmd = newCmd
@@ -65,8 +65,8 @@ export default class SubPath extends Updateable {
 		this.update()
 	}
 
-	quadCurveVia(cpX = null, cpY = null) {
-		// TODO: set type to 'Q'
+	setCurve(cp1X = null, cp1Y = null, cp2X = null, cp2Y = null) {
+		// TODO: set type to 'Q' or 'C'
 		// TODO: set cp1X to cpX, set cp1Y to cpY
 		// TODO: if either is null, set to cmd's X or Y coord
 

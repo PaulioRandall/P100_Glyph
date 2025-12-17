@@ -15,9 +15,17 @@
 			.moveTo(20, 20) //
 			.cubicCurveTo(30, 50, 60, 40, 70, 70) //
 			.lineTo(70, 20) //
-			.close() // 
+			.close() //
 
 		svg.add(path)
+
+		setTimeout(() => {
+			path.commands.replace(
+				path.commands[1], //
+				Cheddar.PathQuadCurve(20, 70, 70, 70), //
+			)
+			path.update()
+		}, 500)
 	})
 </script>
 

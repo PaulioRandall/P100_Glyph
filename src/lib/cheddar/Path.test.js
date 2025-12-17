@@ -80,24 +80,31 @@ describe('Path.js', () => {
 			.lineTo(80, 20) // [1]
 			.lineTo(80, 80) // [2]
 
+		// Clear the list of update funcs because I can't
+		// mock them.
+		p.subPaths.forEach((sp) => sp._updateFuncs.clear())
+
 		expect(p.subPaths).toEqual([
 			new SubPath(p, p.commands[1]),
 			new SubPath(p, p.commands[2]),
 		])
 	})
 
-	test('replaceCommand()', () => {
+	test('subPaths() when closed', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 20) // [1]
+			.lineTo(80, 80) // [2]
+			.close() // [3]
 
-		const currCmd = p.commands[1]
-		const newCmd = new PathCommand('L', 40, 40)
-		p.replaceCommand(currCmd, newCmd)
+		// Clear the list of update funcs because I can't
+		// mock them.
+		p.subPaths.forEach((sp) => sp._updateFuncs.clear())
 
-		expect(p.commands).toEqual([
-			new PathCommand('M', 20, 20), //
-			new PathCommand('L', 40, 40), //
+		expect(p.subPaths).toEqual([
+			new SubPath(p, p.commands[1]),
+			new SubPath(p, p.commands[2]),
+			new SubPath(p, p.commands[3]),
 		])
 	})
 })

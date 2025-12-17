@@ -58,11 +58,6 @@ export default class Path extends Updateable {
 		return this
 	}
 
-	replaceCommand(currCmd, newCmd) {
-		this._commands.replace(currCmd, newCmd)
-		return this
-	}
-
 	moveTo(x, y) {
 		const cmd = PathCommand.move(x, y)
 		this.addCommand(cmd)
@@ -140,7 +135,9 @@ function createSubPaths(path) {
 
 	for (const cmd of path.commands) {
 		if (cmd.type !== 'M') {
-			result.push(new SubPath(path, cmd))
+			const sp = new SubPath(path, cmd)
+			sp.onUpdate(path.update.bind(path))
+			result.push(sp)
 		}
 	}
 

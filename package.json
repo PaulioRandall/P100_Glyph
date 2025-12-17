@@ -16,7 +16,7 @@
 		"build": "npm run fmt && vite build",
 		"dev": "npm run fmt && vite dev --port 3000",
 		"preview": "npm run build && vite preview --port 4000",
-		"commit": "npm run build && cat ./ready-to-ship.txt"
+		"commit": "npm run test && npm run build && cat ./ready-to-ship.txt"
 	},
 	"devDependencies": {
 		"@paulio/p69-svelte": "1.0.0-rc-3",

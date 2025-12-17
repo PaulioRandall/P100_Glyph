@@ -70,4 +70,17 @@ describe('SubPath.js', () => {
 		expect(p.commands[0].x).toEqual(40)
 		expect(p.commands[0].y).toEqual(50)
 	})
+
+	/*
+	test('setCurve()', () => {
+		const p = new Path()
+			.moveTo(20, 20) // [0]
+			.lineTo(80, 80) // [1]
+
+		const sp = new SubPath(p, p.commands.last())
+		sp.setCurve(20, 80)
+
+		expect(sp.command.toString()).toEqual('Q 20 80 80 80')
+	})
+	*/
 })
