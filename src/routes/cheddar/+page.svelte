@@ -20,11 +20,7 @@
 		svg.add(path)
 
 		setTimeout(() => {
-			path.commands.replace(
-				path.commands[1], //
-				Cheddar.PathQuadCurve(20, 70, 70, 70), //
-			)
-			path.update()
+			path.lines[0].setStart(40, 20)
 		}, 500)
 	})
 </script>

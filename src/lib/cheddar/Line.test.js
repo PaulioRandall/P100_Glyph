@@ -1,13 +1,13 @@
 import Path from './Path.js'
-import SubPath from './SubPath.js'
+import Line from './Line.js'
 
-describe('SubPath.js', () => {
+describe('Line.js', () => {
 	test('start()', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 20) // [1]
 
-		const sp = new SubPath(p, p.commands[1])
+		const sp = new Line(p, p.commands[1])
 		expect(sp.start).toEqual({ x: 20, y: 20 })
 	})
 
@@ -16,7 +16,7 @@ describe('SubPath.js', () => {
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 20) // [1]
 
-		const sp = new SubPath(p, p.commands[1])
+		const sp = new Line(p, p.commands[1])
 		expect(sp.end).toEqual({ x: 80, y: 20 })
 	})
 
@@ -26,7 +26,7 @@ describe('SubPath.js', () => {
 			.lineTo(80, 20) // [1]
 			.close() // [2]
 
-		const sp = new SubPath(p, p.commands.last())
+		const sp = new Line(p, p.commands.last())
 		expect(sp.end).toEqual({ x: 20, y: 20 })
 	})
 
@@ -35,7 +35,7 @@ describe('SubPath.js', () => {
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 20) // [1]
 
-		const sp = new SubPath(p, p.commands[1])
+		const sp = new Line(p, p.commands[1])
 		sp.setStart(40, 50)
 
 		expect(sp.start).toEqual({ x: 40, y: 50 })
@@ -49,7 +49,7 @@ describe('SubPath.js', () => {
 			.lineTo(80, 20) // [1]
 			.lineTo(80, 80) // [2]
 
-		const sp = new SubPath(p, p.commands[1])
+		const sp = new Line(p, p.commands[1])
 		sp.setEnd(40, 50)
 
 		expect(sp.end).toEqual({ x: 40, y: 50 })
@@ -63,7 +63,7 @@ describe('SubPath.js', () => {
 			.lineTo(80, 20) // [1]
 			.close() // [2]
 
-		const sp = new SubPath(p, p.commands[2])
+		const sp = new Line(p, p.commands[2])
 		sp.setEnd(40, 50)
 
 		expect(sp.end).toEqual({ x: 40, y: 50 })
@@ -77,7 +77,7 @@ describe('SubPath.js', () => {
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 80) // [1]
 
-		const sp = new SubPath(p, p.commands.last())
+		const sp = new Line(p, p.commands.last())
 		sp.setCurve(20, 80)
 
 		expect(sp.command.toString()).toEqual('Q 20 80 80 80')

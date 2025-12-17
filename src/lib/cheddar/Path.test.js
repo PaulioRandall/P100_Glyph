@@ -1,6 +1,6 @@
 import Path from './Path.js'
 import PathCommand from './PathCommand.js'
-import SubPath from './SubPath.js'
+import Line from './Line.js'
 
 describe('Path.js', () => {
 	test('moveTo(x,y)', () => {
@@ -74,7 +74,7 @@ describe('Path.js', () => {
 		])
 	})
 
-	test('subPaths() when not closed', () => {
+	test('lines() when not closed', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 20) // [1]
@@ -82,15 +82,15 @@ describe('Path.js', () => {
 
 		// Clear the list of update funcs because I can't
 		// mock them.
-		p.subPaths.forEach((sp) => sp._updateFuncs.clear())
+		p.lines.forEach((line) => line._updateFuncs.clear())
 
-		expect(p.subPaths).toEqual([
-			new SubPath(p, p.commands[1]),
-			new SubPath(p, p.commands[2]),
+		expect(p.lines).toEqual([
+			new Line(p, p.commands[1]),
+			new Line(p, p.commands[2]),
 		])
 	})
 
-	test('subPaths() when closed', () => {
+	test('lines() when closed', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 20) // [1]
@@ -99,12 +99,12 @@ describe('Path.js', () => {
 
 		// Clear the list of update funcs because I can't
 		// mock them.
-		p.subPaths.forEach((sp) => sp._updateFuncs.clear())
+		p.lines.forEach((line) => line._updateFuncs.clear())
 
-		expect(p.subPaths).toEqual([
-			new SubPath(p, p.commands[1]),
-			new SubPath(p, p.commands[2]),
-			new SubPath(p, p.commands[3]),
+		expect(p.lines).toEqual([
+			new Line(p, p.commands[1]),
+			new Line(p, p.commands[2]),
+			new Line(p, p.commands[3]),
 		])
 	})
 })
