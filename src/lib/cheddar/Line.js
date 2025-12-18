@@ -1,6 +1,6 @@
 import Updateable from './Updateable.js'
-
-// TODO: Throw if not 'inPath' on get or set?
+import List from './List.js'
+import Command from './Command.js'
 
 export default class Line extends Updateable {
 	_path = null
@@ -65,10 +65,52 @@ export default class Line extends Updateable {
 		this.update()
 	}
 
-	setCurve(cp1X = null, cp1Y = null, cp2X = null, cp2Y = null) {
-		// TODO: set type to 'Q' or 'C'
-		// TODO: set cp1X to cpX, set cp1Y to cpY
-		// TODO: if either is null, set to cmd's X or Y coord
+	straighten() {
+		if (this._cmd.type === 'L' || this._cmd.type === 'Z') {
+			return
+		}
+
+		const endCmd = getEndCommand(this._path, this._cmd)
+		const newCmd = Command.line(endCmd.x, endCmd.y)
+		this._path.commands.replace(this._cmd, newCmd)
+
+		this.update()
+	}
+
+	convertToQuadratic(cpX, cpY) {
+		const endCmd = getEndCommand(this._path, this._cmd)
+		const newCmd = Command.quadCurve(
+			cpX,
+			cpY, //
+			endCmd.x,
+			endCmd.y //
+		)
+
+		if (this._cmd.type === 'Z') {
+			this._path.commands.insertBefore(this._cmd, newCmd)
+		} else {
+			this._path.commands.replace(this._cmd, newCmd)
+		}
+
+		this.update()
+	}
+
+	convertToCubic(cp1X, cp1Y, cp2X, cp2Y) {
+		const endCmd = getEndCommand(this._path, this._cmd)
+		const newCmd = Command.cubicCurve(
+			cp1X,
+			cp1Y, //
+			cp2X,
+			cp2Y, //
+			endCmd.x,
+			endCmd.y //
+		)
+
+		if (this._cmd.type === 'Z') {
+			this._path.commands.insertBefore(this._cmd, newCmd)
+		} else {
+			this._path.commands.replace(this._cmd, newCmd)
+		}
 
 		this.update()
 	}

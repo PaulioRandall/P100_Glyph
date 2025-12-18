@@ -56,8 +56,8 @@ export default class Command {
 		if (type === 'Q') {
 			this._cp1X = parameters[0]
 			this._cp1Y = parameters[1]
-			this._cp2X = parameters[0]
-			this._cp2Y = parameters[1]
+			this._cp2X = null
+			this._cp2Y = null
 		}
 
 		if (type === 'C') {

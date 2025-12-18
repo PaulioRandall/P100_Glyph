@@ -49,8 +49,8 @@ describe('Command.js', () => {
 		expect(cmd.cp1X).toEqual(5)
 		expect(cmd.cp1Y).toEqual(5)
 
-		expect(cmd.cp2X).toEqual(5)
-		expect(cmd.cp2Y).toEqual(5)
+		expect(cmd.cp2X).toEqual(null)
+		expect(cmd.cp2Y).toEqual(null)
 	})
 
 	test('values calculated correctly for cubic command', () => {

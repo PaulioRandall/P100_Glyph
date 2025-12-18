@@ -17,11 +17,32 @@
 			.lineTo(70, 20) //
 			.close() //
 
+		let count = 0
+		path.onUpdate(() => {
+			count++
+			switch (count) {
+			case 1:
+				return path.element.setAttribute('stroke', 'red')
+			case 2:
+				return path.element.setAttribute('stroke', 'green')
+			case 3:
+				return path.element.setAttribute('stroke', 'blue')
+			}
+		})
+
 		svg.add(path)
 
 		setTimeout(() => {
-			path.lines[0].setStart(40, 20)
+			path.lines[1].convertToQuadratic(100, 50)
 		}, 500)
+
+		setTimeout(() => {
+			path.lines[0].straighten()
+		}, 1000)
+
+		setTimeout(() => {
+			path.lines[2].convertToCubic(60, 10, 30, 30)
+		}, 1500)
 	})
 </script>
 
