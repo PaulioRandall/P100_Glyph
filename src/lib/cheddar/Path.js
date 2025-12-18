@@ -2,7 +2,7 @@ import { NAME_SPACE } from './cheddar.js'
 import Updateable from './Updateable.js'
 import List from './List.js'
 import Command from './Command.js'
-import Line from './Line.js'
+import SubPath from './SubPath.js'
 
 export default class Path extends Updateable {
 	static startingAt(x, y) {
@@ -12,7 +12,7 @@ export default class Path extends Updateable {
 	_commands = new List()
 	_closed = false
 	_element = null
-	_lines = new List()
+	_subPaths = new List()
 
 	constructor() {
 		super()
@@ -29,8 +29,8 @@ export default class Path extends Updateable {
 		return this._element
 	}
 
-	get lines() {
-		return this._lines
+	get subPaths() {
+		return this._subPaths
 	}
 
 	get isClosed() {
@@ -104,7 +104,7 @@ export default class Path extends Updateable {
 
 	update() {
 		this._element.setAttribute('d', this.toString())
-		this._lines = createLines(this)
+		this._subPaths = createSubPaths(this)
 		super.update()
 	}
 
@@ -126,14 +126,14 @@ function createElement(commands) {
 	return path
 }
 
-function createLines(path) {
+function createSubPaths(path) {
 	const result = new List()
 
 	for (const cmd of path.commands) {
 		if (cmd.type !== 'M') {
-			const line = new Line(path, cmd)
-			line.onUpdate(path.update.bind(path))
-			result.push(line)
+			const sp = new SubPath(path, cmd)
+			sp.onUpdate(path.update.bind(path))
+			result.push(sp)
 		}
 	}
 

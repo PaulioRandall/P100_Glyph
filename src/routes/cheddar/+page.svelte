@@ -33,15 +33,15 @@
 		svg.add(path)
 
 		setTimeout(() => {
-			path.lines[1].convertToQuadratic(100, 50)
+			path.subPaths[1].convertToQuadratic(100, 50)
 		}, 500)
 
 		setTimeout(() => {
-			path.lines[0].straighten()
+			path.subPaths[0].straighten()
 		}, 1000)
 
 		setTimeout(() => {
-			path.lines[2].convertToCubic(60, 10, 30, 30)
+			path.subPaths[2].convertToCubic(60, 10, 30, 30)
 		}, 1500)
 	})
 </script>

@@ -1,13 +1,13 @@
 import Path from './Path.js'
 import Command from './Command.js'
 
-describe('Line.js', () => {
+describe('SubPath.js', () => {
 	test('start()', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 20) // [1]
 
-		expect(p.lines[0].start).toEqual({ x: 20, y: 20 })
+		expect(p.subPaths[0].start).toEqual({ x: 20, y: 20 })
 	})
 
 	test('end() when not a close command', () => {
@@ -15,7 +15,7 @@ describe('Line.js', () => {
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 20) // [1]
 
-		expect(p.lines[0].end).toEqual({ x: 80, y: 20 })
+		expect(p.subPaths[0].end).toEqual({ x: 80, y: 20 })
 	})
 
 	test('end() when a close command', () => {
@@ -24,7 +24,7 @@ describe('Line.js', () => {
 			.lineTo(80, 20) // [1]
 			.close() // [2]
 
-		expect(p.lines[1].end).toEqual({ x: 20, y: 20 })
+		expect(p.subPaths[1].end).toEqual({ x: 20, y: 20 })
 	})
 
 	test('setStart()', () => {
@@ -32,9 +32,9 @@ describe('Line.js', () => {
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 20) // [1]
 
-		p.lines[0].setStart(40, 50)
+		p.subPaths[0].setStart(40, 50)
 
-		expect(p.lines[0].start).toEqual({ x: 40, y: 50 })
+		expect(p.subPaths[0].start).toEqual({ x: 40, y: 50 })
 		expect(p.commands[0].x).toEqual(40)
 		expect(p.commands[0].y).toEqual(50)
 	})
@@ -45,9 +45,9 @@ describe('Line.js', () => {
 			.lineTo(80, 20) // [1]
 			.lineTo(80, 80) // [2]
 
-		p.lines[0].setEnd(40, 50)
+		p.subPaths[0].setEnd(40, 50)
 
-		expect(p.lines[0].end).toEqual({ x: 40, y: 50 })
+		expect(p.subPaths[0].end).toEqual({ x: 40, y: 50 })
 		expect(p.commands[1].x).toEqual(40)
 		expect(p.commands[1].y).toEqual(50)
 	})
@@ -58,9 +58,9 @@ describe('Line.js', () => {
 			.lineTo(80, 20) // [1]
 			.close() // [2]
 
-		p.lines[1].setEnd(40, 50)
+		p.subPaths[1].setEnd(40, 50)
 
-		expect(p.lines[1].end).toEqual({ x: 40, y: 50 })
+		expect(p.subPaths[1].end).toEqual({ x: 40, y: 50 })
 		expect(p.commands[0].x).toEqual(40)
 		expect(p.commands[0].y).toEqual(50)
 	})
@@ -70,7 +70,7 @@ describe('Line.js', () => {
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 80) // [1]
 
-		p.lines[0].straighten()
+		p.subPaths[0].straighten()
 
 		expect(p.commands[1]).toEqual(
 			Command.line(80, 80) //
@@ -82,7 +82,7 @@ describe('Line.js', () => {
 			.moveTo(20, 20) // [0]
 			.quadCurveTo(40, 50, 80, 80) // [1]
 
-		p.lines[0].straighten()
+		p.subPaths[0].straighten()
 
 		expect(p.commands[1]).toEqual(
 			Command.line(80, 80) //
@@ -94,7 +94,7 @@ describe('Line.js', () => {
 			.moveTo(20, 20) // [0]
 			.cubicCurveTo(40, 40, 50, 50, 80, 80) // [1]
 
-		p.lines[0].straighten()
+		p.subPaths[0].straighten()
 
 		expect(p.commands[1]).toEqual(
 			Command.line(80, 80) //
@@ -106,7 +106,7 @@ describe('Line.js', () => {
 			.moveTo(20, 20) // [0]
 			.close() // [1]
 
-		p.lines[0].straighten()
+		p.subPaths[0].straighten()
 
 		expect(p.commands[1]).toEqual(
 			Command.close() //
@@ -118,7 +118,7 @@ describe('Line.js', () => {
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 80) // [1]
 
-		p.lines[0].convertToQuadratic(20, 80)
+		p.subPaths[0].convertToQuadratic(20, 80)
 
 		expect(p.commands[1]).toEqual(
 			Command.quadCurve(20, 80, 80, 80) //
@@ -130,7 +130,7 @@ describe('Line.js', () => {
 			.moveTo(20, 20) // [0]
 			.quadCurveTo(40, 50, 80, 80) // [1]
 
-		p.lines[0].convertToQuadratic(20, 80)
+		p.subPaths[0].convertToQuadratic(20, 80)
 
 		expect(p.commands[1]).toEqual(
 			Command.quadCurve(20, 80, 80, 80) //
@@ -142,7 +142,7 @@ describe('Line.js', () => {
 			.moveTo(20, 20) // [0]
 			.cubicCurveTo(40, 40, 50, 50, 80, 80) // [1]
 
-		p.lines[0].convertToQuadratic(20, 80)
+		p.subPaths[0].convertToQuadratic(20, 80)
 
 		expect(p.commands[1]).toEqual(
 			Command.quadCurve(20, 80, 80, 80) //
@@ -154,7 +154,7 @@ describe('Line.js', () => {
 			.moveTo(20, 20) // [0]
 			.close() // [1]
 
-		p.lines[0].convertToQuadratic(20, 80)
+		p.subPaths[0].convertToQuadratic(20, 80)
 
 		expect(p.commands[1]).toEqual(
 			Command.quadCurve(20, 80, 20, 20) //
@@ -170,7 +170,7 @@ describe('Line.js', () => {
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 80) // [1]
 
-		p.lines[0].convertToCubic(40, 40, 50, 50)
+		p.subPaths[0].convertToCubic(40, 40, 50, 50)
 
 		expect(p.commands[1]).toEqual(
 			Command.cubicCurve(40, 40, 50, 50, 80, 80) //
@@ -182,7 +182,7 @@ describe('Line.js', () => {
 			.moveTo(20, 20) // [0]
 			.quadCurveTo(40, 40, 80, 80) // [1]
 
-		p.lines[0].convertToCubic(40, 40, 50, 50)
+		p.subPaths[0].convertToCubic(40, 40, 50, 50)
 
 		expect(p.commands[1]).toEqual(
 			Command.cubicCurve(40, 40, 50, 50, 80, 80) //
@@ -194,7 +194,7 @@ describe('Line.js', () => {
 			.moveTo(20, 20) // [0]
 			.cubicCurveTo(30, 30, 70, 70, 80, 80) // [1]
 
-		p.lines[0].convertToCubic(40, 40, 50, 50)
+		p.subPaths[0].convertToCubic(40, 40, 50, 50)
 
 		expect(p.commands[1]).toEqual(
 			Command.cubicCurve(40, 40, 50, 50, 80, 80) //
@@ -206,7 +206,7 @@ describe('Line.js', () => {
 			.moveTo(20, 20) // [0]
 			.close() // [1]
 
-		p.lines[0].convertToCubic(40, 40, 50, 50)
+		p.subPaths[0].convertToCubic(40, 40, 50, 50)
 
 		expect(p.commands[1]).toEqual(
 			Command.cubicCurve(40, 40, 50, 50, 20, 20) //

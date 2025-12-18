@@ -2,7 +2,7 @@ import Updateable from './Updateable.js'
 import List from './List.js'
 import Command from './Command.js'
 
-export default class Line extends Updateable {
+export default class SubPath extends Updateable {
 	_path = null
 	_cmd = null
 
