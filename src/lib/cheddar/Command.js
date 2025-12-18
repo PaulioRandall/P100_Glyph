@@ -17,11 +17,11 @@ export default class Command {
 		return new Command('L', x, y)
 	}
 
-	static quadCurve(cp1X, cp1Y, x, y) {
+	static quadratic(cp1X, cp1Y, x, y) {
 		return new Command('Q', cp1X, cp1Y, x, y)
 	}
 
-	static cubicCurve(cp1X, cp1Y, cp2X, cp2Y, x, y) {
+	static cubic(cp1X, cp1Y, cp2X, cp2Y, x, y) {
 		return new Command('C', cp1X, cp1Y, cp2X, cp2Y, x, y)
 	}
 

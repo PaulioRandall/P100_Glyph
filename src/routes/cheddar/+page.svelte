@@ -13,7 +13,7 @@
 
 		const path = new Cheddar.Path() //
 			.moveTo(20, 20) //
-			.cubicCurveTo(30, 50, 60, 40, 70, 70) //
+			.cubicTo(30, 50, 60, 40, 70, 70) //
 			.lineTo(70, 20) //
 			.close() //
 
@@ -33,7 +33,7 @@
 		svg.add(path)
 
 		setTimeout(() => {
-			path.subPaths[1].convertToQuadratic(100, 50)
+			path.subPaths[1].curve(100, 50)
 		}, 500)
 
 		setTimeout(() => {
@@ -41,7 +41,7 @@
 		}, 1000)
 
 		setTimeout(() => {
-			path.subPaths[2].convertToCubic(60, 10, 30, 30)
+			path.subPaths[2].curve(60, 10, 30, 30)
 		}, 1500)
 	})
 </script>

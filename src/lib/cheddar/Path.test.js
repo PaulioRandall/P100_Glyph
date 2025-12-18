@@ -22,10 +22,10 @@ describe('Path.js', () => {
 		])
 	})
 
-	test('quadCurveTo()', () => {
+	test('quadraticTo()', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
-			.quadCurveTo(20, 80, 80, 80) // [1]
+			.quadraticTo(20, 80, 80, 80) // [1]
 
 		expect(p.commands).toEqual([
 			new Command('M', 20, 20), //
@@ -33,10 +33,10 @@ describe('Path.js', () => {
 		])
 	})
 
-	test('cubicCurveTo()', () => {
+	test('cubicTo()', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
-			.cubicCurveTo(30, 50, 50, 70, 80, 80) // [1]
+			.cubicTo(30, 50, 50, 70, 80, 80) // [1]
 
 		expect(p.commands).toEqual([
 			new Command('M', 20, 20), //

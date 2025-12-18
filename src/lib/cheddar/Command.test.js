@@ -41,7 +41,7 @@ describe('Command.js', () => {
 	})
 
 	test('values calculated correctly for quadratic command', () => {
-		const cmd = Command.quadCurve(5, 5, 20, 20)
+		const cmd = Command.quadratic(5, 5, 20, 20)
 
 		expect(cmd.x).toEqual(20)
 		expect(cmd.y).toEqual(20)
@@ -54,7 +54,7 @@ describe('Command.js', () => {
 	})
 
 	test('values calculated correctly for cubic command', () => {
-		const cmd = Command.cubicCurve(5, 5, 10, 10, 20, 20)
+		const cmd = Command.cubic(5, 5, 10, 10, 20, 20)
 
 		expect(cmd.x).toEqual(20)
 		expect(cmd.y).toEqual(20)
@@ -67,8 +67,8 @@ describe('Command.js', () => {
 	})
 
 	test('withXY()', () => {
-		const cmd = Command.cubicCurve(5, 5, 10, 10, 20, 20)
+		const cmd = Command.cubic(5, 5, 10, 10, 20, 20)
 		const clone = cmd.withXY(50, 75)
-		expect(clone).toEqual(Command.cubicCurve(5, 5, 10, 10, 50, 75))
+		expect(clone).toEqual(Command.cubic(5, 5, 10, 10, 50, 75))
 	})
 })

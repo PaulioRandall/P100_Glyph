@@ -1,5 +1,6 @@
 import SVG from './SVG.js'
 import Path from './Path.js'
+import SubPath from './SubPath.js'
 import Command from './Command.js'
 import Bounds from './Bounds.js'
 import Updateable from './Updateable.js'
@@ -9,10 +10,11 @@ export default {
 	SVG,
 	Bounds,
 	Path,
+	SubPath,
 	Command,
 	PathMove: Command.move,
 	PathLine: Command.line,
-	PathQuadCurve: Command.quadCurve,
-	PathCubicCurve: Command.cubicCurve,
+	PathQuadratic: Command.quadratic,
+	Pathcubic: Command.cubic,
 	PathClose: Command.close,
 }

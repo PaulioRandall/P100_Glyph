@@ -4,15 +4,33 @@ import List from './List.js'
 import Command from './Command.js'
 import SubPath from './SubPath.js'
 
+// TODO: The current problem with SubPaths is that they
+//       are recreated when the path is updated. This means
+//       storing a SubPath after getting it will outdate it
+//       if a method on it, or its parent Path, mutates
+//       the command list in anyway.
+//
+//       We could keep the list of SubPaths updated instead
+//       of being recreated. This means any mutation by
+//       a SubPath must propogate to other SubPaths if
+//       a Command is replaced.
+//
+//       This could be done by storing an index to the
+//       SubPath's core Command within the Path's command
+//       list instead of storing the core Command. Then
+//       update indexes for all SubPaths if a Command is
+//       added or removed (including adding or removing
+//       the associated SubPath).
+
 export default class Path extends Updateable {
 	static startingAt(x, y) {
 		return new Path().move(x, y)
 	}
 
-	_commands = new List()
-	_closed = false
 	_element = null
+	_commands = new List()
 	_subPaths = new List()
+	_closed = false
 
 	constructor() {
 		super()
@@ -66,14 +84,14 @@ export default class Path extends Updateable {
 		return this
 	}
 
-	quadCurveTo(cp1X, cp1Y, x, y) {
-		const cmd = Command.quadCurve(cp1X, cp1Y, x, y)
+	quadraticTo(cp1X, cp1Y, x, y) {
+		const cmd = Command.quadratic(cp1X, cp1Y, x, y)
 		this.addCommand(cmd)
 		return this
 	}
 
-	cubicCurveTo(cp1X, cp1Y, cp2X, cp2Y, x, y) {
-		const cmd = Command.cubicCurve(cp1X, cp1Y, cp2X, cp2Y, x, y)
+	cubicTo(cp1X, cp1Y, cp2X, cp2Y, x, y) {
+		const cmd = Command.cubic(cp1X, cp1Y, cp2X, cp2Y, x, y)
 		this.addCommand(cmd)
 		return this
 	}
@@ -104,14 +122,14 @@ export default class Path extends Updateable {
 
 	update() {
 		this._element.setAttribute('d', this.toString())
-		this._subPaths = createSubPaths(this)
+		updateSubPaths(this)
 		super.update()
 	}
 
 	toString() {
 		return this._commands
 			.map((cmd) => cmd.toString()) //
-			.join(' ')
+			.join(' ') //
 	}
 }
 
@@ -126,16 +144,14 @@ function createElement(commands) {
 	return path
 }
 
-function createSubPaths(path) {
-	const result = new List()
+function updateSubPaths(path) {
+	path._subPaths.clear()
 
 	for (const cmd of path.commands) {
 		if (cmd.type !== 'M') {
 			const sp = new SubPath(path, cmd)
 			sp.onUpdate(path.update.bind(path))
-			result.push(sp)
+			path._subPaths.push(sp)
 		}
 	}
-
-	return result
 }
