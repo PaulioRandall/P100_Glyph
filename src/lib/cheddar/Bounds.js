@@ -57,30 +57,77 @@ export default class Bounds extends Updateable {
 		return this._centerY
 	}
 
+	// Individually set the left value without influencing
+	// other values.
 	setLeft(v) {
 		this._left = Math.round(v)
 		this.update()
 		return this
 	}
 
+	// Individually set the right value without influencing
+	// other values.
 	setRight(v) {
 		this._right = Math.round(v)
 		this.update()
 		return this
 	}
 
+	// Individually set the top value without influencing
+	// other values.
 	setTop(v) {
 		this._top = Math.round(v)
 		this.update()
 		return this
 	}
 
+	// Individually set the bottom value without influencing
+	// other values.
 	setBottom(v) {
 		this._bottom = Math.round(v)
 		this.update()
 		return this
 	}
 
+	// Sets center X adjusting left and right accordingly.
+	setCenterX(x) {
+		x = Math.round(x)
+
+		this._left = x - this._halfWidth
+		this._right = x + this._halfWidth
+
+		this.update()
+		return this
+	}
+
+	// Sets center Y adjusting top and bottom accordingly.
+	setCenterY(y) {
+		y = Math.round(y)
+
+		this._top = y - this._halfWidth
+		this._bottom = y + this._halfWidth
+
+		this.update()
+		return this
+	}
+
+	// Sets the center of the bounds and adjusts left, right,
+	// top, and bottom accordingly.
+	setCenter(x, y) {
+		x = Math.round(x)
+		y = Math.round(y)
+
+		this._left = x - this._halfWidth
+		this._right = x + this._halfWidth
+		this._top = y - this._halfWidth
+		this._bottom = y + this._halfWidth
+
+		this.update()
+		return this
+	}
+
+	// Sets the width and forces the left and right values to
+	// grow or shrink by the same amount to accommodate.
 	setWidth(w) {
 		w = Math.round(w)
 		const diff = w - this._width
@@ -93,6 +140,8 @@ export default class Bounds extends Updateable {
 		return this
 	}
 
+	// Sets the height and forces the top and bottom values
+	// to grow or shrink by the same amount to accommodate.
 	setHeight(h) {
 		h = Math.round(h)
 		const diff = h - this._height
@@ -105,30 +154,39 @@ export default class Bounds extends Updateable {
 		return this
 	}
 
+	// Sets the width by forcing the right value to grow or
+	// shrink to accommodate.
 	setWidthFromLeft(w) {
 		this._right = this._left + w
 		this.update()
 		return this
 	}
 
+	// Sets the width by forcing the left value to grow or
+	// shrink to accommodate.
 	setWidthFromRight(w) {
 		this._left = this._right - w
 		this.update()
 		return this
 	}
 
+	// Sets the height by forcing the bottom value to grow or
+	// shrink to accommodate.
 	setHeightFromTop(h) {
 		this._bottom = this._top + h
 		this.update()
 		return this
 	}
 
+	// Sets the height by forcing the top value to grow or
+	// shrink to accommodate.
 	setHeightFromBottom(h) {
 		this._top = this._bottom - h
 		this.update()
 		return this
 	}
 
+	// Sets left, top, right, and bottom in one update.
 	set(left, top, right, bottom) {
 		this._left = Math.round(left)
 		this._top = Math.round(top)
@@ -138,7 +196,6 @@ export default class Bounds extends Updateable {
 		return this
 	}
 
-	// Override
 	update() {
 		this._width = this._right - this._left
 		this._height = this._bottom - this._top
@@ -177,6 +234,8 @@ export default class Bounds extends Updateable {
 		)
 	}
 
+	// Returns a string representing the bounds in
+	// `left top right bottom` format.
 	toString() {
 		return [
 			this._left, //
@@ -186,6 +245,7 @@ export default class Bounds extends Updateable {
 		].join(' ')
 	}
 
+	// Returns a string suitable for setting SVG viewbox.
 	toViewboxString() {
 		return [
 			this._left, //

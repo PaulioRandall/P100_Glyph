@@ -33,6 +33,39 @@ describe('Bounds.js', () => {
 		expect(cb.centerY).toEqual(50)
 	})
 
+	test('setCenterX()', () => {
+		const cb = new Bounds() //
+			.set(0, 0, 100, 100) //
+			.setCenterX(25)
+
+		expect(cb.centerX).toEqual(25)
+		expect(cb.left).toEqual(-25)
+		expect(cb.right).toEqual(75)
+	})
+
+	test('setCenterY()', () => {
+		const cb = new Bounds() //
+			.set(0, 0, 100, 100) //
+			.setCenterY(25)
+
+		expect(cb.centerY).toEqual(25)
+		expect(cb.top).toEqual(-25)
+		expect(cb.bottom).toEqual(75)
+	})
+
+	test('setCenter()', () => {
+		const cb = new Bounds() //
+			.set(0, 0, 100, 100) //
+			.setCenter(25, 25)
+
+		expect(cb.centerX).toEqual(25)
+		expect(cb.centerY).toEqual(25)
+		expect(cb.left).toEqual(-25)
+		expect(cb.right).toEqual(75)
+		expect(cb.top).toEqual(-25)
+		expect(cb.bottom).toEqual(75)
+	})
+
 	test('setWidth()', () => {
 		const cb = new Bounds() //
 			.setLeft(0) //
