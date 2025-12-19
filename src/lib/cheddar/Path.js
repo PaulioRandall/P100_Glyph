@@ -4,8 +4,6 @@ import List from './List.js'
 import Command from './Command.js'
 import SubPath from './SubPath.js'
 
-// TODO: Should close command 'Z' allowed to be a sub path?
-
 export default class Path extends Updateable {
 	static startingAt(x, y) {
 		return new Path().move(x, y)
@@ -43,7 +41,7 @@ export default class Path extends Updateable {
 		return this._commands.includes(cmd)
 	}
 
-	addCommand(cmd) {
+	nuAddCommand(cmd) {
 		const cmds = this._commands
 
 		if (this._closed) {
@@ -54,6 +52,11 @@ export default class Path extends Updateable {
 
 		cmd.onUpdate(this.update.bind(this))
 
+		return this
+	}
+
+	addCommand(cmd) {
+		this.nuAddCommand(cmd)
 		this.update()
 		return this
 	}
@@ -70,15 +73,42 @@ export default class Path extends Updateable {
 		return this
 	}
 
+	lineToClose() {
+		const { x, y } = this.commands[0]
+
+		const cmd = Command.line(x, y)
+		this.nuAddCommand(cmd).close()
+
+		return this
+	}
+
 	quadraticTo(cp1X, cp1Y, x, y) {
 		const cmd = Command.quadratic(cp1X, cp1Y, x, y)
 		this.addCommand(cmd)
 		return this
 	}
 
+	quadraticToClose(cp1X, cp1Y) {
+		const { x, y } = this.commands[0]
+
+		const cmd = Command.quadratic(cp1X, cp1Y, x, y)
+		this.nuAddCommand(cmd).close()
+
+		return this
+	}
+
 	cubicTo(cp1X, cp1Y, cp2X, cp2Y, x, y) {
 		const cmd = Command.cubic(cp1X, cp1Y, cp2X, cp2Y, x, y)
 		this.addCommand(cmd)
+		return this
+	}
+
+	cubicToClose(cp1X, cp1Y, cp2X, cp2Y) {
+		const { x, y } = this.commands[0]
+
+		const cmd = Command.cubic(cp1X, cp1Y, cp2X, cp2Y, x, y)
+		this.nuAddCommand(cmd).close()
+
 		return this
 	}
 
@@ -134,7 +164,7 @@ function updateSubPaths(path) {
 	path._subPaths.clear()
 
 	for (const cmd of path.commands) {
-		if (cmd.type !== 'M') {
+		if (cmd.type !== 'M' && cmd.type !== 'Z') {
 			const sp = new SubPath(path, cmd)
 			sp.onUpdate(path.update.bind(path))
 			path._subPaths.push(sp)

@@ -9,6 +9,18 @@ function clearUpdateFuncs(path) {
 }
 
 describe('SubPath.js', () => {
+	test('command()', () => {
+		const p = new Path()
+			.moveTo(20, 20) // [0]
+			.lineTo(80, 20) // [1]
+
+		clearUpdateFuncs(p)
+
+		expect(p.subPaths[0].command).toEqual(
+			p.commands[1] //
+		)
+	})
+
 	test('startCommand()', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
@@ -17,31 +29,6 @@ describe('SubPath.js', () => {
 		clearUpdateFuncs(p)
 
 		expect(p.subPaths[0].startCommand).toEqual(
-			p.commands[0] //
-		)
-	})
-
-	test('endCommand() when not a close command', () => {
-		const p = new Path()
-			.moveTo(20, 20) // [0]
-			.lineTo(80, 20) // [1]
-
-		clearUpdateFuncs(p)
-
-		expect(p.subPaths[0].endCommand).toEqual(
-			p.commands[1] //
-		)
-	})
-
-	test('end() when a close command', () => {
-		const p = new Path()
-			.moveTo(20, 20) // [0]
-			.lineTo(80, 20) // [1]
-			.close() // [2]
-
-		clearUpdateFuncs(p)
-
-		expect(p.subPaths[1].endCommand).toEqual(
 			p.commands[0] //
 		)
 	})
@@ -71,26 +58,10 @@ describe('SubPath.js', () => {
 
 		clearUpdateFuncs(p)
 
-		expect(p.subPaths[0].endCommand.x).toEqual(40)
-		expect(p.subPaths[0].endCommand.y).toEqual(50)
+		expect(p.subPaths[0].command.x).toEqual(40)
+		expect(p.subPaths[0].command.y).toEqual(50)
 		expect(p.commands[1].x).toEqual(40)
 		expect(p.commands[1].y).toEqual(50)
-	})
-
-	test('setEnd() for close command', () => {
-		const p = new Path()
-			.moveTo(20, 20) // [0]
-			.lineTo(80, 20) // [1]
-			.close() // [2]
-
-		p.subPaths[1].setEnd(40, 50)
-
-		clearUpdateFuncs(p)
-
-		expect(p.subPaths[1].endCommand.x).toEqual(40)
-		expect(p.subPaths[1].endCommand.y).toEqual(50)
-		expect(p.commands[0].x).toEqual(40)
-		expect(p.commands[0].y).toEqual(50)
 	})
 
 	test('straighten() from line', () => {
@@ -132,20 +103,6 @@ describe('SubPath.js', () => {
 
 		expect(p.commands[1]).toEqual(
 			Command.line(80, 80) //
-		)
-	})
-
-	test('straighten() from close', () => {
-		const p = new Path()
-			.moveTo(20, 20) // [0]
-			.close() // [1]
-
-		p.subPaths[0].straighten()
-
-		clearUpdateFuncs(p)
-
-		expect(p.commands[1]).toEqual(
-			Command.close() //
 		)
 	})
 

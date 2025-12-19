@@ -33,6 +33,22 @@ describe('Path.js', () => {
 		])
 	})
 
+	test('lineToClose()', () => {
+		const p = new Path()
+			.moveTo(20, 20) // [0]
+			.lineTo(80, 20) // [1]
+			.lineToClose() // [2]
+
+		clearUpdateFuncs(p)
+
+		expect(p.commands).toEqual([
+			new Command('M', 20, 20), //
+			new Command('L', 80, 20), //
+			new Command('L', 20, 20), //
+			new Command('Z'), //
+		])
+	})
+
 	test('quadraticTo()', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
@@ -46,6 +62,22 @@ describe('Path.js', () => {
 		])
 	})
 
+	test('quadraticToClose()', () => {
+		const p = new Path()
+			.moveTo(20, 20) // [0]
+			.lineTo(80, 20) // [1]
+			.quadraticToClose(30, 40) // [2]
+
+		clearUpdateFuncs(p)
+
+		expect(p.commands).toEqual([
+			new Command('M', 20, 20), //
+			new Command('L', 80, 20), //
+			new Command('Q', 30, 40, 20, 20), //
+			new Command('Z'), //
+		])
+	})
+
 	test('cubicTo()', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
@@ -56,6 +88,22 @@ describe('Path.js', () => {
 		expect(p.commands).toEqual([
 			new Command('M', 20, 20), //
 			new Command('C', 30, 50, 50, 70, 80, 80), //
+		])
+	})
+
+	test('cubicToClose()', () => {
+		const p = new Path()
+			.moveTo(20, 20) // [0]
+			.lineTo(80, 20) // [1]
+			.cubicToClose(30, 40, 50, 60) // [2]
+
+		clearUpdateFuncs(p)
+
+		expect(p.commands).toEqual([
+			new Command('M', 20, 20), //
+			new Command('L', 80, 20), //
+			new Command('C', 30, 40, 50, 60, 20, 20), //
+			new Command('Z'), //
 		])
 	})
 
@@ -119,7 +167,6 @@ describe('Path.js', () => {
 		expect(p.subPaths).toEqual([
 			new SubPath(p, p.commands[1]),
 			new SubPath(p, p.commands[2]),
-			new SubPath(p, p.commands[3]),
 		])
 	})
 })

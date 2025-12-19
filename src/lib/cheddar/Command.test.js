@@ -160,16 +160,6 @@ describe('Command.js', () => {
 		)
 	})
 
-	test('straighten: from close', () => {
-		const cmd = Command.close()
-
-		cmd.straighten()
-
-		expect(cmd).toEqual(
-			Command.close() //
-		)
-	})
-
 	test('curve: from line to line', () => {
 		const cmd = Command.line(10, 20)
 

@@ -15,7 +15,7 @@
 			.moveTo(20, 20) //
 			.cubicTo(30, 50, 60, 40, 70, 70) //
 			.lineTo(70, 20) //
-			.close() //
+			.lineToClose() //
 
 		let count = 0
 		path.onUpdate(() => {

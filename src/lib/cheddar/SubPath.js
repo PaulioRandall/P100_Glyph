@@ -50,19 +50,6 @@ export default class SubPath extends Updateable {
 		return this._path.commands.itemBefore(this._cmd)
 	}
 
-	// Returns the command containing the x,y point where the
-	// SubPath ends.
-	//
-	// This always the same as the SubPath's command except
-	// for close commands, type 'Z', which will return the
-	// Path's initial move command.
-	get endCommand() {
-		if (this._cmd.type === 'Z') {
-			return this._path.commands[0]
-		}
-		return this._cmd
-	}
-
 	// Returns true if the SubPath is still valid and calls
 	// to methods that manipulate the path can be made.
 	//
@@ -91,7 +78,7 @@ export default class SubPath extends Updateable {
 	setEnd(x, y) {
 		this._errIfNotInPath()
 
-		this.endCommand.nuSetX(x).setY(y)
+		this.command.nuSetX(x).setY(y)
 
 		this.update()
 		return this
@@ -113,7 +100,6 @@ export default class SubPath extends Updateable {
 	curve(cp1X = null, cp1Y = null, cp2X = null, cp2Y = null) {
 		this._errIfNotInPath()
 
-		// TODO: Handle close command case.
 		this._cmd.curve(cp1X, cp1Y, cp2X, cp2Y)
 
 		this.update()
