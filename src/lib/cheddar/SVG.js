@@ -1,39 +1,23 @@
 import { NAME_SPACE } from './cheddar.js'
-import Updateable from './Updateable.js'
+import Elemental from './Elemental.js'
 import Bounds from './Bounds.js'
 import List from './List.js'
 
-export default class SVG extends Updateable {
+export default class SVG extends Elemental {
 	_id = 'cheddar'
-	_element = null
 	_shapes = new List()
 	_viewbox = new Bounds()
 
-	constructor(element = null) {
+	constructor() {
 		super()
 
-		// TODO: Tidy
-		if (!element) {
-			this._element = makeElement(this._id, this._viewbox)
-		} else if (element.tagName === 'SVG') {
-			this._element = element
-			this._updateId()
-			this._updateViewbox()
-		} else {
-			throw new Error('Only accepts an element with an SVG tag name')
-		}
-
+		this._generateElement()
 		this._viewbox.onUpdate(this._updateViewbox.bind(this))
-
 		this.update()
 	}
 
 	get id() {
 		return id
-	}
-
-	get element() {
-		return this._element
 	}
 
 	get viewbox() {
@@ -68,19 +52,21 @@ export default class SVG extends Updateable {
 		this.update()
 		return this
 	}
-}
 
-function makeElement(id, viewbox) {
-	const svg = document.createElementNS(NAME_SPACE, 'svg')
+	_generateElement() {
+		const id = this._id
+		const viewboxString = this._viewbox.toViewboxString()
+		const svg = document.createElementNS(NAME_SPACE, 'svg')
 
-	svg.setAttribute('id', id)
-	svg.setAttribute('xmlns', NAME_SPACE)
-	svg.setAttribute('viewBox', viewbox.toViewboxString())
-	svg.setAttribute('preserveAspectRatio', 'xMaxYMax meet')
+		svg.setAttribute('id', id)
+		svg.setAttribute('xmlns', NAME_SPACE)
+		svg.setAttribute('viewBox', viewboxString)
+		svg.setAttribute('preserveAspectRatio', 'xMaxYMax meet')
 
-	svg.style.display = 'block'
-	svg.style.width = '100%'
-	svg.style.height = '100%'
+		svg.style.display = 'block'
+		svg.style.width = '100%'
+		svg.style.height = '100%'
 
-	return svg
+		this._setElement(svg)
+	}
 }

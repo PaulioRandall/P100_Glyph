@@ -1,14 +1,10 @@
 import { NAME_SPACE } from './cheddar.js'
-import Updateable from './Updateable.js'
+import Elemental from './Elemental.js'
 import List from './List.js'
 import Command from './Command.js'
 import SubPath from './SubPath.js'
 
-export default class Path extends Updateable {
-	static startingAt(x, y) {
-		return new Path().move(x, y)
-	}
-
+export default class Path extends Elemental {
 	_element = null
 	_commands = new List()
 	_subPaths = new List()
@@ -17,7 +13,7 @@ export default class Path extends Updateable {
 	constructor() {
 		super()
 
-		this._element = createElement(this._commands)
+		this._generateElement()
 		this.update()
 	}
 
@@ -136,28 +132,33 @@ export default class Path extends Updateable {
 		return this
 	}
 
-	update() {
-		this._element.setAttribute('d', this.toString())
-		updateSubPaths(this)
-		super.update()
-	}
-
 	toString() {
 		return this._commands
 			.map((cmd) => cmd.toString()) //
 			.join(' ') //
 	}
-}
 
-function createElement(commands) {
-	const path = document.createElementNS(NAME_SPACE, 'path')
-	const textCmds = commands.map((cmd) => cmd.toString())
+	update() {
+		this._element.setAttribute('d', this.toString())
+		this._generateSubPaths()
+		super.update()
+	}
 
-	path.setAttribute('d', textCmds.join(' '))
-	path.setAttribute('stroke', 'black')
-	path.setAttribute('fill', 'none')
+	_generateElement() {
+		const cmds = this._commands
+		const path = document.createElementNS(NAME_SPACE, 'path')
+		const textCmds = cmds.map((cmd) => cmd.toString())
 
-	return path
+		path.setAttribute('d', textCmds.join(' '))
+		path.setAttribute('stroke', 'black')
+		path.setAttribute('fill', 'none')
+
+		this._setElement(path)
+	}
+
+	_generateSubPaths() {
+		updateSubPaths(this)
+	}
 }
 
 function updateSubPaths(path) {
