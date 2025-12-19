@@ -84,7 +84,7 @@ export default class SubPath extends Updateable {
 		}
 
 		const currCmd = this.startCommand
-		const newCmd = currCmd.withXY(x, y)
+		const newCmd = currCmd.clone().setXY(x, y)
 		this._path.commands.replace(currCmd, newCmd)
 
 		this.update()
@@ -98,7 +98,7 @@ export default class SubPath extends Updateable {
 		}
 
 		const currCmd = this.endCommand
-		const newCmd = currCmd.withXY(x, y)
+		const newCmd = currCmd.clone().setXY(x, y)
 		this._path.commands.replace(currCmd, newCmd)
 
 		if (currCmd === this._cmd) {

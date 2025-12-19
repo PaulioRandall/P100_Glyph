@@ -1,4 +1,6 @@
 import List from './List.js'
+import Updateable from './Updateable.js'
+import CommandIndices from './CommandIndices.js'
 
 // An SVG path command. It's immutable from the user dev's
 // perspective. They should replace existing commands
@@ -8,7 +10,7 @@ import List from './List.js'
 //
 // Arcs and curve shortcuts are not supported, this
 // includes 'A', 'S', and 'T' command types.
-export default class Command {
+export default class Command extends Updateable {
 	static move(x, y) {
 		return new Command('M', x, y)
 	}
@@ -29,45 +31,20 @@ export default class Command {
 		return new Command('Z')
 	}
 
-	_parameters = []
-
-	_type = ''
-
+	_params = []
+	_type = null
 	_x = null
 	_y = null
-
 	_cp1X = null
 	_cp1Y = null
-
 	_cp2X = null
 	_cp2Y = null
 
-	constructor(...parameters) {
-		this._parameters = parameters
-		this._type = this._parameters[0]
+	constructor(...params) {
+		super()
 
-		if (this._type !== 'Z') {
-			this._x = List.beforeLast(parameters)
-			this._y = List.last(parameters)
-		}
-
-		if (this._type === 'Q') {
-			this._cp1X = parameters[1]
-			this._cp1Y = parameters[2]
-			this._cp2X = null
-			this._cp2Y = null
-		}
-
-		if (this._type === 'C') {
-			this._cp1X = parameters[1]
-			this._cp1Y = parameters[2]
-			this._cp2X = parameters[3]
-			this._cp2Y = parameters[4]
-		}
-	}
-
-	get parameters() {
-		return this._parameters
+		this._setFields(params)
+		this.update()
 	}
 
 	get type() {
@@ -98,25 +75,43 @@ export default class Command {
 		return this._cp2Y
 	}
 
-	clone() {
-		return new Command(...this._parameters)
+	setXY(x, y) {
+		this._x = Math.round(x)
+		this._y = Math.round(y)
+		this.update()
+		return this
 	}
 
-	withXY(x, y) {
-		const params = List.from(this._parameters)
+	clone() {
+		return new Command(...this._params)
+	}
 
-		params.pop()
-		params.pop()
-		params.push(x, y)
-
-		return new Command(...params)
+	update() {
+		this._remakeParams()
+		super.update()
 	}
 
 	toString() {
-		return this._parameters.join(' ')
+		return this._params.join(' ')
 	}
-}
 
-function orElse(obj, key, elseValue) {
-	return obj.hasOwn(key) ? obj[key] : elseValue
+	_setFields(params) {
+		const paramIndexes = CommandIndices.get(params[0])
+
+		for (const name in paramIndexes) {
+			const i = paramIndexes[name]
+			this['_' + name] = params[i]
+		}
+	}
+
+	_remakeParams() {
+		const indices = CommandIndices.get(this._type)
+		this._params = new Array(indices.length)
+
+		for (const name in indices) {
+			const i = indices[name]
+			const fieldName = '_' + name
+			this._params[i] = this[fieldName]
+		}
+	}
 }

@@ -1,6 +1,15 @@
 import Command from './Command.js'
 
 describe('Command.js', () => {
+	test('setXY', () => {
+		const cmd = Command.line(0, 0)
+
+		cmd.setXY(10, 20)
+
+		expect(cmd.x).toEqual(10)
+		expect(cmd.y).toEqual(20)
+	})
+
 	test('values calculated correctly for close command', () => {
 		const cmd = Command.close('Z')
 
@@ -64,11 +73,5 @@ describe('Command.js', () => {
 
 		expect(cmd.cp2X).toEqual(10)
 		expect(cmd.cp2Y).toEqual(10)
-	})
-
-	test('withXY()', () => {
-		const cmd = Command.cubic(5, 5, 10, 10, 20, 20)
-		const clone = cmd.withXY(50, 75)
-		expect(clone).toEqual(Command.cubic(5, 5, 10, 10, 50, 75))
 	})
 })
