@@ -5,7 +5,6 @@ import Command from './Command.js'
 import SubPath from './SubPath.js'
 
 export default class Path extends Elemental {
-	_element = null
 	_commands = new List()
 	_subPaths = new List()
 	_closed = false
@@ -19,10 +18,6 @@ export default class Path extends Elemental {
 
 	get commands() {
 		return this._commands
-	}
-
-	get element() {
-		return this._element
 	}
 
 	get subPaths() {
