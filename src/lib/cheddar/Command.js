@@ -103,19 +103,6 @@ export default class Command extends Updateable {
 		return this
 	}
 
-	nuSetXY(x, y) {
-		this._errIfClose()
-		this._x = Math.round(x)
-		this._y = Math.round(y)
-		return this
-	}
-
-	setXY(x, y) {
-		this.nuSetXY(x, y)
-		this.update()
-		return this
-	}
-
 	_errIfClose() {
 		if (this._type === 'Z') {
 			throw new Error("Command type must not be 'Z' to do that")
@@ -146,19 +133,6 @@ export default class Command extends Updateable {
 		return this
 	}
 
-	nuSetCP1(x, y) {
-		this._errIfNotCurve()
-		this._cp1X = Math.round(x)
-		this._cp1Y = Math.round(y)
-		return this
-	}
-
-	setCP1(x, y) {
-		this.nuSetCP1(x, y)
-		this.update()
-		return this
-	}
-
 	_errIfNotCurve() {
 		if (this._type !== 'Q' && this._type !== 'C') {
 			throw new Error('Command must be a curve to do that')
@@ -166,7 +140,7 @@ export default class Command extends Updateable {
 	}
 
 	nuSetCP2X(x) {
-		this._errIfNotCurve()
+		this._errIfNotCubic()
 		this._cp2X = Math.round(x)
 		return this
 	}
@@ -178,26 +152,13 @@ export default class Command extends Updateable {
 	}
 
 	nuSetCP2Y(y) {
-		this._errIfNotCurve()
+		this._errIfNotCubic()
 		this._cp2Y = Math.round(y)
 		return this
 	}
 
 	setCP2Y(y) {
 		this.nuSetCP2Y(y)
-		this.update()
-		return this
-	}
-
-	nuSetCP2(x, y) {
-		this._errIfNotCubic()
-		this._cp2X = Math.round(x)
-		this._cp2Y = Math.round(y)
-		return this
-	}
-
-	setCP2(x, y) {
-		this.nuSetCP2(x, y)
 		this.update()
 		return this
 	}

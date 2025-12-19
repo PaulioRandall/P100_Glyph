@@ -89,17 +89,6 @@ describe('Command.js', () => {
 		expect(cmd.params[2]).toEqual(20)
 	})
 
-	test('setXY', () => {
-		const cmd = Command.line(0, 0)
-
-		cmd.setXY(10, 20)
-
-		expect(cmd.x).toEqual(10)
-		expect(cmd.y).toEqual(20)
-		expect(cmd.params[1]).toEqual(10)
-		expect(cmd.params[2]).toEqual(20)
-	})
-
 	test('setCP1X', () => {
 		const cmd = Command.quadratic(0, 0, 0, 0)
 
@@ -118,17 +107,6 @@ describe('Command.js', () => {
 		expect(cmd.params[2]).toEqual(20)
 	})
 
-	test('setCP1', () => {
-		const cmd = Command.quadratic(0, 0, 0, 0)
-
-		cmd.setCP1(10, 20)
-
-		expect(cmd.cp1X).toEqual(10)
-		expect(cmd.cp1Y).toEqual(20)
-		expect(cmd.params[1]).toEqual(10)
-		expect(cmd.params[2]).toEqual(20)
-	})
-
 	test('setCP2X', () => {
 		const cmd = Command.cubic(0, 0, 0, 0, 0, 0)
 
@@ -144,17 +122,6 @@ describe('Command.js', () => {
 		cmd.setCP2Y(20)
 
 		expect(cmd.cp2Y).toEqual(20)
-		expect(cmd.params[4]).toEqual(20)
-	})
-
-	test('setCP2', () => {
-		const cmd = Command.cubic(0, 0, 0, 0, 0, 0)
-
-		cmd.setCP2(10, 20)
-
-		expect(cmd.cp2X).toEqual(10)
-		expect(cmd.cp2Y).toEqual(20)
-		expect(cmd.params[3]).toEqual(10)
 		expect(cmd.params[4]).toEqual(20)
 	})
 
