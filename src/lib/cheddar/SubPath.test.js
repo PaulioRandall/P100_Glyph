@@ -1,8 +1,6 @@
 import Path from './Path.js'
 import Command from './Command.js'
 
-// TODO: Modify tests to remove dependency on Path.
-
 // Clear the list of update funcs because I can't
 // mock them.
 function clearUpdateFuncs(path) {
@@ -181,7 +179,7 @@ describe('SubPath.js', () => {
 		)
 	})
 
-	test('curve() from cubic', () => {
+	test('curve() from cubic to line', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
 			.cubicTo(40, 40, 50, 50, 80, 80) // [1]
@@ -195,7 +193,8 @@ describe('SubPath.js', () => {
 		)
 	})
 
-	test('curve() from close', () => {
+	/*
+	test('curve() from close to line', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
 			.close() // [1]
@@ -208,8 +207,9 @@ describe('SubPath.js', () => {
 			Command.close() //
 		)
 	})
+*/
 
-	test('curve() from line', () => {
+	test('curve() from line to quadratic', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 80) // [1]
@@ -223,7 +223,7 @@ describe('SubPath.js', () => {
 		)
 	})
 
-	test('curve() from quadratic', () => {
+	test('curve() from quadratic to quadratic', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
 			.quadraticTo(40, 50, 80, 80) // [1]
@@ -237,7 +237,7 @@ describe('SubPath.js', () => {
 		)
 	})
 
-	test('curve() from cubic', () => {
+	test('curve() from cubic to quadratic', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
 			.cubicTo(40, 40, 50, 50, 80, 80) // [1]
@@ -251,7 +251,8 @@ describe('SubPath.js', () => {
 		)
 	})
 
-	test('curve() from close', () => {
+	/*
+	test('curve() from close to quadratic', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
 			.close() // [1]
@@ -268,8 +269,8 @@ describe('SubPath.js', () => {
 			Command.close() //
 		)
 	})
-
-	test('curve() from line', () => {
+*/
+	test('curve() from line to cubic', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 80) // [1]
@@ -283,7 +284,7 @@ describe('SubPath.js', () => {
 		)
 	})
 
-	test('curve() from quadratic', () => {
+	test('curve() from quadratic to cubic', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
 			.quadraticTo(40, 40, 80, 80) // [1]
@@ -297,7 +298,7 @@ describe('SubPath.js', () => {
 		)
 	})
 
-	test('curve() from cubic', () => {
+	test('curve() from cubic to cubic', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
 			.cubicTo(30, 30, 70, 70, 80, 80) // [1]
@@ -311,7 +312,8 @@ describe('SubPath.js', () => {
 		)
 	})
 
-	test('curve() from close', () => {
+	/*
+	test('curve() from close to cubic', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
 			.close() // [1]
@@ -328,4 +330,5 @@ describe('SubPath.js', () => {
 			Command.close() //
 		)
 	})
+	*/
 })

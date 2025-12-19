@@ -79,13 +79,9 @@ export default class SubPath extends Updateable {
 
 	// Sets the start point.
 	setStart(x, y) {
-		if (!this.inPath()) {
-			throw new Error('SubPath no longer part of its Path')
-		}
+		this._errIfNotInPath()
 
-		const currCmd = this.startCommand
-		const newCmd = currCmd.clone().setXY(x, y)
-		this._path.commands.replace(currCmd, newCmd)
+		this.startCommand.nuSetX(x).setY(y)
 
 		this.update()
 		return this
@@ -93,100 +89,40 @@ export default class SubPath extends Updateable {
 
 	// Sets the end point.
 	setEnd(x, y) {
-		if (!this.inPath()) {
-			throw new Error('SubPath no longer part of its Path')
-		}
+		this._errIfNotInPath()
 
-		const currCmd = this.endCommand
-		const newCmd = currCmd.clone().setXY(x, y)
-		this._path.commands.replace(currCmd, newCmd)
-
-		if (currCmd === this._cmd) {
-			this._cmd = newCmd
-		}
+		this.endCommand.nuSetX(x).setY(y)
 
 		this.update()
 		return this
 	}
 
 	straighten() {
-		if (!this.inPath()) {
-			throw new Error('SubPath no longer part of its Path')
-		}
+		this._errIfNotInPath()
 
 		if (this._cmd.type === 'L' || this._cmd.type === 'Z') {
 			return this
 		}
 
-		const endCmd = this.endCommand
-		const newCmd = Command.line(endCmd.x, endCmd.y)
-		this._path.commands.replace(this._cmd, newCmd)
+		this._cmd.straighten()
 
 		this.update()
 		return this
 	}
 
 	curve(cp1X = null, cp1Y = null, cp2X = null, cp2Y = null) {
-		if (!this.inPath()) {
-			throw new Error('SubPath no longer part of its Path')
-		}
+		this._errIfNotInPath()
 
-		if (cp1X === null) {
-			this.straighten()
-			return this
-		}
+		// TODO: Handle close command case.
+		this._cmd.curve(cp1X, cp1Y, cp2X, cp2Y)
 
-		if (cp2X === null) {
-			this._convertToQuadrate(cp1X, cp1Y)
-			return this
-		}
-
-		this._convertToCubic(cp1X, cp1Y, cp2X, cp2Y)
+		this.update()
 		return this
 	}
 
-	_convertToQuadrate(cpX, cpY) {
-		const endCmd = this.endCommand
-		const newCmd = Command.quadratic(
-			cpX,
-			cpY, //
-			endCmd.x,
-			endCmd.y //
-		)
-
-		if (this._cmd.type === 'Z') {
-			this._path.commands.insertBefore(this._cmd, newCmd)
-		} else {
-			this._path.commands.replace(this._cmd, newCmd)
+	_errIfNotInPath() {
+		if (!this.inPath()) {
+			throw new Error('SubPath no longer part of its Path')
 		}
-
-		this.update()
-	}
-
-	_convertToCubic(cp1X, cp1Y, cp2X, cp2Y) {
-		const endCmd = this.endCommand
-		const newCmd = Command.cubic(
-			cp1X,
-			cp1Y, //
-			cp2X,
-			cp2Y, //
-			endCmd.x,
-			endCmd.y //
-		)
-
-		if (this._cmd.type === 'Z') {
-			this._path.commands.insertBefore(this._cmd, newCmd)
-		} else {
-			this._path.commands.replace(this._cmd, newCmd)
-		}
-
-		this.update()
-	}
-}
-
-function toPoint(cmd) {
-	return {
-		x: cmd.x,
-		y: cmd.y,
 	}
 }

@@ -208,6 +208,10 @@ export default class Command extends Updateable {
 		}
 	}
 
+	// Same as straighten but does not update parameters.
+	//
+	// You will need to call update after performing any
+	// other 'nu' prefixed operations.
 	nuStraighten() {
 		this._errIfCantStraighten()
 
@@ -247,6 +251,23 @@ export default class Command extends Updateable {
 		}
 	}
 
+	nuCurve(cp1X = null, cp1Y = null, cp2X = null, cp2Y = null) {
+		this._errIfCantCurve()
+
+		if (cp1X === null) {
+			this.straighten()
+			return this
+		}
+
+		if (cp2X === null) {
+			this._updateToQuadratic(cp1X, cp1Y)
+			return this
+		}
+
+		this._updateToCubic(cp1X, cp1Y, cp2X, cp2Y)
+		return this
+	}
+
 	// Converts the command to a curve based on the arguments
 	// provided (or update the current curve).
 	//
@@ -262,23 +283,6 @@ export default class Command extends Updateable {
 	//
 	// TODO: Allow users to specify optional x,y values at
 	//       the end of the argument list.
-	nuCurve(cp1X = null, cp1Y = null, cp2X = null, cp2Y = null) {
-		this._errIfCantCurve()
-
-		if (cp1X === null) {
-			this.straighten()
-			return this
-		}
-
-		if (cp2X === null) {
-			this._updateAsQuadratic(cp1X, cp1Y)
-			return this
-		}
-
-		this._updateAsCubic(cp1X, cp1Y, cp2X, cp2Y)
-		return this
-	}
-
 	curve(cp1X = null, cp1Y = null, cp2X = null, cp2Y = null) {
 		this.nuCurve(cp1X, cp1Y, cp2X, cp2Y)
 		this.update()
@@ -291,7 +295,7 @@ export default class Command extends Updateable {
 		}
 	}
 
-	_updateAsQuadratic(cp1X, cp1Y) {
+	_updateToQuadratic(cp1X, cp1Y) {
 		this._cp1X = cp1X
 		this._cp1Y = cp1Y
 		this._cp2X = null
@@ -299,7 +303,7 @@ export default class Command extends Updateable {
 		this._type = 'Q'
 	}
 
-	_updateAsCubic(cp1X, cp1Y, cp2X, cp2Y) {
+	_updateToCubic(cp1X, cp1Y, cp2X, cp2Y) {
 		this._cp1X = cp1X
 		this._cp1Y = cp1Y
 		this._cp2X = cp2X

@@ -4,23 +4,7 @@ import List from './List.js'
 import Command from './Command.js'
 import SubPath from './SubPath.js'
 
-// TODO: The current problem with SubPaths is that they
-//       are recreated when the path is updated. This means
-//       storing a SubPath after getting it will outdate it
-//       if a method on it, or its parent Path, mutates
-//       the command list in anyway.
-//
-//       We could keep the list of SubPaths updated instead
-//       of being recreated. This means any mutation by
-//       a SubPath must propogate to other SubPaths if
-//       a Command is replaced.
-//
-//       This could be done by storing an index to the
-//       SubPath's core Command within the Path's command
-//       list instead of storing the core Command. Then
-//       update indexes for all SubPaths if a Command is
-//       added or removed (including adding or removing
-//       the associated SubPath).
+// TODO: Should close command 'Z' allowed to be a sub path?
 
 export default class Path extends Updateable {
 	static startingAt(x, y) {
@@ -69,6 +53,7 @@ export default class Path extends Updateable {
 		}
 
 		cmd.onUpdate(this.update.bind(this))
+
 		this.update()
 		return this
 	}
