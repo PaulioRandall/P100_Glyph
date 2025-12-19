@@ -2,14 +2,15 @@ import List from './List.js'
 import Updateable from './Updateable.js'
 import CommandIndices from './CommandIndices.js'
 
-// An SVG path command. It's immutable from the user dev's
-// perspective. They should replace existing commands
-// in the path if they want to make a change.
+// Represents an SVG path command.
 //
-// Commands are always absolute, i.e. uppercase type.
+// Only M, L, Q, C, and Z commands are supported.
 //
-// Arcs and curve shortcuts are not supported, this
-// includes 'A', 'S', and 'T' command types.
+// All mutation functions trigger a call to update except
+// 'nu' prefixed functions. If using 'nu' prefixed
+// functions, make sure to call update (or finish on a call
+// to a function that calls update) to ensure other values
+// are kept in sync and listeners are notified.
 export default class Command extends Updateable {
 	static move(x, y) {
 		return new Command('M', x, y)
@@ -43,8 +44,11 @@ export default class Command extends Updateable {
 	constructor(...params) {
 		super()
 
-		this._setFields(params)
-		this.update()
+		this._setFields(...params)
+	}
+
+	get params() {
+		return this._params
 	}
 
 	get type() {
@@ -75,11 +79,133 @@ export default class Command extends Updateable {
 		return this._cp2Y
 	}
 
-	setXY(x, y) {
+	nuSetX(x) {
+		this._errIfClose()
 		this._x = Math.round(x)
-		this._y = Math.round(y)
+		return this
+	}
+
+	setX(x) {
+		this.nuSetX(x)
 		this.update()
 		return this
+	}
+
+	nuSetY(y) {
+		this._errIfClose()
+		this._y = Math.round(y)
+		return this
+	}
+
+	setY(y) {
+		this.nuSetY(y)
+		this.update()
+		return this
+	}
+
+	nuSetXY(x, y) {
+		this._errIfClose()
+		this._x = Math.round(x)
+		this._y = Math.round(y)
+		return this
+	}
+
+	setXY(x, y) {
+		this.nuSetXY(x, y)
+		this.update()
+		return this
+	}
+
+	_errIfClose() {
+		if (this._type === 'Z') {
+			throw new Error("Command type must not be 'Z' to do that")
+		}
+	}
+
+	nuSetCP1X(x) {
+		this._errIfNotCurve()
+		this._cp1X = Math.round(x)
+		return this
+	}
+
+	setCP1X(x) {
+		this.nuSetCP1X(x)
+		this.update()
+		return this
+	}
+
+	nuSetCP1Y(y) {
+		this._errIfNotCurve()
+		this._cp1Y = Math.round(y)
+		return this
+	}
+
+	setCP1Y(y) {
+		this.nuSetCP1Y(y)
+		this.update()
+		return this
+	}
+
+	nuSetCP1(x, y) {
+		this._errIfNotCurve()
+		this._cp1X = Math.round(x)
+		this._cp1Y = Math.round(y)
+		return this
+	}
+
+	setCP1(x, y) {
+		this.nuSetCP1(x, y)
+		this.update()
+		return this
+	}
+
+	_errIfNotCurve() {
+		if (this._type !== 'Q' && this._type !== 'C') {
+			throw new Error('Command must be a curve to do that')
+		}
+	}
+
+	nuSetCP2X(x) {
+		this._errIfNotCurve()
+		this._cp2X = Math.round(x)
+		return this
+	}
+
+	setCP2X(x) {
+		this.nuSetCP2X(x)
+		this.update()
+		return this
+	}
+
+	nuSetCP2Y(y) {
+		this._errIfNotCurve()
+		this._cp2Y = Math.round(y)
+		return this
+	}
+
+	setCP2Y(y) {
+		this.nuSetCP2Y(y)
+		this.update()
+		return this
+	}
+
+	nuSetCP2(x, y) {
+		this._errIfNotCubic()
+		this._cp2X = Math.round(x)
+		this._cp2Y = Math.round(y)
+		return this
+	}
+
+	setCP2(x, y) {
+		this.nuSetCP2(x, y)
+		this.update()
+		return this
+	}
+
+	_errIfNotCubic() {
+		if (this._type !== 'C') {
+			throw new Error('Command must be cubic to do that')
+		}
 	}
 
 	clone() {
@@ -95,13 +221,15 @@ export default class Command extends Updateable {
 		return this._params.join(' ')
 	}
 
-	_setFields(params) {
+	_setFields(...params) {
 		const paramIndexes = CommandIndices.get(params[0])
 
 		for (const name in paramIndexes) {
 			const i = paramIndexes[name]
 			this['_' + name] = params[i]
 		}
+
+		this.update()
 	}
 
 	_remakeParams() {
