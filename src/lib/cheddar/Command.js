@@ -29,9 +29,9 @@ export default class Command {
 		return new Command('Z')
 	}
 
-	_type = ''
 	_parameters = []
-	_string = ''
+
+	_type = ''
 
 	_x = null
 	_y = null
@@ -42,38 +42,36 @@ export default class Command {
 	_cp2X = null
 	_cp2Y = null
 
-	// TODO: Validate input.
-	constructor(type, ...parameters) {
-		this._type = type
+	constructor(...parameters) {
 		this._parameters = parameters
-		this._string = [type, ...parameters].join(' ')
+		this._type = this._parameters[0]
 
-		if (type !== 'Z') {
+		if (this._type !== 'Z') {
 			this._x = List.beforeLast(parameters)
 			this._y = List.last(parameters)
 		}
 
-		if (type === 'Q') {
-			this._cp1X = parameters[0]
-			this._cp1Y = parameters[1]
+		if (this._type === 'Q') {
+			this._cp1X = parameters[1]
+			this._cp1Y = parameters[2]
 			this._cp2X = null
 			this._cp2Y = null
 		}
 
-		if (type === 'C') {
-			this._cp1X = parameters[0]
-			this._cp1Y = parameters[1]
-			this._cp2X = parameters[2]
-			this._cp2Y = parameters[3]
+		if (this._type === 'C') {
+			this._cp1X = parameters[1]
+			this._cp1Y = parameters[2]
+			this._cp2X = parameters[3]
+			this._cp2Y = parameters[4]
 		}
-	}
-
-	get type() {
-		return this._type
 	}
 
 	get parameters() {
 		return this._parameters
+	}
+
+	get type() {
+		return this._type
 	}
 
 	get x() {
@@ -101,7 +99,7 @@ export default class Command {
 	}
 
 	clone() {
-		return new Command(this._type, ...this._parameters)
+		return new Command(...this._parameters)
 	}
 
 	withXY(x, y) {
@@ -111,11 +109,11 @@ export default class Command {
 		params.pop()
 		params.push(x, y)
 
-		return new Command(this._type, ...params)
+		return new Command(...params)
 	}
 
 	toString() {
-		return this._string
+		return this._parameters.join(' ')
 	}
 }
 
