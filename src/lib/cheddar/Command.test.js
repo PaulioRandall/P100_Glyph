@@ -162,4 +162,44 @@ describe('Command.js', () => {
 		const cmd = new Command('C', 5, 5, 10, 10, 20, 20)
 		expect(cmd.toString()).toEqual('C 5 5 10 10 20 20')
 	})
+
+	test('straighten() from line', () => {
+		const cmd = Command.line(10, 20)
+
+		cmd.straighten()
+
+		expect(cmd).toEqual(
+			Command.line(10, 20) //
+		)
+	})
+
+	test('straighten() from quadratic', () => {
+		const cmd = Command.quadratic(10, 20, 30, 40)
+
+		cmd.straighten()
+
+		expect(cmd).toEqual(
+			Command.line(30, 40) //
+		)
+	})
+
+	test('straighten() from cubic', () => {
+		const cmd = Command.cubic(10, 20, 30, 40, 50, 60)
+
+		cmd.straighten()
+
+		expect(cmd).toEqual(
+			Command.line(50, 60) //
+		)
+	})
+
+	test('straighten() from close', () => {
+		const cmd = Command.close()
+
+		cmd.straighten()
+
+		expect(cmd).toEqual(
+			Command.close() //
+		)
+	})
 })

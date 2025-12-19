@@ -208,6 +208,39 @@ export default class Command extends Updateable {
 		}
 	}
 
+	nuStraighten() {
+		this._errIfCantStraighten()
+
+		if (this._type === 'L' || this._type === 'Z') {
+			return this
+		}
+
+		this._cp1X = null
+		this._cp1Y = null
+		this._cp2X = null
+		this._cp2Y = null
+		this._type = 'L'
+
+		return this
+	}
+
+	// Converts the command to a line command if not already
+	// a line command. Will also do nothing if a close
+	// command because they create straight lines too and we
+	// don't want to open a closed path without the dev
+	// user's explicit instruction.
+	straighten() {
+		this.nuStraighten()
+		this.update()
+		return this
+	}
+
+	_errIfCantStraighten() {
+		if (this._type === 'M') {
+			throw new Error("Move commands can't be straightened")
+		}
+	}
+
 	clone() {
 		return new Command(...this._params)
 	}
