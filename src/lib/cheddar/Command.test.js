@@ -163,7 +163,7 @@ describe('Command.js', () => {
 		expect(cmd.toString()).toEqual('C 5 5 10 10 20 20')
 	})
 
-	test('straighten() from line', () => {
+	test('straighten: from line', () => {
 		const cmd = Command.line(10, 20)
 
 		cmd.straighten()
@@ -173,7 +173,7 @@ describe('Command.js', () => {
 		)
 	})
 
-	test('straighten() from quadratic', () => {
+	test('straighten: from quadratic', () => {
 		const cmd = Command.quadratic(10, 20, 30, 40)
 
 		cmd.straighten()
@@ -183,7 +183,7 @@ describe('Command.js', () => {
 		)
 	})
 
-	test('straighten() from cubic', () => {
+	test('straighten: from cubic', () => {
 		const cmd = Command.cubic(10, 20, 30, 40, 50, 60)
 
 		cmd.straighten()
@@ -193,13 +193,103 @@ describe('Command.js', () => {
 		)
 	})
 
-	test('straighten() from close', () => {
+	test('straighten: from close', () => {
 		const cmd = Command.close()
 
 		cmd.straighten()
 
 		expect(cmd).toEqual(
 			Command.close() //
+		)
+	})
+
+	test('curve: from line to line', () => {
+		const cmd = Command.line(10, 20)
+
+		cmd.curve()
+
+		expect(cmd).toEqual(
+			Command.line(10, 20) //
+		)
+	})
+
+	test('curve: from quadratic to line', () => {
+		const cmd = Command.quadratic(10, 20, 30, 40)
+
+		cmd.curve()
+
+		expect(cmd).toEqual(
+			Command.line(30, 40) //
+		)
+	})
+
+	test('curve: from cubic to line', () => {
+		const cmd = Command.cubic(10, 20, 30, 40, 50, 60)
+
+		cmd.curve()
+
+		expect(cmd).toEqual(
+			Command.line(50, 60) //
+		)
+	})
+
+	test('curve: from line to quadratic', () => {
+		const cmd = Command.line(10, 20)
+
+		cmd.curve(30, 40)
+
+		expect(cmd).toEqual(
+			Command.quadratic(30, 40, 10, 20) //
+		)
+	})
+
+	test('curve: from quadratic to quadratic', () => {
+		const cmd = Command.quadratic(10, 20, 30, 40)
+
+		cmd.curve(50, 60)
+
+		expect(cmd).toEqual(
+			Command.quadratic(50, 60, 30, 40) //
+		)
+	})
+
+	test('curve: from cubic to quadratic', () => {
+		const cmd = Command.cubic(10, 20, 30, 40, 50, 60)
+
+		cmd.curve(70, 80)
+
+		expect(cmd).toEqual(
+			Command.quadratic(70, 80, 50, 60) //
+		)
+	})
+
+	test('curve: from line to cubic', () => {
+		const cmd = Command.line(10, 20)
+
+		cmd.curve(30, 40, 50, 60)
+
+		expect(cmd).toEqual(
+			Command.cubic(30, 40, 50, 60, 10, 20) //
+		)
+	})
+
+	test('curve: from quadratic to cubic', () => {
+		const cmd = Command.quadratic(10, 20, 30, 40)
+
+		cmd.curve(50, 60, 70, 80)
+
+		expect(cmd).toEqual(
+			Command.cubic(50, 60, 70, 80, 30, 40) //
+		)
+	})
+
+	test('curve() from cubic to cubic', () => {
+		const cmd = Command.cubic(10, 20, 30, 40, 50, 60)
+
+		cmd.curve(70, 80, 90, 100)
+
+		expect(cmd).toEqual(
+			Command.cubic(70, 80, 90, 100, 50, 60) //
 		)
 	})
 })

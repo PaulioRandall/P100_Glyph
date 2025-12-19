@@ -68,6 +68,7 @@ export default class Path extends Updateable {
 			cmds.push(cmd)
 		}
 
+		cmd.onUpdate(this.update.bind(this))
 		this.update()
 		return this
 	}

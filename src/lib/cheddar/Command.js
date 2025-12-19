@@ -229,6 +229,12 @@ export default class Command extends Updateable {
 	// command because they create straight lines too and we
 	// don't want to open a closed path without the dev
 	// user's explicit instruction.
+	//
+	// Move commands cannot be converted and will throw an
+	// error.
+	//
+	// TODO: Allow users to specify optional x,y values at
+	//       the end of the argument list.
 	straighten() {
 		this.nuStraighten()
 		this.update()
@@ -239,6 +245,66 @@ export default class Command extends Updateable {
 		if (this._type === 'M') {
 			throw new Error("Move commands can't be straightened")
 		}
+	}
+
+	// Converts the command to a curve based on the arguments
+	// provided (or update the current curve).
+	//
+	// - If no arguments are provided then convert to a
+	//   straight line.
+	// - If the first two arguments are provided (cp1X and
+	//   cp1Y) then convert to a quadratic curve.
+	// - If the first four arguments are provided (cp1X,
+	//   cp1Y, cp2X, cp2Y) then convert to a cubic curve.
+	//
+	// Move and close commands cannot be converted and will
+	// throw an error.
+	//
+	// TODO: Allow users to specify optional x,y values at
+	//       the end of the argument list.
+	nuCurve(cp1X = null, cp1Y = null, cp2X = null, cp2Y = null) {
+		this._errIfCantCurve()
+
+		if (cp1X === null) {
+			this.straighten()
+			return this
+		}
+
+		if (cp2X === null) {
+			this._updateAsQuadratic(cp1X, cp1Y)
+			return this
+		}
+
+		this._updateAsCubic(cp1X, cp1Y, cp2X, cp2Y)
+		return this
+	}
+
+	curve(cp1X = null, cp1Y = null, cp2X = null, cp2Y = null) {
+		this.nuCurve(cp1X, cp1Y, cp2X, cp2Y)
+		this.update()
+		return this
+	}
+
+	_errIfCantCurve() {
+		if (this._type === 'M' || this._type === 'Z') {
+			throw new Error("Move and close commands can't be curved")
+		}
+	}
+
+	_updateAsQuadratic(cp1X, cp1Y) {
+		this._cp1X = cp1X
+		this._cp1Y = cp1Y
+		this._cp2X = null
+		this._cp2Y = null
+		this._type = 'Q'
+	}
+
+	_updateAsCubic(cp1X, cp1Y, cp2X, cp2Y) {
+		this._cp1X = cp1X
+		this._cp1Y = cp1Y
+		this._cp2X = cp2X
+		this._cp2Y = cp2Y
+		this._type = 'C'
 	}
 
 	clone() {

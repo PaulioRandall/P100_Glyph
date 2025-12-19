@@ -33,7 +33,7 @@
 		svg.add(path)
 
 		setTimeout(() => {
-			path.subPaths[1].curve(100, 50)
+			path.commands[2].curve(100, 50)
 		}, 500)
 
 		setTimeout(() => {
