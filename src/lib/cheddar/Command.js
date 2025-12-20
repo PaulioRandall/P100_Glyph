@@ -81,7 +81,7 @@ export default class Command extends Updateable {
 
 	nuSetX(x) {
 		this._errIfClose()
-		this._x = Math.round(x)
+		this._x = x
 		return this
 	}
 
@@ -93,7 +93,7 @@ export default class Command extends Updateable {
 
 	nuSetY(y) {
 		this._errIfClose()
-		this._y = Math.round(y)
+		this._y = y
 		return this
 	}
 
@@ -111,7 +111,7 @@ export default class Command extends Updateable {
 
 	nuSetCP1X(x) {
 		this._errIfNotCurve()
-		this._cp1X = Math.round(x)
+		this._cp1X = x
 		return this
 	}
 
@@ -123,7 +123,7 @@ export default class Command extends Updateable {
 
 	nuSetCP1Y(y) {
 		this._errIfNotCurve()
-		this._cp1Y = Math.round(y)
+		this._cp1Y = y
 		return this
 	}
 
@@ -141,7 +141,7 @@ export default class Command extends Updateable {
 
 	nuSetCP2X(x) {
 		this._errIfNotCubic()
-		this._cp2X = Math.round(x)
+		this._cp2X = x
 		return this
 	}
 
@@ -153,7 +153,7 @@ export default class Command extends Updateable {
 
 	nuSetCP2Y(y) {
 		this._errIfNotCubic()
-		this._cp2Y = Math.round(y)
+		this._cp2Y = y
 		return this
 	}
 
@@ -169,14 +169,23 @@ export default class Command extends Updateable {
 		}
 	}
 
+	// Returns true if a call to straighten is allowed.
+	//
+	// I.e. returns false if a move 'M' or close 'Z' command.
+	canStraighten() {
+		return this._type !== 'M' && this._type !== 'Z'
+	}
+
 	// Same as straighten but does not update parameters.
 	//
 	// You will need to call update after performing any
 	// other 'nu' prefixed operations.
 	nuStraighten() {
-		this._errIfCantStraighten()
+		if (!this.canStraighten()) {
+			throw new Error("Move and close commands can't be straightened")
+		}
 
-		if (this._type === 'L' || this._type === 'Z') {
+		if (this._type === 'L') {
 			return this
 		}
 
@@ -195,25 +204,25 @@ export default class Command extends Updateable {
 	// don't want to open a closed path without the dev
 	// user's explicit instruction.
 	//
-	// Move commands cannot be converted and will throw an
-	// error.
-	//
-	// TODO: Allow users to specify optional x,y values at
-	//       the end of the argument list.
+	// Move and close commands cannot be converted and will
+	// throw an error.
 	straighten() {
 		this.nuStraighten()
 		this.update()
 		return this
 	}
 
-	_errIfCantStraighten() {
-		if (this._type === 'M') {
-			throw new Error("Move commands can't be straightened")
-		}
+	// Returns true if a call to curve is allowed.
+	//
+	// I.e. returns false if a move 'M' or close 'Z' command.
+	canCurve() {
+		return this._type !== 'M' && this._type !== 'Z'
 	}
 
 	nuCurve(cp1X = null, cp1Y = null, cp2X = null, cp2Y = null) {
-		this._errIfCantCurve()
+		if (!this.canCurve()) {
+			throw new Error("Move and close commands can't be curved")
+		}
 
 		if (cp1X === null) {
 			this.straighten()
@@ -241,19 +250,10 @@ export default class Command extends Updateable {
 	//
 	// Move and close commands cannot be converted and will
 	// throw an error.
-	//
-	// TODO: Allow users to specify optional x,y values at
-	//       the end of the argument list.
 	curve(cp1X = null, cp1Y = null, cp2X = null, cp2Y = null) {
 		this.nuCurve(cp1X, cp1Y, cp2X, cp2Y)
 		this.update()
 		return this
-	}
-
-	_errIfCantCurve() {
-		if (this._type === 'M' || this._type === 'Z') {
-			throw new Error("Move and close commands can't be curved")
-		}
 	}
 
 	_updateToQuadratic(cp1X, cp1Y) {
@@ -277,7 +277,7 @@ export default class Command extends Updateable {
 	}
 
 	update() {
-		this._remakeParams()
+		this._generateParams()
 		super.update()
 	}
 
@@ -296,7 +296,7 @@ export default class Command extends Updateable {
 		this.update()
 	}
 
-	_remakeParams() {
+	_generateParams() {
 		const indices = CommandIndices.get(this._type)
 		this._params = new Array(indices.length)
 

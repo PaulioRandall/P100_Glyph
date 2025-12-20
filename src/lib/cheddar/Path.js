@@ -14,9 +14,6 @@ import SubPath from './SubPath.js'
 // TODO: Implement and test remove and clear functions.
 //
 // TODO: Add translate functions.
-//
-// TODO: Allow initial x,y values to be passed on
-//       construction.
 export default class Path extends Elemental {
 	_commands = new List()
 	_subPaths = new List()

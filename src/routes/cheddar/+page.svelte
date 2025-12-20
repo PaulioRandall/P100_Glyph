@@ -16,8 +16,7 @@
 			.setR(10) //
 			.addTo(svg)
 
-		const path = new Cheddar.Path() //
-			.moveTo(20, 20) //
+		const path = new Cheddar.Path(20, 20) //
 			.cubicTo(30, 50, 60, 40, 70, 70) //
 			.lineTo(70, 20) //
 			.lineToClose() //

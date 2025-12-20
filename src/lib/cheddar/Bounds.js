@@ -11,10 +11,6 @@ import Updateable from './Updateable.js'
 //       after a 'nu' mutation then the next function call
 //       may mutate using the wrong values.
 //
-// TODO: Remove rounding and let numbers be free. Fixing
-//       to integers can be done with a function on the
-//       SVG class that user devs can program too.
-//
 // TODO: Add translate functions.
 export default class Bounds extends Updateable {
 	_left = 0
@@ -96,7 +92,7 @@ export default class Bounds extends Updateable {
 
 	// setLeft without calling update.
 	nuSetLeft(v) {
-		this._left = Math.round(v)
+		this._left = v
 		return this
 	}
 
@@ -110,7 +106,7 @@ export default class Bounds extends Updateable {
 
 	// setRight without calling update.
 	nuSetRight(v) {
-		this._right = Math.round(v)
+		this._right = v
 		return this
 	}
 
@@ -124,7 +120,7 @@ export default class Bounds extends Updateable {
 
 	// setTop without calling update.
 	nuSetTop(v) {
-		this._top = Math.round(v)
+		this._top = v
 		return this
 	}
 
@@ -138,10 +134,10 @@ export default class Bounds extends Updateable {
 
 	// setEdges without calling update.
 	nuSetEdges(left, top, right, bottom) {
-		this._left = Math.round(left)
-		this._top = Math.round(top)
-		this._right = Math.round(right)
-		this._bottom = Math.round(bottom)
+		this._left = left
+		this._top = top
+		this._right = right
+		this._bottom = bottom
 		return this
 	}
 
@@ -154,7 +150,7 @@ export default class Bounds extends Updateable {
 
 	// setBottom without calling update.
 	nuSetBottom(v) {
-		this._bottom = Math.round(v)
+		this._bottom = v
 		return this
 	}
 
@@ -168,11 +164,8 @@ export default class Bounds extends Updateable {
 
 	// setCenterX without calling update.
 	nuSetCenterX(x) {
-		x = Math.round(x)
-
 		this._left = x - this._halfWidth
 		this._right = x + this._halfWidth
-
 		return this
 	}
 
@@ -185,11 +178,8 @@ export default class Bounds extends Updateable {
 
 	// setCenterY without calling update.
 	nuSetCenterY(y) {
-		y = Math.round(y)
-
 		this._top = y - this._halfWidth
 		this._bottom = y + this._halfWidth
-
 		return this
 	}
 
@@ -202,10 +192,8 @@ export default class Bounds extends Updateable {
 
 	// setWidth without calling update.
 	nuSetWidth(w) {
-		w = Math.round(w)
-
 		const diff = w - this._width
-		const half = Math.round(diff / 2)
+		const half = diff / 2
 
 		this._left -= half
 		this._right = this._left + w
@@ -223,10 +211,8 @@ export default class Bounds extends Updateable {
 
 	// setHeight without calling update.
 	nuSetHeight(h) {
-		h = Math.round(h)
-
 		const diff = h - this._height
-		const half = Math.round(diff / 2)
+		const half = diff / 2
 
 		this._top -= half
 		this._bottom = this._top + h
@@ -301,8 +287,8 @@ export default class Bounds extends Updateable {
 	update() {
 		this._width = this._right - this._left
 		this._height = this._bottom - this._top
-		this._halfWidth = Math.round(this._width / 2)
-		this._halfHeight = Math.round(this._height / 2)
+		this._halfWidth = this._width / 2
+		this._halfHeight = this._height / 2
 		this._cx = calcCenter(this._left, this._right)
 		this._cy = calcCenter(this._top, this._bottom)
 		super.update()
@@ -311,9 +297,6 @@ export default class Bounds extends Updateable {
 	// Returns true if the coords lay within or on the edge
 	// of the bounds.
 	contains(x, y) {
-		x = Math.round(x)
-		y = Math.round(y)
-
 		return (
 			x >= this._left && //
 			x <= this._right && //
@@ -325,9 +308,6 @@ export default class Bounds extends Updateable {
 	// Returns true if the coords lay within the bounds. Will
 	// return false if on the edge.
 	containsWithin(x, y) {
-		x = Math.round(x)
-		y = Math.round(y)
-
 		return (
 			x > this._left && //
 			x < this._right && //
@@ -359,5 +339,5 @@ export default class Bounds extends Updateable {
 }
 
 function calcCenter(min, max) {
-	return Math.round(max - (max - min) / 2)
+	return max - (max - min) / 2
 }
