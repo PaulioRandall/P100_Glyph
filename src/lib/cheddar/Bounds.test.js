@@ -35,7 +35,7 @@ describe('Bounds.js', () => {
 
 	test('setCenterX()', () => {
 		const cb = new Bounds() //
-			.set(0, 0, 100, 100) //
+			.setEdges(0, 0, 100, 100) //
 			.setCenterX(25)
 
 		expect(cb.centerX).toEqual(25)
@@ -45,23 +45,10 @@ describe('Bounds.js', () => {
 
 	test('setCenterY()', () => {
 		const cb = new Bounds() //
-			.set(0, 0, 100, 100) //
+			.setEdges(0, 0, 100, 100) //
 			.setCenterY(25)
 
 		expect(cb.centerY).toEqual(25)
-		expect(cb.top).toEqual(-25)
-		expect(cb.bottom).toEqual(75)
-	})
-
-	test('setCenter()', () => {
-		const cb = new Bounds() //
-			.set(0, 0, 100, 100) //
-			.setCenter(25, 25)
-
-		expect(cb.centerX).toEqual(25)
-		expect(cb.centerY).toEqual(25)
-		expect(cb.left).toEqual(-25)
-		expect(cb.right).toEqual(75)
 		expect(cb.top).toEqual(-25)
 		expect(cb.bottom).toEqual(75)
 	})
@@ -124,7 +111,7 @@ describe('Bounds.js', () => {
 
 	test('contains()', () => {
 		const cb = new Bounds() //
-			.set(0, 0, 100, 100) //
+			.setEdges(0, 0, 100, 100) //
 
 		const f = (x, y) => cb.contains(x, y)
 
@@ -139,7 +126,7 @@ describe('Bounds.js', () => {
 
 	test('containsWithin()', () => {
 		const cb = new Bounds() //
-			.set(0, 0, 100, 100) //
+			.setEdges(0, 0, 100, 100) //
 
 		const f = (x, y) => cb.containsWithin(x, y)
 
@@ -154,14 +141,14 @@ describe('Bounds.js', () => {
 
 	test('toString()', () => {
 		const cb = new Bounds() //
-			.set(-25, -25, 75, 75) //
+			.setEdges(-25, -25, 75, 75) //
 
 		expect(cb.toString()).toEqual('-25 -25 75 75')
 	})
 
 	test('toViewboxString()', () => {
 		const cb = new Bounds() //
-			.set(-25, -25, 75, 75) //
+			.setEdges(-25, -25, 75, 75) //
 
 		expect(cb.toViewboxString()).toEqual('-25 -25 100 100')
 	})

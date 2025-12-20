@@ -3,6 +3,8 @@ import Updateable from './Updateable.js'
 
 // Classes extending the Elemental class map to a single
 // HTML element which is updateable.
+//
+// TODO: Document.
 export default class Elemental extends Updateable {
 	_element = null
 

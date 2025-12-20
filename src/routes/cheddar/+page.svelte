@@ -7,7 +7,7 @@
 
 	onMount(() => {
 		svg = new Cheddar.SVG()
-		svg.viewbox.set(0, 0, 100, 100)
+		svg.viewbox.setEdges(0, 0, 100, 100)
 
 		container.appendChild(svg.element)
 
@@ -32,6 +32,11 @@
 			path.element.setAttribute('stroke', 'blue')
 			path.subPaths[2].curve(60, 10, 30, 30)
 		}, 1500)
+
+		setTimeout(() => {
+			path.element.setAttribute('stroke', 'navy')
+			svg.viewbox.setWidth(200).setHeight(200)
+		}, 2000)
 	})
 </script>
 

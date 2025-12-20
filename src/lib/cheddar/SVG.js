@@ -13,7 +13,7 @@ export default class SVG extends Elemental {
 
 		this._generateElement()
 
-		this._viewbox.onUpdate(this._updateViewbox.bind(this))
+		this._viewbox.onUpdate(this.update.bind(this))
 		this.update()
 	}
 
@@ -21,17 +21,17 @@ export default class SVG extends Elemental {
 		return this._viewbox
 	}
 
-	_updateViewbox() {
-		this.element.setAttribute(
-			'viewBox', //
-			this._viewbox.toViewboxString() //
-		)
-	}
-
 	add(elemental) {
 		this._group.add(elemental)
 		this.update()
 		return this
+	}
+
+	update() {
+		this.element.setAttribute(
+			'viewBox', //
+			this._viewbox.toViewboxString() //
+		)
 	}
 
 	_generateElement() {
