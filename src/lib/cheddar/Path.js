@@ -22,8 +22,12 @@ export default class Path extends Elemental {
 	_subPaths = new List()
 	_closed = false
 
-	constructor() {
+	constructor(x = null, y = null) {
 		super()
+
+		if (x !== null) {
+			this.nuMoveTo(x, y)
+		}
 
 		this._generateElement()
 		this.update()
@@ -39,11 +43,6 @@ export default class Path extends Elemental {
 
 	get isClosed() {
 		return this._closed
-	}
-
-	// TODO: Rename to 'contains'?
-	containsCommand(cmd) {
-		return this._commands.includes(cmd)
 	}
 
 	nuAddCommand(cmd) {
@@ -70,79 +69,150 @@ export default class Path extends Elemental {
 		return this
 	}
 
-	moveTo(x, y) {
+	nuMoveTo(x, y) {
 		const cmd = Command.move(x, y)
-		this.addCommand(cmd)
+		this.nuAddCommand(cmd)
+		return this
+	}
+
+	moveTo(x, y) {
+		this.nuMoveTo(x, y)
+		this.update()
+		return this
+	}
+
+	nuLineTo(x, y) {
+		const cmd = Command.line(x, y)
+		this.nuAddCommand(cmd)
 		return this
 	}
 
 	lineTo(x, y) {
+		this.nuLineTo(x, y)
+		this.update()
+		return this
+	}
+
+	nuLineToClose() {
+		const { x, y } = this.commands[0]
+
 		const cmd = Command.line(x, y)
-		this.addCommand(cmd)
+		this.nuAddCommand(cmd)
+		this.nuClose()
+
 		return this
 	}
 
 	lineToClose() {
-		const { x, y } = this.commands[0]
+		this.nuLineToClose()
+		this.update()
+		return this
+	}
 
-		const cmd = Command.line(x, y)
-		this.nuAddCommand(cmd).close()
-
+	// TODO: Should x,y come first?
+	nuQuadraticTo(cp1X, cp1Y, x, y) {
+		const cmd = Command.quadratic(cp1X, cp1Y, x, y)
+		this.nuAddCommand(cmd)
 		return this
 	}
 
 	quadraticTo(cp1X, cp1Y, x, y) {
+		this.nuQuadraticTo(cp1X, cp1Y, x, y)
+		this.update()
+		return this
+	}
+
+	nuQuadraticToClose(cp1X, cp1Y) {
+		const { x, y } = this.commands[0]
+
 		const cmd = Command.quadratic(cp1X, cp1Y, x, y)
-		this.addCommand(cmd)
+		this.nuAddCommand(cmd)
+		this.nuClose()
+
 		return this
 	}
 
 	quadraticToClose(cp1X, cp1Y) {
-		const { x, y } = this.commands[0]
+		this.nuQuadraticToClose(cp1X, cp1Y)
+		this.update()
+		return this
+	}
 
-		const cmd = Command.quadratic(cp1X, cp1Y, x, y)
-		this.nuAddCommand(cmd).close()
-
+	nuCubicTo(cp1X, cp1Y, cp2X, cp2Y, x, y) {
+		const cmd = Command.cubic(cp1X, cp1Y, cp2X, cp2Y, x, y)
+		this.nuAddCommand(cmd)
 		return this
 	}
 
 	cubicTo(cp1X, cp1Y, cp2X, cp2Y, x, y) {
+		this.nuCubicTo(cp1X, cp1Y, cp2X, cp2Y, x, y)
+		this.update()
+		return this
+	}
+
+	nuCubicToClose(cp1X, cp1Y, cp2X, cp2Y) {
+		const { x, y } = this.commands[0]
+
 		const cmd = Command.cubic(cp1X, cp1Y, cp2X, cp2Y, x, y)
-		this.addCommand(cmd)
+		this.nuAddCommand(cmd)
+		this.nuClose()
+
 		return this
 	}
 
 	cubicToClose(cp1X, cp1Y, cp2X, cp2Y) {
-		const { x, y } = this.commands[0]
+		this.nuCubicToClose(cp1X, cp1Y, cp2X, cp2Y)
+		this.update()
+		return this
+	}
 
-		const cmd = Command.cubic(cp1X, cp1Y, cp2X, cp2Y, x, y)
-		this.nuAddCommand(cmd).close()
+	nuClose() {
+		if (this._closed) {
+			return this
+		}
+
+		const cmd = Command.close()
+		this.nuAddCommand(cmd)
+		this._closed = true
 
 		return this
 	}
 
 	close() {
 		if (this._closed) {
-			return
+			return this
 		}
 
-		this.addCommand(Command.close())
-		this._closed = true
+		this.nuClose()
 		this.update()
 
 		return this
 	}
 
-	open() {
+	nuOpen() {
 		if (!this._closed) {
 			return
 		}
 
 		this._closed = false
 		this._commands.pop()
+
+		return this
+	}
+
+	open() {
+		if (!this._closed) {
+			return this
+		}
+
+		this.nuOpen()
 		this.update()
 
 		return this
+	}
+
+	containsCommand(cmd) {
+		return this._commands.includes(cmd)
 	}
 
 	toString() {
