@@ -28,6 +28,11 @@ export default class Elemental extends Updateable {
 		return this
 	}
 
+	addTo(group) {
+		group.add(this)
+		return this
+	}
+
 	update() {
 		if (this.element && !this.element.id) {
 			this.element.id = randomId()

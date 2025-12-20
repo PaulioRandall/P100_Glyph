@@ -14,6 +14,8 @@ import Updateable from './Updateable.js'
 // TODO: Remove rounding and let numbers be free. Fixing
 //       to integers can be done with a function on the
 //       SVG class that user devs can program too.
+//
+// TODO: Add translate functions.
 export default class Bounds extends Updateable {
 	_left = 0
 	_top = 0
@@ -25,8 +27,16 @@ export default class Bounds extends Updateable {
 	_halfWidth = 50
 	_halfHeight = 50
 
-	_centerX = 50
-	_centerY = 50
+	_cx = 50
+	_cy = 50
+
+	get x() {
+		return this._left
+	}
+
+	get y() {
+		return this._top
+	}
 
 	get left() {
 		return this._left
@@ -42,6 +52,14 @@ export default class Bounds extends Updateable {
 
 	get bottom() {
 		return this._bottom
+	}
+
+	get w() {
+		return this._width
+	}
+
+	get h() {
+		return this._height
 	}
 
 	get width() {
@@ -60,12 +78,20 @@ export default class Bounds extends Updateable {
 		return this._halfHeight
 	}
 
+	get cx() {
+		return this._cx
+	}
+
+	get cy() {
+		return this._cy
+	}
+
 	get centerX() {
-		return this._centerX
+		return this._cx
 	}
 
 	get centerY() {
-		return this._centerY
+		return this._cy
 	}
 
 	// setLeft without calling update.
@@ -277,8 +303,8 @@ export default class Bounds extends Updateable {
 		this._height = this._bottom - this._top
 		this._halfWidth = Math.round(this._width / 2)
 		this._halfHeight = Math.round(this._height / 2)
-		this._centerX = calcCenter(this._left, this._right)
-		this._centerY = calcCenter(this._top, this._bottom)
+		this._cx = calcCenter(this._left, this._right)
+		this._cy = calcCenter(this._top, this._bottom)
 		super.update()
 	}
 

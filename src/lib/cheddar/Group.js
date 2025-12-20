@@ -2,6 +2,9 @@ import { NAME_SPACE } from './cheddar.js'
 import Elemental from './Elemental.js'
 import List from './List.js'
 
+// TODO: Document.
+//
+// TODO: Add translate functions.
 export default class Group extends Elemental {
 	_elementals = new List()
 

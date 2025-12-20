@@ -12,6 +12,11 @@ import SubPath from './SubPath.js'
 //       props from the element?
 //
 // TODO: Implement and test remove and clear functions.
+//
+// TODO: Add translate functions.
+//
+// TODO: Allow initial x,y values to be passed on
+//       construction.
 export default class Path extends Elemental {
 	_commands = new List()
 	_subPaths = new List()
@@ -36,13 +41,9 @@ export default class Path extends Elemental {
 		return this._closed
 	}
 
+	// TODO: Rename to 'contains'?
 	containsCommand(cmd) {
 		return this._commands.includes(cmd)
-	}
-
-	addTo(group) {
-		group.add(this)
-		return this
 	}
 
 	nuAddCommand(cmd) {

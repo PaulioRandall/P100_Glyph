@@ -4,6 +4,7 @@ import Group from './Group.js'
 import Bounds from './Bounds.js'
 import List from './List.js'
 
+// TODO: Add remove and clear functions.
 export default class SVG extends Elemental {
 	_group = new Group()
 	_viewbox = new Bounds()
