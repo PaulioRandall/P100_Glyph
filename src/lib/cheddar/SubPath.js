@@ -64,7 +64,9 @@ export default class SubPath extends Updateable {
 		return this._path.containsCommand(this._cmd)
 	}
 
-	// Sets the start point.
+	// Sets the x,y point on the command appearing before
+	// this SubPath's command within the parent Path, i.e.
+	// sets the start point of SubPath.
 	setStart(x, y) {
 		this._errIfNotInPath()
 
@@ -74,7 +76,9 @@ export default class SubPath extends Updateable {
 		return this
 	}
 
-	// Sets the end point.
+	// Sets the x,y point on the underlying command. This
+	// will also set the start point of the command appearing
+	// afterwards within the parent Path.
 	setEnd(x, y) {
 		this._errIfNotInPath()
 
@@ -84,10 +88,15 @@ export default class SubPath extends Updateable {
 		return this
 	}
 
+	// Converts the underlying command to a line if not
+	// already.
+	//
+	// Move commands cannot be converted and will throw an
+	// error.
 	straighten() {
 		this._errIfNotInPath()
 
-		if (this._cmd.type === 'L' || this._cmd.type === 'Z') {
+		if (this._cmd.type === 'L') {
 			return this
 		}
 
@@ -97,6 +106,18 @@ export default class SubPath extends Updateable {
 		return this
 	}
 
+	// Converts the command to a curve based on the arguments
+	// provided (or update the current curve).
+	//
+	// - If no arguments are provided then convert to a
+	//   straight line.
+	// - If the first two arguments are provided (cp1X and
+	//   cp1Y) then convert to a quadratic curve.
+	// - If the first four arguments are provided (cp1X,
+	//   cp1Y, cp2X, cp2Y) then convert to a cubic curve.
+	//
+	// Move and close commands cannot be converted and will
+	// throw an error.
 	curve(cp1X = null, cp1Y = null, cp2X = null, cp2Y = null) {
 		this._errIfNotInPath()
 

@@ -1,6 +1,6 @@
 import { NAME_SPACE } from './cheddar.js'
-import Elemental from './Elemental.js'
 import List from './List.js'
+import Elemental from './Elemental.js'
 import Command from './Command.js'
 import SubPath from './SubPath.js'
 
@@ -32,6 +32,11 @@ export default class Path extends Elemental {
 		return this._commands.includes(cmd)
 	}
 
+	addTo(group) {
+		group.add(this)
+		return this
+	}
+
 	nuAddCommand(cmd) {
 		const cmds = this._commands
 
@@ -42,6 +47,10 @@ export default class Path extends Elemental {
 		}
 
 		cmd.onUpdate(this.update.bind(this))
+
+		if (cmd.type !== 'M' && cmd.type !== 'Z') {
+			this._subPaths.push(new SubPath(this, cmd))
+		}
 
 		return this
 	}
@@ -135,7 +144,6 @@ export default class Path extends Elemental {
 
 	update() {
 		this._element.setAttribute('d', this.toString())
-		this._generateSubPaths()
 		super.update()
 	}
 
@@ -149,21 +157,5 @@ export default class Path extends Elemental {
 		path.setAttribute('fill', 'none')
 
 		this._setElement(path)
-	}
-
-	_generateSubPaths() {
-		updateSubPaths(this)
-	}
-}
-
-function updateSubPaths(path) {
-	path._subPaths.clear()
-
-	for (const cmd of path.commands) {
-		if (cmd.type !== 'M' && cmd.type !== 'Z') {
-			const sp = new SubPath(path, cmd)
-			sp.onUpdate(path.update.bind(path))
-			path._subPaths.push(sp)
-		}
 	}
 }
