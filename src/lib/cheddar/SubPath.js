@@ -16,7 +16,7 @@ import Command from './Command.js'
 // However, there is core command that determines the shape
 // of the drawn line. It is returned by the command getter.
 //
-// TODO: Add 'canStraighten' and 'canCurve' functions.
+// TODO: Should SubPath update if its command updates?
 export default class SubPath extends Updateable {
 	_path = null
 	_cmd = null
@@ -90,6 +90,13 @@ export default class SubPath extends Updateable {
 		return this
 	}
 
+	// Returns true if a call to straighten is allowed.
+	//
+	// I.e. returns false if a move 'M' or close 'Z' command.
+	canStraighten() {
+		return this._cmd.canStraighten()
+	}
+
 	// Converts the underlying command to a line if not
 	// already.
 	//
@@ -106,6 +113,13 @@ export default class SubPath extends Updateable {
 
 		this.update()
 		return this
+	}
+
+	// Returns true if a call to curve is allowed.
+	//
+	// I.e. returns false if a move 'M' or close 'Z' command.
+	canCurve() {
+		return this._cmd.canCurve()
 	}
 
 	// Converts the command to a curve based on the arguments

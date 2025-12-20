@@ -96,6 +96,7 @@ export default class Circle extends Elemental {
 		this.element.setAttribute('cx', this._cx)
 		this.element.setAttribute('cy', this._cy)
 		this.element.setAttribute('r', this._r)
+		super.update()
 	}
 
 	_generateElement() {

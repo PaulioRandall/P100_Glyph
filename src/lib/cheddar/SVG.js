@@ -33,6 +33,8 @@ export default class SVG extends Elemental {
 			'viewBox', //
 			this._viewbox.toViewboxString() //
 		)
+
+		super.update()
 	}
 
 	_generateElement() {
