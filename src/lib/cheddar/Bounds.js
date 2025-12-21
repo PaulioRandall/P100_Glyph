@@ -1,7 +1,10 @@
 import Updateable from './Updateable.js'
 
-// Represents a bounding box on a 2D plane. Can be used to
-// create viewboxes too.
+// Represents a bounding box or viewbox on a 2D plane.
+//
+// Unlike Elemental classes, the values are kept in sync;
+// a call to the update function won't do anything other
+// than notify listeners.
 export default class Bounds extends Updateable {
 	_left = 0
 	_top = 0
@@ -262,6 +265,7 @@ export default class Bounds extends Updateable {
 		return this
 	}
 
+	// translateX without calling update.
 	nuTranslateX(dx) {
 		this._left += dx
 		this._right += dx
@@ -269,12 +273,15 @@ export default class Bounds extends Updateable {
 		return this
 	}
 
+	// Moves the bounds on the X plane by dx, which may be
+	// negative.
 	translateX(dx) {
 		this.nuTranslateX(dx)
 		this.update()
 		return this
 	}
 
+	// translateY without calling update.
 	nuTranslateY(dy) {
 		this._top += dy
 		this._bottom += dy
@@ -282,6 +289,8 @@ export default class Bounds extends Updateable {
 		return this
 	}
 
+	// Moves the bounds on the Y plane by dy, which may be
+	// negative.
 	translateY(dy) {
 		this.nuTranslateY(dy)
 		this.update()
