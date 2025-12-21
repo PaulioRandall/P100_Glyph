@@ -11,7 +11,18 @@ import List from './List.js'
 // the super method so updates are made and listeners are
 // notified.
 export default class Updateable {
+	_updater = this.update.bind(this)
 	_updateFuncs = new List()
+
+	// Returns the updater function that calls update with
+	// this object bound.
+	//
+	// The same underlying function is returned so can be
+	// easily used with tools that allow registering and
+	// unregistering of callbacks, e.g. DOM events.
+	get updater() {
+		return this._updater
+	}
 
 	// Registers a function that is called when an updateable
 	// part of the object is updated.
@@ -39,6 +50,7 @@ export default class Updateable {
 	// By default it does nothing except call updater and
 	// notifier functions.
 	update() {
+		//console.log(this.constructor.name)
 		this.notify()
 	}
 

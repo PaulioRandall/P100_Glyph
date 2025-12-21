@@ -1,5 +1,11 @@
 import Command from './Command.js'
 
+function nu(updateable) {
+	updateable._updater = null
+	updateable._updateFuncs.clear()
+	return updateable
+}
+
 describe('Command.js', () => {
 	test('move (static)', () => {
 		const cmd = Command.move(20, 20)
@@ -220,13 +226,25 @@ describe('Command.js', () => {
 		)
 	})
 
+	// *****************************************************
+	// NEXT We had just worked out that the updater
+	//      introduced issues with testing the same way
+	//      updateFuncs did. To resolve, a 'nu' function was
+	//      created that should be called on both the actual
+	//      and expected objects to remove these object
+	//      personal values.
+	//
+	//      I need to update the rest of the tests
+	//      accordingly. Only the 3 tests below have been
+	//      fixed with the 'nu' function.
+
 	test('curve: from line to cubic', () => {
 		const cmd = Command.line(10, 20)
 
 		cmd.curve(30, 40, 50, 60)
 
-		expect(cmd).toEqual(
-			Command.cubic(30, 40, 50, 60, 10, 20) //
+		expect(nu(cmd)).toEqual(
+			nu(Command.cubic(30, 40, 50, 60, 10, 20)) //
 		)
 	})
 
@@ -235,8 +253,8 @@ describe('Command.js', () => {
 
 		cmd.curve(50, 60, 70, 80)
 
-		expect(cmd).toEqual(
-			Command.cubic(50, 60, 70, 80, 30, 40) //
+		expect(nu(cmd)).toEqual(
+			nu(Command.cubic(50, 60, 70, 80, 30, 40)) //
 		)
 	})
 
@@ -245,8 +263,8 @@ describe('Command.js', () => {
 
 		cmd.curve(70, 80, 90, 100)
 
-		expect(cmd).toEqual(
-			Command.cubic(70, 80, 90, 100, 50, 60) //
+		expect(nu(cmd)).toEqual(
+			nu(Command.cubic(70, 80, 90, 100, 50, 60)) //
 		)
 	})
 })

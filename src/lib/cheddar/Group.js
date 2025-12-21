@@ -8,7 +8,6 @@ export default class Group extends Elemental {
 
 	constructor() {
 		super()
-
 		this._generateElement()
 	}
 
@@ -16,9 +15,9 @@ export default class Group extends Elemental {
 		this._elementals.push(elemental)
 		this.element.appendChild(elemental.element)
 
-		elemental.update()
-		this.update()
+		elemental.onUpdate(this.updater)
 
+		this.update()
 		return this
 	}
 
@@ -27,12 +26,12 @@ export default class Group extends Elemental {
 			return
 		}
 
+		elemental.offUpdate(this.updater)
+
 		this.element.removeChild(elemental.element)
 		this._elementals.remove(elemental)
 
-		elemental.update()
 		this.update()
-
 		return this
 	}
 

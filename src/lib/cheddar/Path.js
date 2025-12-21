@@ -20,12 +20,11 @@ export default class Path extends Elemental {
 	constructor(x = null, y = null) {
 		super()
 
-		if (x !== null) {
-			this.nuMoveTo(x, y)
-		}
-
 		this._generateElement()
-		this.update()
+
+		if (x !== null) {
+			this.moveTo(x, y)
+		}
 	}
 
 	get commands() {
@@ -49,17 +48,42 @@ export default class Path extends Elemental {
 			cmds.push(cmd)
 		}
 
-		cmd.onUpdate(this.update.bind(this))
-
 		if (cmd.type !== 'M' && cmd.type !== 'Z') {
-			this._subPaths.push(new SubPath(this, cmd))
+			const sp = new SubPath(this, cmd)
+			this._subPaths.push(sp)
+			cmd.onUpdate(sp.updater)
 		}
+
+		cmd.onUpdate(this.updater)
 
 		return this
 	}
 
 	addCommand(cmd) {
 		this.nuAddCommand(cmd)
+		this.update()
+		return this
+	}
+
+	nuRemoveCommand(cmd) {
+		if (!this._commands.includes(cmd)) {
+			return
+		}
+
+		const sp = this._subPaths.find((sp) => sp.command === cmd)
+		if (sp) {
+			this._subPaths.remove(sp)
+			cmd.offUpdate(sp.updater)
+		}
+
+		cmd.offUpdate(this.updater)
+		this._commands.remove(cmd)
+
+		return this
+	}
+
+	removeCommand(cmd) {
+		this.nuRemoveCommand(cmd)
 		this.update()
 		return this
 	}
@@ -258,11 +282,9 @@ export default class Path extends Elemental {
 	}
 
 	_generateElement() {
-		const cmds = this._commands
 		const path = document.createElementNS(NAME_SPACE, 'path')
-		const textCmds = cmds.map((cmd) => cmd.toString())
 
-		path.setAttribute('d', textCmds.join(' '))
+		path.setAttribute('d', this.toString())
 		path.setAttribute('stroke', 'black')
 		path.setAttribute('fill', 'none')
 

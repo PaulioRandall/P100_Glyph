@@ -14,6 +14,7 @@ export default class Elemental extends Updateable {
 		this._element = element
 	}
 
+	// Returns the ID on the element.
 	get id() {
 		return this.element.id
 	}

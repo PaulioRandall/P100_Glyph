@@ -3,6 +3,17 @@ import Circle from './Circle.js'
 import Path from './Path.js'
 
 describe('Group.js', () => {
+	test('add/remove', () => {
+		const c = new Circle(10, 20)
+		const g = new Group()
+
+		expect(c._updateFuncs.length).toEqual(0)
+		g.add(c)
+		expect(c._updateFuncs.length).toEqual(1)
+		g.remove(c)
+		expect(c._updateFuncs.length).toEqual(0)
+	})
+
 	test('translateX', () => {
 		const c = new Circle(20, 30)
 		const p = new Path(40, 50).lineTo(60, 70)

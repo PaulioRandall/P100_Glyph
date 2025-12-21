@@ -14,8 +14,8 @@ export default class SVG extends Elemental {
 
 		this._generateElement()
 
-		this._viewbox.onUpdate(this.update.bind(this))
-		this.update()
+		this._group.onUpdate(this.updater)
+		this._viewbox.onUpdate(this.updater)
 	}
 
 	get viewbox() {
@@ -24,7 +24,11 @@ export default class SVG extends Elemental {
 
 	add(elemental) {
 		this._group.add(elemental)
-		this.update()
+		return this
+	}
+
+	remove(elemntal) {
+		this._group.remove(elemental)
 		return this
 	}
 

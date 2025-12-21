@@ -10,8 +10,20 @@ function clearUpdateFuncs(path) {
 }
 
 describe('Path.js', () => {
+	test('addCommand/removeCommand', () => {
+		const p = new Path()
+		const cmd = Command.move(10, 20)
+
+		expect(cmd._updateFuncs.length).toEqual(0)
+		p.addCommand(cmd)
+		expect(cmd._updateFuncs.length).toEqual(1)
+		p.removeCommand(cmd)
+		expect(cmd._updateFuncs.length).toEqual(0)
+	})
+
 	test('moveTo(x,y)', () => {
-		const p = new Path().moveTo(20, 20) // [0]
+		const p = new Path() //
+			.moveTo(20, 20) // [0]
 
 		clearUpdateFuncs(p)
 
