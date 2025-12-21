@@ -2,21 +2,11 @@ import Path from './Path.js'
 import Command from './Command.js'
 import SubPath from './SubPath.js'
 
-function nu(updateable) {
-	updateable._updater = null
-	updateable._updateFuncs.clear()
-	return updateable
-}
-
-function expectUpdateable(act, exp) {
-	expect(nu(act)).toEqual(nu(exp))
-}
-
-function expectUpdateables(act, exp) {
-	act.forEach(nu)
-	exp.forEach(nu)
-	expect(act).toEqual(exp)
-}
+import {
+	nu, //
+	expectUpdateable, //
+	expectUpdateables, //
+} from './testutil.js'
 
 describe('Path.js', () => {
 	test('addCommand/removeCommand', () => {

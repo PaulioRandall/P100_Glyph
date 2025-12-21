@@ -1,14 +1,9 @@
 import Command from './Command.js'
 
-function nu(updateable) {
-	updateable._updater = null
-	updateable._updateFuncs.clear()
-	return updateable
-}
-
-function expectCmd(act, exp) {
-	expect(nu(act)).toEqual(nu(exp))
-}
+import {
+	nu, //
+	expectUpdateable, //
+} from './testutil.js'
 
 describe('Command.js', () => {
 	test('move (static)', () => {
@@ -145,7 +140,7 @@ describe('Command.js', () => {
 
 		cmd.straighten()
 
-		expectCmd(cmd, Command.line(10, 20))
+		expectUpdateable(cmd, Command.line(10, 20))
 	})
 
 	test('straighten: from quadratic', () => {
@@ -153,7 +148,7 @@ describe('Command.js', () => {
 
 		cmd.straighten()
 
-		expectCmd(cmd, Command.line(30, 40))
+		expectUpdateable(cmd, Command.line(30, 40))
 	})
 
 	test('straighten: from cubic', () => {
@@ -161,7 +156,7 @@ describe('Command.js', () => {
 
 		cmd.straighten()
 
-		expectCmd(cmd, Command.line(50, 60))
+		expectUpdateable(cmd, Command.line(50, 60))
 	})
 
 	test('curve: from line to line', () => {
@@ -169,7 +164,7 @@ describe('Command.js', () => {
 
 		cmd.curve()
 
-		expectCmd(cmd, Command.line(10, 20))
+		expectUpdateable(cmd, Command.line(10, 20))
 	})
 
 	test('curve: from quadratic to line', () => {
@@ -177,7 +172,7 @@ describe('Command.js', () => {
 
 		cmd.curve()
 
-		expectCmd(cmd, Command.line(30, 40))
+		expectUpdateable(cmd, Command.line(30, 40))
 	})
 
 	test('curve: from cubic to line', () => {
@@ -185,7 +180,7 @@ describe('Command.js', () => {
 
 		cmd.curve()
 
-		expectCmd(cmd, Command.line(50, 60))
+		expectUpdateable(cmd, Command.line(50, 60))
 	})
 
 	test('curve: from line to quadratic', () => {
@@ -193,7 +188,7 @@ describe('Command.js', () => {
 
 		cmd.curve(30, 40)
 
-		expectCmd(cmd, Command.quadratic(30, 40, 10, 20))
+		expectUpdateable(cmd, Command.quadratic(30, 40, 10, 20))
 	})
 
 	test('curve: from quadratic to quadratic', () => {
@@ -201,7 +196,7 @@ describe('Command.js', () => {
 
 		cmd.curve(50, 60)
 
-		expectCmd(cmd, Command.quadratic(50, 60, 30, 40))
+		expectUpdateable(cmd, Command.quadratic(50, 60, 30, 40))
 	})
 
 	test('curve: from cubic to quadratic', () => {
@@ -209,7 +204,7 @@ describe('Command.js', () => {
 
 		cmd.curve(70, 80)
 
-		expectCmd(cmd, Command.quadratic(70, 80, 50, 60))
+		expectUpdateable(cmd, Command.quadratic(70, 80, 50, 60))
 	})
 
 	test('curve: from line to cubic', () => {
@@ -217,7 +212,7 @@ describe('Command.js', () => {
 
 		cmd.curve(30, 40, 50, 60)
 
-		expectCmd(cmd, Command.cubic(30, 40, 50, 60, 10, 20))
+		expectUpdateable(cmd, Command.cubic(30, 40, 50, 60, 10, 20))
 	})
 
 	test('curve: from quadratic to cubic', () => {
@@ -225,7 +220,7 @@ describe('Command.js', () => {
 
 		cmd.curve(50, 60, 70, 80)
 
-		expectCmd(cmd, Command.cubic(50, 60, 70, 80, 30, 40))
+		expectUpdateable(cmd, Command.cubic(50, 60, 70, 80, 30, 40))
 	})
 
 	test('curve() from cubic to cubic', () => {
@@ -233,6 +228,6 @@ describe('Command.js', () => {
 
 		cmd.curve(70, 80, 90, 100)
 
-		expectCmd(cmd, Command.cubic(70, 80, 90, 100, 50, 60))
+		expectUpdateable(cmd, Command.cubic(70, 80, 90, 100, 50, 60))
 	})
 })
