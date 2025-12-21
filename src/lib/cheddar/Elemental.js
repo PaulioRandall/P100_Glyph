@@ -7,6 +7,7 @@ import Updateable from './Updateable.js'
 // TODO: Document.
 export default class Elemental extends Updateable {
 	_element = null
+	_attrs = new Map()
 
 	constructor(element = null) {
 		super()
@@ -23,10 +24,19 @@ export default class Elemental extends Updateable {
 		return this._element
 	}
 
-	setId(id) {
-		this._element.id = id
-		this.update()
+	nuAttr(name, value = undefined) {
+		if (value === undefined) {
+			return this._attrs.get(name)
+		}
+
+		this._attrs.set(name, value)
 		return this
+	}
+
+	attr(name, value = undefined) {
+		const result = this.nuAttr(name, value)
+		this.update()
+		return result
 	}
 
 	addTo(group) {
@@ -39,9 +49,22 @@ export default class Elemental extends Updateable {
 	}
 
 	update() {
-		if (this.element && !this.element.id) {
-			this.element.id = randomId()
+		if (!this.element) {
+			super.update()
+			return
 		}
+
+		if (!this._attrs.get('id')) {
+			this._attrs.set('id', randomId())
+		}
+
+		this._attrs.forEach((value, name) => {
+			if (value === undefined) {
+				this.element.removeAttribute(name)
+			} else {
+				this.element.setAttribute(name, value)
+			}
+		})
 
 		super.update()
 	}

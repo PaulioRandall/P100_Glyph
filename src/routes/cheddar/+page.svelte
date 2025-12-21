@@ -27,34 +27,35 @@
 			.lineToClose() //
 			.addTo(svg)
 
-					console.log("**********")
+		console.log("**********")
 
 		setTimeout(() => {
 			path.element.setAttribute('stroke', 'red')
 			path.commands[2].curve(100, 50)
-			circle.setRadius(15).translateX(5).translateY(-5)
-					console.log("********** 500")
+			circle.nuSetRadius(15).nuTranslateX(5).translateY(-5)
+			console.log("********** 500")
 		}, 500)
 
 		setTimeout(() => {
 			path.element.setAttribute('stroke', 'green')
 			path.subPaths[0].straighten()
-			circle.setRadius(20).translateX(5).translateY(-5)
-					console.log("********** 1000")
+			circle.nuSetRadius(20).nuTranslateX(5).translateY(-5)
+			console.log("********** 1000")
 		}, 1000)
 
 		setTimeout(() => {
 			path.element.setAttribute('stroke', 'blue')
 			path.subPaths[2].curve(60, 10, 30, 30)
-			circle.setRadius(25).translateX(5).translateY(-5)
-					console.log("********** 1500")
+			circle.nuSetRadius(25).nuTranslateX(5).translateY(-5)
+			console.log("********** 1500")
 		}, 1500)
 
 		setTimeout(() => {
 			path.element.setAttribute('stroke', 'navy')
-			svg.viewbox.setWidthAnchorCenter(200).setHeightAnchorCenter(200)
-			circle.element.setAttribute('stroke', 'red')
-					console.log("********** 2000")
+			svg.viewbox.nuSetWidthAnchorCenter(200).setHeightAnchorCenter(200)
+			//circle.element.setAttribute('stroke', 'red')
+			circle.attr('stroke', 'red')
+			console.log("********** 2000")
 		}, 2000)
 	})
 </script>

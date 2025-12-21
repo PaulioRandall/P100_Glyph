@@ -10,8 +10,6 @@ import SubPath from './SubPath.js'
 //       stroke, strokewidth, fill, etc. Or maybe add
 //       functions to Elemental class that add and remove
 //       props from the element?
-//
-// TODO: Implement and test remove and clear functions.
 export default class Path extends Elemental {
 	_commands = new List()
 	_subPaths = new List()
@@ -72,8 +70,8 @@ export default class Path extends Elemental {
 
 		const sp = this._subPaths.find((sp) => sp.command === cmd)
 		if (sp) {
-			this._subPaths.remove(sp)
 			cmd.offUpdate(sp.updater)
+			this._subPaths.remove(sp)
 		}
 
 		cmd.offUpdate(this.updater)
@@ -84,6 +82,20 @@ export default class Path extends Elemental {
 
 	removeCommand(cmd) {
 		this.nuRemoveCommand(cmd)
+		this.update()
+		return this
+	}
+
+	nuClear() {
+		for (const cmd of [...this._commands]) {
+			this.nuRemoveCommand(cmd)
+		}
+
+		return this
+	}
+
+	clear() {
+		this.nuClear()
 		this.update()
 		return this
 	}
@@ -128,7 +140,6 @@ export default class Path extends Elemental {
 		return this
 	}
 
-	// TODO: Should x,y come first?
 	nuQuadraticTo(cp1X, cp1Y, x, y) {
 		const cmd = Command.quadratic(cp1X, cp1Y, x, y)
 		this.nuAddCommand(cmd)

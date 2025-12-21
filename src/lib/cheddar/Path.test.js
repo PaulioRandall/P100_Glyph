@@ -20,6 +20,18 @@ describe('Path.js', () => {
 		expect(cmd._updateFuncs.length).toEqual(0)
 	})
 
+	test('clear', () => {
+		const p = new Path() //
+			.moveTo(10, 20) //
+			.lineTo(30, 40) //
+			.quadraticToClose(50, 60) //
+
+		p.clear()
+
+		expect(p.subPaths.length).toEqual(0)
+		expect(p.commands.length).toEqual(0)
+	})
+
 	test('moveTo(x,y)', () => {
 		const p = new Path(20, 20)
 
