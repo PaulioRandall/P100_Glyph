@@ -53,21 +53,21 @@ describe('Bounds.js', () => {
 		expect(cb.bottom).toEqual(75)
 	})
 
-	test('setWidth()', () => {
+	test('setWidthAnchorCenter()', () => {
 		const cb = new Bounds() //
 			.setLeft(0) //
 			.setRight(100) //
-			.setWidth(200) //
+			.setWidthAnchorCenter(200) //
 
 		expect(cb.left).toEqual(-50)
 		expect(cb.right).toEqual(150)
 	})
 
-	test('setHeight()', () => {
+	test('setHeightAnchorCenter()', () => {
 		const cb = new Bounds() //
 			.setTop(0) //
 			.setBottom(100) //
-			.setHeight(200) //
+			.setHeightAnchorCenter(200) //
 
 		expect(cb.top).toEqual(-50)
 		expect(cb.bottom).toEqual(150)
@@ -107,6 +107,26 @@ describe('Bounds.js', () => {
 
 		expect(cb.height).toEqual(75)
 		expect(cb.top).toEqual(-50)
+	})
+
+	test('translateX()', () => {
+		const cb = new Bounds() //
+			.setEdges(0, 0, 100, 100) //
+			.translateX(25) //
+			.translateX(-50) //
+
+		expect(cb.left).toEqual(-25)
+		expect(cb.right).toEqual(75)
+	})
+
+	test('translateY()', () => {
+		const cb = new Bounds() //
+			.setEdges(0, 0, 100, 100) //
+			.translateY(25) //
+			.translateY(-50) //
+
+		expect(cb.top).toEqual(-25)
+		expect(cb.bottom).toEqual(75)
 	})
 
 	test('contains()', () => {

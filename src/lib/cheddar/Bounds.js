@@ -10,8 +10,6 @@ import Updateable from './Updateable.js'
 //       existing state, if an update has not been made
 //       after a 'nu' mutation then the next function call
 //       may mutate using the wrong values.
-//
-// TODO: Add translate functions.
 export default class Bounds extends Updateable {
 	_left = 0
 	_top = 0
@@ -23,14 +21,6 @@ export default class Bounds extends Updateable {
 
 	_cx = 50
 	_cy = 50
-
-	get x() {
-		return this._left
-	}
-
-	get y() {
-		return this._top
-	}
 
 	get left() {
 		return this._left
@@ -46,6 +36,14 @@ export default class Bounds extends Updateable {
 
 	get bottom() {
 		return this._bottom
+	}
+
+	get x() {
+		return this._left
+	}
+
+	get y() {
+		return this._top
 	}
 
 	get width() {
@@ -166,8 +164,8 @@ export default class Bounds extends Updateable {
 		return this
 	}
 
-	// setWidth without calling update.
-	nuSetWidth(w) {
+	// setWidthAnchorCenter without calling update.
+	nuSetWidthAnchorCenter(w) {
 		const diff = w - this._w
 		const half = diff / 2
 
@@ -179,27 +177,8 @@ export default class Bounds extends Updateable {
 
 	// Sets the width and forces the left and right values to
 	// grow or shrink by the same amount to accommodate.
-	setWidth(w) {
-		this.nuSetWidth(w)
-		this.update()
-		return this
-	}
-
-	// setHeight without calling update.
-	nuSetHeight(h) {
-		const diff = h - this._h
-		const half = diff / 2
-
-		this._top -= half
-		this._bottom = this._top + h
-
-		return this
-	}
-
-	// Sets the height and forces the top and bottom values
-	// to grow or shrink by the same amount to accommodate.
-	setHeight(h) {
-		this.nuSetHeight(h)
+	setWidthAnchorCenter(w) {
+		this.nuSetWidthAnchorCenter(w)
 		this.update()
 		return this
 	}
@@ -232,6 +211,25 @@ export default class Bounds extends Updateable {
 		return this
 	}
 
+	// setHeightAnchorCenter without calling update.
+	nuSetHeightAnchorCenter(h) {
+		const diff = h - this._h
+		const half = diff / 2
+
+		this._top -= half
+		this._bottom = this._top + h
+
+		return this
+	}
+
+	// Sets the height and forces the top and bottom values
+	// to grow or shrink by the same amount to accommodate.
+	setHeightAnchorCenter(h) {
+		this.nuSetHeightAnchorCenter(h)
+		this.update()
+		return this
+	}
+
 	// setHeightAnchorTop without calling update.
 	nuSetHeightAnchorTop(h) {
 		this._bottom = this._top + h
@@ -256,6 +254,30 @@ export default class Bounds extends Updateable {
 	// shrink to accommodate.
 	setHeightAnchorBottom(h) {
 		this.nuSetHeightAnchorBottom(h)
+		this.update()
+		return this
+	}
+
+	nuTranslateX(dx) {
+		this._left += dx
+		this._right += dx
+		return this
+	}
+
+	translateX(dx) {
+		this.nuTranslateX(dx)
+		this.update()
+		return this
+	}
+
+	nuTranslateY(dy) {
+		this._top += dy
+		this._bottom += dy
+		return this
+	}
+
+	translateY(dy) {
+		this.nuTranslateY(dy)
 		this.update()
 		return this
 	}

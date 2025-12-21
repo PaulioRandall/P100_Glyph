@@ -2,8 +2,6 @@ import { NAME_SPACE } from './cheddar.js'
 import Elemental from './Elemental.js'
 
 // TODO: Document.
-//
-// TODO: Add translate functions.
 export default class Circle extends Elemental {
 	_cx = 0
 	_cy = 0
@@ -68,6 +66,32 @@ export default class Circle extends Elemental {
 
 	setRadius(r) {
 		this.nuSetRadius(r)
+		this.update()
+		return this
+	}
+
+	canTranslate() {
+		return true
+	}
+
+	nuTranslateX(dx) {
+		this._cx += dx
+		return this
+	}
+
+	translateX(dx) {
+		this.nuTranslateX(dx)
+		this.update()
+		return this
+	}
+
+	nuTranslateY(dy) {
+		this._cy += dy
+		return this
+	}
+
+	translateY(dy) {
+		this.nuTranslateY(dy)
 		this.update()
 		return this
 	}

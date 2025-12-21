@@ -3,8 +3,6 @@ import Elemental from './Elemental.js'
 import List from './List.js'
 
 // TODO: Document.
-//
-// TODO: Add translate functions.
 export default class Group extends Elemental {
 	_elementals = new List()
 
@@ -35,6 +33,42 @@ export default class Group extends Elemental {
 		elemental.update()
 		this.update()
 
+		return this
+	}
+
+	canTranslate() {
+		return true
+	}
+
+	nuTranslateX(dx) {
+		for (const elem of this._elementals) {
+			if (elem.canTranslate()) {
+				elem.translateX(dx)
+			}
+		}
+
+		return this
+	}
+
+	translateX(dx) {
+		this.nuTranslateX(dx)
+		this.update()
+		return this
+	}
+
+	nuTranslateY(dy) {
+		for (const elem of this._elementals) {
+			if (elem.canTranslate()) {
+				elem.translateY(dy)
+			}
+		}
+
+		return this
+	}
+
+	translateY(dy) {
+		this.nuTranslateY(dy)
+		this.update()
 		return this
 	}
 

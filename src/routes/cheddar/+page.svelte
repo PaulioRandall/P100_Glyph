@@ -25,24 +25,24 @@
 		setTimeout(() => {
 			path.element.setAttribute('stroke', 'red')
 			path.commands[2].curve(100, 50)
-			circle.nuSetRadius(15).nuSetCenterX(20).setCenterY(80)
+			circle.setRadius(15).translateX(5).translateY(-5)
 		}, 500)
 
 		setTimeout(() => {
 			path.element.setAttribute('stroke', 'green')
 			path.subPaths[0].straighten()
-			circle.nuSetRadius(20).nuSetCenterX(25).setCenterY(75)
+			circle.setRadius(20).translateX(5).translateY(-5)
 		}, 1000)
 
 		setTimeout(() => {
 			path.element.setAttribute('stroke', 'blue')
 			path.subPaths[2].curve(60, 10, 30, 30)
-			circle.nuSetRadius(25).nuSetCenterX(30).setCenterY(70)
+			circle.setRadius(25).translateX(5).translateY(-5)
 		}, 1500)
 
 		setTimeout(() => {
 			path.element.setAttribute('stroke', 'navy')
-			svg.viewbox.setWidth(200).setHeight(200)
+			svg.viewbox.setWidthAnchorCenter(200).setHeightAnchorCenter(200)
 			circle.element.setAttribute('stroke', 'red')
 		}, 2000)
 	})

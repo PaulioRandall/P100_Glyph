@@ -79,6 +79,10 @@ export default class Command extends Updateable {
 		return this._cp2Y
 	}
 
+	hasXY() {
+		return this._type !== 'Z'
+	}
+
 	nuSetX(x) {
 		this._errIfClose()
 		this._x = x
@@ -167,6 +171,30 @@ export default class Command extends Updateable {
 		if (this._type !== 'C') {
 			throw new Error('Command must be cubic to do that')
 		}
+	}
+
+	nuTranslateX(dx) {
+		this._errIfClose()
+		this._x += dx
+		return this
+	}
+
+	translateX(dx) {
+		this.nuTranslateX(dx)
+		this.update()
+		return this
+	}
+
+	nuTranslateY(dy) {
+		this._errIfClose()
+		this._y += dy
+		return this
+	}
+
+	translateY(dy) {
+		this.nuTranslateY(dy)
+		this.update()
+		return this
 	}
 
 	// Returns true if a call to straighten is allowed.

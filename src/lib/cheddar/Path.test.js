@@ -169,4 +169,32 @@ describe('Path.js', () => {
 			new SubPath(p, p.commands[2]),
 		])
 	})
+
+	test('translateX()', () => {
+		const p = new Path()
+			.moveTo(20, 20) // [0]
+			.lineTo(80, 20) // [1]
+			.translateX(100)
+
+		clearUpdateFuncs(p)
+
+		expect(p.commands).toEqual([
+			Command.move(120, 20), //
+			Command.line(180, 20), //
+		])
+	})
+
+	test('translateY()', () => {
+		const p = new Path()
+			.moveTo(20, 20) // [0]
+			.lineTo(80, 20) // [1]
+			.translateY(100)
+
+		clearUpdateFuncs(p)
+
+		expect(p.commands).toEqual([
+			Command.move(20, 120), //
+			Command.line(80, 120), //
+		])
+	})
 })

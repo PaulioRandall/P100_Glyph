@@ -33,6 +33,10 @@ export default class Elemental extends Updateable {
 		return this
 	}
 
+	canTranslate() {
+		return false
+	}
+
 	update() {
 		if (this.element && !this.element.id) {
 			this.element.id = randomId()

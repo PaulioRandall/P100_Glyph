@@ -12,8 +12,6 @@ import SubPath from './SubPath.js'
 //       props from the element?
 //
 // TODO: Implement and test remove and clear functions.
-//
-// TODO: Add translate functions.
 export default class Path extends Elemental {
 	_commands = new List()
 	_subPaths = new List()
@@ -205,6 +203,42 @@ export default class Path extends Elemental {
 		this.nuOpen()
 		this.update()
 
+		return this
+	}
+
+	canTranslate() {
+		return true
+	}
+
+	nuTranslateX(dx) {
+		for (const cmd of this._commands) {
+			if (cmd.hasXY()) {
+				cmd.translateX(dx)
+			}
+		}
+
+		return this
+	}
+
+	translateX(dx) {
+		this.nuTranslateX(dx)
+		this.update()
+		return this
+	}
+
+	nuTranslateY(dy) {
+		for (const cmd of this._commands) {
+			if (cmd.hasXY()) {
+				cmd.translateY(dy)
+			}
+		}
+
+		return this
+	}
+
+	translateY(dy) {
+		this.nuTranslateY(dy)
+		this.update()
 		return this
 	}
 
