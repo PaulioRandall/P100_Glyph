@@ -1,4 +1,3 @@
-import Updateable from './Updateable.js'
 import List from './List.js'
 import Command from './Command.js'
 
@@ -15,7 +14,7 @@ import Command from './Command.js'
 // a SubPath does not represent a single command, per se.
 // However, there is core command that determines the shape
 // of the drawn line. It is returned by the command getter.
-export default class SubPath extends Updateable {
+export default class SubPath {
 	_path = null
 	_cmd = null
 
@@ -24,8 +23,6 @@ export default class SubPath extends Updateable {
 	// need to though. Each Path keeps an updated list of
 	// SubPaths accessible through its 'subPaths' getter.
 	constructor(path, cmd) {
-		super()
-
 		this._path = path
 		this._cmd = cmd
 	}
@@ -69,10 +66,7 @@ export default class SubPath extends Updateable {
 	// sets the start point of SubPath.
 	setStart(x, y) {
 		this._errIfNotInPath()
-
 		this.startCommand.nuSetX(x).setY(y)
-
-		this.update()
 		return this
 	}
 
@@ -81,10 +75,7 @@ export default class SubPath extends Updateable {
 	// afterwards within the parent Path.
 	setEnd(x, y) {
 		this._errIfNotInPath()
-
 		this.command.nuSetX(x).setY(y)
-
-		this.update()
 		return this
 	}
 
@@ -108,8 +99,6 @@ export default class SubPath extends Updateable {
 		}
 
 		this._cmd.straighten()
-
-		this.update()
 		return this
 	}
 
@@ -134,10 +123,7 @@ export default class SubPath extends Updateable {
 	// throw an error.
 	curve(cp1X = null, cp1Y = null, cp2X = null, cp2Y = null) {
 		this._errIfNotInPath()
-
 		this._cmd.curve(cp1X, cp1Y, cp2X, cp2Y)
-
-		this.update()
 		return this
 	}
 

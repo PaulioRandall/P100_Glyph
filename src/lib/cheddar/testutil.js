@@ -1,6 +1,12 @@
 export function nu(updateable) {
-	updateable._updater = null
-	updateable._updateFuncs.clear()
+	if (updateable?._updater) {
+		updateable._updater = null
+	}
+
+	if (updateable?._updateFuncs) {
+		updateable._updateFuncs.clear()
+	}
+
 	return updateable
 }
 

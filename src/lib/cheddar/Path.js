@@ -43,7 +43,6 @@ export default class Path extends Elemental {
 		if (cmd.type !== 'M' && cmd.type !== 'Z') {
 			const sp = new SubPath(this, cmd)
 			this._subPaths.push(sp)
-			cmd.onUpdate(sp.updater)
 		}
 
 		cmd.onUpdate(this.updater)
@@ -64,7 +63,6 @@ export default class Path extends Elemental {
 
 		const sp = this._subPaths.find((sp) => sp.command === cmd)
 		if (sp) {
-			cmd.offUpdate(sp.updater)
 			this._subPaths.remove(sp)
 		}
 

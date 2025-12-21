@@ -1,18 +1,17 @@
 # TODO
 
-- Remove Updateable from SubPath
-- Document Circle
-- Consider using `attr` to hold onto Circle props cx, cy, and r?
-- Document Command
-- Document Elemental
-- Document Group
-- Consider if `canTranslate` is needed? It could be that all Elementals can be trasnlated? Rendering it obsolete.
-- Document Path
-- Add functions to change specific properties
-- Document SVG
+- SubPath: Remove Updateable
+- Circle: Document
+- Command: Document
+- Elemental: Document
+- Group: Document
+- Path: Document
+- Path: Add functions to change specific properties
+- SubPath: add `nu` prefixed versions of functions
+- SVG: Document
 - Implement nuAdd, nuRemove, and nuClear to SVG
-- Write tests for SVG functions where appropriate
-- Write tests for the following rules
+- SVG: Write tests for functions where appropriate
+- $ Write tests for the following rules
 
 ```
 WHEN the SVG or its viewbox changes
@@ -31,3 +30,8 @@ WHEN a Command changes
 - It is updated
 - Its parent Path is updated
 ```
+
+# Considerations
+
+- Consider using `attr` to hold onto Circle props cx, cy, and r?
+- Consider if `canTranslate` is needed? It could be that all Elementals can be trasnlated? Rendering it obsolete.
