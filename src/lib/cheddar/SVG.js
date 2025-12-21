@@ -4,7 +4,6 @@ import Group from './Group.js'
 import BBox from './BBox.js'
 import List from './List.js'
 
-// TODO: Add remove and clear functions.
 export default class SVG extends Elemental {
 	_group = new Group()
 	_viewbox = new BBox()
@@ -29,6 +28,11 @@ export default class SVG extends Elemental {
 
 	remove(elemntal) {
 		this._group.remove(elemental)
+		return this
+	}
+
+	clear() {
+		this._group.clear(elemental)
 		return this
 	}
 

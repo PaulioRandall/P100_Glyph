@@ -1,7 +1,6 @@
 import { NAME_SPACE } from './cheddar.js'
 import Elemental from './Elemental.js'
 
-// TODO: Document.
 export default class Circle extends Elemental {
 	_cx = 0
 	_cy = 0

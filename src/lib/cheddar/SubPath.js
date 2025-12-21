@@ -15,8 +15,6 @@ import Command from './Command.js'
 // a SubPath does not represent a single command, per se.
 // However, there is core command that determines the shape
 // of the drawn line. It is returned by the command getter.
-//
-// TODO: Should SubPath update if its command updates?
 export default class SubPath extends Updateable {
 	_path = null
 	_cmd = null

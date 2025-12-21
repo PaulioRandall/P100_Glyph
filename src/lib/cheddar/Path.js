@@ -4,12 +4,6 @@ import Elemental from './Elemental.js'
 import Command from './Command.js'
 import SubPath from './SubPath.js'
 
-// TODO: Document.
-//
-// TODO: Implement functions to change properties such as
-//       stroke, strokewidth, fill, etc. Or maybe add
-//       functions to Elemental class that add and remove
-//       props from the element?
 export default class Path extends Elemental {
 	_commands = new List()
 	_subPaths = new List()

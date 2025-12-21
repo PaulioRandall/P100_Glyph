@@ -50,7 +50,7 @@ export default class Updateable {
 	// By default it does nothing except call updater and
 	// notifier functions.
 	update() {
-		console.log(this.constructor.name)
+		//console.log(this.constructor.name)
 		this.notify()
 	}
 
