@@ -19,24 +19,12 @@ export default class Circle extends Elemental {
 		this._generateElement()
 	}
 
-	get cx() {
+	get centerX() {
 		return this._cx
 	}
 
-	get cy() {
+	get centerY() {
 		return this._cy
-	}
-
-	get r() {
-		return this._r
-	}
-
-	get w() {
-		return this._r * 2
-	}
-
-	get h() {
-		return this._r * 2
 	}
 
 	get radius() {
@@ -44,52 +32,44 @@ export default class Circle extends Elemental {
 	}
 
 	get width() {
-		return this.w()
+		return this._r * 2
 	}
 
 	get height() {
-		return this.h()
+		return this._r * 2
 	}
 
-	nuSetCX(cx) {
+	nuSetCenterX(cx) {
 		this._cx = cx
 		return this
 	}
 
-	setCX(cx) {
-		this.nuSetCX(cx)
+	setCenterX(cx) {
+		this.nuSetCenterX(cx)
 		this.update()
 		return this
 	}
 
-	nuSetCY(cy) {
+	nuSetCenterY(cy) {
 		this._cy = cy
 		return this
 	}
 
-	setCY(cy) {
-		this.nuSetCY(cy)
+	setCenterY(cy) {
+		this.nuSetCenterY(cy)
 		this.update()
-		return this
-	}
-
-	nuSetR(r) {
-		this._r = r
 		return this
 	}
 
 	nuSetRadius(r) {
-		return this.nuSetR(r)
-	}
-
-	setR(r) {
-		this.nuSetR(r)
-		this.update()
+		this._r = r
 		return this
 	}
 
 	setRadius(r) {
-		return this.setR(r)
+		this.nuSetRadius(r)
+		this.update()
+		return this
 	}
 
 	update() {

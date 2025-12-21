@@ -18,10 +18,8 @@ export default class Bounds extends Updateable {
 	_right = 100
 	_bottom = 100
 
-	_width = 100
-	_height = 100
-	_halfWidth = 50
-	_halfHeight = 50
+	_w = 100
+	_h = 100
 
 	_cx = 50
 	_cy = 50
@@ -50,36 +48,12 @@ export default class Bounds extends Updateable {
 		return this._bottom
 	}
 
-	get w() {
-		return this._width
-	}
-
-	get h() {
-		return this._height
-	}
-
 	get width() {
-		return this._width
+		return this._w
 	}
 
 	get height() {
-		return this._height
-	}
-
-	get halfWidth() {
-		return this._halfWidth
-	}
-
-	get halfHeight() {
-		return this._halfHeight
-	}
-
-	get cx() {
-		return this._cx
-	}
-
-	get cy() {
-		return this._cy
+		return this._h
 	}
 
 	get centerX() {
@@ -164,8 +138,9 @@ export default class Bounds extends Updateable {
 
 	// setCenterX without calling update.
 	nuSetCenterX(x) {
-		this._left = x - this._halfWidth
-		this._right = x + this._halfWidth
+		const half = this._w / 2
+		this._left = x - half
+		this._right = x + half
 		return this
 	}
 
@@ -178,8 +153,9 @@ export default class Bounds extends Updateable {
 
 	// setCenterY without calling update.
 	nuSetCenterY(y) {
-		this._top = y - this._halfWidth
-		this._bottom = y + this._halfWidth
+		const half = this._h / 2
+		this._top = y - half
+		this._bottom = y + half
 		return this
 	}
 
@@ -192,7 +168,7 @@ export default class Bounds extends Updateable {
 
 	// setWidth without calling update.
 	nuSetWidth(w) {
-		const diff = w - this._width
+		const diff = w - this._w
 		const half = diff / 2
 
 		this._left -= half
@@ -211,7 +187,7 @@ export default class Bounds extends Updateable {
 
 	// setHeight without calling update.
 	nuSetHeight(h) {
-		const diff = h - this._height
+		const diff = h - this._h
 		const half = diff / 2
 
 		this._top -= half
@@ -228,67 +204,65 @@ export default class Bounds extends Updateable {
 		return this
 	}
 
-	// setWidthFromLeft without calling update.
-	nuSetWidthFromLeft(w) {
+	// setWidthAnchorLeft without calling update.
+	nuSetWidthAnchorLeft(w) {
 		this._right = this._left + w
 		return this
 	}
 
 	// Sets the width by forcing the right value to grow or
 	// shrink to accommodate.
-	setWidthFromLeft(w) {
-		this.nuSetWidthFromLeft(w)
+	setWidthAnchorLeft(w) {
+		this.nuSetWidthAnchorLeft(w)
 		this.update()
 		return this
 	}
 
-	// setWidthFromRight without calling update.
-	nuSetWidthFromRight(w) {
+	// setWidthAnchorRight without calling update.
+	nuSetWidthAnchorRight(w) {
 		this._left = this._right - w
 		return this
 	}
 
 	// Sets the width by forcing the left value to grow or
 	// shrink to accommodate.
-	setWidthFromRight(w) {
-		this.nuSetWidthFromRight(w)
+	setWidthAnchorRight(w) {
+		this.nuSetWidthAnchorRight(w)
 		this.update()
 		return this
 	}
 
-	// setHeightFromTop without calling update.
-	nuSetHeightFromTop(h) {
+	// setHeightAnchorTop without calling update.
+	nuSetHeightAnchorTop(h) {
 		this._bottom = this._top + h
 		return this
 	}
 
 	// Sets the height by forcing the bottom value to grow or
 	// shrink to accommodate.
-	setHeightFromTop(h) {
-		this.nuSetHeightFromTop(h)
+	setHeightAnchorTop(h) {
+		this.nuSetHeightAnchorTop(h)
 		this.update()
 		return this
 	}
 
-	// setHeightFromBottom without calling update.
-	nuSetHeightFromBottom(h) {
+	// setHeightAnchorBottom without calling update.
+	nuSetHeightAnchorBottom(h) {
 		this._top = this._bottom - h
 		return this
 	}
 
 	// Sets the height by forcing the top value to grow or
 	// shrink to accommodate.
-	setHeightFromBottom(h) {
-		this.nuSetHeightFromBottom(h)
+	setHeightAnchorBottom(h) {
+		this.nuSetHeightAnchorBottom(h)
 		this.update()
 		return this
 	}
 
 	update() {
-		this._width = this._right - this._left
-		this._height = this._bottom - this._top
-		this._halfWidth = this._width / 2
-		this._halfHeight = this._height / 2
+		this._w = this._right - this._left
+		this._h = this._bottom - this._top
 		this._cx = calcCenter(this._left, this._right)
 		this._cy = calcCenter(this._top, this._bottom)
 		super.update()
@@ -332,8 +306,8 @@ export default class Bounds extends Updateable {
 		return [
 			this._left, //
 			this._top, //
-			this._width, //
-			this._height, //
+			this._w, //
+			this._h, //
 		].join(' ')
 	}
 }

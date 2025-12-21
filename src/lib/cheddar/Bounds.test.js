@@ -73,37 +73,37 @@ describe('Bounds.js', () => {
 		expect(cb.bottom).toEqual(150)
 	})
 
-	test('setWidthFromLeft()', () => {
+	test('setWidthAnchorLeft()', () => {
 		const cb = new Bounds() //
 			.setLeft(-25) //
-			.setWidthFromLeft(75) //
+			.setWidthAnchorLeft(75) //
 
 		expect(cb.width).toEqual(75)
 		expect(cb.right).toEqual(50)
 	})
 
-	test('setWidthFromRight()', () => {
+	test('setWidthAnchorRight()', () => {
 		const cb = new Bounds() //
 			.setRight(25) //
-			.setWidthFromRight(75) //
+			.setWidthAnchorRight(75) //
 
 		expect(cb.width).toEqual(75)
 		expect(cb.left).toEqual(-50)
 	})
 
-	test('setHeightFromTop()', () => {
+	test('setHeightAnchorTop()', () => {
 		const cb = new Bounds() //
 			.setTop(-25) //
-			.setHeightFromTop(75) //
+			.setHeightAnchorTop(75) //
 
 		expect(cb.height).toEqual(75)
 		expect(cb.bottom).toEqual(50)
 	})
 
-	test('setHeightFromBottom()', () => {
+	test('setHeightAnchorBottom()', () => {
 		const cb = new Bounds() //
 			.setBottom(25) //
-			.setHeightFromBottom(75) //
+			.setHeightAnchorBottom(75) //
 
 		expect(cb.height).toEqual(75)
 		expect(cb.top).toEqual(-50)

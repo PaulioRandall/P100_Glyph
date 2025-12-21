@@ -1,24 +1,24 @@
 import Circle from './Circle.js'
 
 describe('Circle.js', () => {
-	test('setCX', () => {
+	test('setCenterX', () => {
 		const c = new Circle() //
-			.setCX(10)
+			.setCenterX(10)
 
-		expect(c.cx).toEqual(10)
+		expect(c.centerX).toEqual(10)
 	})
 
-	test('setCY', () => {
+	test('setCenterY', () => {
 		const c = new Circle() //
-			.setCY(10)
+			.setCenterY(10)
 
-		expect(c.cy).toEqual(10)
+		expect(c.centerY).toEqual(10)
 	})
 
-	test('setR/setRadius', () => {
+	test('setRadius', () => {
 		const c = new Circle() //
-			.setR(10)
+			.setRadius(10)
 
-		expect(c.r).toEqual(10)
+		expect(c.radius).toEqual(10)
 	})
 })

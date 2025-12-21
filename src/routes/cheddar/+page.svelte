@@ -11,9 +11,9 @@
 		container.appendChild(svg.element)
 
 		const circle = new Cheddar.Circle() //
-			.setCX(15) //
-			.setCY(85) //
-			.setR(10) //
+			.setCenterX(15) //
+			.setCenterY(85) //
+			.setRadius(10) //
 			.addTo(svg)
 
 		const path = new Cheddar.Path(20, 20) //
@@ -25,19 +25,19 @@
 		setTimeout(() => {
 			path.element.setAttribute('stroke', 'red')
 			path.commands[2].curve(100, 50)
-			circle.nuSetR(15).nuSetCX(20).setCY(80)
+			circle.nuSetRadius(15).nuSetCenterX(20).setCenterY(80)
 		}, 500)
 
 		setTimeout(() => {
 			path.element.setAttribute('stroke', 'green')
 			path.subPaths[0].straighten()
-			circle.nuSetR(20).nuSetCX(25).setCY(75)
+			circle.nuSetRadius(20).nuSetCenterX(25).setCenterY(75)
 		}, 1000)
 
 		setTimeout(() => {
 			path.element.setAttribute('stroke', 'blue')
 			path.subPaths[2].curve(60, 10, 30, 30)
-			circle.nuSetR(25).nuSetCX(30).setCY(70)
+			circle.nuSetRadius(25).nuSetCenterX(30).setCenterY(70)
 		}, 1500)
 
 		setTimeout(() => {
