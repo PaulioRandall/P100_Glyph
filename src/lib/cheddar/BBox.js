@@ -5,7 +5,7 @@ import Updateable from './Updateable.js'
 // Unlike Elemental classes, the values are kept in sync;
 // a call to the update function won't do anything other
 // than notify listeners.
-export default class Bounds extends Updateable {
+export default class BBox extends Updateable {
 	_left = 0
 	_top = 0
 	_right = 100
@@ -273,7 +273,7 @@ export default class Bounds extends Updateable {
 		return this
 	}
 
-	// Moves the bounds on the X plane by dx, which may be
+	// Moves the box on the X plane by dx, which may be
 	// negative.
 	translateX(dx) {
 		this.nuTranslateX(dx)
@@ -289,7 +289,7 @@ export default class Bounds extends Updateable {
 		return this
 	}
 
-	// Moves the bounds on the Y plane by dy, which may be
+	// Moves the box on the Y plane by dy, which may be
 	// negative.
 	translateY(dy) {
 		this.nuTranslateY(dy)
@@ -298,7 +298,7 @@ export default class Bounds extends Updateable {
 	}
 
 	// Returns true if the coords lay within or on the edge
-	// of the bounds.
+	// of the box.
 	contains(x, y) {
 		return (
 			x >= this._left && //
@@ -308,7 +308,7 @@ export default class Bounds extends Updateable {
 		)
 	}
 
-	// Returns true if the coords lay within the bounds. Will
+	// Returns true if the coords lay within the box. Will
 	// return false if on the edge.
 	containsWithin(x, y) {
 		return (
@@ -319,7 +319,7 @@ export default class Bounds extends Updateable {
 		)
 	}
 
-	// Returns a string representing the bounds in
+	// Returns a string representing the box in
 	// `left top right bottom` format.
 	toString() {
 		return [

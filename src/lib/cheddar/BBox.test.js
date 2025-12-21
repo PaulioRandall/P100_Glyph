@@ -1,8 +1,8 @@
-import Bounds from './Bounds.js'
+import BBox from './BBox.js'
 
-describe('Bounds.js', () => {
+describe('BBox.js', () => {
 	test('width()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setLeft(-100) //
 			.setRight(+100) //
 
@@ -10,7 +10,7 @@ describe('Bounds.js', () => {
 	})
 
 	test('height()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setTop(-100) //
 			.setBottom(+100) //
 
@@ -18,7 +18,7 @@ describe('Bounds.js', () => {
 	})
 
 	test('centerX()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setLeft(-25) //
 			.setRight(125) //
 
@@ -26,7 +26,7 @@ describe('Bounds.js', () => {
 	})
 
 	test('centerY()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setTop(-25) //
 			.setBottom(125) //
 
@@ -34,7 +34,7 @@ describe('Bounds.js', () => {
 	})
 
 	test('setCenterX()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setEdges(0, 0, 100, 100) //
 			.setCenterX(25)
 
@@ -44,7 +44,7 @@ describe('Bounds.js', () => {
 	})
 
 	test('setCenterY()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setEdges(0, 0, 100, 100) //
 			.setCenterY(25)
 
@@ -54,7 +54,7 @@ describe('Bounds.js', () => {
 	})
 
 	test('setWidthAnchorLeft()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setLeft(-25) //
 			.setWidthAnchorLeft(100) //
 
@@ -64,7 +64,7 @@ describe('Bounds.js', () => {
 	})
 
 	test('setWidthAnchorCenter()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setLeft(0) //
 			.setRight(100) //
 			.setWidthAnchorCenter(200) //
@@ -74,7 +74,7 @@ describe('Bounds.js', () => {
 	})
 
 	test('setWidthAnchorRight()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setRight(25) //
 			.setWidthAnchorRight(100) //
 
@@ -84,7 +84,7 @@ describe('Bounds.js', () => {
 	})
 
 	test('setHeightAnchorTop()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setTop(-25) //
 			.setHeightAnchorTop(100) //
 
@@ -94,7 +94,7 @@ describe('Bounds.js', () => {
 	})
 
 	test('setHeightAnchorCenter()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setTop(0) //
 			.setBottom(100) //
 			.setHeightAnchorCenter(200) //
@@ -104,7 +104,7 @@ describe('Bounds.js', () => {
 	})
 
 	test('setHeightAnchorBottom()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setBottom(25) //
 			.setHeightAnchorBottom(100) //
 
@@ -114,7 +114,7 @@ describe('Bounds.js', () => {
 	})
 
 	test('translateX()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setEdges(0, 0, 100, 100) //
 			.translateX(25) //
 			.translateX(-50) //
@@ -125,7 +125,7 @@ describe('Bounds.js', () => {
 	})
 
 	test('translateY()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setEdges(0, 0, 100, 100) //
 			.translateY(25) //
 			.translateY(-50) //
@@ -136,7 +136,7 @@ describe('Bounds.js', () => {
 	})
 
 	test('contains()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setEdges(0, 0, 100, 100) //
 
 		const f = (x, y) => cb.contains(x, y)
@@ -151,7 +151,7 @@ describe('Bounds.js', () => {
 	})
 
 	test('containsWithin()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setEdges(0, 0, 100, 100) //
 
 		const f = (x, y) => cb.containsWithin(x, y)
@@ -166,14 +166,14 @@ describe('Bounds.js', () => {
 	})
 
 	test('toString()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setEdges(-25, -25, 75, 75) //
 
 		expect(cb.toString()).toEqual('-25 -25 75 75')
 	})
 
 	test('toViewboxString()', () => {
-		const cb = new Bounds() //
+		const cb = new BBox() //
 			.setEdges(-25, -25, 75, 75) //
 
 		expect(cb.toViewboxString()).toEqual('-25 -25 100 100')

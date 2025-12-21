@@ -1,13 +1,13 @@
 import { NAME_SPACE } from './cheddar.js'
 import Elemental from './Elemental.js'
 import Group from './Group.js'
-import Bounds from './Bounds.js'
+import BBox from './BBox.js'
 import List from './List.js'
 
 // TODO: Add remove and clear functions.
 export default class SVG extends Elemental {
 	_group = new Group()
-	_viewbox = new Bounds()
+	_viewbox = new BBox()
 
 	constructor() {
 		super()

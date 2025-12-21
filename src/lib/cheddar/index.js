@@ -1,6 +1,6 @@
 import Updateable from './Updateable.js'
 import Elemental from './Elemental.js'
-import Bounds from './Bounds.js'
+import BBox from './BBox.js'
 
 import SVG from './SVG.js'
 import Group from './Group.js'
@@ -14,7 +14,7 @@ import Circle from './Circle.js'
 export default {
 	Updateable,
 	Elemental,
-	Bounds,
+	BBox,
 
 	// Groups
 	SVG,
