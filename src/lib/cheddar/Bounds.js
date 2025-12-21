@@ -1,15 +1,7 @@
 import Updateable from './Updateable.js'
 
-// Represents a bounding box on a 2D plane.
-//
-// Bounds work with intergers only.
-//
-// TODO: Create dirty flags and partial updates to deal
-//       with repeated calls to 'nu' prefix functions.
-//       Because these functions mutate state based upon
-//       existing state, if an update has not been made
-//       after a 'nu' mutation then the next function call
-//       may mutate using the wrong values.
+// Represents a bounding box on a 2D plane. Can be used to
+// create viewboxes too.
 export default class Bounds extends Updateable {
 	_left = 0
 	_top = 0
@@ -38,14 +30,6 @@ export default class Bounds extends Updateable {
 		return this._bottom
 	}
 
-	get x() {
-		return this._left
-	}
-
-	get y() {
-		return this._top
-	}
-
 	get width() {
 		return this._w
 	}
@@ -65,6 +49,8 @@ export default class Bounds extends Updateable {
 	// setLeft without calling update.
 	nuSetLeft(v) {
 		this._left = v
+		this._updateWidth()
+		this._updateCenterX()
 		return this
 	}
 
@@ -79,6 +65,8 @@ export default class Bounds extends Updateable {
 	// setRight without calling update.
 	nuSetRight(v) {
 		this._right = v
+		this._updateWidth()
+		this._updateCenterX()
 		return this
 	}
 
@@ -93,6 +81,8 @@ export default class Bounds extends Updateable {
 	// setTop without calling update.
 	nuSetTop(v) {
 		this._top = v
+		this._updateHeight()
+		this._updateCenterY()
 		return this
 	}
 
@@ -104,25 +94,11 @@ export default class Bounds extends Updateable {
 		return this
 	}
 
-	// setEdges without calling update.
-	nuSetEdges(left, top, right, bottom) {
-		this._left = left
-		this._top = top
-		this._right = right
-		this._bottom = bottom
-		return this
-	}
-
-	// Sets left, top, right, and bottom together.
-	setEdges(left, top, right, bottom) {
-		this.nuSetEdges(left, top, right, bottom)
-		this.update()
-		return this
-	}
-
 	// setBottom without calling update.
 	nuSetBottom(v) {
 		this._bottom = v
+		this._updateHeight()
+		this._updateCenterY()
 		return this
 	}
 
@@ -134,58 +110,65 @@ export default class Bounds extends Updateable {
 		return this
 	}
 
+	// setEdges without calling update.
+	nuSetEdges(left, top, right, bottom) {
+		this._left = left
+		this._top = top
+		this._right = right
+		this._bottom = bottom
+
+		this._updateWidth()
+		this._updateHeight()
+		this._updateCenterX()
+		this._updateCenterY()
+
+		return this
+	}
+
+	// Sets left, top, right, and bottom together.
+	setEdges(left, top, right, bottom) {
+		this.nuSetEdges(left, top, right, bottom)
+		this.update()
+		return this
+	}
+
 	// setCenterX without calling update.
-	nuSetCenterX(x) {
+	nuSetCenterX(cx) {
 		const half = this._w / 2
-		this._left = x - half
-		this._right = x + half
+		this._cx = cx
+		this._left = cx - half
+		this._right = cx + half
 		return this
 	}
 
 	// Sets center X adjusting left and right accordingly.
-	setCenterX(x) {
-		this.nuSetCenterX(x)
+	setCenterX(cx) {
+		this.nuSetCenterX(cx)
 		this.update()
 		return this
 	}
 
 	// setCenterY without calling update.
-	nuSetCenterY(y) {
+	nuSetCenterY(cy) {
 		const half = this._h / 2
-		this._top = y - half
-		this._bottom = y + half
+		this._cy = cy
+		this._top = cy - half
+		this._bottom = cy + half
 		return this
 	}
 
 	// Sets center Y adjusting top and bottom accordingly.
-	setCenterY(y) {
-		this.nuSetCenterY(y)
-		this.update()
-		return this
-	}
-
-	// setWidthAnchorCenter without calling update.
-	nuSetWidthAnchorCenter(w) {
-		const diff = w - this._w
-		const half = diff / 2
-
-		this._left -= half
-		this._right = this._left + w
-
-		return this
-	}
-
-	// Sets the width and forces the left and right values to
-	// grow or shrink by the same amount to accommodate.
-	setWidthAnchorCenter(w) {
-		this.nuSetWidthAnchorCenter(w)
+	setCenterY(cy) {
+		this.nuSetCenterY(cy)
 		this.update()
 		return this
 	}
 
 	// setWidthAnchorLeft without calling update.
 	nuSetWidthAnchorLeft(w) {
+		this._w = w
 		this._right = this._left + w
+		this._updateCenterX()
 		return this
 	}
 
@@ -197,9 +180,28 @@ export default class Bounds extends Updateable {
 		return this
 	}
 
+	// setWidthAnchorCenter without calling update.
+	nuSetWidthAnchorCenter(w) {
+		this._w = w
+		this._left = this._cx - w / 2
+		this._right = this._left + w
+		this._updateCenterX()
+		return this
+	}
+
+	// Sets the width and forces the left and right values to
+	// grow or shrink by the same amount to accommodate.
+	setWidthAnchorCenter(w) {
+		this.nuSetWidthAnchorCenter(w)
+		this.update()
+		return this
+	}
+
 	// setWidthAnchorRight without calling update.
 	nuSetWidthAnchorRight(w) {
+		this._w = w
 		this._left = this._right - w
+		this._updateCenterX()
 		return this
 	}
 
@@ -211,28 +213,11 @@ export default class Bounds extends Updateable {
 		return this
 	}
 
-	// setHeightAnchorCenter without calling update.
-	nuSetHeightAnchorCenter(h) {
-		const diff = h - this._h
-		const half = diff / 2
-
-		this._top -= half
-		this._bottom = this._top + h
-
-		return this
-	}
-
-	// Sets the height and forces the top and bottom values
-	// to grow or shrink by the same amount to accommodate.
-	setHeightAnchorCenter(h) {
-		this.nuSetHeightAnchorCenter(h)
-		this.update()
-		return this
-	}
-
 	// setHeightAnchorTop without calling update.
 	nuSetHeightAnchorTop(h) {
+		this._h = h
 		this._bottom = this._top + h
+		this._updateCenterY()
 		return this
 	}
 
@@ -244,9 +229,28 @@ export default class Bounds extends Updateable {
 		return this
 	}
 
+	// setHeightAnchorCenter without calling update.
+	nuSetHeightAnchorCenter(h) {
+		this._h = h
+		this._top = this._cy - h / 2
+		this._bottom = this._top + h
+		this._updateCenterY()
+		return this
+	}
+
+	// Sets the height and forces the top and bottom values
+	// to grow or shrink by the same amount to accommodate.
+	setHeightAnchorCenter(h) {
+		this.nuSetHeightAnchorCenter(h)
+		this.update()
+		return this
+	}
+
 	// setHeightAnchorBottom without calling update.
 	nuSetHeightAnchorBottom(h) {
+		this._h = h
 		this._top = this._bottom - h
+		this._updateCenterY()
 		return this
 	}
 
@@ -261,6 +265,7 @@ export default class Bounds extends Updateable {
 	nuTranslateX(dx) {
 		this._left += dx
 		this._right += dx
+		this._updateCenterX()
 		return this
 	}
 
@@ -273,6 +278,7 @@ export default class Bounds extends Updateable {
 	nuTranslateY(dy) {
 		this._top += dy
 		this._bottom += dy
+		this._updateCenterY()
 		return this
 	}
 
@@ -280,14 +286,6 @@ export default class Bounds extends Updateable {
 		this.nuTranslateY(dy)
 		this.update()
 		return this
-	}
-
-	update() {
-		this._w = this._right - this._left
-		this._h = this._bottom - this._top
-		this._cx = calcCenter(this._left, this._right)
-		this._cy = calcCenter(this._top, this._bottom)
-		super.update()
 	}
 
 	// Returns true if the coords lay within or on the edge
@@ -331,6 +329,22 @@ export default class Bounds extends Updateable {
 			this._w, //
 			this._h, //
 		].join(' ')
+	}
+
+	_updateWidth() {
+		this._w = this._right - this._left
+	}
+
+	_updateHeight() {
+		this._h = this._bottom - this._top
+	}
+
+	_updateCenterX() {
+		this._cx = calcCenter(this._left, this._right)
+	}
+
+	_updateCenterY() {
+		this._cy = calcCenter(this._top, this._bottom)
 	}
 }
 

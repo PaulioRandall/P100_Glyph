@@ -1,7 +1,7 @@
 import Bounds from './Bounds.js'
 
 describe('Bounds.js', () => {
-	test('width() set properly', () => {
+	test('width()', () => {
 		const cb = new Bounds() //
 			.setLeft(-100) //
 			.setRight(+100) //
@@ -9,7 +9,7 @@ describe('Bounds.js', () => {
 		expect(cb.width).toEqual(200)
 	})
 
-	test('height() set properly', () => {
+	test('height()', () => {
 		const cb = new Bounds() //
 			.setTop(-100) //
 			.setBottom(+100) //
@@ -53,6 +53,16 @@ describe('Bounds.js', () => {
 		expect(cb.bottom).toEqual(75)
 	})
 
+	test('setWidthAnchorLeft()', () => {
+		const cb = new Bounds() //
+			.setLeft(-25) //
+			.setWidthAnchorLeft(100) //
+
+		expect(cb.width).toEqual(100)
+		expect(cb.right).toEqual(75)
+		expect(cb.centerX).toEqual(25)
+	})
+
 	test('setWidthAnchorCenter()', () => {
 		const cb = new Bounds() //
 			.setLeft(0) //
@@ -61,6 +71,26 @@ describe('Bounds.js', () => {
 
 		expect(cb.left).toEqual(-50)
 		expect(cb.right).toEqual(150)
+	})
+
+	test('setWidthAnchorRight()', () => {
+		const cb = new Bounds() //
+			.setRight(25) //
+			.setWidthAnchorRight(100) //
+
+		expect(cb.width).toEqual(100)
+		expect(cb.left).toEqual(-75)
+		expect(cb.centerX).toEqual(-25)
+	})
+
+	test('setHeightAnchorTop()', () => {
+		const cb = new Bounds() //
+			.setTop(-25) //
+			.setHeightAnchorTop(100) //
+
+		expect(cb.height).toEqual(100)
+		expect(cb.bottom).toEqual(75)
+		expect(cb.centerY).toEqual(25)
 	})
 
 	test('setHeightAnchorCenter()', () => {
@@ -73,40 +103,14 @@ describe('Bounds.js', () => {
 		expect(cb.bottom).toEqual(150)
 	})
 
-	test('setWidthAnchorLeft()', () => {
-		const cb = new Bounds() //
-			.setLeft(-25) //
-			.setWidthAnchorLeft(75) //
-
-		expect(cb.width).toEqual(75)
-		expect(cb.right).toEqual(50)
-	})
-
-	test('setWidthAnchorRight()', () => {
-		const cb = new Bounds() //
-			.setRight(25) //
-			.setWidthAnchorRight(75) //
-
-		expect(cb.width).toEqual(75)
-		expect(cb.left).toEqual(-50)
-	})
-
-	test('setHeightAnchorTop()', () => {
-		const cb = new Bounds() //
-			.setTop(-25) //
-			.setHeightAnchorTop(75) //
-
-		expect(cb.height).toEqual(75)
-		expect(cb.bottom).toEqual(50)
-	})
-
 	test('setHeightAnchorBottom()', () => {
 		const cb = new Bounds() //
 			.setBottom(25) //
-			.setHeightAnchorBottom(75) //
+			.setHeightAnchorBottom(100) //
 
-		expect(cb.height).toEqual(75)
-		expect(cb.top).toEqual(-50)
+		expect(cb.height).toEqual(100)
+		expect(cb.top).toEqual(-75)
+		expect(cb.centerY).toEqual(-25)
 	})
 
 	test('translateX()', () => {
@@ -117,6 +121,7 @@ describe('Bounds.js', () => {
 
 		expect(cb.left).toEqual(-25)
 		expect(cb.right).toEqual(75)
+		expect(cb.centerX).toEqual(25)
 	})
 
 	test('translateY()', () => {
@@ -127,6 +132,7 @@ describe('Bounds.js', () => {
 
 		expect(cb.top).toEqual(-25)
 		expect(cb.bottom).toEqual(75)
+		expect(cb.centerY).toEqual(25)
 	})
 
 	test('contains()', () => {
