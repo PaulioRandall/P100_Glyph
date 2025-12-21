@@ -2,11 +2,20 @@ import Path from './Path.js'
 import Command from './Command.js'
 import SubPath from './SubPath.js'
 
-// Clear the list of update funcs because I can't
-// mock them.
-function clearUpdateFuncs(path) {
-	path.commands.forEach((cmd) => cmd._updateFuncs.clear())
-	path.subPaths.forEach((sp) => sp._updateFuncs.clear())
+function nu(updateable) {
+	updateable._updater = null
+	updateable._updateFuncs.clear()
+	return updateable
+}
+
+function expectUpdateable(act, exp) {
+	expect(nu(act)).toEqual(nu(exp))
+}
+
+function expectUpdateables(act, exp) {
+	act.forEach(nu)
+	exp.forEach(nu)
+	expect(act).toEqual(exp)
 }
 
 describe('Path.js', () => {
@@ -22,13 +31,10 @@ describe('Path.js', () => {
 	})
 
 	test('moveTo(x,y)', () => {
-		const p = new Path() //
-			.moveTo(20, 20) // [0]
+		const p = new Path(20, 20)
 
-		clearUpdateFuncs(p)
-
-		expect(p.commands).toEqual([
-			new Command('M', 20, 20), //
+		expectUpdateables(p.commands, [
+			Command.move(20, 20), //
 		])
 	})
 
@@ -37,11 +43,9 @@ describe('Path.js', () => {
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 20) // [1]
 
-		clearUpdateFuncs(p)
-
-		expect(p.commands).toEqual([
-			new Command('M', 20, 20), //
-			new Command('L', 80, 20), //
+		expectUpdateables(p.commands, [
+			Command.move(20, 20), //
+			Command.line(80, 20), //
 		])
 	})
 
@@ -51,13 +55,11 @@ describe('Path.js', () => {
 			.lineTo(80, 20) // [1]
 			.lineToClose() // [2]
 
-		clearUpdateFuncs(p)
-
-		expect(p.commands).toEqual([
-			new Command('M', 20, 20), //
-			new Command('L', 80, 20), //
-			new Command('L', 20, 20), //
-			new Command('Z'), //
+		expectUpdateables(p.commands, [
+			Command.move(20, 20), //
+			Command.line(80, 20), //
+			Command.line(20, 20), //
+			Command.close(), //
 		])
 	})
 
@@ -66,11 +68,9 @@ describe('Path.js', () => {
 			.moveTo(20, 20) // [0]
 			.quadraticTo(20, 80, 80, 80) // [1]
 
-		clearUpdateFuncs(p)
-
-		expect(p.commands).toEqual([
-			new Command('M', 20, 20), //
-			new Command('Q', 20, 80, 80, 80), //
+		expectUpdateables(p.commands, [
+			Command.move(20, 20), //
+			Command.quadratic(20, 80, 80, 80), //
 		])
 	})
 
@@ -80,13 +80,11 @@ describe('Path.js', () => {
 			.lineTo(80, 20) // [1]
 			.quadraticToClose(30, 40) // [2]
 
-		clearUpdateFuncs(p)
-
-		expect(p.commands).toEqual([
-			new Command('M', 20, 20), //
-			new Command('L', 80, 20), //
-			new Command('Q', 30, 40, 20, 20), //
-			new Command('Z'), //
+		expectUpdateables(p.commands, [
+			Command.move(20, 20), //
+			Command.line(80, 20), //
+			Command.quadratic(30, 40, 20, 20), //
+			Command.close(), //
 		])
 	})
 
@@ -95,11 +93,9 @@ describe('Path.js', () => {
 			.moveTo(20, 20) // [0]
 			.cubicTo(30, 50, 50, 70, 80, 80) // [1]
 
-		clearUpdateFuncs(p)
-
-		expect(p.commands).toEqual([
-			new Command('M', 20, 20), //
-			new Command('C', 30, 50, 50, 70, 80, 80), //
+		expectUpdateables(p.commands, [
+			Command.move(20, 20), //
+			Command.cubic(30, 50, 50, 70, 80, 80), //
 		])
 	})
 
@@ -109,13 +105,11 @@ describe('Path.js', () => {
 			.lineTo(80, 20) // [1]
 			.cubicToClose(30, 40, 50, 60) // [2]
 
-		clearUpdateFuncs(p)
-
-		expect(p.commands).toEqual([
-			new Command('M', 20, 20), //
-			new Command('L', 80, 20), //
-			new Command('C', 30, 40, 50, 60, 20, 20), //
-			new Command('Z'), //
+		expectUpdateables(p.commands, [
+			Command.move(20, 20), //
+			Command.line(80, 20), //
+			Command.cubic(30, 40, 50, 60, 20, 20), //
+			Command.close(), //
 		])
 	})
 
@@ -126,13 +120,11 @@ describe('Path.js', () => {
 			.lineTo(80, 80) // [2]
 			.close() // [3]
 
-		clearUpdateFuncs(p)
-
-		expect(p.commands).toEqual([
-			new Command('M', 20, 20), //
-			new Command('L', 80, 20), //
-			new Command('L', 80, 80), //
-			new Command('Z'), //
+		expectUpdateables(p.commands, [
+			Command.move(20, 20), //
+			Command.line(80, 20), //
+			Command.line(80, 80), //
+			Command.close(), //
 		])
 	})
 
@@ -144,12 +136,10 @@ describe('Path.js', () => {
 			.lineTo(80, 80) // [3]
 			.open() // [4]
 
-		clearUpdateFuncs(p)
-
-		expect(p.commands).toEqual([
-			new Command('M', 20, 20), //
-			new Command('L', 80, 20), //
-			new Command('L', 80, 80), //
+		expectUpdateables(p.commands, [
+			Command.move(20, 20), //
+			Command.line(80, 20), //
+			Command.line(80, 80), //
 		])
 	})
 
@@ -159,11 +149,9 @@ describe('Path.js', () => {
 			.lineTo(80, 20) // [1]
 			.lineTo(80, 80) // [2]
 
-		clearUpdateFuncs(p)
-
-		expect(p.subPaths).toEqual([
-			new SubPath(p, p.commands[1]),
-			new SubPath(p, p.commands[2]),
+		expectUpdateables(p.subPaths, [
+			new SubPath(p, p.commands[1]), //
+			new SubPath(p, p.commands[2]), //
 		])
 	})
 
@@ -174,9 +162,7 @@ describe('Path.js', () => {
 			.lineTo(80, 80) // [2]
 			.close() // [3]
 
-		clearUpdateFuncs(p)
-
-		expect(p.subPaths).toEqual([
+		expectUpdateables(p.subPaths, [
 			new SubPath(p, p.commands[1]),
 			new SubPath(p, p.commands[2]),
 		])
@@ -188,9 +174,7 @@ describe('Path.js', () => {
 			.lineTo(80, 20) // [1]
 			.translateX(100)
 
-		clearUpdateFuncs(p)
-
-		expect(p.commands).toEqual([
+		expectUpdateables(p.commands, [
 			Command.move(120, 20), //
 			Command.line(180, 20), //
 		])
@@ -202,9 +186,7 @@ describe('Path.js', () => {
 			.lineTo(80, 20) // [1]
 			.translateY(100)
 
-		clearUpdateFuncs(p)
-
-		expect(p.commands).toEqual([
+		expectUpdateables(p.commands, [
 			Command.move(20, 120), //
 			Command.line(80, 120), //
 		])

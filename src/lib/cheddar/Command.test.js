@@ -6,6 +6,10 @@ function nu(updateable) {
 	return updateable
 }
 
+function expectCmd(act, exp) {
+	expect(nu(act)).toEqual(nu(exp))
+}
+
 describe('Command.js', () => {
 	test('move (static)', () => {
 		const cmd = Command.move(20, 20)
@@ -141,9 +145,7 @@ describe('Command.js', () => {
 
 		cmd.straighten()
 
-		expect(cmd).toEqual(
-			Command.line(10, 20) //
-		)
+		expectCmd(cmd, Command.line(10, 20))
 	})
 
 	test('straighten: from quadratic', () => {
@@ -151,9 +153,7 @@ describe('Command.js', () => {
 
 		cmd.straighten()
 
-		expect(cmd).toEqual(
-			Command.line(30, 40) //
-		)
+		expectCmd(cmd, Command.line(30, 40))
 	})
 
 	test('straighten: from cubic', () => {
@@ -161,9 +161,7 @@ describe('Command.js', () => {
 
 		cmd.straighten()
 
-		expect(cmd).toEqual(
-			Command.line(50, 60) //
-		)
+		expectCmd(cmd, Command.line(50, 60))
 	})
 
 	test('curve: from line to line', () => {
@@ -171,9 +169,7 @@ describe('Command.js', () => {
 
 		cmd.curve()
 
-		expect(cmd).toEqual(
-			Command.line(10, 20) //
-		)
+		expectCmd(cmd, Command.line(10, 20))
 	})
 
 	test('curve: from quadratic to line', () => {
@@ -181,9 +177,7 @@ describe('Command.js', () => {
 
 		cmd.curve()
 
-		expect(cmd).toEqual(
-			Command.line(30, 40) //
-		)
+		expectCmd(cmd, Command.line(30, 40))
 	})
 
 	test('curve: from cubic to line', () => {
@@ -191,9 +185,7 @@ describe('Command.js', () => {
 
 		cmd.curve()
 
-		expect(cmd).toEqual(
-			Command.line(50, 60) //
-		)
+		expectCmd(cmd, Command.line(50, 60))
 	})
 
 	test('curve: from line to quadratic', () => {
@@ -201,9 +193,7 @@ describe('Command.js', () => {
 
 		cmd.curve(30, 40)
 
-		expect(cmd).toEqual(
-			Command.quadratic(30, 40, 10, 20) //
-		)
+		expectCmd(cmd, Command.quadratic(30, 40, 10, 20))
 	})
 
 	test('curve: from quadratic to quadratic', () => {
@@ -211,9 +201,7 @@ describe('Command.js', () => {
 
 		cmd.curve(50, 60)
 
-		expect(cmd).toEqual(
-			Command.quadratic(50, 60, 30, 40) //
-		)
+		expectCmd(cmd, Command.quadratic(50, 60, 30, 40))
 	})
 
 	test('curve: from cubic to quadratic', () => {
@@ -221,31 +209,15 @@ describe('Command.js', () => {
 
 		cmd.curve(70, 80)
 
-		expect(cmd).toEqual(
-			Command.quadratic(70, 80, 50, 60) //
-		)
+		expectCmd(cmd, Command.quadratic(70, 80, 50, 60))
 	})
-
-	// *****************************************************
-	// NEXT We had just worked out that the updater
-	//      introduced issues with testing the same way
-	//      updateFuncs did. To resolve, a 'nu' function was
-	//      created that should be called on both the actual
-	//      and expected objects to remove these object
-	//      personal values.
-	//
-	//      I need to update the rest of the tests
-	//      accordingly. Only the 3 tests below have been
-	//      fixed with the 'nu' function.
 
 	test('curve: from line to cubic', () => {
 		const cmd = Command.line(10, 20)
 
 		cmd.curve(30, 40, 50, 60)
 
-		expect(nu(cmd)).toEqual(
-			nu(Command.cubic(30, 40, 50, 60, 10, 20)) //
-		)
+		expectCmd(cmd, Command.cubic(30, 40, 50, 60, 10, 20))
 	})
 
 	test('curve: from quadratic to cubic', () => {
@@ -253,9 +225,7 @@ describe('Command.js', () => {
 
 		cmd.curve(50, 60, 70, 80)
 
-		expect(nu(cmd)).toEqual(
-			nu(Command.cubic(50, 60, 70, 80, 30, 40)) //
-		)
+		expectCmd(cmd, Command.cubic(50, 60, 70, 80, 30, 40))
 	})
 
 	test('curve() from cubic to cubic', () => {
@@ -263,8 +233,6 @@ describe('Command.js', () => {
 
 		cmd.curve(70, 80, 90, 100)
 
-		expect(nu(cmd)).toEqual(
-			nu(Command.cubic(70, 80, 90, 100, 50, 60)) //
-		)
+		expectCmd(cmd, Command.cubic(70, 80, 90, 100, 50, 60))
 	})
 })
