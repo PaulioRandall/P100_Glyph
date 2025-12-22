@@ -48,9 +48,9 @@ describe('Group.js', () => {
 			.add(new Circle(30, 40)) //
 			.add(new Circle(50, 60)) //
 
-		expect(g.length).toEqual(3)
+		expect(g.size).toEqual(3)
 		g.clear()
-		expect(g.length).toEqual(0)
+		expect(g.size).toEqual(0)
 	})
 
 	test('translateX', () => {
