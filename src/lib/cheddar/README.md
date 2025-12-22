@@ -1,11 +1,13 @@
 # TODO
 
+- DirtyMap: Make updateable
+- DirtyMap: Apply to Elemental
+- DirtyMap: Test
 - Group: Document
 - Path: Document
 - SVG: Document
 - Path: Add functions to change specific properties
 - SVG: Write tests for functions where appropriate
-- Elemental: Create new `DirtyMap` class that flags every name that has been modified as dirty. A function can be called to reset all the flags, e.g. after applying the map changes to the element in question. This allows only updates to elements that are needed, take place.
 - $ Write tests for the following rules
 
 ```
