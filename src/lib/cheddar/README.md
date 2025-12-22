@@ -1,6 +1,5 @@
 # TODO
 
-- Elemental: Document
 - Group: Document
 - Path: Document
 - SVG: Document
