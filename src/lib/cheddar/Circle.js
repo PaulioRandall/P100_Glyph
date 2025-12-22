@@ -3,10 +3,6 @@ import Elemental from './Elemental.js'
 
 // An Elemental for drawing a standard SVG Circle.
 export default class Circle extends Elemental {
-	_cx = 0
-	_cy = 0
-	_r = 0
-
 	// Arguments:
 	// [0] center X (optional)
 	// [1] center Y (optional)
@@ -14,36 +10,36 @@ export default class Circle extends Elemental {
 	constructor(cx = 0, cy = 0, r = 0) {
 		super()
 
-		this._cx = cx
-		this._cy = cy
-		this._r = r
+		this.attr('cx', cx)
+		this.attr('cy', cy)
+		this.attr('r', r)
 
 		this._generateElement()
 	}
 
 	get centerX() {
-		return this._cx
+		return this.attr('cx')
 	}
 
 	get centerY() {
-		return this._cy
+		return this.attr('cy')
 	}
 
 	get radius() {
-		return this._r
+		return this.attr('r')
 	}
 
 	get width() {
-		return this._r * 2
+		return this.attr('r') * 2
 	}
 
 	get height() {
-		return this._r * 2
+		return this.attr('r') * 2
 	}
 
 	// setCenterX without calling update.
 	nuSetCenterX(cx) {
-		this._cx = cx
+		this.attr('cx', cx)
 		return this
 	}
 
@@ -56,7 +52,7 @@ export default class Circle extends Elemental {
 
 	// setCenterY without calling update.
 	nuSetCenterY(cy) {
-		this._cy = cy
+		this.attr('cy', cy)
 		return this
 	}
 
@@ -69,7 +65,7 @@ export default class Circle extends Elemental {
 
 	// setRadius without calling update.
 	nuSetRadius(r) {
-		this._r = r
+		this.attr('r', r)
 		return this
 	}
 
@@ -87,7 +83,7 @@ export default class Circle extends Elemental {
 
 	// translateX without calling update.
 	nuTranslateX(dx) {
-		this._cx += dx
+		this.attr('cx', this.attr('cx') + dx)
 		return this
 	}
 
@@ -101,7 +97,7 @@ export default class Circle extends Elemental {
 
 	// translateY without calling update.
 	nuTranslateY(dy) {
-		this._cy += dy
+		this.attr('cy', this.attr('cy') + dy)
 		return this
 	}
 
@@ -113,23 +109,13 @@ export default class Circle extends Elemental {
 		return this
 	}
 
-	update() {
-		this.element.setAttribute('cx', this._cx)
-		this.element.setAttribute('cy', this._cy)
-		this.element.setAttribute('r', this._r)
-		super.update()
-	}
-
 	_generateElement() {
 		const circle = document.createElementNS(NAME_SPACE, 'circle')
-
-		circle.setAttribute('cx', this._cx)
-		circle.setAttribute('cy', this._cy)
-		circle.setAttribute('r', this._r)
 
 		circle.setAttribute('stroke', 'black')
 		circle.setAttribute('fill', 'none')
 
 		this._setElement(circle)
+		this.update()
 	}
 }

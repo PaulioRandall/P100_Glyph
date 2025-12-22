@@ -4,7 +4,6 @@
 - Group: Document
 - Path: Document
 - Path: Add functions to change specific properties
-- SubPath: add `nu` prefixed versions of functions
 - SVG: Document
 - Implement nuAdd, nuRemove, and nuClear to SVG
 - SVG: Write tests for functions where appropriate
@@ -30,5 +29,4 @@ WHEN a Command changes
 
 # Considerations
 
-- Consider using `attr` to hold onto Circle props cx, cy, and r?
 - Consider if `canTranslate` is needed? It could be that all Elementals can be trasnlated? Rendering it obsolete.
