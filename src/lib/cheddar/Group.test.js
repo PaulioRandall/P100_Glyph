@@ -14,6 +14,17 @@ describe('Group.js', () => {
 		expect(c._updateFuncs.length).toEqual(0)
 	})
 
+	test('clear', () => {
+		const g = new Group() //
+			.add(new Circle(10, 20)) //
+			.add(new Circle(30, 40)) //
+			.add(new Circle(50, 60)) //
+
+		expect(g.length).toEqual(3)
+		g.clear()
+		expect(g.length).toEqual(0)
+	})
+
 	test('translateX', () => {
 		const c = new Circle(20, 30)
 		const p = new Path(40, 50).lineTo(60, 70)

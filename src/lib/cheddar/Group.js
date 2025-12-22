@@ -5,6 +5,10 @@ import List from './List.js'
 export default class Group extends Elemental {
 	_elementals = new List()
 
+	get length() {
+		return this._elementals.length
+	}
+
 	constructor() {
 		super()
 		this._generateElement()
@@ -43,6 +47,19 @@ export default class Group extends Elemental {
 
 	remove(...elementals) {
 		this.nuRemove(...elementals)
+		this.update()
+		return this
+	}
+
+	nuClear() {
+		for (const e of [...this._elementals]) {
+			this.nuRemove(e)
+		}
+		return this
+	}
+
+	clear() {
+		this.nuClear()
 		this.update()
 		return this
 	}
