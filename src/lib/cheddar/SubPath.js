@@ -1,7 +1,7 @@
 import List from './List.js'
 import Command from './Command.js'
 
-// A SubPath represents a visual line of a Path.
+// A SubPath represents a visual line within a Path.
 //
 // They are exposed by the Path to allow manipulation of
 // its commands in a way that an end user will often

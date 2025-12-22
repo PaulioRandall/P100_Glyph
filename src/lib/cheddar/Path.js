@@ -1,11 +1,11 @@
 import { NAME_SPACE } from './cheddar.js'
 import List from './List.js'
-import Elemental from './Elemental.js'
+import DrawnElemental from './DrawnElemental.js'
 import Command from './Command.js'
 import SubPath from './SubPath.js'
 
 // Class for drawing an SVG Path.
-export default class Path extends Elemental {
+export default class Path extends DrawnElemental {
 	_commands = new List()
 	_subPaths = new List()
 	_closed = false
