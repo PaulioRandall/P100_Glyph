@@ -1,8 +1,8 @@
 import { NAME_SPACE } from './cheddar.js'
-import DrawnElemental from './DrawnElemental.js'
+import Elemental from './Elemental.js'
 
-// An DrawnElemental for drawing a standard SVG Circle.
-export default class Circle extends DrawnElemental {
+// An Elemental for drawing a standard SVG Circle.
+export default class Circle extends Elemental {
 	// Arguments:
 	// [0] center X (optional)
 	// [1] center Y (optional)
@@ -11,7 +11,7 @@ export default class Circle extends DrawnElemental {
 		super()
 
 		this.attrs.nuPut('stroke', 'black')
-		this.attrs.nuPut('fill', 'none')
+		this.attrs.nuPut('fill', 'white')
 		this.attrs.nuPut('cx', cx)
 		this.attrs.nuPut('cy', cy)
 		this.attrs.nuPut('r', r)

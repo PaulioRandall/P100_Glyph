@@ -117,8 +117,22 @@ export default class DirtyMap extends Updateable {
 	}
 
 	// Returns true if the name is dirty.
-	isDirty(name) {
+	isDirty(name = undefined) {
+		if (name === undefined) {
+			return this._dirty.size > 0
+		}
 		return this._dirty.has(name)
+	}
+
+	// Returns the underlying map entries.
+	map(f) {
+		const result = []
+
+		for (const entry of this._map.entries()) {
+			result.push(f(entry))
+		}
+
+		return result
 	}
 
 	// Returns true if putting this name value pair will

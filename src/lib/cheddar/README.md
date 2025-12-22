@@ -1,6 +1,5 @@
 # TODO
 
-- Path: Add functions to change specific properties
 - SVG: Write tests for functions where appropriate
 - Elemental: Tidy update function
 

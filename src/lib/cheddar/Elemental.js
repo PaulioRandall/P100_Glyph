@@ -7,6 +7,7 @@ import DirtyMap from './DirtyMap.js'
 export default class Elemental extends Updateable {
 	_element = null
 	_attrs = new DirtyMap()
+	_style = new DirtyMap()
 
 	// Arguments:
 	// [0]: element (optional)
@@ -27,6 +28,10 @@ export default class Elemental extends Updateable {
 
 	get attrs() {
 		return this._attrs
+	}
+
+	get style() {
+		return this._style
 	}
 
 	get attributes() {
@@ -62,6 +67,15 @@ export default class Elemental extends Updateable {
 				const v = this._attrs.val(name)
 				this.element.setAttribute(name, v)
 			}
+		}
+		this._attrs.nuClean()
+
+		// TODO: Tidy
+		if (this._style.isDirty()) {
+			const style = this._style
+				.map(([k, v]) => `${k}: ${v};`) //
+				.join('') //
+			this.element.setAttribute('style', style)
 		}
 		this._attrs.nuClean()
 
