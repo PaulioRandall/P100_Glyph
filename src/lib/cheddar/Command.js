@@ -5,29 +5,31 @@ import CommandIndices from './CommandIndices.js'
 // Represents an SVG path command.
 //
 // Only M, L, Q, C, and Z commands are supported.
-//
-// All mutation functions trigger a call to update except
-// 'nu' prefixed functions. If using 'nu' prefixed
-// functions, make sure to call update (or finish on a call
-// to a function that calls update) to ensure other values
-// are kept in sync and listeners are notified.
 export default class Command extends Updateable {
+	// Returns a new move command to {x,y}.
 	static move(x, y) {
 		return new Command('M', x, y)
 	}
 
+	// Returns a new line command to {x,y}.
 	static line(x, y) {
 		return new Command('L', x, y)
 	}
 
+	// Returns a new quadratic command to {x,y} using
+	// {cp1X,cp1Y} as the control point.
 	static quadratic(cp1X, cp1Y, x, y) {
 		return new Command('Q', cp1X, cp1Y, x, y)
 	}
 
+	// Returns a new cubic command to {x,y} using
+	// {cp1X,cp1Y} as the first control point and {cp2X,cp2Y}
+	// as the second.
 	static cubic(cp1X, cp1Y, cp2X, cp2Y, x, y) {
 		return new Command('C', cp1X, cp1Y, cp2X, cp2Y, x, y)
 	}
 
+	// Returns a new close command.
 	static close() {
 		return new Command('Z')
 	}
@@ -41,6 +43,10 @@ export default class Command extends Updateable {
 	_cp2X = null
 	_cp2Y = null
 
+	// Arguments:
+	// [...]: The parameters in the order rendered by the
+	//        path. E.g. ["M", 10, 20] for the move command
+	//        `M 10 20`.
 	constructor(...params) {
 		super()
 
@@ -79,28 +85,36 @@ export default class Command extends Updateable {
 		return this._cp2Y
 	}
 
+	// Returns tru if the command has x and y value, i.e.
+	// not a close command.
 	hasXY() {
 		return this._type !== 'Z'
 	}
 
+	// setX without calling update.
 	nuSetX(x) {
 		this._errIfClose()
 		this._x = x
 		return this
 	}
 
+	// Sets the X value. Throws an error if the command has
+	// no X value.
 	setX(x) {
 		this.nuSetX(x)
 		this.update()
 		return this
 	}
 
+	// setY without calling update.
 	nuSetY(y) {
 		this._errIfClose()
 		this._y = y
 		return this
 	}
 
+	// Sets the Y value. Throws an error if the command has
+	// no Y value.
 	setY(y) {
 		this.nuSetY(y)
 		this.update()
@@ -113,24 +127,30 @@ export default class Command extends Updateable {
 		}
 	}
 
+	// setCP1X without calling update.
 	nuSetCP1X(x) {
 		this._errIfNotCurve()
 		this._cp1X = x
 		return this
 	}
 
+	// Sets the X value of the first control point. Throws an
+	// error if the command is not a curve.
 	setCP1X(x) {
 		this.nuSetCP1X(x)
 		this.update()
 		return this
 	}
 
+	// setCP1Y without calling update.
 	nuSetCP1Y(y) {
 		this._errIfNotCurve()
 		this._cp1Y = y
 		return this
 	}
 
+	// Sets the Y value of the first control point. Throws an
+	// error if the command is not a curve.
 	setCP1Y(y) {
 		this.nuSetCP1Y(y)
 		this.update()
@@ -143,24 +163,30 @@ export default class Command extends Updateable {
 		}
 	}
 
+	// setCP2X without calling update.
 	nuSetCP2X(x) {
 		this._errIfNotCubic()
 		this._cp2X = x
 		return this
 	}
 
+	// Sets the X value of the first control point. Throws an
+	// error if the command is not a cubic curve.
 	setCP2X(x) {
 		this.nuSetCP2X(x)
 		this.update()
 		return this
 	}
 
+	// setCP2Y without calling update.
 	nuSetCP2Y(y) {
 		this._errIfNotCubic()
 		this._cp2Y = y
 		return this
 	}
 
+	// Sets the Y value of the first control point. Throws an
+	// error if the command is not a cubic curve.
 	setCP2Y(y) {
 		this.nuSetCP2Y(y)
 		this.update()
@@ -173,24 +199,30 @@ export default class Command extends Updateable {
 		}
 	}
 
+	// translateX without calling update.
 	nuTranslateX(dx) {
 		this._errIfClose()
 		this._x += dx
 		return this
 	}
 
+	// Moves the command destination X point by dx, which may
+	// be negative.
 	translateX(dx) {
 		this.nuTranslateX(dx)
 		this.update()
 		return this
 	}
 
+	// translateY without calling update.
 	nuTranslateY(dy) {
 		this._errIfClose()
 		this._y += dy
 		return this
 	}
 
+	// Moves the command destination Y point by dx, which may
+	// be negative.
 	translateY(dy) {
 		this.nuTranslateY(dy)
 		this.update()
@@ -204,10 +236,7 @@ export default class Command extends Updateable {
 		return this._type !== 'M' && this._type !== 'Z'
 	}
 
-	// Same as straighten but does not update parameters.
-	//
-	// You will need to call update after performing any
-	// other 'nu' prefixed operations.
+	// straighten without calling update.
 	nuStraighten() {
 		if (!this.canStraighten()) {
 			throw new Error("Move and close commands can't be straightened")
@@ -247,6 +276,7 @@ export default class Command extends Updateable {
 		return this._type !== 'M' && this._type !== 'Z'
 	}
 
+	// curve without calling update.
 	nuCurve(cp1X = null, cp1Y = null, cp2X = null, cp2Y = null) {
 		if (!this.canCurve()) {
 			throw new Error("Move and close commands can't be curved")
@@ -300,15 +330,14 @@ export default class Command extends Updateable {
 		this._type = 'C'
 	}
 
-	clone() {
-		return new Command(...this._params)
-	}
-
 	update() {
 		this._generateParams()
 		super.update()
 	}
 
+	// Returns the command as a string in the form that can
+	// be directly inserted into the full Path, e.g.
+	// `M 10 20`.
 	toString() {
 		return this._params.join(' ')
 	}

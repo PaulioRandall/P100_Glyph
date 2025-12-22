@@ -1,8 +1,5 @@
 # TODO
 
-- SubPath: Remove Updateable
-- Circle: Document
-- Command: Document
 - Elemental: Document
 - Group: Document
 - Path: Document
