@@ -3,6 +3,34 @@ import Circle from './Circle.js'
 import Path from './Path.js'
 
 describe('Group.js', () => {
+	test('update', () => {
+		const g1 = new Group()
+		const g2 = new Group()
+		const g3 = new Group()
+
+		g2.add(g3)
+		g1.add(g2)
+
+		let g1Called = 0
+		g1.onUpdate(() => g1Called++)
+
+		let g2Called = 0
+		g2.onUpdate(() => g2Called++)
+
+		let g3Called = 0
+		g3.onUpdate(() => g3Called++)
+
+		expect(g3Called).toEqual(0)
+		expect(g2Called).toEqual(0)
+		expect(g1Called).toEqual(0)
+
+		g3.update()
+
+		expect(g3Called).toEqual(1)
+		expect(g2Called).toEqual(1)
+		expect(g1Called).toEqual(1)
+	})
+
 	test('add/remove', () => {
 		const c = new Circle(10, 20)
 		const g = new Group()

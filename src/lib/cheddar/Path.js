@@ -50,7 +50,6 @@ export default class Path extends Elemental {
 		}
 
 		cmd.onUpdate(this.updater)
-
 		return this
 	}
 
