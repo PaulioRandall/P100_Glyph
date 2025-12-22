@@ -10,36 +10,38 @@ export default class Circle extends Elemental {
 	constructor(cx = 0, cy = 0, r = 0) {
 		super()
 
-		this.attr('cx', cx)
-		this.attr('cy', cy)
-		this.attr('r', r)
+		this.attrs.nuPut('stroke', 'black')
+		this.attrs.nuPut('fill', 'none')
+		this.attrs.nuPut('cx', cx)
+		this.attrs.nuPut('cy', cy)
+		this.attrs.nuPut('r', r)
 
 		this._generateElement()
 	}
 
 	get centerX() {
-		return this.attr('cx')
+		return this.attrs.val('cx')
 	}
 
 	get centerY() {
-		return this.attr('cy')
+		return this.attrs.val('cy')
 	}
 
 	get radius() {
-		return this.attr('r')
+		return this.attrs.val('r')
 	}
 
 	get width() {
-		return this.attr('r') * 2
+		return this.attrs.val('r') * 2
 	}
 
 	get height() {
-		return this.attr('r') * 2
+		return this.attrs.val('r') * 2
 	}
 
 	// setCenterX without calling update.
 	nuSetCenterX(cx) {
-		this.attr('cx', cx)
+		this.attrs.nuPut('cx', cx)
 		return this
 	}
 
@@ -52,7 +54,7 @@ export default class Circle extends Elemental {
 
 	// setCenterY without calling update.
 	nuSetCenterY(cy) {
-		this.attr('cy', cy)
+		this.attrs.nuPut('cy', cy)
 		return this
 	}
 
@@ -65,7 +67,7 @@ export default class Circle extends Elemental {
 
 	// setRadius without calling update.
 	nuSetRadius(r) {
-		this.attr('r', r)
+		this.attrs.nuPut('r', r)
 		return this
 	}
 
@@ -83,7 +85,8 @@ export default class Circle extends Elemental {
 
 	// translateX without calling update.
 	nuTranslateX(dx) {
-		this.attr('cx', this.attr('cx') + dx)
+		const curr = this.attrs.val('cx')
+		this.attrs.nuPut('cx', curr + dx)
 		return this
 	}
 
@@ -97,7 +100,8 @@ export default class Circle extends Elemental {
 
 	// translateY without calling update.
 	nuTranslateY(dy) {
-		this.attr('cy', this.attr('cy') + dy)
+		const curr = this.attrs.val('cy')
+		this.attrs.nuPut('cy', curr + dy)
 		return this
 	}
 
@@ -111,10 +115,6 @@ export default class Circle extends Elemental {
 
 	_generateElement() {
 		const circle = document.createElementNS(NAME_SPACE, 'circle')
-
-		circle.setAttribute('stroke', 'black')
-		circle.setAttribute('fill', 'none')
-
 		this._setElement(circle)
 		this.update()
 	}

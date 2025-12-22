@@ -103,5 +103,6 @@ export default class Group extends Elemental {
 	_generateElement() {
 		const group = document.createElementNS(NAME_SPACE, 'g')
 		this._setElement(group)
+		this.update()
 	}
 }

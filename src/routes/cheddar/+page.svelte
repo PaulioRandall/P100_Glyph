@@ -12,14 +12,14 @@
 		container.appendChild(svg.element)
 
 		const circle = new Cheddar.Circle() //
-			.setCenterX(15) //
-			.setCenterY(85) //
+			.nuSetCenterX(15) //
+			.nuSetCenterY(85) //
 			.setRadius(10) //
 			.addTo(svg)
 
 		const path = new Cheddar.Path(20, 20) //
-			.cubicTo(30, 50, 60, 40, 70, 70) //
-			.lineTo(70, 20) //
+			.nuCubicTo(30, 50, 60, 40, 70, 70) //
+			.nuLineTo(70, 20) //
 			.lineToClose() //
 			.addTo(svg)
 
@@ -45,7 +45,7 @@
 			path.element.setAttribute('stroke', 'navy')
 			svg.viewbox.nuSetWidthAnchorCenter(200).setHeightAnchorCenter(200)
 			//circle.element.setAttribute('stroke', 'red')
-			circle.attr('stroke', 'red')
+			circle.attrs.put('stroke', 'red')
 		}, 2000)
 	})
 </script>

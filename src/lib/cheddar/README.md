@@ -1,11 +1,11 @@
 # TODO
 
-- DirtyMap: Apply to Elemental
-- Group: Document
-- Path: Document
-- SVG: Document
 - Path: Add functions to change specific properties
+- Path: Document
+- Group: Document
+- SVG: Document
 - SVG: Write tests for functions where appropriate
+- Elemental: Tidy update function
 - $ Write tests for the following rules
 
 ```

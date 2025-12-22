@@ -1,11 +1,12 @@
 import { randomId } from './cheddar.js'
 import Updateable from './Updateable.js'
+import DirtyMap from './DirtyMap.js'
 
 // Classes extending Elemental map to a single HTML
 // element.
 export default class Elemental extends Updateable {
 	_element = null
-	_attrs = new Map()
+	_attrs = new DirtyMap()
 
 	// Arguments:
 	// [0]: element (optional)
@@ -13,36 +14,23 @@ export default class Elemental extends Updateable {
 		super()
 
 		this._element = element
+		this._attrs.onUpdate(this.updater)
 	}
 
 	get id() {
-		return this.element.id
+		return this._attrs.get('id')
 	}
 
 	get element() {
 		return this._element
 	}
 
-	// attr without calling update.
-	nuAttr(name, value = undefined) {
-		if (value === undefined) {
-			return this._attrs.get(name)
-		}
-
-		this._attrs.set(name, value)
-		return this
+	get attrs() {
+		return this._attrs
 	}
 
-	// Gets or sets an element attribute. Getter is invoked
-	// if value is undefined, else setter is invoked.
-	attr(name, value = undefined) {
-		if (value === undefined) {
-			return this._attrs.get(name)
-		}
-
-		this._attrs.set(name, value)
-		this.update()
-		return this
+	get attributes() {
+		return this._attrs
 	}
 
 	// Shortcut for adding itself to a group.
@@ -57,22 +45,25 @@ export default class Elemental extends Updateable {
 	}
 
 	update() {
+		if (!this._attrs.val('id')) {
+			this._attrs.nuSet('id', randomId())
+		}
+
 		if (!this.element) {
 			super.update()
 			return
 		}
 
-		if (!this._attrs.get('id')) {
-			this._attrs.set('id', randomId())
-		}
-
-		this._attrs.forEach((value, name) => {
-			if (value === undefined) {
+		// TODO: Tidy
+		for (const name of this._attrs.listDirty()) {
+			if (this._attrs.val(name) === undefined) {
 				this.element.removeAttribute(name)
 			} else {
-				this.element.setAttribute(name, value)
+				const v = this._attrs.val(name)
+				this.element.setAttribute(name, v)
 			}
-		})
+		}
+		this._attrs.nuClean()
 
 		super.update()
 	}

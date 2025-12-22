@@ -30,13 +30,13 @@ export default class DirtyMap extends Updateable {
 
 	// put without calling update.
 	nuPut(name, value, forceDirty = false) {
-		const change = this.willDirty(name, value)
+		const changed = this.willDirty(name, value)
 
-		if (change) {
+		if (changed) {
 			this._map.set(name, value)
 		}
 
-		if (forceDirty || change) {
+		if (forceDirty || changed) {
 			this._dirty.add(name)
 		}
 
@@ -47,17 +47,34 @@ export default class DirtyMap extends Updateable {
 	// unless the value is equal to the existing value and
 	// forceDirty is false.
 	put(name, value, forceDirty = false) {
-		const change = this.willDirty(name, value)
+		const changed = this.willDirty(name, value)
 
-		if (change) {
+		if (changed) {
 			this._map.set(name, value)
 		}
 
-		if (forceDirty || change) {
+		if (forceDirty || changed) {
 			this._dirty.add(name)
 			this.update()
 		}
 
+		return this
+	}
+
+	// putMissing without calling update.
+	nuPutMissing(name, value) {
+		if (!this._map.has(name)) {
+			this.nuPut(name, value)
+		}
+		return this
+	}
+
+	// Puts a value into the map only if the name is not
+	// a key currently in the map.
+	putMissing(name, value) {
+		if (!this._map.has(name)) {
+			this.put(name, value)
+		}
 		return this
 	}
 

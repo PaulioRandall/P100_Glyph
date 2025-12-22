@@ -12,6 +12,10 @@ export default class Path extends Elemental {
 	constructor(x = null, y = null) {
 		super()
 
+		this.attrs.nuPut('stroke', 'black')
+		this.attrs.nuPut('fill', 'none')
+		this.attrs.nuPut('d', this.toString())
+
 		this._generateElement()
 
 		if (x !== null) {
@@ -280,17 +284,13 @@ export default class Path extends Elemental {
 	}
 
 	update() {
-		this._element.setAttribute('d', this.toString())
+		this.attrs.nuPut('d', this.toString())
 		super.update()
 	}
 
 	_generateElement() {
 		const path = document.createElementNS(NAME_SPACE, 'path')
-
-		path.setAttribute('d', this.toString())
-		path.setAttribute('stroke', 'black')
-		path.setAttribute('fill', 'none')
-
 		this._setElement(path)
+		this.update()
 	}
 }

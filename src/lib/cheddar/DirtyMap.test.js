@@ -40,6 +40,27 @@ describe('DirtyMap.js', () => {
 		expect(observer.count).toEqual(2)
 	})
 
+	test('putMissing: new missing', () => {
+		const m = new DirtyMap()
+		const observer = onUpdate(m)
+
+		m.putMissing('a', 1)
+
+		expect(m.has('a')).toEqual(true)
+		expect(m.get('a')).toEqual(1)
+		expect(m.listDirty()).toEqual(['a'])
+		expect(observer.count).toEqual(1)
+	})
+
+	test('putMissing: already exists', () => {
+		const m = new DirtyMap()
+
+		m.put('a', undefined)
+		m.putMissing('a', 123)
+
+		expect(m.get('a')).toEqual(undefined)
+	})
+
 	test('val: gets', () => {
 		const m = new DirtyMap()
 

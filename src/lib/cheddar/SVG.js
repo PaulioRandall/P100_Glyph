@@ -12,9 +12,6 @@ export default class SVG extends Elemental {
 	constructor() {
 		super()
 
-		this.attr('xmlns', NAME_SPACE)
-		this.attr('preserveAspectRatio', 'xMaxYMax meet')
-
 		this._generateElement()
 
 		this._group.onUpdate(this.updater)
@@ -73,19 +70,16 @@ export default class SVG extends Elemental {
 	}
 
 	update() {
-		this.nuAttr('viewBox', this._viewbox.toViewboxString())
+		this.attrs.nuPutMissing('xmlns', NAME_SPACE)
+		this.attrs.nuPut('viewBox', this._viewbox.toViewboxString())
 		super.update()
 	}
 
 	_generateElement() {
-		const viewboxString = this._viewbox.toViewboxString()
 		const svg = document.createElementNS(NAME_SPACE, 'svg')
-
 		svg.appendChild(this._group.element)
 
-		svg.style.display = 'block'
-		svg.style.width = '100%'
-		svg.style.height = '100%'
+		this.attrs.nuPut('preserveAspectRatio', 'xMaxYMax meet')
 
 		this._setElement(svg)
 		this.update()
