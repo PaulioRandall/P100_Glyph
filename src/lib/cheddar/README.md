@@ -1,8 +1,6 @@
 # TODO
 
-- DirtyMap: Make updateable
 - DirtyMap: Apply to Elemental
-- DirtyMap: Test
 - Group: Document
 - Path: Document
 - SVG: Document
