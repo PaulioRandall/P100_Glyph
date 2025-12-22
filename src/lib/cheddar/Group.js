@@ -10,26 +10,39 @@ export default class Group extends Elemental {
 		this._generateElement()
 	}
 
-	add(elemental) {
-		this._elementals.push(elemental)
-		this.element.appendChild(elemental.element)
+	nuAdd(...elementals) {
+		for (const e of elementals) {
+			this._elementals.push(e)
+			this.element.appendChild(e.element)
+			e.onUpdate(this.updater)
+		}
 
-		elemental.onUpdate(this.updater)
+		return this
+	}
 
+	add(...elementals) {
+		this.nuAdd(...elementals)
 		this.update()
 		return this
 	}
 
-	remove(elemental) {
-		if (!this._elementals.includes(elemental)) {
-			return
+	nuRemove(...elementals) {
+		for (const e of elementals) {
+			if (!this._elementals.includes(e)) {
+				continue
+			}
+
+			e.offUpdate(this.updater)
+
+			this.element.removeChild(e.element)
+			this._elementals.remove(e)
 		}
 
-		elemental.offUpdate(this.updater)
+		return this
+	}
 
-		this.element.removeChild(elemental.element)
-		this._elementals.remove(elemental)
-
+	remove(...elementals) {
+		this.nuRemove(...elementals)
 		this.update()
 		return this
 	}

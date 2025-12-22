@@ -3,16 +3,13 @@
 - Elemental: Document
 - Group: Document
 - Path: Document
-- Path: Add functions to change specific properties
 - SVG: Document
+- Path: Add functions to change specific properties
 - Implement nuAdd, nuRemove, and nuClear to SVG
 - SVG: Write tests for functions where appropriate
 - $ Write tests for the following rules
 
 ```
-WHEN the SVG or its viewbox changes
-- SVG is updated
-
 WHEN a Group changes
 - It is updated
 - Its parent Group is updated

@@ -17,17 +17,21 @@ export default class SVG extends Elemental {
 		this._viewbox.onUpdate(this.updater)
 	}
 
+	get group() {
+		return this._group
+	}
+
 	get viewbox() {
 		return this._viewbox
 	}
 
-	add(elemental) {
-		this._group.add(elemental)
+	add(...elementals) {
+		this._group.add(...elementals)
 		return this
 	}
 
-	remove(elemntal) {
-		this._group.remove(elemental)
+	remove(...elementals) {
+		this._group.remove(...elementals)
 		return this
 	}
 
