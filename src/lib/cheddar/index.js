@@ -3,6 +3,7 @@ import Elemental from './Elemental.js'
 import BBox from './BBox.js'
 
 import SVG from './SVG.js'
+import SVGNav from './SVGNav.js'
 import Group from './Group.js'
 
 import Path from './Path.js'
@@ -19,6 +20,7 @@ export default {
 	// Groups
 	SVG,
 	Group,
+	SVGNav,
 
 	// Paths
 	Path,

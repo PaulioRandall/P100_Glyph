@@ -16,6 +16,7 @@ export default class Elemental extends Updateable {
 
 		this._element = element
 		this._attrs.onUpdate(this.updater)
+		this._style.onUpdate(this.updater)
 	}
 
 	get id() {
@@ -77,7 +78,7 @@ export default class Elemental extends Updateable {
 				.join('') //
 			this.element.setAttribute('style', style)
 		}
-		this._attrs.nuClean()
+		this._style.nuClean()
 
 		super.update()
 	}

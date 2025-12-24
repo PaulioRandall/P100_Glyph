@@ -11,6 +11,8 @@
 		svg.viewbox.setEdges(0, 0, 100, 100)
 		container.appendChild(svg.element)
 
+		const nav = new Cheddar.SVGNav(svg)
+
 		const circle = new Cheddar.Circle() //
 			.nuSetCenterX(15) //
 			.nuSetCenterY(85) //
@@ -23,40 +25,22 @@
 			.lineToClose() //
 			.addTo(svg)
 
-		setTimeout(() => {
-			path.element.setAttribute('stroke', 'red')
-			path.commands[2].curve(100, 50)
-			circle.nuSetRadius(15).nuTranslateX(5).translateY(-5)
-		}, 500)
-
-		setTimeout(() => {
-			path.element.setAttribute('stroke', 'green')
-			path.subPaths[0].straighten()
-			circle.nuSetRadius(20).nuTranslateX(5).translateY(-5)
-		}, 1000)
-
-		setTimeout(() => {
-			path.element.setAttribute('stroke', 'blue')
-			path.subPaths[2].curve(60, 10, 30, 30)
-			circle.nuSetRadius(25).nuTranslateX(5).translateY(-5)
-		}, 1500)
-
-		setTimeout(() => {
-			path.element.setAttribute('stroke', 'navy')
-			svg.viewbox.nuSetWidthAnchorCenter(200).setHeightAnchorCenter(200)
-			//circle.element.setAttribute('stroke', 'red')
-			circle.attrs.put('stroke', 'red')
-		}, 2000)
+		circle.setRadius(10).translateX(25).translateY(-25)
+		circle.attrs.set('stroke', 'red')
 	})
 </script>
 
-<div bind:this={container} class="container">
+<main bind:this={container} class="container">
 	<!-- Content controlled by Cheddar --> 
-</div>
+</main>
 
 <style>
 	.container {
-		width: 600px;
-		height: 600px;
+		width: 100vw;
+		max-width: 600px;
+		height: 100vh;
+		max-height: 600px;
+
+		overflow: hidden;
 	}
 </style>

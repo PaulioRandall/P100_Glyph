@@ -202,7 +202,19 @@ export default class Command extends Updateable {
 	// translateX without calling update.
 	nuTranslateX(dx) {
 		this._errIfClose()
-		this._x += dx
+
+		if (this._x !== null) {
+			this._x += dx
+		}
+
+		if (this._cp1X !== null) {
+			this._cp1X += dx
+		}
+
+		if (this._cp2X !== null) {
+			this._cp2X += dx
+		}
+
 		return this
 	}
 
@@ -217,7 +229,19 @@ export default class Command extends Updateable {
 	// translateY without calling update.
 	nuTranslateY(dy) {
 		this._errIfClose()
-		this._y += dy
+
+		if (this._y !== null) {
+			this._y += dy
+		}
+
+		if (this._cp1Y !== null) {
+			this._cp1Y += dy
+		}
+
+		if (this._cp2Y !== null) {
+			this._cp2Y += dy
+		}
+
 		return this
 	}
 
