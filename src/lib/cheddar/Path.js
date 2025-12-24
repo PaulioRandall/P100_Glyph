@@ -273,17 +273,10 @@ export default class Path extends Elemental {
 		return this
 	}
 
-	// Always returns true.
-	canTranslate() {
-		return true
-	}
-
-	// translateX without calling update.
-	nuTranslateX(dx) {
+	// moveX without calling update.
+	numoveX(dx) {
 		for (const cmd of this._commands) {
-			if (cmd.hasXY()) {
-				cmd.translateX(dx)
-			}
+			cmd.moveX(dx)
 		}
 
 		return this
@@ -291,18 +284,16 @@ export default class Path extends Elemental {
 
 	// Moves the group by dx on the X plane. dx may be
 	// negative.
-	translateX(dx) {
-		this.nuTranslateX(dx)
+	moveX(dx) {
+		this.numoveX(dx)
 		this.update()
 		return this
 	}
 
-	// translateY without calling update.
-	nuTranslateY(dy) {
+	// moveY without calling update.
+	numoveY(dy) {
 		for (const cmd of this._commands) {
-			if (cmd.hasXY()) {
-				cmd.translateY(dy)
-			}
+			cmd.moveY(dy)
 		}
 
 		return this
@@ -310,8 +301,8 @@ export default class Path extends Elemental {
 
 	// Moves the group by dy on the Y plane. dy may be
 	// negative.
-	translateY(dy) {
-		this.nuTranslateY(dy)
+	moveY(dy) {
+		this.numoveY(dy)
 		this.update()
 		return this
 	}

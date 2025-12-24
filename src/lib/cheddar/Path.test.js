@@ -170,11 +170,11 @@ describe('Path.js', () => {
 		])
 	})
 
-	test('translateX()', () => {
+	test('moveX()', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 20) // [1]
-			.translateX(100)
+			.moveX(100)
 
 		expectUpdateables(p.commands, [
 			Command.move(120, 20), //
@@ -182,11 +182,11 @@ describe('Path.js', () => {
 		])
 	})
 
-	test('translateY()', () => {
+	test('moveY()', () => {
 		const p = new Path()
 			.moveTo(20, 20) // [0]
 			.lineTo(80, 20) // [1]
-			.translateY(100)
+			.moveY(100)
 
 		expectUpdateables(p.commands, [
 			Command.move(20, 120), //

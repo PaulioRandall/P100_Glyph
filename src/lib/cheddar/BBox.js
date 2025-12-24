@@ -265,8 +265,8 @@ export default class BBox extends Updateable {
 		return this
 	}
 
-	// translateX without calling update.
-	nuTranslateX(dx) {
+	// moveX without calling update.
+	numoveX(dx) {
 		this._left += dx
 		this._right += dx
 		this._updateCenterX()
@@ -275,14 +275,14 @@ export default class BBox extends Updateable {
 
 	// Moves the box on the X plane by dx, which may be
 	// negative.
-	translateX(dx) {
-		this.nuTranslateX(dx)
+	moveX(dx) {
+		this.numoveX(dx)
 		this.update()
 		return this
 	}
 
-	// translateY without calling update.
-	nuTranslateY(dy) {
+	// moveY without calling update.
+	numoveY(dy) {
 		this._top += dy
 		this._bottom += dy
 		this._updateCenterY()
@@ -291,8 +291,8 @@ export default class BBox extends Updateable {
 
 	// Moves the box on the Y plane by dy, which may be
 	// negative.
-	translateY(dy) {
-		this.nuTranslateY(dy)
+	moveY(dy) {
+		this.numoveY(dy)
 		this.update()
 		return this
 	}

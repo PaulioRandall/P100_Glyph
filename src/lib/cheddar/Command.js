@@ -85,12 +85,6 @@ export default class Command extends Updateable {
 		return this._cp2Y
 	}
 
-	// Returns tru if the command has x and y value, i.e.
-	// not a close command.
-	hasXY() {
-		return this._type !== 'Z'
-	}
-
 	// setX without calling update.
 	nuSetX(x) {
 		this._errIfClose()
@@ -199,8 +193,8 @@ export default class Command extends Updateable {
 		}
 	}
 
-	// translateX without calling update.
-	nuTranslateX(dx) {
+	// moveX without calling update.
+	numoveX(dx) {
 		this._errIfClose()
 
 		if (this._x !== null) {
@@ -220,14 +214,14 @@ export default class Command extends Updateable {
 
 	// Moves the command destination X point by dx, which may
 	// be negative.
-	translateX(dx) {
-		this.nuTranslateX(dx)
+	moveX(dx) {
+		this.numoveX(dx)
 		this.update()
 		return this
 	}
 
-	// translateY without calling update.
-	nuTranslateY(dy) {
+	// moveY without calling update.
+	numoveY(dy) {
 		this._errIfClose()
 
 		if (this._y !== null) {
@@ -247,8 +241,8 @@ export default class Command extends Updateable {
 
 	// Moves the command destination Y point by dx, which may
 	// be negative.
-	translateY(dy) {
-		this.nuTranslateY(dy)
+	moveY(dy) {
+		this.numoveY(dy)
 		this.update()
 		return this
 	}

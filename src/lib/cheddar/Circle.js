@@ -78,13 +78,8 @@ export default class Circle extends Elemental {
 		return this
 	}
 
-	// Always returns true.
-	canTranslate() {
-		return true
-	}
-
-	// translateX without calling update.
-	nuTranslateX(dx) {
+	// moveX without calling update.
+	numoveX(dx) {
 		const curr = this.attrs.val('cx')
 		this.attrs.nuPut('cx', curr + dx)
 		return this
@@ -92,14 +87,14 @@ export default class Circle extends Elemental {
 
 	// Moves the circle on the X plane by dx, which may be
 	// negative.
-	translateX(dx) {
-		this.nuTranslateX(dx)
+	moveX(dx) {
+		this.numoveX(dx)
 		this.update()
 		return this
 	}
 
-	// translateY without calling update.
-	nuTranslateY(dy) {
+	// moveY without calling update.
+	numoveY(dy) {
 		const curr = this.attrs.val('cy')
 		this.attrs.nuPut('cy', curr + dy)
 		return this
@@ -107,8 +102,8 @@ export default class Circle extends Elemental {
 
 	// Moves the circle on the Y plane by dy, which may be
 	// negative.
-	translateY(dy) {
-		this.nuTranslateY(dy)
+	moveY(dy) {
+		this.numoveY(dy)
 		this.update()
 		return this
 	}

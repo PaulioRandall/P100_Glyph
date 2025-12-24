@@ -75,17 +75,10 @@ export default class Group extends Elemental {
 		return this
 	}
 
-	// Always retursn true.
-	canTranslate() {
-		return true
-	}
-
-	// translateX without calling update.
-	nuTranslateX(dx) {
+	// moveX without calling update.
+	numoveX(dx) {
 		for (const elem of this._elementals) {
-			if (elem.canTranslate()) {
-				elem.translateX(dx)
-			}
+			elem.moveX(dx)
 		}
 
 		return this
@@ -93,18 +86,16 @@ export default class Group extends Elemental {
 
 	// Moves the group by dx on the X plane. dx may be
 	// negative.
-	translateX(dx) {
-		this.nuTranslateX(dx)
+	moveX(dx) {
+		this.numoveX(dx)
 		this.update()
 		return this
 	}
 
-	// translateY without calling update.
-	nuTranslateY(dy) {
+	// moveY without calling update.
+	numoveY(dy) {
 		for (const elem of this._elementals) {
-			if (elem.canTranslate()) {
-				elem.translateY(dy)
-			}
+			elem.moveY(dy)
 		}
 
 		return this
@@ -112,8 +103,8 @@ export default class Group extends Elemental {
 
 	// Moves the group by dy on the Y plane. dy may be
 	// negative.
-	translateY(dy) {
-		this.nuTranslateY(dy)
+	moveY(dy) {
+		this.numoveY(dy)
 		this.update()
 		return this
 	}

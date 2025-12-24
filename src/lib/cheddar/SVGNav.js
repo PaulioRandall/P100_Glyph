@@ -68,8 +68,8 @@ export default class Nav {
 	_event_pointermove(e) {
 		e.preventDefault()
 
-		this._svg.group.nuTranslateX(e.movementX)
-		this._svg.group.translateY(e.movementY)
+		this._svg.group.numoveX(e.movementX)
+		this._svg.group.moveY(e.movementY)
 	}
 
 	_event_pointerup(e) {

@@ -45,11 +45,6 @@ export default class Elemental extends Updateable {
 		return this
 	}
 
-	// Always true.
-	canTranslate() {
-		return false
-	}
-
 	update() {
 		if (!this._attrs.val('id')) {
 			this._attrs.nuSet('id', randomId())

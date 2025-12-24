@@ -113,22 +113,22 @@ describe('BBox.js', () => {
 		expect(cb.centerY).toEqual(-25)
 	})
 
-	test('translateX()', () => {
+	test('moveX()', () => {
 		const cb = new BBox() //
 			.setEdges(0, 0, 100, 100) //
-			.translateX(25) //
-			.translateX(-50) //
+			.moveX(25) //
+			.moveX(-50) //
 
 		expect(cb.left).toEqual(-25)
 		expect(cb.right).toEqual(75)
 		expect(cb.centerX).toEqual(25)
 	})
 
-	test('translateY()', () => {
+	test('moveY()', () => {
 		const cb = new BBox() //
 			.setEdges(0, 0, 100, 100) //
-			.translateY(25) //
-			.translateY(-50) //
+			.moveY(25) //
+			.moveY(-50) //
 
 		expect(cb.top).toEqual(-25)
 		expect(cb.bottom).toEqual(75)
