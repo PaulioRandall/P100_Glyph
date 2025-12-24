@@ -274,7 +274,7 @@ export default class Path extends Elemental {
 	}
 
 	// moveX without calling update.
-	numoveX(dx) {
+	nuMoveX(dx) {
 		for (const cmd of this._commands) {
 			cmd.moveX(dx)
 		}
@@ -285,13 +285,13 @@ export default class Path extends Elemental {
 	// Moves the group by dx on the X plane. dx may be
 	// negative.
 	moveX(dx) {
-		this.numoveX(dx)
+		this.nuMoveX(dx)
 		this.update()
 		return this
 	}
 
 	// moveY without calling update.
-	numoveY(dy) {
+	nuMoveY(dy) {
 		for (const cmd of this._commands) {
 			cmd.moveY(dy)
 		}
@@ -302,7 +302,7 @@ export default class Path extends Elemental {
 	// Moves the group by dy on the Y plane. dy may be
 	// negative.
 	moveY(dy) {
-		this.numoveY(dy)
+		this.nuMoveY(dy)
 		this.update()
 		return this
 	}

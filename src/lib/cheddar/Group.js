@@ -76,7 +76,7 @@ export default class Group extends Elemental {
 	}
 
 	// moveX without calling update.
-	numoveX(dx) {
+	nuMoveX(dx) {
 		for (const elem of this._elementals) {
 			elem.moveX(dx)
 		}
@@ -87,13 +87,13 @@ export default class Group extends Elemental {
 	// Moves the group by dx on the X plane. dx may be
 	// negative.
 	moveX(dx) {
-		this.numoveX(dx)
+		this.nuMoveX(dx)
 		this.update()
 		return this
 	}
 
 	// moveY without calling update.
-	numoveY(dy) {
+	nuMoveY(dy) {
 		for (const elem of this._elementals) {
 			elem.moveY(dy)
 		}
@@ -104,7 +104,7 @@ export default class Group extends Elemental {
 	// Moves the group by dy on the Y plane. dy may be
 	// negative.
 	moveY(dy) {
-		this.numoveY(dy)
+		this.nuMoveY(dy)
 		this.update()
 		return this
 	}

@@ -68,7 +68,7 @@ export default class Nav {
 	_event_pointermove(e) {
 		e.preventDefault()
 
-		this._svg.group.numoveX(e.movementX)
+		this._svg.group.nuMoveX(e.movementX)
 		this._svg.group.moveY(e.movementY)
 	}
 

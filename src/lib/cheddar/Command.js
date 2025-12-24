@@ -194,9 +194,7 @@ export default class Command extends Updateable {
 	}
 
 	// moveX without calling update.
-	numoveX(dx) {
-		this._errIfClose()
-
+	nuMoveX(dx) {
 		if (this._x !== null) {
 			this._x += dx
 		}
@@ -215,15 +213,13 @@ export default class Command extends Updateable {
 	// Moves the command destination X point by dx, which may
 	// be negative.
 	moveX(dx) {
-		this.numoveX(dx)
+		this.nuMoveX(dx)
 		this.update()
 		return this
 	}
 
 	// moveY without calling update.
-	numoveY(dy) {
-		this._errIfClose()
-
+	nuMoveY(dy) {
 		if (this._y !== null) {
 			this._y += dy
 		}
@@ -242,7 +238,7 @@ export default class Command extends Updateable {
 	// Moves the command destination Y point by dx, which may
 	// be negative.
 	moveY(dy) {
-		this.numoveY(dy)
+		this.nuMoveY(dy)
 		this.update()
 		return this
 	}
