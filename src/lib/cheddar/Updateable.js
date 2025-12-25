@@ -49,11 +49,6 @@ export default class Updateable {
 	//
 	// By default it does nothing except call notify.
 	update() {
-		this.notify()
-	}
-
-	// Notify listeners without invoking update.
-	notify() {
 		this._updateFuncs.forEach((f) => f(this))
 	}
 }

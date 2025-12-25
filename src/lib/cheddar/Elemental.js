@@ -8,16 +8,16 @@ export default class Elemental extends Updateable {
 	_element = null
 	_attrs = new DirtyMap()
 	_styles = new DirtyMap()
+	_transforms = new DirtyMap()
 	_updating = false
 
-	// Arguments:
-	// [0]: element (optional)
-	constructor(element = null) {
+	constructor() {
 		super()
 
-		this._element = element
+		this._attrs.set('id', randomId())
 		this._attrs.onUpdate(this.updater)
 		this._styles.onUpdate(this.updater)
+		this._transforms.onUpdate(this.updater)
 	}
 
 	get id() {
@@ -34,6 +34,10 @@ export default class Elemental extends Updateable {
 
 	get styles() {
 		return this._styles
+	}
+
+	get transforms() {
+		return this._transforms
 	}
 
 	get attributes() {
@@ -56,6 +60,14 @@ export default class Elemental extends Updateable {
 		return this
 	}
 
+	transform(name, value = undefined) {
+		if (value === undefined) {
+			return this._transforms.get(name)
+		}
+		this._transforms.put(name, value)
+		return this
+	}
+
 	// Shortcut for adding itself to a group.
 	addTo(group) {
 		group.add(this)
@@ -69,41 +81,69 @@ export default class Elemental extends Updateable {
 
 		this._updating = true
 
-		if (!this._attrs.val('id')) {
-			this._attrs.set('id', randomId())
-		}
+		try {
+			if (this.element) {
+				this._updateAttr()
+				this._updateStyle()
+				this._updateTransform()
+			}
 
-		if (!this.element) {
 			super.update()
+		} finally {
 			this._updating = false
-			return
 		}
+	}
 
-		// TODO: Tidy
+	_setElement(element) {
+		this._element = element
+	}
+
+	_updateAttr() {
 		for (const name of this._attrs.listDirty()) {
-			if (this._attrs.val(name) === undefined) {
+			const v = this._attrs.val(name)
+
+			if (v === undefined) {
 				this.element.removeAttribute(name)
 			} else {
-				const v = this._attrs.val(name)
 				this.element.setAttribute(name, v)
 			}
 		}
-		this._attrs.clean()
 
-		// TODO: Tidy
+		this._attrs.clean()
+	}
+
+	_updateStyle() {
 		if (this._styles.isDirty()) {
 			const style = this._styles
 				.map(([k, v]) => `${k}: ${v};`) //
 				.join('') //
 			this.element.setAttribute('style', style)
 		}
-		this._styles.clean()
 
-		super.update()
-		this._updating = false
+		this._styles.clean()
 	}
 
-	_setElement(element) {
-		this._element = element
+	_updateTransform() {
+		if (this._transforms.isDirty()) {
+			const transforms = this._transforms
+				.map(this._transformValueToString) //
+				.map(this._transformPairToString) //
+				.join('') //
+			this.element.setAttribute('transform', transforms)
+		}
+
+		this._transforms.clean()
+	}
+
+	_transformValueToString([k, v]) {
+		if (Array.isArray(v)) {
+			return [k, v.join(' ')]
+		}
+
+		return [k, v]
+	}
+
+	_transformPairToString([k, v]) {
+		return `${k}(${v})`
 	}
 }

@@ -25,6 +25,8 @@ export default class Nav {
 		this._enabled = true
 		this._on('pointerdown', this._pointerdown)
 		this._on('pointerup', this._pointerup)
+		this._on('mousewheel', this._mousewheel)
+		this._on('wheel', this._mousewheel)
 	}
 
 	disable() {
@@ -68,8 +70,13 @@ export default class Nav {
 	_event_pointermove(e) {
 		e.preventDefault()
 
-		this._svg.group.moveX(e.movementX)
-		this._svg.group.moveY(e.movementY)
+		const v = this._svg.group.transform('translate')
+		const xy = v || [0, 0]
+
+		this._svg.group.transform('translate', [
+			(xy[0] || 0) + e.movementX,
+			(xy[1] || 0) + e.movementY,
+		])
 	}
 
 	_event_pointerup(e) {
@@ -83,6 +90,13 @@ export default class Nav {
 	}
 
 	_event_mousewheel(e) {
-		console.log(e.wheelDeltaY, e.deltaY)
+		const oldScale = this._svg.group.transform('scale') || 1
+		const amount = e.wheelDeltaY > 0 ? 0.1 : -0.1
+		const newScale = oldScale + amount
+
+		if (newScale > 0.3 && newScale < 2) {
+			this._svg.group.attr('transform-origin', 'center')
+			this._svg.group.transform('scale', newScale)
+		}
 	}
 }

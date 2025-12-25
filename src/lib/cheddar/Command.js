@@ -216,26 +216,6 @@ export default class Command extends Updateable {
 		return this._type !== 'M' && this._type !== 'Z'
 	}
 
-	// curve without calling update.
-	nuCurve(cp1X = null, cp1Y = null, cp2X = null, cp2Y = null) {
-		if (!this.canCurve()) {
-			throw new Error("Move and close commands can't be curved")
-		}
-
-		if (cp1X === null) {
-			this.straighten()
-			return this
-		}
-
-		if (cp2X === null) {
-			this._updateToQuadratic(cp1X, cp1Y)
-			return this
-		}
-
-		this._updateToCubic(cp1X, cp1Y, cp2X, cp2Y)
-		return this
-	}
-
 	// Converts the command to a curve based on the arguments
 	// provided (or update the current curve).
 	//
@@ -252,36 +232,14 @@ export default class Command extends Updateable {
 
 		if (cp1X === null) {
 			this.straighten()
-			this.update()
-			return this
-		}
-
-		if (cp2X === null) {
+		} else if (cp2X === null) {
 			this._updateToQuadratic(cp1X, cp1Y)
-			this.update()
-			return this
+		} else {
+			this._updateToCubic(cp1X, cp1Y, cp2X, cp2Y)
 		}
 
-		this._updateToCubic(cp1X, cp1Y, cp2X, cp2Y)
 		this.update()
-
 		return this
-	}
-
-	_updateToQuadratic(cp1X, cp1Y) {
-		this._cp1X = cp1X
-		this._cp1Y = cp1Y
-		this._cp2X = null
-		this._cp2Y = null
-		this._type = 'Q'
-	}
-
-	_updateToCubic(cp1X, cp1Y, cp2X, cp2Y) {
-		this._cp1X = cp1X
-		this._cp1Y = cp1Y
-		this._cp2X = cp2X
-		this._cp2Y = cp2Y
-		this._type = 'C'
 	}
 
 	update() {
@@ -316,5 +274,21 @@ export default class Command extends Updateable {
 			const fieldName = '_' + name
 			this._params[i] = this[fieldName]
 		}
+	}
+
+	_updateToQuadratic(cp1X, cp1Y) {
+		this._cp1X = cp1X
+		this._cp1Y = cp1Y
+		this._cp2X = null
+		this._cp2Y = null
+		this._type = 'Q'
+	}
+
+	_updateToCubic(cp1X, cp1Y, cp2X, cp2Y) {
+		this._cp1X = cp1X
+		this._cp1Y = cp1Y
+		this._cp2X = cp2X
+		this._cp2Y = cp2Y
+		this._type = 'C'
 	}
 }

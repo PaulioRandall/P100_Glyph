@@ -3,7 +3,7 @@ import Updateable from './Updateable.js'
 describe('Updateable.js', () => {
 	test('No listeners', () => {
 		const cu = new Updateable()
-		cu.notify()
+		cu.update()
 	})
 
 	test('Try to add listener that is not a function', () => {
@@ -22,7 +22,7 @@ describe('Updateable.js', () => {
 		cu.onUpdate(() => called.push(2))
 		cu.onUpdate(() => called.push(3))
 
-		cu.notify()
+		cu.update()
 
 		expect(called).toEqual([1, 2, 3])
 	})
@@ -41,7 +41,7 @@ describe('Updateable.js', () => {
 
 		cu.offUpdate(two)
 
-		cu.notify()
+		cu.update()
 
 		expect(called).toEqual([1, 3])
 	})

@@ -112,6 +112,13 @@ export default class DirtyMap extends Updateable {
 	// Removes all names from the dirty list.
 	clean() {
 		this._dirty.clear()
+
+		for (const [name, value] of this._map.entries()) {
+			if (value === undefined) {
+				this._map.delete(name)
+			}
+		}
+
 		this.update()
 		return this
 	}
