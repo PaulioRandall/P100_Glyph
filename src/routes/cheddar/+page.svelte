@@ -14,21 +14,21 @@
 		const nav = new Cheddar.SVGNav(svg)
 
 		const circle = new Cheddar.Circle() //
-			.nuSetCenterX(15) //
-			.nuSetCenterY(85) //
+			.setCenterX(15) //
+			.setCenterY(85) //
 			.setRadius(10) //
 			.addTo(svg) //
 
 		const path = new Cheddar.Path(20, 20) //
-			.nuCubicTo(30, 50, 60, 40, 70, 70) //
-			.nuLineTo(70, 20) //
+			.cubicTo(30, 50, 60, 40, 70, 70) //
+			.lineTo(70, 20) //
 			.lineToClose() //
 			.addTo(svg) //
 
 		circle.setRadius(10) //
 			.moveX(25) //
 			.moveY(-25) //
-			.attrs.set('stroke', 'red') //
+			.attr('stroke', 'red') //
 	})
 </script>
 

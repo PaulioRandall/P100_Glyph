@@ -47,16 +47,12 @@ export default class Updateable {
 	// You should only call this function yourself if you
 	// want to refresh content as if an update occurred.
 	//
-	// By default it does nothing except call updater and
-	// notifier functions.
+	// By default it does nothing except call notify.
 	update() {
-		//console.log(this.constructor.name)
 		this.notify()
 	}
 
-	// Notify listeners that an update has occurred, or
-	// at least invoke actions that are performed when an
-	// update occurs.
+	// Notify listeners without invoking update.
 	notify() {
 		this._updateFuncs.forEach((f) => f(this))
 	}

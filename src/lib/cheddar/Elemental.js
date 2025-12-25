@@ -7,7 +7,8 @@ import DirtyMap from './DirtyMap.js'
 export default class Elemental extends Updateable {
 	_element = null
 	_attrs = new DirtyMap()
-	_style = new DirtyMap()
+	_styles = new DirtyMap()
+	_updating = false
 
 	// Arguments:
 	// [0]: element (optional)
@@ -16,7 +17,7 @@ export default class Elemental extends Updateable {
 
 		this._element = element
 		this._attrs.onUpdate(this.updater)
-		this._style.onUpdate(this.updater)
+		this._styles.onUpdate(this.updater)
 	}
 
 	get id() {
@@ -31,12 +32,28 @@ export default class Elemental extends Updateable {
 		return this._attrs
 	}
 
-	get style() {
-		return this._style
+	get styles() {
+		return this._styles
 	}
 
 	get attributes() {
 		return this._attrs
+	}
+
+	attr(name, value = undefined) {
+		if (value === undefined) {
+			return this._attrs.get(name)
+		}
+		this._attrs.put(name, value)
+		return this
+	}
+
+	style(name, value = undefined) {
+		if (value === undefined) {
+			return this._styles.get(name)
+		}
+		this._styles.put(name, value)
+		return this
 	}
 
 	// Shortcut for adding itself to a group.
@@ -46,12 +63,19 @@ export default class Elemental extends Updateable {
 	}
 
 	update() {
+		if (this._updating) {
+			return
+		}
+
+		this._updating = true
+
 		if (!this._attrs.val('id')) {
-			this._attrs.nuSet('id', randomId())
+			this._attrs.set('id', randomId())
 		}
 
 		if (!this.element) {
 			super.update()
+			this._updating = false
 			return
 		}
 
@@ -64,18 +88,19 @@ export default class Elemental extends Updateable {
 				this.element.setAttribute(name, v)
 			}
 		}
-		this._attrs.nuClean()
+		this._attrs.clean()
 
 		// TODO: Tidy
-		if (this._style.isDirty()) {
-			const style = this._style
+		if (this._styles.isDirty()) {
+			const style = this._styles
 				.map(([k, v]) => `${k}: ${v};`) //
 				.join('') //
 			this.element.setAttribute('style', style)
 		}
-		this._style.nuClean()
+		this._styles.clean()
 
 		super.update()
+		this._updating = false
 	}
 
 	_setElement(element) {

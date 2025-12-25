@@ -85,116 +85,64 @@ export default class Command extends Updateable {
 		return this._cp2Y
 	}
 
-	// setX without calling update.
-	nuSetX(x) {
-		this._errIfClose()
-		this._x = x
-		return this
-	}
-
-	// Sets the X value. Throws an error if the command has
-	// no X value.
+	// Sets the X value.
 	setX(x) {
-		this.nuSetX(x)
-		this.update()
+		if (this._x !== null) {
+			this._x = x
+			this.update()
+		}
 		return this
 	}
 
-	// setY without calling update.
-	nuSetY(y) {
-		this._errIfClose()
-		this._y = y
-		return this
-	}
-
-	// Sets the Y value. Throws an error if the command has
-	// no Y value.
+	// Sets the Y value.
 	setY(y) {
-		this.nuSetY(y)
-		this.update()
-		return this
-	}
-
-	_errIfClose() {
-		if (this._type === 'Z') {
-			throw new Error("Command type must not be 'Z' to do that")
+		if (this._y !== null) {
+			this._y = y
+			this.update()
 		}
-	}
-
-	// setCP1X without calling update.
-	nuSetCP1X(x) {
-		this._errIfNotCurve()
-		this._cp1X = x
 		return this
 	}
 
-	// Sets the X value of the first control point. Throws an
-	// error if the command is not a curve.
+	// Sets the X value of the first control point.
 	setCP1X(x) {
-		this.nuSetCP1X(x)
-		this.update()
-		return this
-	}
-
-	// setCP1Y without calling update.
-	nuSetCP1Y(y) {
-		this._errIfNotCurve()
-		this._cp1Y = y
-		return this
-	}
-
-	// Sets the Y value of the first control point. Throws an
-	// error if the command is not a curve.
-	setCP1Y(y) {
-		this.nuSetCP1Y(y)
-		this.update()
-		return this
-	}
-
-	_errIfNotCurve() {
-		if (this._type !== 'Q' && this._type !== 'C') {
-			throw new Error('Command must be a curve to do that')
+		if (this._cp1X !== null) {
+			this._cp1X = x
+			this.update()
 		}
-	}
-
-	// setCP2X without calling update.
-	nuSetCP2X(x) {
-		this._errIfNotCubic()
-		this._cp2X = x
 		return this
 	}
 
-	// Sets the X value of the first control point. Throws an
-	// error if the command is not a cubic curve.
+	// Sets the Y value of the first control point.
+	setCP1Y(y) {
+		if (this._cp1Y !== null) {
+			this._cp1Y = y
+			this.update()
+		}
+		return this
+	}
+
+	// Sets the X value of the first control point.
 	setCP2X(x) {
-		this.nuSetCP2X(x)
-		this.update()
-		return this
-	}
-
-	// setCP2Y without calling update.
-	nuSetCP2Y(y) {
-		this._errIfNotCubic()
-		this._cp2Y = y
+		if (this._cp2X !== null) {
+			this._cp2X = x
+			this.update()
+		}
 		return this
 	}
 
 	// Sets the Y value of the first control point. Throws an
 	// error if the command is not a cubic curve.
 	setCP2Y(y) {
-		this.nuSetCP2Y(y)
-		this.update()
+		if (this._cp2Y !== null) {
+			this._cp2Y = y
+			this.update()
+		}
 		return this
 	}
 
-	_errIfNotCubic() {
-		if (this._type !== 'C') {
-			throw new Error('Command must be cubic to do that')
-		}
-	}
-
-	// moveX without calling update.
-	nuMoveX(dx) {
+	// Moves the command destination X point by dx, which may
+	// be negative.
+	moveX(dx) {
 		if (this._x !== null) {
 			this._x += dx
 		}
@@ -207,19 +155,13 @@ export default class Command extends Updateable {
 			this._cp2X += dx
 		}
 
-		return this
-	}
-
-	// Moves the command destination X point by dx, which may
-	// be negative.
-	moveX(dx) {
-		this.nuMoveX(dx)
 		this.update()
 		return this
 	}
 
-	// moveY without calling update.
-	nuMoveY(dy) {
+	// Moves the command destination Y point by dx, which may
+	// be negative.
+	moveY(dy) {
 		if (this._y !== null) {
 			this._y += dy
 		}
@@ -232,13 +174,6 @@ export default class Command extends Updateable {
 			this._cp2Y += dy
 		}
 
-		return this
-	}
-
-	// Moves the command destination Y point by dx, which may
-	// be negative.
-	moveY(dy) {
-		this.nuMoveY(dy)
 		this.update()
 		return this
 	}
@@ -250,10 +185,14 @@ export default class Command extends Updateable {
 		return this._type !== 'M' && this._type !== 'Z'
 	}
 
-	// straighten without calling update.
-	nuStraighten() {
+	// Converts the command to a line command if not already
+	// a line command. Will also do nothing if a close
+	// command because they create straight lines too and we
+	// don't want to open a closed path without the dev
+	// user's explicit instruction.
+	straighten() {
 		if (!this.canStraighten()) {
-			throw new Error("Move and close commands can't be straightened")
+			return this
 		}
 
 		if (this._type === 'L') {
@@ -266,19 +205,6 @@ export default class Command extends Updateable {
 		this._cp2Y = null
 		this._type = 'L'
 
-		return this
-	}
-
-	// Converts the command to a line command if not already
-	// a line command. Will also do nothing if a close
-	// command because they create straight lines too and we
-	// don't want to open a closed path without the dev
-	// user's explicit instruction.
-	//
-	// Move and close commands cannot be converted and will
-	// throw an error.
-	straighten() {
-		this.nuStraighten()
 		this.update()
 		return this
 	}
@@ -319,12 +245,26 @@ export default class Command extends Updateable {
 	//   cp1Y) then convert to a quadratic curve.
 	// - If the first four arguments are provided (cp1X,
 	//   cp1Y, cp2X, cp2Y) then convert to a cubic curve.
-	//
-	// Move and close commands cannot be converted and will
-	// throw an error.
 	curve(cp1X = null, cp1Y = null, cp2X = null, cp2Y = null) {
-		this.nuCurve(cp1X, cp1Y, cp2X, cp2Y)
+		if (!this.canCurve()) {
+			return this
+		}
+
+		if (cp1X === null) {
+			this.straighten()
+			this.update()
+			return this
+		}
+
+		if (cp2X === null) {
+			this._updateToQuadratic(cp1X, cp1Y)
+			this.update()
+			return this
+		}
+
+		this._updateToCubic(cp1X, cp1Y, cp2X, cp2Y)
 		this.update()
+
 		return this
 	}
 

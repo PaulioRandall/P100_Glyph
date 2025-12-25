@@ -10,100 +10,70 @@ export default class Circle extends Elemental {
 	constructor(cx = 0, cy = 0, r = 0) {
 		super()
 
-		this.attrs.nuPut('stroke', 'black')
-		this.attrs.nuPut('fill', 'white')
-		this.attrs.nuPut('cx', cx)
-		this.attrs.nuPut('cy', cy)
-		this.attrs.nuPut('r', r)
+		this.attr('stroke', 'black')
+		this.attr('fill', 'white')
+		this.attr('cx', cx)
+		this.attr('cy', cy)
+		this.attr('r', r)
 
 		this._generateElement()
 	}
 
 	get centerX() {
-		return this.attrs.val('cx')
+		return this.attr('cx')
 	}
 
 	get centerY() {
-		return this.attrs.val('cy')
+		return this.attr('cy')
 	}
 
 	get radius() {
-		return this.attrs.val('r')
+		return this.attr('r')
 	}
 
 	get width() {
-		return this.attrs.val('r') * 2
+		return this.attr('r') * 2
 	}
 
 	get height() {
-		return this.attrs.val('r') * 2
-	}
-
-	// setCenterX without calling update.
-	nuSetCenterX(cx) {
-		this.attrs.nuPut('cx', cx)
-		return this
+		return this.attr('r') * 2
 	}
 
 	// Sets the X value of the circle center.
 	setCenterX(cx) {
-		this.nuSetCenterX(cx)
+		this.attr('cx', cx)
 		this.update()
-		return this
-	}
-
-	// setCenterY without calling update.
-	nuSetCenterY(cy) {
-		this.attrs.nuPut('cy', cy)
 		return this
 	}
 
 	// Sets the Y value of the circle center.
 	setCenterY(cy) {
-		this.nuSetCenterY(cy)
+		this.attr('cy', cy)
 		this.update()
-		return this
-	}
-
-	// setRadius without calling update.
-	nuSetRadius(r) {
-		this.attrs.nuPut('r', r)
 		return this
 	}
 
 	// Sets the radius of the circle.
 	setRadius(r) {
-		this.nuSetRadius(r)
+		this.attr('r', r)
 		this.update()
-		return this
-	}
-
-	// moveX without calling update.
-	numoveX(dx) {
-		const curr = this.attrs.val('cx')
-		this.attrs.nuPut('cx', curr + dx)
 		return this
 	}
 
 	// Moves the circle on the X plane by dx, which may be
 	// negative.
 	moveX(dx) {
-		this.numoveX(dx)
+		const curr = this.attr('cx')
+		this.attr('cx', curr + dx)
 		this.update()
-		return this
-	}
-
-	// moveY without calling update.
-	numoveY(dy) {
-		const curr = this.attrs.val('cy')
-		this.attrs.nuPut('cy', curr + dy)
 		return this
 	}
 
 	// Moves the circle on the Y plane by dy, which may be
 	// negative.
 	moveY(dy) {
-		this.numoveY(dy)
+		const curr = this.attr('cy')
+		this.attr('cy', curr + dy)
 		this.update()
 		return this
 	}

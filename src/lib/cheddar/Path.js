@@ -16,9 +16,10 @@ export default class Path extends Elemental {
 	constructor(x = null, y = null) {
 		super()
 
-		this.attrs.nuPut('stroke', 'black')
-		this.attrs.nuPut('fill', 'none')
-		this.attrs.nuPut('d', this.toString())
+		this.attr('xlmns', NAME_SPACE)
+		this.attr('stroke', 'black')
+		this.attr('fill', 'none')
+		this.attr('d', this.toString())
 
 		this._generateElement()
 
@@ -39,60 +40,17 @@ export default class Path extends Elemental {
 		return this._closed
 	}
 
-	// addCommand without calling update.
-	nuAddCommand(cmd) {
-		const cmds = this._commands
-
-		if (this._closed) {
-			cmds.insertBefore(cmds.last(), cmd)
-		} else {
-			cmds.push(cmd)
-		}
-
-		if (cmd.type !== 'M' && cmd.type !== 'Z') {
-			const sp = new SubPath(this, cmd)
-			this._subPaths.push(sp)
-		}
-
-		cmd.onUpdate(this.updater)
-		return this
-	}
-
 	// Append a command to the path.
 	addCommand(cmd) {
-		this.nuAddCommand(cmd)
-		this.update()
-		return this
-	}
-
-	// removeCommand without calling update.
-	nuRemoveCommand(cmd) {
-		if (!this._commands.includes(cmd)) {
-			return
-		}
-
-		const sp = this._subPaths.find((sp) => sp.command === cmd)
-		if (sp) {
-			this._subPaths.remove(sp)
-		}
-
-		cmd.offUpdate(this.updater)
-		this._commands.remove(cmd)
-
+		this._addCmd(cmd)
+		this._update()
 		return this
 	}
 
 	// Remove a command from the path.
 	removeCommand(cmd) {
-		this.nuRemoveCommand(cmd)
-		this.update()
-		return this
-	}
-
-	// clear without calling update.
-	nuClear() {
-		for (const cmd of [...this._commands]) {
-			this.nuRemoveCommand(cmd)
+		if (this._removeCmd(cmd)) {
+			this._update()
 		}
 
 		return this
@@ -100,115 +58,67 @@ export default class Path extends Elemental {
 
 	// Removes all commadns from the path.
 	clear() {
-		this.nuClear()
-		this.update()
-		return this
-	}
+		let removed = false
+		for (const cmd of [...this._commands]) {
+			removed || this._removeCmd(cmd)
+		}
 
-	// moveTo without calling update.
-	nuMoveTo(x, y) {
-		const cmd = Command.move(x, y)
-		this.nuAddCommand(cmd)
+		if (removed) {
+			this._update()
+		}
+
 		return this
 	}
 
 	// Creates a new move command to {x,y}.
 	moveTo(x, y) {
-		this.nuMoveTo(x, y)
-		this.update()
-		return this
-	}
-
-	// lineTo without calling update.
-	nuLineTo(x, y) {
-		const cmd = Command.line(x, y)
-		this.nuAddCommand(cmd)
+		this._addCmd(Command.move(x, y))
+		this._update()
 		return this
 	}
 
 	// Creates a new line command to {x,y}.
 	lineTo(x, y) {
-		this.nuLineTo(x, y)
-		this.update()
-		return this
-	}
-
-	// lineToClose without calling update.
-	nuLineToClose() {
-		const { x, y } = this.commands[0]
-
-		const cmd = Command.line(x, y)
-		this.nuAddCommand(cmd)
-		this.nuClose()
-
+		this._addCmd(Command.line(x, y))
+		this._update()
 		return this
 	}
 
 	// Creates a new line to the first commands X and Y
 	// values.
 	lineToClose() {
-		this.nuLineToClose()
-		this.update()
-		return this
-	}
-
-	// quadraticTo without calling update.
-	nuQuadraticTo(cp1X, cp1Y, x, y) {
-		const cmd = Command.quadratic(cp1X, cp1Y, x, y)
-		this.nuAddCommand(cmd)
+		const { x, y } = this.commands[0]
+		this._addCmd(Command.line(x, y))
+		this._close()
+		this._update()
 		return this
 	}
 
 	// Creates a quadratic curve via the {cp1X,cp1Y}
 	// and ending at {x,y}.
 	quadraticTo(cp1X, cp1Y, x, y) {
-		this.nuQuadraticTo(cp1X, cp1Y, x, y)
-		this.update()
-		return this
-	}
-
-	// quadraticToClose without calling update.
-	nuQuadraticToClose(cp1X, cp1Y) {
-		const { x, y } = this.commands[0]
-
 		const cmd = Command.quadratic(cp1X, cp1Y, x, y)
-		this.nuAddCommand(cmd)
-		this.nuClose()
-
+		this._addCmd(cmd)
+		this._update()
 		return this
 	}
 
 	// Creates a quadratic curve via the {cp1X,cp1Y}
 	// and ending the X and Y point of the first command.
 	quadraticToClose(cp1X, cp1Y) {
-		this.nuQuadraticToClose(cp1X, cp1Y)
-		this.update()
-		return this
-	}
-
-	// cubicToClose without calling update.
-	nuCubicTo(cp1X, cp1Y, cp2X, cp2Y, x, y) {
-		const cmd = Command.cubic(cp1X, cp1Y, cp2X, cp2Y, x, y)
-		this.nuAddCommand(cmd)
+		const { x, y } = this.commands[0]
+		this._addCmd(Command.quadratic(cp1X, cp1Y, x, y))
+		this._close()
+		this._update()
 		return this
 	}
 
 	// Creates a cubic curve via the {cp1X,cp1Y} and
 	// {cp2X,cp2Y} to {x,y}.
 	cubicTo(cp1X, cp1Y, cp2X, cp2Y, x, y) {
-		this.nuCubicTo(cp1X, cp1Y, cp2X, cp2Y, x, y)
-		this.update()
-		return this
-	}
-
-	// cubicToClose without calling update.
-	nuCubicToClose(cp1X, cp1Y, cp2X, cp2Y) {
-		const { x, y } = this.commands[0]
-
 		const cmd = Command.cubic(cp1X, cp1Y, cp2X, cp2Y, x, y)
-		this.nuAddCommand(cmd)
-		this.nuClose()
-
+		this._addCmd(cmd)
+		this._update()
 		return this
 	}
 
@@ -216,21 +126,10 @@ export default class Path extends Elemental {
 	// {cp2X,cp2Y} and ending the X and Y point of the first
 	// command.
 	cubicToClose(cp1X, cp1Y, cp2X, cp2Y) {
-		this.nuCubicToClose(cp1X, cp1Y, cp2X, cp2Y)
-		this.update()
-		return this
-	}
-
-	// close without calling update.
-	nuClose() {
-		if (this._closed) {
-			return this
-		}
-
-		const cmd = Command.close()
-		this.nuAddCommand(cmd)
-		this._closed = true
-
+		const { x, y } = this.commands[0]
+		this._addCmd(Command.cubic(cp1X, cp1Y, cp2X, cp2Y, x, y))
+		this._close()
+		this._update()
 		return this
 	}
 
@@ -238,24 +137,9 @@ export default class Path extends Elemental {
 	// commands added after will be inserted before the close
 	// command.
 	close() {
-		if (this._closed) {
-			return this
+		if (this._close()) {
+			this._update()
 		}
-
-		this.nuClose()
-		this.update()
-
-		return this
-	}
-
-	// open without calling update.
-	nuOpen() {
-		if (!this._closed) {
-			return
-		}
-
-		this._closed = false
-		this._commands.pop()
 
 		return this
 	}
@@ -263,47 +147,32 @@ export default class Path extends Elemental {
 	// Removes the close command from the end of the command
 	// list, if it exists.
 	open() {
-		if (!this._closed) {
-			return this
-		}
-
-		this.nuOpen()
-		this.update()
-
-		return this
-	}
-
-	// moveX without calling update.
-	nuMoveX(dx) {
-		for (const cmd of this._commands) {
-			cmd.moveX(dx)
+		if (this._open()) {
+			this._update()
 		}
 
 		return this
 	}
 
-	// Moves the group by dx on the X plane. dx may be
+	// Moves all elements by dx on the X plane. dx may be
 	// negative.
 	moveX(dx) {
-		this.nuMoveX(dx)
-		this.update()
-		return this
-	}
-
-	// moveY without calling update.
-	nuMoveY(dy) {
 		for (const cmd of this._commands) {
-			cmd.moveY(dy)
+			cmd.moveX(dx)
+			this._update()
 		}
 
 		return this
 	}
 
-	// Moves the group by dy on the Y plane. dy may be
+	// Moves the elements by dy on the Y plane. dy may be
 	// negative.
 	moveY(dy) {
-		this.nuMoveY(dy)
-		this.update()
+		for (const cmd of this._commands) {
+			cmd.moveY(dy)
+			this._update()
+		}
+
 		return this
 	}
 
@@ -321,14 +190,69 @@ export default class Path extends Elemental {
 			.join(' ') //
 	}
 
-	update() {
-		this.attrs.nuPut('d', this.toString())
-		super.update()
-	}
-
 	_generateElement() {
 		const path = document.createElementNS(NAME_SPACE, 'path')
 		this._setElement(path)
+		this._update()
+	}
+
+	_update() {
+		this.attr('d', this.toString())
 		this.update()
+	}
+
+	_addCmd(cmd) {
+		const cmds = this._commands
+
+		if (this._closed) {
+			cmds.insertBefore(cmds.last(), cmd)
+		} else {
+			cmds.push(cmd)
+		}
+
+		if (cmd.type !== 'M' && cmd.type !== 'Z') {
+			const sp = new SubPath(this, cmd)
+			this._subPaths.push(sp)
+		}
+
+		cmd.onUpdate(this.updater)
+	}
+
+	_removeCmd(cmd) {
+		if (!this._commands.includes(cmd)) {
+			return false
+		}
+
+		const sp = this._subPaths.find((sp) => sp.command === cmd)
+		if (sp) {
+			this._subPaths.remove(sp)
+		}
+
+		cmd.offUpdate(this.updater)
+		this._commands.remove(cmd)
+
+		return true
+	}
+
+	_close() {
+		if (this._closed) {
+			return false
+		}
+
+		this._addCmd(Command.close())
+		this._closed = true
+
+		return true
+	}
+
+	_open() {
+		if (!this._closed) {
+			return false
+		}
+
+		this._closed = false
+		this._commands.pop()
+
+		return true
 	}
 }

@@ -49,72 +49,48 @@ export default class BBox extends Updateable {
 		return this._cy
 	}
 
-	// setLeft without calling update.
-	nuSetLeft(v) {
-		this._left = v
-		this._updateWidth()
-		this._updateCenterX()
-		return this
-	}
-
 	// Individually set the left value without influencing
 	// other values.
 	setLeft(v) {
-		this.nuSetLeft(v)
-		this.update()
-		return this
-	}
-
-	// setRight without calling update.
-	nuSetRight(v) {
-		this._right = v
+		this._left = v
 		this._updateWidth()
 		this._updateCenterX()
+		this.update()
 		return this
 	}
 
 	// Individually set the right value without influencing
 	// other values.
 	setRight(v) {
-		this.nuSetRight(v)
+		this._right = v
+		this._updateWidth()
+		this._updateCenterX()
 		this.update()
-		return this
-	}
-
-	// setTop without calling update.
-	nuSetTop(v) {
-		this._top = v
-		this._updateHeight()
-		this._updateCenterY()
 		return this
 	}
 
 	// Individually set the top value without influencing
 	// other values.
 	setTop(v) {
-		this.nuSetTop(v)
-		this.update()
-		return this
-	}
-
-	// setBottom without calling update.
-	nuSetBottom(v) {
-		this._bottom = v
+		this._top = v
 		this._updateHeight()
 		this._updateCenterY()
+		this.update()
 		return this
 	}
 
 	// Individually set the bottom value without influencing
 	// other values.
 	setBottom(v) {
-		this.nuSetBottom(v)
+		this._bottom = v
+		this._updateHeight()
+		this._updateCenterY()
 		this.update()
 		return this
 	}
 
-	// setEdges without calling update.
-	nuSetEdges(left, top, right, bottom) {
+	// Sets left, top, right, and bottom together.
+	setEdges(left, top, right, bottom) {
 		this._left = left
 		this._top = top
 		this._right = right
@@ -125,174 +101,118 @@ export default class BBox extends Updateable {
 		this._updateCenterX()
 		this._updateCenterY()
 
-		return this
-	}
-
-	// Sets left, top, right, and bottom together.
-	setEdges(left, top, right, bottom) {
-		this.nuSetEdges(left, top, right, bottom)
 		this.update()
-		return this
-	}
-
-	// setCenterX without calling update.
-	nuSetCenterX(cx) {
-		const half = this._w / 2
-		this._cx = cx
-		this._left = cx - half
-		this._right = cx + half
 		return this
 	}
 
 	// Sets center X adjusting left and right accordingly.
 	setCenterX(cx) {
-		this.nuSetCenterX(cx)
-		this.update()
-		return this
-	}
+		const half = this._w / 2
+		this._cx = cx
+		this._left = cx - half
+		this._right = cx + half
 
-	// setCenterY without calling update.
-	nuSetCenterY(cy) {
-		const half = this._h / 2
-		this._cy = cy
-		this._top = cy - half
-		this._bottom = cy + half
+		this.update()
 		return this
 	}
 
 	// Sets center Y adjusting top and bottom accordingly.
 	setCenterY(cy) {
-		this.nuSetCenterY(cy)
-		this.update()
-		return this
-	}
+		const half = this._h / 2
+		this._cy = cy
+		this._top = cy - half
+		this._bottom = cy + half
 
-	// setWidthAnchorLeft without calling update.
-	nuSetWidthAnchorLeft(w) {
-		this._w = w
-		this._right = this._left + w
-		this._updateCenterX()
+		this.update()
 		return this
 	}
 
 	// Sets the width by forcing the right value to grow or
 	// shrink to accommodate.
 	setWidthAnchorLeft(w) {
-		this.nuSetWidthAnchorLeft(w)
-		this.update()
-		return this
-	}
-
-	// setWidthAnchorCenter without calling update.
-	nuSetWidthAnchorCenter(w) {
 		this._w = w
-		this._left = this._cx - w / 2
 		this._right = this._left + w
 		this._updateCenterX()
+
+		this.update()
 		return this
 	}
 
 	// Sets the width and forces the left and right values to
 	// grow or shrink by the same amount to accommodate.
 	setWidthAnchorCenter(w) {
-		this.nuSetWidthAnchorCenter(w)
-		this.update()
-		return this
-	}
-
-	// setWidthAnchorRight without calling update.
-	nuSetWidthAnchorRight(w) {
 		this._w = w
-		this._left = this._right - w
+		this._left = this._cx - w / 2
+		this._right = this._left + w
 		this._updateCenterX()
+
+		this.update()
 		return this
 	}
 
 	// Sets the width by forcing the left value to grow or
 	// shrink to accommodate.
 	setWidthAnchorRight(w) {
-		this.nuSetWidthAnchorRight(w)
-		this.update()
-		return this
-	}
+		this._w = w
+		this._left = this._right - w
+		this._updateCenterX()
 
-	// setHeightAnchorTop without calling update.
-	nuSetHeightAnchorTop(h) {
-		this._h = h
-		this._bottom = this._top + h
-		this._updateCenterY()
+		this.update()
 		return this
 	}
 
 	// Sets the height by forcing the bottom value to grow or
 	// shrink to accommodate.
 	setHeightAnchorTop(h) {
-		this.nuSetHeightAnchorTop(h)
-		this.update()
-		return this
-	}
-
-	// setHeightAnchorCenter without calling update.
-	nuSetHeightAnchorCenter(h) {
 		this._h = h
-		this._top = this._cy - h / 2
 		this._bottom = this._top + h
 		this._updateCenterY()
+
+		this.update()
 		return this
 	}
 
 	// Sets the height and forces the top and bottom values
 	// to grow or shrink by the same amount to accommodate.
 	setHeightAnchorCenter(h) {
-		this.nuSetHeightAnchorCenter(h)
-		this.update()
-		return this
-	}
-
-	// setHeightAnchorBottom without calling update.
-	nuSetHeightAnchorBottom(h) {
 		this._h = h
-		this._top = this._bottom - h
+		this._top = this._cy - h / 2
+		this._bottom = this._top + h
 		this._updateCenterY()
+
+		this.update()
 		return this
 	}
 
 	// Sets the height by forcing the top value to grow or
 	// shrink to accommodate.
 	setHeightAnchorBottom(h) {
-		this.nuSetHeightAnchorBottom(h)
-		this.update()
-		return this
-	}
+		this._h = h
+		this._top = this._bottom - h
+		this._updateCenterY()
 
-	// moveX without calling update.
-	numoveX(dx) {
-		this._left += dx
-		this._right += dx
-		this._updateCenterX()
+		this.update()
 		return this
 	}
 
 	// Moves the box on the X plane by dx, which may be
 	// negative.
 	moveX(dx) {
-		this.numoveX(dx)
-		this.update()
-		return this
-	}
+		this._left += dx
+		this._right += dx
+		this._updateCenterX()
 
-	// moveY without calling update.
-	numoveY(dy) {
-		this._top += dy
-		this._bottom += dy
-		this._updateCenterY()
+		this.update()
 		return this
 	}
 
 	// Moves the box on the Y plane by dy, which may be
 	// negative.
 	moveY(dy) {
-		this.numoveY(dy)
+		this._top += dy
+		this._bottom += dy
+		this._updateCenterY()
+
 		this.update()
 		return this
 	}

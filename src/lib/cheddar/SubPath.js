@@ -66,7 +66,7 @@ export default class SubPath {
 	// sets the start point of SubPath.
 	setStart(x, y) {
 		this._errIfNotInPath()
-		this.startCommand.nuSetX(x).setY(y)
+		this.startCommand.setX(x).setY(y)
 		return this
 	}
 
@@ -75,7 +75,7 @@ export default class SubPath {
 	// afterwards within the parent Path.
 	setEnd(x, y) {
 		this._errIfNotInPath()
-		this.command.nuSetX(x).setY(y)
+		this.command.setX(x).setY(y)
 		return this
 	}
 

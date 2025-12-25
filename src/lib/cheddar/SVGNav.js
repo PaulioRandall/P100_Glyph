@@ -62,13 +62,13 @@ export default class Nav {
 
 		this._pointer = true
 		this._on('pointermove', this._pointermove)
-		this._svg.style.set('cursor', 'grabbing')
+		this._svg.style('cursor', 'grabbing')
 	}
 
 	_event_pointermove(e) {
 		e.preventDefault()
 
-		this._svg.group.nuMoveX(e.movementX)
+		this._svg.group.moveX(e.movementX)
 		this._svg.group.moveY(e.movementY)
 	}
 
@@ -77,7 +77,7 @@ export default class Nav {
 
 		if (this._pointer) {
 			this._pointer = false
-			this._svg.style.set('cursor', 'auto')
+			this._svg.style('cursor', 'auto')
 			this._off('pointermove', this._pointermove)
 		}
 	}

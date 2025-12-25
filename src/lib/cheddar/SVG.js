@@ -8,6 +8,7 @@ import List from './List.js'
 export default class SVG extends Elemental {
 	_group = new Group()
 	_viewbox = new BBox()
+	_viewboxUpdater = this._viewboxUpdated.bind(this)
 
 	constructor() {
 		super()
@@ -15,7 +16,7 @@ export default class SVG extends Elemental {
 		this._generateElement()
 
 		this._group.onUpdate(this.updater)
-		this._viewbox.onUpdate(this.updater)
+		this._viewbox.onUpdate(this._viewboxUpdater)
 	}
 
 	// Gets the root Group for holding Elementals. Updates to
@@ -31,12 +32,6 @@ export default class SVG extends Elemental {
 		return this._viewbox
 	}
 
-	// add without calling update.
-	nuAdd(...elementals) {
-		this._group.nuAdd(...elementals)
-		return this
-	}
-
 	// Adds Elementals to the root group. Updates to
 	// Elementals will propagate to the group.
 	add(...elementals) {
@@ -44,21 +39,9 @@ export default class SVG extends Elemental {
 		return this
 	}
 
-	// remove without calling update.
-	nuRemove(...elementals) {
-		this._group.nuRemove(...elementals)
-		return this
-	}
-
 	// Removes Elementals from the root group.
 	remove(...elementals) {
 		this._group.remove(...elementals)
-		return this
-	}
-
-	// clear without calling update.
-	nuClear(...elementals) {
-		this._group.nuClear(...elementals)
 		return this
 	}
 
@@ -69,17 +52,17 @@ export default class SVG extends Elemental {
 		return this
 	}
 
-	update() {
-		this.attrs.nuPutMissing('xmlns', NAME_SPACE)
-		this.attrs.nuPut('viewBox', this._viewbox.toViewboxString())
-		super.update()
+	_viewboxUpdated() {
+		this.attr('viewBox', this._viewbox.toViewboxString())
 	}
 
 	_generateElement() {
 		const svg = document.createElementNS(NAME_SPACE, 'svg')
 		svg.appendChild(this._group.element)
 
-		this.attrs.nuPut('preserveAspectRatio', 'xMaxYMax meet')
+		this.attr('xmlns', NAME_SPACE)
+		this.attr('viewBox', this._viewbox.toViewboxString())
+		this.attr('preserveAspectRatio', 'xMaxYMax meet')
 
 		this._setElement(svg)
 		this.update()

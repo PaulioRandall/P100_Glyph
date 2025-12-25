@@ -17,30 +17,10 @@ export default class DirtyMap extends Updateable {
 		return this._map.get(name)
 	}
 
-	// set without calling update.
-	nuSet(name, value) {
-		return this.nuPut(name, value, true)
-	}
-
 	// Puts a value into the map and always sets the name as
 	// dirty.
 	set(name, value) {
 		return this.put(name, value, true)
-	}
-
-	// put without calling update.
-	nuPut(name, value, forceDirty = false) {
-		const changed = this.willDirty(name, value)
-
-		if (changed) {
-			this._map.set(name, value)
-		}
-
-		if (forceDirty || changed) {
-			this._dirty.add(name)
-		}
-
-		return this
 	}
 
 	// Puts a value into the map. The name is set as dirty
@@ -61,14 +41,6 @@ export default class DirtyMap extends Updateable {
 		return this
 	}
 
-	// putMissing without calling update.
-	nuPutMissing(name, value) {
-		if (!this._map.has(name)) {
-			this.nuPut(name, value)
-		}
-		return this
-	}
-
 	// Puts a value into the map only if the name is not
 	// a key currently in the map.
 	putMissing(name, value) {
@@ -76,14 +48,6 @@ export default class DirtyMap extends Updateable {
 			this.put(name, value)
 		}
 		return this
-	}
-
-	// val without calling update.
-	nuVal(name, value = undefined, forceDirty = false) {
-		if (value === undefined) {
-			return this.get(name)
-		}
-		return this.nuPut(name, value, forceDirty)
 	}
 
 	// If value is undefined, then returns the result of the
@@ -94,15 +58,6 @@ export default class DirtyMap extends Updateable {
 			return this.get(name)
 		}
 		return this.put(name, value, forceDirty)
-	}
-
-	// del without calling update.
-	nuDel(name) {
-		if (this._map.has(name)) {
-			this._dirty.add(name)
-			this._map.delete(name)
-		}
-		return this
 	}
 
 	// Deletes an entry if it exists. Causes the name to be
@@ -141,16 +96,10 @@ export default class DirtyMap extends Updateable {
 		return !this._map.has(name) || this._map.get(name) !== value
 	}
 
-	// dirty without calling update.
-	nuDirty(name) {
-		this._dirty.add(name)
-		return this
-	}
-
 	// Sets a name as dirty. Name does not have to be in the
 	// map itself.
 	dirty(name) {
-		this.nuDirty(name)
+		this._dirty.add(name)
 		this.update()
 		return this
 	}
@@ -160,15 +109,9 @@ export default class DirtyMap extends Updateable {
 		return [...this._dirty]
 	}
 
-	// clean without calling update.
-	nuClean() {
-		this._dirty.clear()
-		return this
-	}
-
 	// Removes all names from the dirty list.
 	clean() {
-		this.nuClean()
+		this._dirty.clear()
 		this.update()
 		return this
 	}
