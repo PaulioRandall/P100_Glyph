@@ -8,7 +8,7 @@ export default class Nav {
 	_pointerup = this._event_pointerup.bind(this)
 	_mousewheel = this._event_mousewheel.bind(this)
 
-	_pointer = false
+	_start = null
 	_enabled = false
 
 	constructor(svg) {
@@ -36,15 +36,13 @@ export default class Nav {
 
 		this._enabled = false
 
-		this._off('pointermove', this._pointerdown)
-		this._off('pointerdown', this._pointerdown)
-		this._off('pointerup', this._pointerup)
-
-		if (this._pointer) {
+		if (this._start) {
+			this._off('pointermove', this._pointerdown)
+			this._off('pointerdown', this._pointerdown)
+			this._off('pointerup', this._pointerup)
 			this._svg.style.set('cursor', 'auto')
+			this._start = null
 		}
-
-		this._pointer = false
 	}
 
 	_on(type, handler) {
@@ -58,11 +56,13 @@ export default class Nav {
 	_event_pointerdown(e) {
 		e.preventDefault()
 
-		if (this._pointer) {
+		if (this._start) {
 			return
 		}
 
-		this._pointer = true
+		this._start = this._svg.group.transform('translate') || [0, 0]
+		this._start = this._mapCoords(e)
+
 		this._on('pointermove', this._pointermove)
 		this._svg.style('cursor', 'grabbing')
 	}
@@ -70,20 +70,15 @@ export default class Nav {
 	_event_pointermove(e) {
 		e.preventDefault()
 
-		const v = this._svg.group.transform('translate')
-		const xy = v || [0, 0]
-
-		this._svg.group.transform('translate', [
-			(xy[0] || 0) + e.movementX,
-			(xy[1] || 0) + e.movementY,
-		])
+		const xy = this._mapCoords(e)
+		this._svg.group.transform('translate', xy)
 	}
 
 	_event_pointerup(e) {
 		e.preventDefault()
 
-		if (this._pointer) {
-			this._pointer = false
+		if (this._start) {
+			this._start = null
 			this._svg.style('cursor', 'auto')
 			this._off('pointermove', this._pointermove)
 		}
@@ -94,9 +89,18 @@ export default class Nav {
 		const amount = e.wheelDeltaY > 0 ? 0.1 : -0.1
 		const newScale = oldScale + amount
 
+		// TODO: Changing transform origin resets position
+		//       and causes a jump. Needs fixing.
 		if (newScale > 0.3 && newScale < 2) {
-			this._svg.group.attr('transform-origin', 'center')
+			const xy = this._svg.mapClientToViewboxPercent(e.clientX, e.clientY)
+			this._svg.group.attr('transform-origin', `${xy[0]}% ${xy[1]}%`)
 			this._svg.group.transform('scale', newScale)
 		}
+	}
+
+	_mapCoords(e) {
+		const xy = this._svg.mapClientToViewbox(e.clientX, e.clientY)
+
+		return [xy[0] - this._start[0], xy[1] - this._start[1]]
 	}
 }

@@ -1,14 +1,22 @@
 <script>
+	import './app.css'
+
 	import { onMount } from 'svelte'
 	import Cheddar from '$cheddar'
 
 	let container = $state(null)
 	let svg = $state(null)
+	let borderPath = null
 
 	onMount(() => {
 		svg = new Cheddar.SVG()
 
-		svg.viewbox.setEdges(0, 0, 100, 100)
+		setTimeout(() => {
+			svg.attr('width', '100%')
+			svg.attr('height', '100%')
+			//svg.sizeToParent()
+		}, 0)
+
 		container.appendChild(svg.element)
 
 		const nav = new Cheddar.SVGNav(svg)
@@ -25,28 +33,62 @@
 			.lineToClose() //
 			.addTo(svg) //
 
+		borderPath = new Cheddar.Path(0,0)
+			.lineTo(0, 100) //
+			.lineTo(100, 100) //
+			.lineTo(100, 0) //
+			.close() //
+			.addTo(svg)
+
 		circle.setRadius(10) //
 			.moveX(25) //
 			.moveY(-25) //
 			.attr('stroke', 'red') //
 	})
+
+	function onresize() {
+		
+		/*
+svg.sizeToParent()
+		borderPath.clear()
+		borderPath.moveTo(0,0)
+		borderPath.lineTo()
+		borderPath.commands[1].setY(svg.viewbox.height)
+		borderPath.commands[2].setX(svg.viewbox.width).setY(svg.viewbox.height)
+		borderPath.commands[3].setX(svg.viewbox.width)
+		*/
+	}
 </script>
 
-<main bind:this={container} class="container">
+<svelte:window {onresize} />
+
+<main bind:this={container}>
 	<!-- Content controlled by Cheddar --> 
 </main>
 
 <style>
-	:global(body) {
-		margin: 0;
-	}
+:global(*) {
+	margin: 0;
+	box-sizing: border-box;
+}
 
-	main {
-		width: min(100vw, 100vh);
-		height: min(100vw, 100vh);
-		max-width: min(100vw, 100vh);
-		max-height: min(100vw, 100vh);
+:global(html), :global(body) {
+	margin: 0;
+	padding: 0;
+}
 
-		overflow: hidden;
-	}
+main {
+	display: block;
+
+	margin: 0;
+	padding: 0;
+
+	width: 100vw;
+	height: 100vh;
+	max-width: 100vw;
+	max-height: 100vh;
+
+	overflow: hidden;
+}
+
 </style>
