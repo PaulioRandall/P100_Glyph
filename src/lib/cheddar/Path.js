@@ -44,7 +44,12 @@ export default class Path extends Elemental {
 		return this._commands
 	}
 
-	get isClosed() {
+	get closed() {
+		return this._closed
+	}
+
+	set closed(v) {
+		v ? this.close() : this.open()
 		return this._closed
 	}
 

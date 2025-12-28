@@ -14,6 +14,16 @@ export default class DirtyMap extends Updateable {
 		this._putProps(obj)
 	}
 
+	// Returns the map size.
+	get size() {
+		return this._map.size
+	}
+
+	// Returns the number of dirty entries.
+	get dirtySize() {
+		return this._dirty.length
+	}
+
 	// Returns true if the name exists within the map.
 	has(name) {
 		return this._map.has(name)

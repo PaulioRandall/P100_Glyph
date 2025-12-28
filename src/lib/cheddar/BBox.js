@@ -1,10 +1,6 @@
 import Updateable from './Updateable.js'
 
 // Represents a bounding box or viewbox on a 2D plane.
-//
-// Unlike Elemental classes, the values are kept in sync;
-// a call to the update function won't do anything other
-// than notify listeners.
 export default class BBox extends Updateable {
 	_left = 0
 	_top = 0
@@ -21,32 +17,72 @@ export default class BBox extends Updateable {
 		return this._left
 	}
 
+	set left(v) {
+		this.setLeft(v)
+		return v
+	}
+
 	get top() {
 		return this._top
+	}
+
+	set top(v) {
+		this.setTop(v)
+		return v
 	}
 
 	get right() {
 		return this._right
 	}
 
+	set right(v) {
+		this.setRight(v)
+		return v
+	}
+
 	get bottom() {
 		return this._bottom
+	}
+
+	set bottom(v) {
+		this.setBottom(v)
+		return v
 	}
 
 	get width() {
 		return this._w
 	}
 
+	set width(v) {
+		this.setWidth(v, 'center')
+		return v
+	}
+
 	get height() {
 		return this._h
+	}
+
+	set height(v) {
+		this.setHeight(v, 'center')
+		return v
 	}
 
 	get centerX() {
 		return this._cx
 	}
 
+	set centerX(v) {
+		this.setCenterX(v)
+		return v
+	}
+
 	get centerY() {
 		return this._cy
+	}
+
+	set centerY(v) {
+		this.setCenterY(v)
+		return v
 	}
 
 	// Individually set the left value without influencing
@@ -265,6 +301,8 @@ export default class BBox extends Updateable {
 
 	// Resizes the box to match the inner width and height
 	// of the browser window.
+	//
+	// Requires access to global 'window' object.
 	sizeToWindow() {
 		this.setEdges(0, 0, window.innerWidth, window.innerHeight)
 		return this

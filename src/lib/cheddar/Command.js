@@ -65,8 +65,18 @@ export default class Command extends Updateable {
 		return this._x
 	}
 
+	set x(v) {
+		this.setX(v)
+		return v
+	}
+
 	get y() {
 		return this._y
+	}
+
+	set y(v) {
+		this.setY(v)
+		return v
 	}
 
 	get cp1X() {

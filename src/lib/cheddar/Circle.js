@@ -28,20 +28,27 @@ export default class Circle extends Elemental {
 		return this.attr('cx')
 	}
 
+	set centerX(v) {
+		this.setCenterX(v)
+		return v
+	}
+
 	get centerY() {
 		return this.attr('cy')
+	}
+
+	set centerY(v) {
+		this.setCenterY(v)
+		return v
 	}
 
 	get radius() {
 		return this.attr('r')
 	}
 
-	get width() {
-		return this.attr('r') * 2
-	}
-
-	get height() {
-		return this.attr('r') * 2
+	set radius(v) {
+		this.setRadius(v)
+		return v
 	}
 
 	// Sets the X value of the circle center.
