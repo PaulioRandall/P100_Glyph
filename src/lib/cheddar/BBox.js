@@ -107,27 +107,39 @@ export default class BBox extends Updateable {
 
 	// Sets center X adjusting left and right accordingly.
 	setCenterX(cx) {
+		this._centerX(cx)
+		this.updated()
+		return this
+	}
+
+	_centerX(cx) {
 		const half = this._w / 2
 		this._cx = cx
 		this._left = cx - half
 		this._right = cx + half
-
-		this.updated()
-		return this
 	}
 
 	// Sets center Y adjusting top and bottom accordingly.
 	setCenterY(cy) {
-		const half = this._h / 2
-		this._cy = cy
-		this._top = cy - half
-		this._bottom = cy + half
-
+		this._centerY(cy)
 		this.updated()
 		return this
 	}
 
-	// TODO: setCenter(x,y)
+	_centerY(cy) {
+		const half = this._h / 2
+		this._cy = cy
+		this._top = cy - half
+		this._bottom = cy + half
+	}
+
+	// Sets center adjusting all edges accordingly.
+	setCenter(cx, cy) {
+		this._centerX(cx)
+		this._centerY(cy)
+		this.updated()
+		return this
+	}
 
 	// Sets the width by forcing the right value to grow or
 	// shrink to accommodate.
