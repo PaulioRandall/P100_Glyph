@@ -237,12 +237,16 @@ export default class BBox extends Updateable {
 		this._updateCenterY()
 	}
 
+	// Moves the box on the X and Y plane by dx and dy,
+	// each may be negative.
 	move(dx, dy) {
 		this._moveX(dx)
 		this._moveY(dy)
 		this.updated()
 	}
 
+	// Resizes the box to match the inner width and height
+	// of the browser window.
 	sizeToWindow() {
 		this.setEdges(0, 0, window.innerWidth, window.innerHeight)
 		return this

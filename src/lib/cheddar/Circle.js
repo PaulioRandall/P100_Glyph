@@ -53,7 +53,7 @@ export default class Circle extends Elemental {
 		return this
 	}
 
-	// Sets the radius of the circle.
+	// Sets the circle radius.
 	setRadius(r) {
 		this.attr('r', r)
 		this.updated()
@@ -63,22 +63,37 @@ export default class Circle extends Elemental {
 	// Moves the circle on the X plane by dx, which may be
 	// negative.
 	moveX(dx) {
-		const curr = this.attr('cx')
-		this.attr('cx', curr + dx)
+		this._moveX(dx)
 		this.updated()
 		return this
+	}
+
+	_moveX(dx) {
+		const curr = this.attr('cx')
+		this.attr('cx', curr + dx)
 	}
 
 	// Moves the circle on the Y plane by dy, which may be
 	// negative.
 	moveY(dy) {
-		const curr = this.attr('cy')
-		this.attr('cy', curr + dy)
+		this._moveY(dy)
 		this.updated()
 		return this
 	}
 
-	// TODO: move(x,y)
+	_moveY(dy) {
+		const curr = this.attr('cy')
+		this.attr('cy', curr + dy)
+	}
+
+	// Moves the circle on the X and Y plane by dx and dy,
+	// each may be negative.
+	move(dx, dy) {
+		this._moveX(dx)
+		this._moveY(dy)
+		this.updated()
+		return this
+	}
 
 	_generateElement() {
 		const circle = document.createElementNS(NAME_SPACE, 'circle')
