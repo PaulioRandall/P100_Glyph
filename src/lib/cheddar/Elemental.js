@@ -4,8 +4,6 @@ import DirtyMap from './DirtyMap.js'
 
 // Classes extending Elemental map to a single HTML
 // element.
-//
-// TODO: Document.
 export default class Elemental extends Updateable {
 	_element = null
 	_attrs = new DirtyMap()
@@ -30,22 +28,9 @@ export default class Elemental extends Updateable {
 		return this._element
 	}
 
-	get attrs() {
-		return this._attrs
-	}
-
-	get styles() {
-		return this._styles
-	}
-
-	get transforms() {
-		return this._transforms
-	}
-
-	get attributes() {
-		return this._attrs
-	}
-
+	// Get or sets an element attribute. If value is
+	// undefined, then gets the value, else sets the
+	// attribute.
 	attr(name, value = undefined) {
 		if (value === undefined) {
 			return this._attrs.get(name)
@@ -54,6 +39,15 @@ export default class Elemental extends Updateable {
 		return this
 	}
 
+	// Sets all own properties in the object as element
+	// attributes.
+	attrs(obj = {}) {
+		this._attrs.putProps(obj)
+		return this
+	}
+
+	// Get or sets an element style. If value is undefined,
+	// then gets the style, else sets the style.
 	style(name, value = undefined) {
 		if (value === undefined) {
 			return this._styles.get(name)
@@ -62,11 +56,28 @@ export default class Elemental extends Updateable {
 		return this
 	}
 
+	// Sets all own properties in the object as element
+	// styles.
+	styles(obj = {}) {
+		this._styles.putProps(obj)
+		return this
+	}
+
+	// Get or sets an SVG element transform. If value is
+	// undefined, then gets the transform, else sets the
+	// transform.
 	transform(name, value = undefined) {
 		if (value === undefined) {
 			return this._transforms.get(name)
 		}
 		this._transforms.put(name, value)
+		return this
+	}
+
+	// Sets all own properties in the object as SVG element
+	// transforms.
+	transforms(obj = {}) {
+		this._transforms.putProps(obj)
 		return this
 	}
 
@@ -78,6 +89,7 @@ export default class Elemental extends Updateable {
 
 	updated() {
 		if (this._updating) {
+			// To prevent calls triggered by this function.
 			return
 		}
 
