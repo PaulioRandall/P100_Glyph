@@ -24,7 +24,7 @@ describe('Group.js', () => {
 		expect(g2Called).toEqual(0)
 		expect(g1Called).toEqual(0)
 
-		g3.update()
+		g3.updated()
 
 		expect(g3Called).toEqual(1)
 		expect(g2Called).toEqual(1)

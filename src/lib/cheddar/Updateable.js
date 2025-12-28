@@ -10,20 +10,18 @@ import List from './List.js'
 // If overriding the update or notify methods, always call
 // the super method so updates are made and listeners are
 // notified.
-//
-// TODO: Rename to 'Notifier'.
 export default class Updateable {
-	_updater = this.update.bind(this)
+	_notifier = this.updated.bind(this)
 	_updateFuncs = new List()
 
-	// Returns the updater function that calls update with
+	// Returns the notifier function that calls update with
 	// this object bound.
 	//
 	// The same underlying function is returned so can be
 	// easily used with tools that allow registering and
 	// unregistering of callbacks, e.g. DOM events.
-	get updater() {
-		return this._updater
+	get notifier() {
+		return this._notifier
 	}
 
 	// Registers a function that is called when an updateable
@@ -50,7 +48,7 @@ export default class Updateable {
 	//
 	// Beware: if overriding this function then always call
 	// super method to notify listeners.
-	update() {
+	updated() {
 		this._updateFuncs.forEach((f) => f(this))
 	}
 }

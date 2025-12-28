@@ -51,7 +51,7 @@ export default class Command extends Updateable {
 		super()
 
 		this._setFields(...params)
-		this.update()
+		this.updated()
 	}
 
 	get params() {
@@ -91,7 +91,7 @@ export default class Command extends Updateable {
 		if (this._x !== null) {
 			this._x = x
 			this.updateParams()
-			this.update()
+			this.updated()
 		}
 		return this
 	}
@@ -101,7 +101,7 @@ export default class Command extends Updateable {
 		if (this._y !== null) {
 			this._y = y
 			this.updateParams()
-			this.update()
+			this.updated()
 		}
 		return this
 	}
@@ -113,7 +113,7 @@ export default class Command extends Updateable {
 		if (this._cp1X !== null) {
 			this._cp1X = x
 			this.updateParams()
-			this.update()
+			this.updated()
 		}
 		return this
 	}
@@ -123,7 +123,7 @@ export default class Command extends Updateable {
 		if (this._cp1Y !== null) {
 			this._cp1Y = y
 			this.updateParams()
-			this.update()
+			this.updated()
 		}
 		return this
 	}
@@ -135,7 +135,7 @@ export default class Command extends Updateable {
 		if (this._cp2X !== null) {
 			this._cp2X = x
 			this.updateParams()
-			this.update()
+			this.updated()
 		}
 		return this
 	}
@@ -146,7 +146,7 @@ export default class Command extends Updateable {
 		if (this._cp2Y !== null) {
 			this._cp2Y = y
 			this.updateParams()
-			this.update()
+			this.updated()
 		}
 		return this
 	}
@@ -169,7 +169,7 @@ export default class Command extends Updateable {
 		}
 
 		this.updateParams()
-		this.update()
+		this.updated()
 
 		return this
 	}
@@ -190,7 +190,7 @@ export default class Command extends Updateable {
 		}
 
 		this.updateParams()
-		this.update()
+		this.updated()
 
 		return this
 	}
@@ -228,7 +228,7 @@ export default class Command extends Updateable {
 		this._type = 'L'
 
 		this.updateParams()
-		this.update()
+		this.updated()
 
 		return this
 	}
@@ -266,7 +266,7 @@ export default class Command extends Updateable {
 		}
 
 		this.updateParams()
-		this.update()
+		this.updated()
 
 		return this
 	}

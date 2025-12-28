@@ -1,6 +1,6 @@
 export function nu(updateable) {
-	if (updateable?._updater) {
-		updateable._updater = null
+	if (updateable?._notifier) {
+		updateable._notifier = null
 	}
 
 	if (updateable?._updateFuncs) {

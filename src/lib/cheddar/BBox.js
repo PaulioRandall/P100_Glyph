@@ -55,7 +55,7 @@ export default class BBox extends Updateable {
 		this._left = v
 		this._updateWidth()
 		this._updateCenterX()
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -65,7 +65,7 @@ export default class BBox extends Updateable {
 		this._right = v
 		this._updateWidth()
 		this._updateCenterX()
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -75,7 +75,7 @@ export default class BBox extends Updateable {
 		this._top = v
 		this._updateHeight()
 		this._updateCenterY()
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -85,7 +85,7 @@ export default class BBox extends Updateable {
 		this._bottom = v
 		this._updateHeight()
 		this._updateCenterY()
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -101,7 +101,7 @@ export default class BBox extends Updateable {
 		this._updateCenterX()
 		this._updateCenterY()
 
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -112,7 +112,7 @@ export default class BBox extends Updateable {
 		this._left = cx - half
 		this._right = cx + half
 
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -123,7 +123,7 @@ export default class BBox extends Updateable {
 		this._top = cy - half
 		this._bottom = cy + half
 
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -136,7 +136,7 @@ export default class BBox extends Updateable {
 		this._right = this._left + w
 		this._updateCenterX()
 
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -148,7 +148,7 @@ export default class BBox extends Updateable {
 		this._right = this._left + w
 		this._updateCenterX()
 
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -159,7 +159,7 @@ export default class BBox extends Updateable {
 		this._left = this._right - w
 		this._updateCenterX()
 
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -170,7 +170,7 @@ export default class BBox extends Updateable {
 		this._bottom = this._top + h
 		this._updateCenterY()
 
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -182,7 +182,7 @@ export default class BBox extends Updateable {
 		this._bottom = this._top + h
 		this._updateCenterY()
 
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -193,7 +193,7 @@ export default class BBox extends Updateable {
 		this._top = this._bottom - h
 		this._updateCenterY()
 
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -204,7 +204,7 @@ export default class BBox extends Updateable {
 		this._right += dx
 		this._updateCenterX()
 
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -215,7 +215,7 @@ export default class BBox extends Updateable {
 		this._bottom += dy
 		this._updateCenterY()
 
-		this.update()
+		this.updated()
 		return this
 	}
 

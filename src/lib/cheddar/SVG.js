@@ -8,15 +8,15 @@ import List from './List.js'
 export default class SVG extends Elemental {
 	_group = new Group()
 	_viewbox = new BBox()
-	_viewboxUpdater = this._viewboxUpdated.bind(this)
+	_viewboxnotifier = this._viewboxUpdated.bind(this)
 
 	constructor() {
 		super()
 
 		this._generateElement()
 
-		this._group.onUpdate(this.updater)
-		this._viewbox.onUpdate(this._viewboxUpdater)
+		this._group.onUpdate(this.notifier)
+		this._viewbox.onUpdate(this._viewboxnotifier)
 	}
 
 	// Gets the root Group for holding Elementals. Updates to
@@ -48,7 +48,7 @@ export default class SVG extends Elemental {
 	// Removes all Elementals from the root group.
 	clear() {
 		this._group.clear(elemental)
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -99,6 +99,6 @@ export default class SVG extends Elemental {
 		this.attr('preserveAspectRatio', 'xMaxYMax meet')
 
 		this._setElement(svg)
-		this.update()
+		this.updated()
 	}
 }

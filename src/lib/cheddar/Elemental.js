@@ -17,9 +17,9 @@ export default class Elemental extends Updateable {
 		super()
 
 		this._attrs.set('id', randomId())
-		this._attrs.onUpdate(this.updater)
-		this._styles.onUpdate(this.updater)
-		this._transforms.onUpdate(this.updater)
+		this._attrs.onUpdate(this.notifier)
+		this._styles.onUpdate(this.notifier)
+		this._transforms.onUpdate(this.notifier)
 	}
 
 	get id() {
@@ -76,7 +76,7 @@ export default class Elemental extends Updateable {
 		return this
 	}
 
-	update() {
+	updated() {
 		if (this._updating) {
 			return
 		}
@@ -90,7 +90,7 @@ export default class Elemental extends Updateable {
 				this._updateTransform()
 			}
 
-			super.update()
+			super.updated()
 		} finally {
 			this._updating = false
 		}

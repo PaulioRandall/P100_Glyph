@@ -42,21 +42,21 @@ export default class Circle extends Elemental {
 	// Sets the X value of the circle center.
 	setCenterX(cx) {
 		this.attr('cx', cx)
-		this.update()
+		this.updated()
 		return this
 	}
 
 	// Sets the Y value of the circle center.
 	setCenterY(cy) {
 		this.attr('cy', cy)
-		this.update()
+		this.updated()
 		return this
 	}
 
 	// Sets the radius of the circle.
 	setRadius(r) {
 		this.attr('r', r)
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -65,7 +65,7 @@ export default class Circle extends Elemental {
 	moveX(dx) {
 		const curr = this.attr('cx')
 		this.attr('cx', curr + dx)
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -74,7 +74,7 @@ export default class Circle extends Elemental {
 	moveY(dy) {
 		const curr = this.attr('cy')
 		this.attr('cy', curr + dy)
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -83,6 +83,6 @@ export default class Circle extends Elemental {
 	_generateElement() {
 		const circle = document.createElementNS(NAME_SPACE, 'circle')
 		this._setElement(circle)
-		this.update()
+		this.updated()
 	}
 }

@@ -35,7 +35,7 @@ export default class DirtyMap extends Updateable {
 
 		if (forceDirty || changed) {
 			this._dirty.add(name)
-			this.update()
+			this.updated()
 		}
 
 		return this
@@ -69,7 +69,7 @@ export default class DirtyMap extends Updateable {
 		if (this._map.has(name)) {
 			this._dirty.add(name)
 			this._map.delete(name)
-			this.update()
+			this.updated()
 		}
 		return this
 	}
@@ -105,7 +105,7 @@ export default class DirtyMap extends Updateable {
 	// map itself.
 	dirty(name) {
 		this._dirty.add(name)
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -124,7 +124,7 @@ export default class DirtyMap extends Updateable {
 			}
 		}
 
-		this.update()
+		this.updated()
 		return this
 	}
 }

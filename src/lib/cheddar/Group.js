@@ -23,17 +23,17 @@ export default class Group extends Elemental {
 		for (const e of elementals) {
 			this._elementals.push(e)
 			this.element.appendChild(e.element)
-			e.onUpdate(this.updater)
+			e.onUpdate(this.notifier)
 		}
 
-		this.update()
+		this.updated()
 		return this
 	}
 
 	// Removes elementals.
 	remove(...elementals) {
 		this._remove(elementals)
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -41,7 +41,7 @@ export default class Group extends Elemental {
 	// after all have been removed.
 	clear() {
 		this._remove([...this._elementals])
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -52,7 +52,7 @@ export default class Group extends Elemental {
 			elem.moveX(dx)
 		}
 
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -63,7 +63,7 @@ export default class Group extends Elemental {
 			elem.moveY(dy)
 		}
 
-		this.update()
+		this.updated()
 		return this
 	}
 
@@ -72,7 +72,7 @@ export default class Group extends Elemental {
 	_generateElement() {
 		const group = document.createElementNS(NAME_SPACE, 'g')
 		this._setElement(group)
-		this.update()
+		this.updated()
 	}
 
 	_remove(elementals) {
@@ -81,7 +81,7 @@ export default class Group extends Elemental {
 				continue
 			}
 
-			e.offUpdate(this.updater)
+			e.offUpdate(this.notifier)
 
 			this.element.removeChild(e.element)
 			this._elementals.remove(e)
