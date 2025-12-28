@@ -84,7 +84,7 @@ export default class Group extends Elemental {
 
 	// Moves the group on the X and Y plane by dx and dy,
 	// each may be negative.
-	move(dx, dy) {
+	moveBy(dx, dy) {
 		this._moveX(dx)
 		this._moveY(dy)
 		this.updated()

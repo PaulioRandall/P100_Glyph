@@ -7,7 +7,7 @@ import {
 
 describe('Command.js', () => {
 	test('move (static)', () => {
-		const cmd = Command.move(20, 20)
+		const cmd = Command.moveBy(20, 20)
 
 		expect(cmd.x).toEqual(20)
 		expect(cmd.y).toEqual(20)
@@ -161,7 +161,7 @@ describe('Command.js', () => {
 	test('move', () => {
 		const cmd = Command.cubic(10, 20, 30, 40, 50, 60)
 
-		cmd.move(100, 200)
+		cmd.moveBy(100, 200)
 
 		expect(cmd.cp1X).toEqual(110)
 		expect(cmd.cp2X).toEqual(130)

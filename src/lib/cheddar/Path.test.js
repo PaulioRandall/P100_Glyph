@@ -10,7 +10,7 @@ import {
 describe('Path.js', () => {
 	test('addCommand/removeCommand', () => {
 		const p = new Path()
-		const cmd = Command.move(10, 20)
+		const cmd = Command.moveBy(10, 20)
 
 		expect(cmd._listeners.length).toEqual(0)
 		p.addCommand(cmd)
@@ -34,7 +34,7 @@ describe('Path.js', () => {
 		const p = new Path(20, 20)
 
 		expectUpdateables(p.commands, [
-			Command.move(20, 20), //
+			Command.moveBy(20, 20), //
 		])
 	})
 
@@ -44,7 +44,7 @@ describe('Path.js', () => {
 			.lineTo(80, 20) // [1]
 
 		expectUpdateables(p.commands, [
-			Command.move(20, 20), //
+			Command.moveBy(20, 20), //
 			Command.line(80, 20), //
 		])
 	})
@@ -56,7 +56,7 @@ describe('Path.js', () => {
 			.lineToClose() // [2]
 
 		expectUpdateables(p.commands, [
-			Command.move(20, 20), //
+			Command.moveBy(20, 20), //
 			Command.line(80, 20), //
 			Command.line(20, 20), //
 			Command.close(), //
@@ -69,7 +69,7 @@ describe('Path.js', () => {
 			.quadraticTo(20, 80, 80, 80) // [1]
 
 		expectUpdateables(p.commands, [
-			Command.move(20, 20), //
+			Command.moveBy(20, 20), //
 			Command.quadratic(20, 80, 80, 80), //
 		])
 	})
@@ -81,7 +81,7 @@ describe('Path.js', () => {
 			.quadraticToClose(30, 40) // [2]
 
 		expectUpdateables(p.commands, [
-			Command.move(20, 20), //
+			Command.moveBy(20, 20), //
 			Command.line(80, 20), //
 			Command.quadratic(30, 40, 20, 20), //
 			Command.close(), //
@@ -94,7 +94,7 @@ describe('Path.js', () => {
 			.cubicTo(30, 50, 50, 70, 80, 80) // [1]
 
 		expectUpdateables(p.commands, [
-			Command.move(20, 20), //
+			Command.moveBy(20, 20), //
 			Command.cubic(30, 50, 50, 70, 80, 80), //
 		])
 	})
@@ -106,7 +106,7 @@ describe('Path.js', () => {
 			.cubicToClose(30, 40, 50, 60) // [2]
 
 		expectUpdateables(p.commands, [
-			Command.move(20, 20), //
+			Command.moveBy(20, 20), //
 			Command.line(80, 20), //
 			Command.cubic(30, 40, 50, 60, 20, 20), //
 			Command.close(), //
@@ -121,7 +121,7 @@ describe('Path.js', () => {
 			.close() // [3]
 
 		expectUpdateables(p.commands, [
-			Command.move(20, 20), //
+			Command.moveBy(20, 20), //
 			Command.line(80, 20), //
 			Command.line(80, 80), //
 			Command.close(), //
@@ -137,7 +137,7 @@ describe('Path.js', () => {
 			.open() // [4]
 
 		expectUpdateables(p.commands, [
-			Command.move(20, 20), //
+			Command.moveBy(20, 20), //
 			Command.line(80, 20), //
 			Command.line(80, 80), //
 		])
@@ -150,7 +150,7 @@ describe('Path.js', () => {
 			.moveX(100)
 
 		expectUpdateables(p.commands, [
-			Command.move(120, 20), //
+			Command.moveBy(120, 20), //
 			Command.line(180, 20), //
 		])
 	})
@@ -162,19 +162,19 @@ describe('Path.js', () => {
 			.moveY(100)
 
 		expectUpdateables(p.commands, [
-			Command.move(20, 120), //
+			Command.moveBy(20, 120), //
 			Command.line(80, 120), //
 		])
 	})
 
-	test('move()', () => {
+	test('moveBy()', () => {
 		const p = new Path()
 			.moveTo(20, 30) // [0]
 			.lineTo(40, 50) // [1]
-			.move(100, 200)
+			.moveBy(100, 200)
 
 		expectUpdateables(p.commands, [
-			Command.move(120, 230), //
+			Command.moveBy(120, 230), //
 			Command.line(140, 250), //
 		])
 	})

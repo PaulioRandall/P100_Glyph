@@ -83,7 +83,7 @@ export default class Path extends Elemental {
 
 	// Creates a new move command to {x,y}.
 	moveTo(x, y) {
-		this._addCmd(Command.move(x, y))
+		this._addCmd(Command.moveBy(x, y))
 		this.updateElement()
 		this.updated()
 		return this
@@ -226,7 +226,7 @@ export default class Path extends Elemental {
 
 	// Moves the path on the X and Y plane by dx and dy,
 	// each may be negative.
-	move(dx, dy) {
+	moveBy(dx, dy) {
 		const movedX = this._moveX(dx)
 		const movedY = this._moveY(dy)
 
@@ -239,6 +239,10 @@ export default class Path extends Elemental {
 	}
 
 	// Grows the path by the passed factor and origin coords.
+	//
+	// This does not apply a transform, It scales by directly
+	// adjusting the values defining the shape. This is why
+	// the function is not called 'scaleBy'.
 	growBy(factor, originX, originY) {
 		function scale(coord, origin) {
 			return (coord - origin) * factor + origin

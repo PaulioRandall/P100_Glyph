@@ -128,35 +128,11 @@ describe('BBox.js', () => {
 		expect(cb.centerY).toEqual(-25)
 	})
 
-	test('moveX()', () => {
+	test('moveBy()', () => {
 		const cb = new BBox() //
 			.setEdges(0, 0, 100, 100) //
-			.moveX(25) //
-			.moveX(-50) //
-
-		expect(cb.left).toEqual(-25)
-		expect(cb.right).toEqual(75)
-		expect(cb.centerX).toEqual(25)
-	})
-
-	test('moveY()', () => {
-		const cb = new BBox() //
-			.setEdges(0, 0, 100, 100) //
-			.moveY(25) //
-			.moveY(-50) //
-
-		expect(cb.top).toEqual(-25)
-		expect(cb.bottom).toEqual(75)
-		expect(cb.centerY).toEqual(25)
-	})
-
-	test('move()', () => {
-		const cb = new BBox() //
-			.setEdges(0, 0, 100, 100) //
-			.moveX(25) //
-			.moveX(-50) //
-			.moveY(25) //
-			.moveY(-50) //
+			.moveBy(25, 25) //
+			.moveBy(-50, -50) //
 
 		expect(cb.left).toEqual(-25)
 		expect(cb.top).toEqual(-25)

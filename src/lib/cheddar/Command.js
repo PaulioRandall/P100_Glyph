@@ -6,7 +6,7 @@ import CommandIndices from './CommandIndices.js'
 // Only M, L, Q, C, and Z commands are supported.
 export default class Command extends Updateable {
 	// Returns a new move command to {x,y}.
-	static move(x, y) {
+	static moveBy(x, y) {
 		return new Command('M', x, y)
 	}
 
@@ -243,7 +243,7 @@ export default class Command extends Updateable {
 
 	// Moves the command on the X and Y plane by dx and dy,
 	// each may be negative.
-	move(dx, dy) {
+	moveBy(dx, dy) {
 		this._moveX(dx)
 		this._moveY(dy)
 

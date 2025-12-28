@@ -101,7 +101,7 @@ export default class Circle extends Elemental {
 
 	// Moves the circle on the X and Y plane by dx and dy,
 	// each may be negative.
-	move(dx, dy) {
+	moveBy(dx, dy) {
 		this._moveX(dx)
 		this._moveY(dy)
 		this.updated()
@@ -110,16 +110,14 @@ export default class Circle extends Elemental {
 
 	// Increases the radius by half the passed length.
 	// Negative lengths shrink the circle.
-	grow(by) {
-		const r = this.radius + by / 2
-		this.setRadius(r)
-		return this
-	}
-
-	// Decreases the radius by half the passed length.
-	// Negative lengths grow the circle.
-	shrink(by) {
-		const r = this.radius - by / 2
+	//
+	// This does not apply a transform, It scales by directly
+	// adjusting the values defining the shape. This is why
+	// the function is not called 'scaleBy'.
+	//
+	// TODO: Allow user to pass in origin coords.
+	growBy(v) {
+		const r = this.radius + v / 2
 		this.setRadius(r)
 		return this
 	}

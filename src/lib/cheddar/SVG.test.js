@@ -24,7 +24,7 @@ describe('SVG.js', () => {
 
 		svg.viewbox.setLeft(-100)
 		svg.viewbox.setWidthAnchorCenter(500)
-		svg.viewbox.moveY(200)
+		svg.viewbox.moveBy(0, 200)
 		expect(count).toEqual(3)
 	})
 })

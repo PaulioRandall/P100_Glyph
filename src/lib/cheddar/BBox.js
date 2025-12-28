@@ -218,10 +218,17 @@ export default class BBox extends Updateable {
 		return this
 	}
 
-	// Moves the box on the X plane by dx, which may be
-	// negative.
-	moveX(dx) {
-		this._moveX(dx)
+	// Moves the box on the X and Y plane by dx and dy,
+	// each may be negative.
+	moveBy(dx, dy) {
+		if (dx !== 0) {
+			this._moveX(dx)
+		}
+
+		if (dy !== 0) {
+			this._moveY(dy)
+		}
+
 		this.updated()
 		return this
 	}
@@ -232,42 +239,23 @@ export default class BBox extends Updateable {
 		this._updateCenterX()
 	}
 
-	// Moves the box on the Y plane by dy, which may be
-	// negative.
-	moveY(dy) {
-		this._moveY(dy)
-		this.updated()
-		return this
-	}
-
 	_moveY(dy) {
 		this._top += dy
 		this._bottom += dy
 		this._updateCenterY()
 	}
 
-	// Moves the box on the X and Y plane by dx and dy,
-	// each may be negative.
-	move(dx, dy) {
-		this._moveX(dx)
-		this._moveY(dy)
-		this.updated()
-	}
-
-	// Grows the box by the passed length anchored on the
+	// Grows the box by the passed factor, anchored on the
 	// center. Negative values shrink the box.
-	grow(by) {
-		this._setWidthAnchorCenter(this._w + by)
-		this._setHeightAnchorCenter(this._h + by)
-		this.updated()
-		return this
-	}
-
-	// Shrinks the box by the passed length anchored on the
-	// center. Negative values grow the box.
-	shrink(by) {
-		this._setWidthAnchorCenter(this._w - by)
-		this._setHeightAnchorCenter(this._h - by)
+	//
+	// This does not apply a transform, It scales by directly
+	// adjusting the values defining the shape. This is why
+	// the function is not called 'scale'.
+	//
+	// TODO: Allow user to pass in origin coords.
+	growBy(factor) {
+		this._setWidthAnchorCenter(this._w + factor)
+		this._setHeightAnchorCenter(this._h + factor)
 		this.updated()
 		return this
 	}
