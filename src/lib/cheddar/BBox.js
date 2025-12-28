@@ -212,26 +212,36 @@ export default class BBox extends Updateable {
 	// Moves the box on the X plane by dx, which may be
 	// negative.
 	moveX(dx) {
+		this._moveX(dx)
+		this.updated()
+		return this
+	}
+
+	_moveX(dx) {
 		this._left += dx
 		this._right += dx
 		this._updateCenterX()
-
-		this.updated()
-		return this
 	}
 
 	// Moves the box on the Y plane by dy, which may be
 	// negative.
 	moveY(dy) {
-		this._top += dy
-		this._bottom += dy
-		this._updateCenterY()
-
+		this._moveY(dy)
 		this.updated()
 		return this
 	}
 
-	// TODO: move(x,y)
+	_moveY(dy) {
+		this._top += dy
+		this._bottom += dy
+		this._updateCenterY()
+	}
+
+	move(dx, dy) {
+		this._moveX(dx)
+		this._moveY(dy)
+		this.updated()
+	}
 
 	sizeToWindow() {
 		this.setEdges(0, 0, window.innerWidth, window.innerHeight)
