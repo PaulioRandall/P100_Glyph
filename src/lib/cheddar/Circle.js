@@ -2,9 +2,6 @@ import { NAME_SPACE } from './cheddar.js'
 import Elemental from './Elemental.js'
 
 // An Elemental for drawing a standard SVG Circle.
-//
-// TODO: grow and shrink functions.
-// TODO: fitBorder function.
 export default class Circle extends Elemental {
 	// Same as constructing the Circle class directly.
 	static from(cx, cy, r) {
@@ -108,6 +105,22 @@ export default class Circle extends Elemental {
 		this._moveX(dx)
 		this._moveY(dy)
 		this.updated()
+		return this
+	}
+
+	// Increases the radius by half the passed length.
+	// Negative lengths shrink the circle.
+	grow(by) {
+		const r = this.radius + by / 2
+		this.setRadius(r)
+		return this
+	}
+
+	// Decreases the radius by half the passed length.
+	// Negative lengths grow the circle.
+	shrink(by) {
+		const r = this.radius - by / 2
+		this.setRadius(r)
 		return this
 	}
 

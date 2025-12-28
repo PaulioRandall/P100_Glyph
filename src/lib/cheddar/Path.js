@@ -4,9 +4,6 @@ import Elemental from './Elemental.js'
 import Command from './Command.js'
 
 // Class for drawing an SVG Path.
-//
-// TODO: grow and shrink functions.
-// TODO: fitBorder function.
 export default class Path extends Elemental {
 	// Same as constructing the Path class directly.
 	static from(x, y) {

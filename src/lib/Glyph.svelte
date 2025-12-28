@@ -14,8 +14,7 @@
 			})
 
 		svg.viewbox //
-			.setWidthAnchorLeft(100) //
-			.setHeightAnchorTop(100) //
+			.setEdges(0, 0, 100, 100) //
 
 		container.appendChild(svg.element)
 

@@ -157,13 +157,16 @@ export default class BBox extends Updateable {
 	// Sets the width and forces the left and right values to
 	// grow or shrink by the same amount to accommodate.
 	setWidthAnchorCenter(w) {
+		this._setWidthAnchorCenter(w)
+		this.updated()
+		return this
+	}
+
+	_setWidthAnchorCenter(w) {
 		this._w = w
 		this._left = this._cx - w / 2
 		this._right = this._left + w
 		this._updateCenterX()
-
-		this.updated()
-		return this
 	}
 
 	// Sets the width by forcing the left value to grow or
@@ -191,13 +194,16 @@ export default class BBox extends Updateable {
 	// Sets the height and forces the top and bottom values
 	// to grow or shrink by the same amount to accommodate.
 	setHeightAnchorCenter(h) {
+		this._setHeightAnchorCenter(h)
+		this.updated()
+		return this
+	}
+
+	_setHeightAnchorCenter(h) {
 		this._h = h
 		this._top = this._cy - h / 2
 		this._bottom = this._top + h
 		this._updateCenterY()
-
-		this.updated()
-		return this
 	}
 
 	// Sets the height by forcing the top value to grow or
@@ -245,6 +251,24 @@ export default class BBox extends Updateable {
 		this._moveX(dx)
 		this._moveY(dy)
 		this.updated()
+	}
+
+	// Grows the box by the passed length anchored on the
+	// center. Negative values shrink the box.
+	grow(by) {
+		this._setWidthAnchorCenter(this._w + by)
+		this._setHeightAnchorCenter(this._h + by)
+		this.updated()
+		return this
+	}
+
+	// Shrinks the box by the passed length anchored on the
+	// center. Negative values grow the box.
+	shrink(by) {
+		this._setWidthAnchorCenter(this._w - by)
+		this._setHeightAnchorCenter(this._h - by)
+		this.updated()
+		return this
 	}
 
 	// Resizes the box to match the inner width and height
