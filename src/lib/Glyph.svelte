@@ -1,45 +1,68 @@
 <script>
-	import { onMount } from 'svelte'
-	import { GlyphCanvas } from './canvas'
-	import {
-		ElementList,
-		ButtonBar,
-		DeleteElementButton,
-		ModeDisplay,
-		TogglePathClosure,
-	} from './components'
+	import { onMount, tick } from 'svelte'
+	import Cheddar from '$cheddar'
 	
 	let container = null
-	let canvas = $state(null)
+	let svg = null		
 
-	onMount(() => {
-		canvas = new GlyphCanvas(container)
-		canvas.setGridSize(5, 5)
+	onMount(async () => {
+		svg = Cheddar.svg()
+			.attr('visibility', 'hidden') //
+			.styles({
+				'width': 'min(100vw, 100vh)',
+				'height': 'min(100vw, 100vh)',
+			})
+
+		svg.viewbox //
+			.setWidthAnchorLeft(100) //
+			.setHeightAnchorTop(100) //
+
+		container.appendChild(svg.element)
+
+		Cheddar.circle(50, 50, 25)
+			.addTo(svg) //
+
+		Cheddar.rect(0.5, 0.5, 99.5, 99.5)
+ 			.attrs({
+				'stroke-width': 1,
+				'stroke-dasharray': '2 2',
+			}) //
+			.addTo(svg) //
+		
+		await tick()
+
+		sizeToParent()
+		svg.attr('visibility', 'visible') 
 	})
 
-	// IDEA: There is only one canvas area, the user draws
-	//       what they want and then selects an area for the
-	//       image?
-	//       This would require merging the core and shadow
-	//       grids then adding functionality to specify the
-	//       "print" or visual area.
+	function sizeToParent() {
+		if (!svg) {
+			return
+		}
+	}
+
+	// Prevent right click:
+	// 		oncontextmenu={(e) => e.preventDefault()}
 </script>
+
+<svelte:window onresize={sizeToParent} />
 
 <div class="glyph">
 	<div
 		role="application"
 		bind:this={container}
-		oncontextmenu={(e) => e.preventDefault()}
+
 		class="canvas-container">
 		<!-- InnerHTML handled by Two instance -->
 	</div>
 
+<!--
 	<ButtonBar>
-		<!--
+		
 			TODO: Allow user to edit points on existing shape.
 			TODO: Allow user to select line join type.
 			TODO: Allow user to select line cap type.
-		-->
+		
 		{#if canvas}
 			<ModeDisplay {canvas} />
 			<TogglePathClosure {canvas} />
@@ -50,6 +73,7 @@
 	{#if canvas}
 		<ElementList {canvas} />
 	{/if}
+	-->
 </div>
 
 <style>

@@ -5,6 +5,8 @@ import Updateable from './Updateable.js'
 // Unlike Elemental classes, the values are kept in sync;
 // a call to the update function won't do anything other
 // than notify listeners.
+//
+// TODO: grow and shrink functions.
 export default class BBox extends Updateable {
 	_left = 0
 	_top = 0

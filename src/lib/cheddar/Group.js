@@ -4,7 +4,14 @@ import List from './List.js'
 
 // A standard SVG group for clustering a set of elements
 // together.
+//
+// TODO: grow and shrink functions.
 export default class Group extends Elemental {
+	// Same as constructing the Group class directly.
+	static from() {
+		return new Group()
+	}
+
 	_elementals = new List()
 
 	// Returns the number of elementals in the group.

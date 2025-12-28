@@ -17,5 +17,7 @@
 		height: 100vh;
 		max-width: 100vw;
 		max-height: 100vh;
+
+		overflow: hidden;
 	}
 </style>

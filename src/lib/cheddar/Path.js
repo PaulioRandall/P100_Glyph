@@ -4,7 +4,24 @@ import Elemental from './Elemental.js'
 import Command from './Command.js'
 
 // Class for drawing an SVG Path.
+//
+// TODO: grow and shrink functions.
+// TODO: fitBorder function.
 export default class Path extends Elemental {
+	// Same as constructing the Path class directly.
+	static from(x, y) {
+		return new Path(x, y)
+	}
+
+	// Creates rectangle as a Path.
+	static rect(left, top, right, bottom) {
+		return new Path(left, top)
+			.lineTo(right, top) //
+			.lineTo(right, bottom) //
+			.lineTo(left, bottom) //
+			.lineToClose() //
+	}
+
 	_commands = new List()
 	_closed = false
 
@@ -21,7 +38,7 @@ export default class Path extends Elemental {
 
 		this._generateElement()
 
-		if (x !== null) {
+		if (x !== null && x !== undefined) {
 			this.moveTo(x, y)
 		}
 	}

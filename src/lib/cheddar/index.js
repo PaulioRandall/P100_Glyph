@@ -13,14 +13,25 @@ import Circle from './Circle.js'
 export default {
 	Updateable,
 	Elemental,
+
+	// BBox
 	BBox,
+	bbox: BBox.from,
 
-	// Groups
+	// SVG
 	SVG,
-	Group,
+	svg: SVG.from,
 
-	// Paths
+	// Group
+	Group,
+	group: Group.from,
+
+	// Path
 	Path,
+	path: Path.from,
+	rect: Path.rect,
+
+	// Command
 	Command,
 	PathMove: Command.move,
 	PathLine: Command.line,
@@ -30,4 +41,5 @@ export default {
 
 	// Shapes
 	Circle,
+	circle: Circle.from,
 }

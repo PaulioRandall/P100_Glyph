@@ -5,6 +5,11 @@ import BBox from './BBox.js'
 
 // Adapter for creating and managing an SVG element.
 export default class SVG extends Elemental {
+	// Same as constructing the Group class directly.
+	static from() {
+		return new SVG()
+	}
+
 	_group = new Group()
 	_viewbox = new BBox()
 	_viewboxNotifier = this._viewboxUpdated.bind(this)
