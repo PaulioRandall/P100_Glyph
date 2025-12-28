@@ -12,11 +12,11 @@ describe('Path.js', () => {
 		const p = new Path()
 		const cmd = Command.move(10, 20)
 
-		expect(cmd._updateFuncs.length).toEqual(0)
+		expect(cmd._listeners.length).toEqual(0)
 		p.addCommand(cmd)
-		expect(cmd._updateFuncs.length).toEqual(1)
+		expect(cmd._listeners.length).toEqual(1)
 		p.removeCommand(cmd)
-		expect(cmd._updateFuncs.length).toEqual(0)
+		expect(cmd._listeners.length).toEqual(0)
 	})
 
 	test('clear', () => {

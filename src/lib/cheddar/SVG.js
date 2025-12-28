@@ -2,13 +2,12 @@ import { NAME_SPACE } from './cheddar.js'
 import Elemental from './Elemental.js'
 import Group from './Group.js'
 import BBox from './BBox.js'
-import List from './List.js'
 
 // Adapter for creating and managing an SVG element.
 export default class SVG extends Elemental {
 	_group = new Group()
 	_viewbox = new BBox()
-	_viewboxnotifier = this._viewboxUpdated.bind(this)
+	_viewboxNotifier = this._viewboxUpdated.bind(this)
 
 	constructor() {
 		super()
@@ -16,7 +15,7 @@ export default class SVG extends Elemental {
 		this._generateElement()
 
 		this._group.onUpdate(this.notifier)
-		this._viewbox.onUpdate(this._viewboxnotifier)
+		this._viewbox.onUpdate(this._viewboxNotifier)
 	}
 
 	// Gets the root Group for holding Elementals. Updates to

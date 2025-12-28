@@ -3,8 +3,8 @@ export function nu(updateable) {
 		updateable._notifier = null
 	}
 
-	if (updateable?._updateFuncs) {
-		updateable._updateFuncs.clear()
+	if (updateable?._listeners) {
+		updateable._listeners.clear()
 	}
 
 	return updateable

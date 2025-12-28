@@ -12,7 +12,7 @@ import List from './List.js'
 // notified.
 export default class Updateable {
 	_notifier = this.updated.bind(this)
-	_updateFuncs = new List()
+	_listeners = new List()
 
 	// Returns the notifier function that calls update with
 	// this object bound.
@@ -31,13 +31,13 @@ export default class Updateable {
 			throw new Error('Not a function')
 		}
 
-		this._updateFuncs.push(func)
+		this._listeners.push(func)
 		return () => this.offUpdate(func)
 	}
 
 	// Unregisters a function registered throught onUpdate.
 	offUpdate(func) {
-		this._updateFuncs.remove(func)
+		this._listeners.remove(func)
 	}
 
 	// Notifies any registered listeners that a change has
@@ -49,6 +49,6 @@ export default class Updateable {
 	// Beware: if overriding this function then always call
 	// super method to notify listeners.
 	updated() {
-		this._updateFuncs.forEach((f) => f(this))
+		this._listeners.forEach((f) => f(this))
 	}
 }

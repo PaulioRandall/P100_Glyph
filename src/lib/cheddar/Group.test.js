@@ -35,11 +35,11 @@ describe('Group.js', () => {
 		const c = new Circle(10, 20)
 		const g = new Group()
 
-		expect(c._updateFuncs.length).toEqual(0)
+		expect(c._listeners.length).toEqual(0)
 		g.add(c)
-		expect(c._updateFuncs.length).toEqual(1)
+		expect(c._listeners.length).toEqual(1)
 		g.remove(c)
-		expect(c._updateFuncs.length).toEqual(0)
+		expect(c._listeners.length).toEqual(0)
 	})
 
 	test('clear', () => {

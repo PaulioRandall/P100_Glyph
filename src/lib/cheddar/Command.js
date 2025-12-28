@@ -1,4 +1,3 @@
-import List from './List.js'
 import Updateable from './Updateable.js'
 import CommandIndices from './CommandIndices.js'
 
