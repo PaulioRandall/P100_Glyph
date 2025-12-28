@@ -43,14 +43,16 @@ export default class Path extends Elemental {
 	// Append a command to the path.
 	addCommand(cmd) {
 		this._addCmd(cmd)
-		this._update()
+		this.updateElement()
+		this.update()
 		return this
 	}
 
 	// Remove a command from the path.
 	removeCommand(cmd) {
 		if (this._removeCmd(cmd)) {
-			this._update()
+			this.updateElement()
+			this.update()
 		}
 
 		return this
@@ -64,7 +66,8 @@ export default class Path extends Elemental {
 		}
 
 		if (removed) {
-			this._update()
+			this.updateElement()
+			this.update()
 		}
 
 		return this
@@ -73,14 +76,16 @@ export default class Path extends Elemental {
 	// Creates a new move command to {x,y}.
 	moveTo(x, y) {
 		this._addCmd(Command.move(x, y))
-		this._update()
+		this.updateElement()
+		this.update()
 		return this
 	}
 
 	// Creates a new line command to {x,y}.
 	lineTo(x, y) {
 		this._addCmd(Command.line(x, y))
-		this._update()
+		this.updateElement()
+		this.update()
 		return this
 	}
 
@@ -90,7 +95,8 @@ export default class Path extends Elemental {
 		const { x, y } = this.commands[0]
 		this._addCmd(Command.line(x, y))
 		this._close()
-		this._update()
+		this.updateElement()
+		this.update()
 		return this
 	}
 
@@ -99,7 +105,8 @@ export default class Path extends Elemental {
 	quadraticTo(cp1X, cp1Y, x, y) {
 		const cmd = Command.quadratic(cp1X, cp1Y, x, y)
 		this._addCmd(cmd)
-		this._update()
+		this.updateElement()
+		this.update()
 		return this
 	}
 
@@ -109,7 +116,8 @@ export default class Path extends Elemental {
 		const { x, y } = this.commands[0]
 		this._addCmd(Command.quadratic(cp1X, cp1Y, x, y))
 		this._close()
-		this._update()
+		this.updateElement()
+		this.update()
 		return this
 	}
 
@@ -118,7 +126,8 @@ export default class Path extends Elemental {
 	cubicTo(cp1X, cp1Y, cp2X, cp2Y, x, y) {
 		const cmd = Command.cubic(cp1X, cp1Y, cp2X, cp2Y, x, y)
 		this._addCmd(cmd)
-		this._update()
+		this.updateElement()
+		this.update()
 		return this
 	}
 
@@ -129,7 +138,8 @@ export default class Path extends Elemental {
 		const { x, y } = this.commands[0]
 		this._addCmd(Command.cubic(cp1X, cp1Y, cp2X, cp2Y, x, y))
 		this._close()
-		this._update()
+		this.updateElement()
+		this.update()
 		return this
 	}
 
@@ -138,7 +148,8 @@ export default class Path extends Elemental {
 	// command.
 	close() {
 		if (this._close()) {
-			this._update()
+			this.updateElement()
+			this.update()
 		}
 
 		return this
@@ -148,7 +159,8 @@ export default class Path extends Elemental {
 	// list, if it exists.
 	open() {
 		if (this._open()) {
-			this._update()
+			this.updateElement()
+			this.update()
 		}
 
 		return this
@@ -159,7 +171,8 @@ export default class Path extends Elemental {
 	moveX(dx) {
 		for (const cmd of this._commands) {
 			cmd.moveX(dx)
-			this._update()
+			this.updateElement()
+			this.update()
 		}
 
 		return this
@@ -170,10 +183,20 @@ export default class Path extends Elemental {
 	moveY(dy) {
 		for (const cmd of this._commands) {
 			cmd.moveY(dy)
-			this._update()
+			this.updateElement()
+			this.update()
 		}
 
 		return this
+	}
+
+	// TODO: move(x,y)
+
+	// Updates the element's 'd' attribute with any changes.
+	// Done automatically when a command is added, modified,
+	// or removed.
+	updateElement() {
+		this.attr('d', this.toString())
 	}
 
 	// Returns true if the passed command is in the path.
@@ -193,11 +216,7 @@ export default class Path extends Elemental {
 	_generateElement() {
 		const path = document.createElementNS(NAME_SPACE, 'path')
 		this._setElement(path)
-		this._update()
-	}
-
-	_update() {
-		this.attr('d', this.toString())
+		this.updateElement()
 		this.update()
 	}
 

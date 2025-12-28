@@ -78,6 +78,8 @@ export default class Circle extends Elemental {
 		return this
 	}
 
+	// TODO: move(x,y)
+
 	_generateElement() {
 		const circle = document.createElementNS(NAME_SPACE, 'circle')
 		this._setElement(circle)

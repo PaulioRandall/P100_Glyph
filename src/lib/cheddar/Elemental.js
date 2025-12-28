@@ -4,6 +4,8 @@ import DirtyMap from './DirtyMap.js'
 
 // Classes extending Elemental map to a single HTML
 // element.
+//
+// TODO: Document.
 export default class Elemental extends Updateable {
 	_element = null
 	_attrs = new DirtyMap()
@@ -79,9 +81,9 @@ export default class Elemental extends Updateable {
 			return
 		}
 
-		this._updating = true
-
 		try {
+			this._updating = true
+
 			if (this.element) {
 				this._updateAttr()
 				this._updateStyle()

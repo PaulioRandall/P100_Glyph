@@ -10,16 +10,14 @@
 
 	onMount(() => {
 		svg = new Cheddar.SVG()
+		svg.attr('width', '100%')
+		svg.attr('height', '100%')
 
 		setTimeout(() => {
-			svg.attr('width', '100%')
-			svg.attr('height', '100%')
-			//svg.sizeToParent()
+			svg.sizeToElement()
 		}, 0)
 
 		container.appendChild(svg.element)
-
-		const nav = new Cheddar.SVGNav(svg)
 
 		const circle = new Cheddar.Circle() //
 			.setCenterX(15) //
@@ -47,16 +45,7 @@
 	})
 
 	function onresize() {
-		
-		/*
-svg.sizeToParent()
-		borderPath.clear()
-		borderPath.moveTo(0,0)
-		borderPath.lineTo()
-		borderPath.commands[1].setY(svg.viewbox.height)
-		borderPath.commands[2].setX(svg.viewbox.width).setY(svg.viewbox.height)
-		borderPath.commands[3].setX(svg.viewbox.width)
-		*/
+		svg.sizeToElement()
 	}
 </script>
 
@@ -67,28 +56,27 @@ svg.sizeToParent()
 </main>
 
 <style>
-:global(*) {
-	margin: 0;
-	box-sizing: border-box;
-}
+	:global(*) {
+		margin: 0;
+		box-sizing: border-box;
+	}
 
-:global(html), :global(body) {
-	margin: 0;
-	padding: 0;
-}
+	:global(html), :global(body) {
+		margin: 0;
+		padding: 0;
+	}
 
-main {
-	display: block;
+	main {
+		display: block;
 
-	margin: 0;
-	padding: 0;
+		margin: 0;
+		padding: 0;
 
-	width: 100vw;
-	height: 100vh;
-	max-width: 100vw;
-	max-height: 100vh;
+		width: 100vw;
+		height: 100vh;
+		max-width: 100vw;
+		max-height: 100vh;
 
-	overflow: hidden;
-}
-
+		overflow: hidden;
+	}
 </style>

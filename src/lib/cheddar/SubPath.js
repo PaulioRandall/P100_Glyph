@@ -14,6 +14,8 @@ import Command from './Command.js'
 // a SubPath does not represent a single command, per se.
 // However, there is core command that determines the shape
 // of the drawn line. It is returned by the command getter.
+//
+// TODO: Remove.
 export default class SubPath {
 	_path = null
 	_cmd = null

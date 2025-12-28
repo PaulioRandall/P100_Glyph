@@ -57,17 +57,22 @@ export default class SVG extends Elemental {
 		return this
 	}
 
-	sizeToParent() {
+	sizeToElement() {
 		const rect = this.element.getBoundingClientRect()
 		this._viewbox.setEdges(0, 0, rect.width, rect.height)
 		return this
 	}
 
-	mapClientToViewbox(clientX, clientY) {
+	elementToViewbox() {
 		return [
-			clientX * (this.viewbox.width / this.element.clientWidth),
-			clientY * (this.viewbox.height / this.element.clientHeight),
+			this.viewbox.width / this.element.clientWidth,
+			this.viewbox.height / this.element.clientHeight,
 		]
+	}
+
+	mapClientToViewbox(clientX, clientY) {
+		const ratios = this.elementToViewbox()
+		return [clientX * ratios[0], clientY * ratios[1]]
 	}
 
 	mapClientToViewboxPercent(clientX, clientY) {

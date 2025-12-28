@@ -51,6 +51,7 @@ export default class Command extends Updateable {
 		super()
 
 		this._setFields(...params)
+		this.update()
 	}
 
 	get params() {
@@ -89,6 +90,7 @@ export default class Command extends Updateable {
 	setX(x) {
 		if (this._x !== null) {
 			this._x = x
+			this.updateParams()
 			this.update()
 		}
 		return this
@@ -98,15 +100,19 @@ export default class Command extends Updateable {
 	setY(y) {
 		if (this._y !== null) {
 			this._y = y
+			this.updateParams()
 			this.update()
 		}
 		return this
 	}
 
+	// TODO: setXY(x,y)
+
 	// Sets the X value of the first control point.
 	setCP1X(x) {
 		if (this._cp1X !== null) {
 			this._cp1X = x
+			this.updateParams()
 			this.update()
 		}
 		return this
@@ -116,15 +122,19 @@ export default class Command extends Updateable {
 	setCP1Y(y) {
 		if (this._cp1Y !== null) {
 			this._cp1Y = y
+			this.updateParams()
 			this.update()
 		}
 		return this
 	}
 
+	// TODO: setCP1(x,y)
+
 	// Sets the X value of the first control point.
 	setCP2X(x) {
 		if (this._cp2X !== null) {
 			this._cp2X = x
+			this.updateParams()
 			this.update()
 		}
 		return this
@@ -135,10 +145,13 @@ export default class Command extends Updateable {
 	setCP2Y(y) {
 		if (this._cp2Y !== null) {
 			this._cp2Y = y
+			this.updateParams()
 			this.update()
 		}
 		return this
 	}
+
+	// TODO: setCP2(x,y)
 
 	// Moves the command destination X point by dx, which may
 	// be negative.
@@ -155,7 +168,9 @@ export default class Command extends Updateable {
 			this._cp2X += dx
 		}
 
+		this.updateParams()
 		this.update()
+
 		return this
 	}
 
@@ -174,15 +189,23 @@ export default class Command extends Updateable {
 			this._cp2Y += dy
 		}
 
+		this.updateParams()
 		this.update()
+
 		return this
 	}
 
-	// Returns true if a call to straighten is allowed.
-	//
-	// I.e. returns false if a move 'M' or close 'Z' command.
+	// TODO: move(x,y)
+
+	// Returns true if a call to straighten will modify the
+	// command, i.e. returns false if a move 'M', line 'L' or
+	// close 'Z' command.
 	canStraighten() {
-		return this._type !== 'M' && this._type !== 'Z'
+		return (
+			this._type !== 'M' && //
+			this._type !== 'L' && //
+			this._type !== 'Z'
+		) //
 	}
 
 	// Converts the command to a line command if not already
@@ -190,12 +213,11 @@ export default class Command extends Updateable {
 	// command because they create straight lines too and we
 	// don't want to open a closed path without the dev
 	// user's explicit instruction.
+	//
+	// If canStraighten is false then no changes will be
+	// made.
 	straighten() {
 		if (!this.canStraighten()) {
-			return this
-		}
-
-		if (this._type === 'L') {
 			return this
 		}
 
@@ -205,13 +227,15 @@ export default class Command extends Updateable {
 		this._cp2Y = null
 		this._type = 'L'
 
+		this.updateParams()
 		this.update()
+
 		return this
 	}
 
-	// Returns true if a call to curve is allowed.
-	//
-	// I.e. returns false if a move 'M' or close 'Z' command.
+	// Returns true if invoking the function may change the
+	// command, i.e. returns false if a move 'M' or close 'Z'
+	// command.
 	canCurve() {
 		return this._type !== 'M' && this._type !== 'Z'
 	}
@@ -225,6 +249,9 @@ export default class Command extends Updateable {
 	//   cp1Y) then convert to a quadratic curve.
 	// - If the first four arguments are provided (cp1X,
 	//   cp1Y, cp2X, cp2Y) then convert to a cubic curve.
+	//
+	// If canCurve returns false then no changes will be
+	// made.
 	curve(cp1X = null, cp1Y = null, cp2X = null, cp2Y = null) {
 		if (!this.canCurve()) {
 			return this
@@ -238,13 +265,24 @@ export default class Command extends Updateable {
 			this._updateToCubic(cp1X, cp1Y, cp2X, cp2Y)
 		}
 
+		this.updateParams()
 		this.update()
+
 		return this
 	}
 
-	update() {
-		this._generateParams()
-		super.update()
+	// Updates the paramter array with changes to the object.
+	// This is used to construct the string used to populate
+	// the 'd' attribute of a path.
+	updateParams() {
+		const indices = CommandIndices.get(this._type)
+		this._params = new Array(indices.length)
+
+		for (const name in indices) {
+			const i = indices[name]
+			const fieldName = '_' + name
+			this._params[i] = this[fieldName]
+		}
 	}
 
 	// Returns the command as a string in the form that can
@@ -262,18 +300,7 @@ export default class Command extends Updateable {
 			this['_' + name] = params[i]
 		}
 
-		this.update()
-	}
-
-	_generateParams() {
-		const indices = CommandIndices.get(this._type)
-		this._params = new Array(indices.length)
-
-		for (const name in indices) {
-			const i = indices[name]
-			const fieldName = '_' + name
-			this._params[i] = this[fieldName]
-		}
+		this.updateParams()
 	}
 
 	_updateToQuadratic(cp1X, cp1Y) {

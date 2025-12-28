@@ -50,6 +50,9 @@ export default class DirtyMap extends Updateable {
 		return this
 	}
 
+	// TODO: puOwnProps({})
+	// TODO: putProps({})
+
 	// If value is undefined, then returns the result of the
 	// 'get' function. If value is defined, then this calls
 	// the 'put' function.
@@ -71,14 +74,6 @@ export default class DirtyMap extends Updateable {
 		return this
 	}
 
-	// Returns true if the name is dirty.
-	isDirty(name = undefined) {
-		if (name === undefined) {
-			return this._dirty.size > 0
-		}
-		return this._dirty.has(name)
-	}
-
 	// Returns the underlying map entries.
 	map(f) {
 		const result = []
@@ -88,6 +83,16 @@ export default class DirtyMap extends Updateable {
 		}
 
 		return result
+	}
+
+	// TODO: mapDirty(f)
+
+	// Returns true if the name is dirty.
+	isDirty(name = undefined) {
+		if (name === undefined) {
+			return this._dirty.size > 0
+		}
+		return this._dirty.has(name)
 	}
 
 	// Returns true if putting this name value pair will

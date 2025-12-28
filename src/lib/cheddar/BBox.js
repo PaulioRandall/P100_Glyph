@@ -105,11 +105,6 @@ export default class BBox extends Updateable {
 		return this
 	}
 
-	sizeToWindow() {
-		this.setEdges(0, 0, window.innerWidth, window.innerHeight)
-		return this
-	}
-
 	// Sets center X adjusting left and right accordingly.
 	setCenterX(cx) {
 		const half = this._w / 2
@@ -131,6 +126,8 @@ export default class BBox extends Updateable {
 		this.update()
 		return this
 	}
+
+	// TODO: setCenter(x,y)
 
 	// Sets the width by forcing the right value to grow or
 	// shrink to accommodate.
@@ -219,6 +216,13 @@ export default class BBox extends Updateable {
 		this._updateCenterY()
 
 		this.update()
+		return this
+	}
+
+	// TODO: move(x,y)
+
+	sizeToWindow() {
+		this.setEdges(0, 0, window.innerWidth, window.innerHeight)
 		return this
 	}
 

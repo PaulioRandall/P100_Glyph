@@ -67,6 +67,8 @@ export default class Group extends Elemental {
 		return this
 	}
 
+	// TODO: moveXY(x,y)
+
 	_generateElement() {
 		const group = document.createElementNS(NAME_SPACE, 'g')
 		this._setElement(group)

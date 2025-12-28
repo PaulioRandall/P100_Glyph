@@ -10,6 +10,8 @@ import List from './List.js'
 // If overriding the update or notify methods, always call
 // the super method so updates are made and listeners are
 // notified.
+//
+// TODO: Rename to 'Notifier'.
 export default class Updateable {
 	_updater = this.update.bind(this)
 	_updateFuncs = new List()
@@ -40,14 +42,14 @@ export default class Updateable {
 		this._updateFuncs.remove(func)
 	}
 
-	// Updates the internal state of the object then notifies
-	// any registered listeners. It also notify onUpdate and
-	// onNotify functions.
+	// Notifies any registered listeners that a change has
+	// been made.
 	//
 	// You should only call this function yourself if you
 	// want to refresh content as if an update occurred.
 	//
-	// By default it does nothing except call notify.
+	// Beware: if overriding this function then always call
+	// super method to notify listeners.
 	update() {
 		this._updateFuncs.forEach((f) => f(this))
 	}
