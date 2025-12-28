@@ -23,7 +23,7 @@ describe('SVG.js', () => {
 		svg.onUpdate(() => count++)
 
 		svg.viewbox.setLeft(-100)
-		svg.viewbox.setWidthAnchorCenter(500)
+		svg.viewbox.setWidth(500)
 		svg.viewbox.moveBy(0, 200)
 		expect(count).toEqual(3)
 	})

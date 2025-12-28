@@ -68,60 +68,60 @@ describe('BBox.js', () => {
 		expect(cb.bottom).toEqual(75)
 	})
 
-	test('setWidthAnchorLeft()', () => {
+	test('setWidth() anchor left', () => {
 		const cb = new BBox() //
 			.setLeft(-25) //
-			.setWidthAnchorLeft(100) //
+			.setWidth(100, 'left') //
 
 		expect(cb.width).toEqual(100)
 		expect(cb.right).toEqual(75)
 		expect(cb.centerX).toEqual(25)
 	})
 
-	test('setWidthAnchorCenter()', () => {
+	test('setWidth() anchor center', () => {
 		const cb = new BBox() //
 			.setLeft(0) //
 			.setRight(100) //
-			.setWidthAnchorCenter(200) //
+			.setWidth(200, 'center') //
 
 		expect(cb.left).toEqual(-50)
 		expect(cb.right).toEqual(150)
 	})
 
-	test('setWidthAnchorRight()', () => {
+	test('setWidth() anchor right', () => {
 		const cb = new BBox() //
 			.setRight(25) //
-			.setWidthAnchorRight(100) //
+			.setWidth(100, 'right') //
 
 		expect(cb.width).toEqual(100)
 		expect(cb.left).toEqual(-75)
 		expect(cb.centerX).toEqual(-25)
 	})
 
-	test('setHeightAnchorTop()', () => {
+	test('setHeight() anchor top', () => {
 		const cb = new BBox() //
 			.setTop(-25) //
-			.setHeightAnchorTop(100) //
+			.setHeight(100, 'top') //
 
 		expect(cb.height).toEqual(100)
 		expect(cb.bottom).toEqual(75)
 		expect(cb.centerY).toEqual(25)
 	})
 
-	test('setHeightAnchorCenter()', () => {
+	test('setHeight() anchor center', () => {
 		const cb = new BBox() //
 			.setTop(0) //
 			.setBottom(100) //
-			.setHeightAnchorCenter(200) //
+			.setHeight(200, 'center') //
 
 		expect(cb.top).toEqual(-50)
 		expect(cb.bottom).toEqual(150)
 	})
 
-	test('setHeightAnchorBottom()', () => {
+	test('setHeight() anchor bottom', () => {
 		const cb = new BBox() //
 			.setBottom(25) //
-			.setHeightAnchorBottom(100) //
+			.setHeight(100, 'bottom') //
 
 		expect(cb.height).toEqual(100)
 		expect(cb.top).toEqual(-75)

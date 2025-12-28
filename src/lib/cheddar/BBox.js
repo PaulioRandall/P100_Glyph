@@ -5,9 +5,6 @@ import Updateable from './Updateable.js'
 // Unlike Elemental classes, the values are kept in sync;
 // a call to the update function won't do anything other
 // than notify listeners.
-//
-// TODO: rename 'set...' functions to 'moveTo' and
-//       'move...' functions to 'moveBy'.
 export default class BBox extends Updateable {
 	_left = 0
 	_top = 0
@@ -144,23 +141,31 @@ export default class BBox extends Updateable {
 		return this
 	}
 
-	// Sets the width by forcing the right value to grow or
-	// shrink to accommodate.
-	setWidthAnchorLeft(w) {
-		this._w = w
-		this._right = this._left + w
-		this._updateCenterX()
+	// Sets the width. The anchor defines the point to keep
+	// still while the other parts expand and shrink to fit.
+	//
+	// By default, the anchor is on the 'center' forcing both
+	// sides to expand or shrink evenly. It's also possible
+	// to anchor on the 'left' or 'right'.
+	setWidth(w, anchor = 'center') {
+		if (anchor === 'left') {
+			this._setWidthAnchorLeft(w)
+		} else if (anchor === 'center') {
+			this._setWidthAnchorCenter(w)
+		} else if (anchor === 'right') {
+			this._setWidthAnchorRight(w)
+		} else {
+			throw new Error(`Unknown anchor '${anchor}'`)
+		}
 
 		this.updated()
 		return this
 	}
 
-	// Sets the width and forces the left and right values to
-	// grow or shrink by the same amount to accommodate.
-	setWidthAnchorCenter(w) {
-		this._setWidthAnchorCenter(w)
-		this.updated()
-		return this
+	_setWidthAnchorLeft(w) {
+		this._w = w
+		this._right = this._left + w
+		this._updateCenterX()
 	}
 
 	_setWidthAnchorCenter(w) {
@@ -170,34 +175,37 @@ export default class BBox extends Updateable {
 		this._updateCenterX()
 	}
 
-	// Sets the width by forcing the left value to grow or
-	// shrink to accommodate.
-	setWidthAnchorRight(w) {
+	_setWidthAnchorRight(w) {
 		this._w = w
 		this._left = this._right - w
 		this._updateCenterX()
+	}
+
+	// Sets the height. The anchor defines the point to keep
+	// still while the other parts expand and shrink to fit.
+	//
+	// By default, the anchor is on the 'center' forcing both
+	// sides to expand or shrink evenly. It's also possible
+	// to anchor on the 'top' or 'bottom'.
+	setHeight(w, anchor = 'center') {
+		if (anchor === 'top') {
+			this._setHeightAnchorTop(w)
+		} else if (anchor === 'center') {
+			this._setHeightAnchorCenter(w)
+		} else if (anchor === 'bottom') {
+			this._setHeightAnchorBottom(w)
+		} else {
+			throw new Error(`Unknown anchor '${anchor}'`)
+		}
 
 		this.updated()
 		return this
 	}
 
-	// Sets the height by forcing the bottom value to grow or
-	// shrink to accommodate.
-	setHeightAnchorTop(h) {
+	_setHeightAnchorTop(h) {
 		this._h = h
 		this._bottom = this._top + h
 		this._updateCenterY()
-
-		this.updated()
-		return this
-	}
-
-	// Sets the height and forces the top and bottom values
-	// to grow or shrink by the same amount to accommodate.
-	setHeightAnchorCenter(h) {
-		this._setHeightAnchorCenter(h)
-		this.updated()
-		return this
 	}
 
 	_setHeightAnchorCenter(h) {
@@ -207,15 +215,10 @@ export default class BBox extends Updateable {
 		this._updateCenterY()
 	}
 
-	// Sets the height by forcing the top value to grow or
-	// shrink to accommodate.
-	setHeightAnchorBottom(h) {
+	_setHeightAnchorBottom(h) {
 		this._h = h
 		this._top = this._bottom - h
 		this._updateCenterY()
-
-		this.updated()
-		return this
 	}
 
 	// Moves the box on the X and Y plane by dx and dy,
