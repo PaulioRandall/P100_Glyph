@@ -93,6 +93,7 @@ export default class Command extends Updateable {
 			this.updateParams()
 			this.updated()
 		}
+
 		return this
 	}
 
@@ -103,10 +104,22 @@ export default class Command extends Updateable {
 			this.updateParams()
 			this.updated()
 		}
+
 		return this
 	}
 
-	// TODO: setXY(x,y)
+	// Sets the X and Y value. Triggers a single update
+	// notification.
+	setXY(x, y) {
+		if (this._x !== null) {
+			this._x = x
+			this._y = y
+			this.updateParams()
+			this.updated()
+		}
+
+		return this
+	}
 
 	// Sets the X value of the first control point.
 	setCP1X(x) {
@@ -115,6 +128,7 @@ export default class Command extends Updateable {
 			this.updateParams()
 			this.updated()
 		}
+
 		return this
 	}
 
@@ -125,10 +139,22 @@ export default class Command extends Updateable {
 			this.updateParams()
 			this.updated()
 		}
+
 		return this
 	}
 
-	// TODO: setCP1(x,y)
+	// Sets the X and Y for the first control. Triggers a
+	// single update notification.
+	setCP1(x, y) {
+		if (this._cp1X !== null) {
+			this._cp1X = x
+			this._cp1Y = y
+			this.updateParams()
+			this.updated()
+		}
+
+		return this
+	}
 
 	// Sets the X value of the first control point.
 	setCP2X(x) {
@@ -137,6 +163,7 @@ export default class Command extends Updateable {
 			this.updateParams()
 			this.updated()
 		}
+
 		return this
 	}
 
@@ -148,10 +175,22 @@ export default class Command extends Updateable {
 			this.updateParams()
 			this.updated()
 		}
+
 		return this
 	}
 
-	// TODO: setCP2(x,y)
+	// Sets the X and Y for the second control. Triggers a
+	// single update notification.
+	setCP2(x, y) {
+		if (this._cp2X !== null) {
+			this._cp2X = x
+			this._cp2Y = y
+			this.updateParams()
+			this.updated()
+		}
+
+		return this
+	}
 
 	// Moves the command destination X point by dx, which may
 	// be negative.
