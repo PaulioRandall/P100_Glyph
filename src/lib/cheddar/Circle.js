@@ -80,10 +80,11 @@ export default class Circle extends Elemental {
 		return this
 	}
 
-	// Moves the circle on the X plane by dx, which may be
-	// negative.
-	moveX(dx) {
+	// Moves the circle on the X and Y plane by dx and dy,
+	// each may be negative.
+	moveBy(dx, dy) {
 		this._moveX(dx)
+		this._moveY(dy)
 		this.updated()
 		return this
 	}
@@ -93,26 +94,9 @@ export default class Circle extends Elemental {
 		this.attr('cx', curr + dx)
 	}
 
-	// Moves the circle on the Y plane by dy, which may be
-	// negative.
-	moveY(dy) {
-		this._moveY(dy)
-		this.updated()
-		return this
-	}
-
 	_moveY(dy) {
 		const curr = this.attr('cy')
 		this.attr('cy', curr + dy)
-	}
-
-	// Moves the circle on the X and Y plane by dx and dy,
-	// each may be negative.
-	moveBy(dx, dy) {
-		this._moveX(dx)
-		this._moveY(dy)
-		this.updated()
-		return this
 	}
 
 	// Increases the radius by half the passed length.

@@ -201,10 +201,11 @@ export default class Command extends Updateable {
 		return this
 	}
 
-	// Moves the command destination X point by dx, which may
-	// be negative.
-	moveX(dx) {
+	// Moves the command on the X and Y plane by dx and dy,
+	// each may be negative.
+	moveBy(dx, dy) {
 		this._moveX(dx)
+		this._moveY(dy)
 
 		this.updateParams()
 		this.updated()
@@ -226,17 +227,6 @@ export default class Command extends Updateable {
 		}
 	}
 
-	// Moves the command destination Y point by dx, which may
-	// be negative.
-	moveY(dy) {
-		this._moveY(dy)
-
-		this.updateParams()
-		this.updated()
-
-		return this
-	}
-
 	_moveY(dy) {
 		if (this._y !== null) {
 			this._y += dy
@@ -249,18 +239,6 @@ export default class Command extends Updateable {
 		if (this._cp2Y !== null) {
 			this._cp2Y += dy
 		}
-	}
-
-	// Moves the command on the X and Y plane by dx and dy,
-	// each may be negative.
-	moveBy(dx, dy) {
-		this._moveX(dx)
-		this._moveY(dy)
-
-		this.updateParams()
-		this.updated()
-
-		return this
 	}
 
 	// Returns true if a call to straighten will modify the

@@ -143,30 +143,6 @@ describe('Path.js', () => {
 		])
 	})
 
-	test('moveX()', () => {
-		const p = new Path()
-			.moveTo(20, 20) // [0]
-			.lineTo(80, 20) // [1]
-			.moveX(100)
-
-		expectUpdateables(p.commands, [
-			Command.moveBy(120, 20), //
-			Command.line(180, 20), //
-		])
-	})
-
-	test('moveY()', () => {
-		const p = new Path()
-			.moveTo(20, 20) // [0]
-			.lineTo(80, 20) // [1]
-			.moveY(100)
-
-		expectUpdateables(p.commands, [
-			Command.moveBy(20, 120), //
-			Command.line(80, 120), //
-		])
-	})
-
 	test('moveBy()', () => {
 		const p = new Path()
 			.moveTo(20, 30) // [0]

@@ -179,68 +179,29 @@ export default class Path extends Elemental {
 		return this
 	}
 
-	// Moves all elements by dx on the X plane. dx may be
-	// negative.
-	moveX(dx) {
-		if (this._moveX(dx)) {
-			this.updateElement()
-			this.updated()
-		}
-
-		return this
-	}
-
-	_moveX(dx) {
-		if (this._commands.length === 0) {
-			return false
-		}
-
-		this.doMuted(() => {
-			for (const cmd of this._commands) {
-				cmd.moveX(dx)
-			}
-		})
-
-		return true
-	}
-
-	// Moves the elements by dy on the Y plane. dy may be
-	// negative.
-	moveY(dy) {
-		if (this._moveY(dy)) {
-			this.updateElement()
-			this.updated()
-		}
-
-		return this
-	}
-
-	_moveY(dy) {
-		if (this._commands.length === 0) {
-			return false
-		}
-
-		this.doMuted(() => {
-			for (const cmd of this._commands) {
-				cmd.moveY(dy)
-			}
-		})
-
-		return true
-	}
-
 	// Moves the path on the X and Y plane by dx and dy,
 	// each may be negative.
 	moveBy(dx, dy) {
-		const movedX = this._moveX(dx)
-		const movedY = this._moveY(dy)
-
-		if (movedX || movedY) {
+		if (this._moveBy(dx, dy)) {
 			this.updateElement()
 			this.updated()
 		}
 
 		return this
+	}
+
+	_moveBy(dx, dy) {
+		if (this._commands.length === 0) {
+			return false
+		}
+
+		this.doMuted(() => {
+			for (const cmd of this._commands) {
+				cmd.moveBy(dx, dy)
+			}
+		})
+
+		return true
 	}
 
 	// Grows the path by the passed factor and origin coords.
