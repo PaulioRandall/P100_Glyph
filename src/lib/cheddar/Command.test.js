@@ -130,6 +130,56 @@ describe('Command.js', () => {
 		expect(cmd.params[4]).toEqual(20)
 	})
 
+	test('moveX', () => {
+		const cmd = Command.cubic(10, 20, 30, 40, 50, 60)
+
+		cmd.moveX(100)
+
+		expect(cmd.cp1X).toEqual(110)
+		expect(cmd.cp2X).toEqual(130)
+		expect(cmd.x).toEqual(150)
+
+		expect(cmd.params[1]).toEqual(110)
+		expect(cmd.params[3]).toEqual(130)
+		expect(cmd.params[5]).toEqual(150)
+	})
+
+	test('moveY', () => {
+		const cmd = Command.cubic(10, 20, 30, 40, 50, 60)
+
+		cmd.moveY(100)
+
+		expect(cmd.cp1Y).toEqual(120)
+		expect(cmd.cp2Y).toEqual(140)
+		expect(cmd.y).toEqual(160)
+
+		expect(cmd.params[2]).toEqual(120)
+		expect(cmd.params[4]).toEqual(140)
+		expect(cmd.params[6]).toEqual(160)
+	})
+
+	test('move', () => {
+		const cmd = Command.cubic(10, 20, 30, 40, 50, 60)
+
+		cmd.move(100, 200)
+
+		expect(cmd.cp1X).toEqual(110)
+		expect(cmd.cp2X).toEqual(130)
+		expect(cmd.x).toEqual(150)
+
+		expect(cmd.cp1Y).toEqual(220)
+		expect(cmd.cp2Y).toEqual(240)
+		expect(cmd.y).toEqual(260)
+
+		expect(cmd.params[1]).toEqual(110)
+		expect(cmd.params[3]).toEqual(130)
+		expect(cmd.params[5]).toEqual(150)
+
+		expect(cmd.params[2]).toEqual(220)
+		expect(cmd.params[4]).toEqual(240)
+		expect(cmd.params[6]).toEqual(260)
+	})
+
 	test('toString', () => {
 		const cmd = new Command('C', 5, 5, 10, 10, 20, 20)
 		expect(cmd.toString()).toEqual('C 5 5 10 10 20 20')

@@ -163,20 +163,30 @@ export default class Path extends Elemental {
 	// Moves all elements by dx on the X plane. dx may be
 	// negative.
 	moveX(dx) {
-		for (const cmd of this._commands) {
-			cmd.moveX(dx)
+		if (this._moveX(dx)) {
 			this.updateElement()
 			this.updated()
 		}
 
 		return this
+	}
+
+	_moveX(dx) {
+		if (this._commands.length === 0) {
+			return false
+		}
+
+		for (const cmd of this._commands) {
+			cmd.moveX(dx)
+		}
+
+		return true
 	}
 
 	// Moves the elements by dy on the Y plane. dy may be
 	// negative.
 	moveY(dy) {
-		for (const cmd of this._commands) {
-			cmd.moveY(dy)
+		if (this._moveY(dy)) {
 			this.updateElement()
 			this.updated()
 		}
@@ -184,7 +194,31 @@ export default class Path extends Elemental {
 		return this
 	}
 
-	// TODO: move(x,y)
+	_moveY(dy) {
+		if (this._commands.length === 0) {
+			return false
+		}
+
+		for (const cmd of this._commands) {
+			cmd.moveY(dy)
+		}
+
+		return true
+	}
+
+	// Moves the path on the X and Y plane by dx and dy,
+	// each may be negative.
+	move(dx, dy) {
+		const movedX = this._moveX(dx)
+		const movedY = this._moveY(dy)
+
+		if (movedX || movedY) {
+			this.updateElement()
+			this.updated()
+		}
+
+		return this
+	}
 
 	// Updates the element's 'd' attribute with any changes.
 	// Done automatically when a command is added, modified,

@@ -166,4 +166,16 @@ describe('Path.js', () => {
 			Command.line(80, 120), //
 		])
 	})
+
+	test('move()', () => {
+		const p = new Path()
+			.moveTo(20, 30) // [0]
+			.lineTo(40, 50) // [1]
+			.move(100, 200)
+
+		expectUpdateables(p.commands, [
+			Command.move(120, 230), //
+			Command.line(140, 250), //
+		])
+	})
 })

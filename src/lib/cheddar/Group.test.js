@@ -80,4 +80,24 @@ describe('Group.js', () => {
 		expect(p.commands[0].y).toEqual(150)
 		expect(p.commands[1].y).toEqual(170)
 	})
+
+	test('move', () => {
+		const c = new Circle(20, 30)
+		const p = new Path(40, 50).lineTo(60, 70)
+
+		const g = new Group() //
+			.add(c) //
+			.add(p) //
+			.moveX(100) //
+			.moveY(200)
+
+		expect(c.centerX).toEqual(120)
+		expect(c.centerY).toEqual(230)
+
+		expect(p.commands[0].x).toEqual(140)
+		expect(p.commands[0].y).toEqual(250)
+
+		expect(p.commands[1].x).toEqual(160)
+		expect(p.commands[1].y).toEqual(270)
+	})
 })

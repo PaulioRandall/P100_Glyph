@@ -10,22 +10,22 @@
 
 	onMount(() => {
 		svg = new Cheddar.SVG()
-		svg.attr('width', '100%')
-		svg.attr('height', '100%')
+			.attr('width', '100%') //
+			.attr('height', '100%') //
+			.attr('visibility', 'hidden') //
 
 		setTimeout(() => {
-			svg.sizeToElement()
+			svg.sizeToElement() //
+				.attr('visibility', 'visible') //
 		}, 0)
 
-		container.appendChild(svg.element)
-
-		const circle = new Cheddar.Circle() //
+		const circle = new Cheddar.Circle()
 			.setCenterX(15) //
 			.setCenterY(85) //
 			.setRadius(10) //
 			.addTo(svg) //
 
-		const path = new Cheddar.Path(20, 20) //
+		const path = new Cheddar.Path(20, 20)
 			.cubicTo(30, 50, 60, 40, 70, 70) //
 			.lineTo(70, 20) //
 			.lineToClose() //
@@ -36,12 +36,13 @@
 			.lineTo(100, 100) //
 			.lineTo(100, 0) //
 			.close() //
-			.addTo(svg)
+			.addTo(svg) //
 
 		circle.setRadius(10) //
-			.moveX(25) //
-			.moveY(-25) //
+			.move(25, -25) //
 			.attr('stroke', 'red') //
+
+		container.appendChild(svg.element)
 	})
 
 	function onresize() {

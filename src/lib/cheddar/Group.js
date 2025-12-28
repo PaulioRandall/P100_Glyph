@@ -48,26 +48,39 @@ export default class Group extends Elemental {
 	// Moves the group by dx on the X plane. dx may be
 	// negative.
 	moveX(dx) {
+		this._moveX(dx)
+		this.updated()
+		return this
+	}
+
+	_moveX(dx) {
 		for (const elem of this._elementals) {
 			elem.moveX(dx)
 		}
-
-		this.updated()
-		return this
 	}
 
 	// Moves the group by dy on the Y plane. dy may be
 	// negative.
 	moveY(dy) {
-		for (const elem of this._elementals) {
-			elem.moveY(dy)
-		}
-
+		this._moveY(dy)
 		this.updated()
 		return this
 	}
 
-	// TODO: moveXY(x,y)
+	_moveY(dy) {
+		for (const elem of this._elementals) {
+			elem.moveY(dy)
+		}
+	}
+
+	// Moves the group on the X and Y plane by dx and dy,
+	// each may be negative.
+	move(dx, dy) {
+		this._moveX(dx)
+		this._moveY(dy)
+		this.updated()
+		return this
+	}
 
 	_generateElement() {
 		const group = document.createElementNS(NAME_SPACE, 'g')
