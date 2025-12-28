@@ -27,7 +27,7 @@ describe('DirtyMap.js', () => {
 		expect(m.listDirty()).toEqual([])
 	})
 
-	test('put: calls update', () => {
+	test('put: calls updated', () => {
 		const m = new DirtyMap()
 		const observer = onUpdate(m)
 
@@ -59,6 +59,22 @@ describe('DirtyMap.js', () => {
 		m.putMissing('a', 123)
 
 		expect(m.get('a')).toEqual(undefined)
+	})
+
+	test('putProps()', () => {
+		const m = new DirtyMap()
+
+		const obj = Object.create(
+			{ a: 1 }, //
+			{ b: { value: 2 } } //
+		)
+
+		m.putProps(obj)
+
+		expect(m.has('a')).toEqual(false)
+		expect(m.get('b')).toEqual(2)
+
+		expect(m.listDirty()).toEqual(['b'])
 	})
 
 	test('val: gets', () => {

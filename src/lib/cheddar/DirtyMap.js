@@ -6,6 +6,14 @@ export default class DirtyMap extends Updateable {
 	_map = new Map()
 	_dirty = new Set()
 
+	// Arguments:
+	// [0] an object whose own properties shown be added to
+	//     the map.
+	constructor(obj = {}) {
+		super()
+		this._putProps(obj)
+	}
+
 	// Returns true if the name exists within the map.
 	has(name) {
 		return this._map.has(name)
@@ -27,6 +35,14 @@ export default class DirtyMap extends Updateable {
 	// unless the value is equal to the existing value and
 	// forceDirty is false.
 	put(name, value, forceDirty = false) {
+		if (this._put(name, value, forceDirty)) {
+			this.updated()
+		}
+
+		return this
+	}
+
+	_put(name, value, forceDirty = false) {
 		const changed = this.willDirty(name, value)
 
 		if (changed) {
@@ -35,10 +51,10 @@ export default class DirtyMap extends Updateable {
 
 		if (forceDirty || changed) {
 			this._dirty.add(name)
-			this.updated()
+			return true
 		}
 
-		return this
+		return false
 	}
 
 	// Puts a value into the map only if the name is not
@@ -47,11 +63,30 @@ export default class DirtyMap extends Updateable {
 		if (!this._map.has(name)) {
 			this.put(name, value)
 		}
+
 		return this
 	}
 
-	// TODO: puOwnProps({})
-	// TODO: putProps({})
+	// Puts all enumerable own properties of the object into
+	// the map. Triggers a single update notification.
+	putProps(obj) {
+		if (this._putProps(obj)) {
+			this.updated()
+		}
+
+		return this
+	}
+
+	_putProps(obj) {
+		const names = Object.getOwnPropertyNames(obj)
+		let changed = false
+
+		for (const n of names) {
+			changed = this._put(n, obj[n], false) || changed
+		}
+
+		return changed
+	}
 
 	// If value is undefined, then returns the result of the
 	// 'get' function. If value is defined, then this calls
@@ -84,8 +119,6 @@ export default class DirtyMap extends Updateable {
 
 		return result
 	}
-
-	// TODO: mapDirty(f)
 
 	// Returns true if the name is dirty.
 	isDirty(name = undefined) {
