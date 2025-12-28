@@ -13,6 +13,7 @@ import List from './List.js'
 export default class Updateable {
 	_notifier = this.updated.bind(this)
 	_listeners = new List()
+	_muted = false
 
 	// Returns the notifier function that calls update with
 	// this object bound.
@@ -22,6 +23,12 @@ export default class Updateable {
 	// unregistering of callbacks, e.g. DOM events.
 	get notifier() {
 		return this._notifier
+	}
+
+	// Returns true if notifications are not being sent
+	// for updates.
+	get muted() {
+		return this._muted
 	}
 
 	// Registers a function that is called when an updateable
@@ -40,6 +47,27 @@ export default class Updateable {
 		this._listeners.remove(func)
 	}
 
+	// Prevents notifications from being sent on update.
+	//
+	// Useful when applying bulk changes. Don't forget to
+	// unmute and call updated after applying changes!
+	mute() {
+		this._muted = true
+	}
+
+	// Enables notification on update, if not already
+	// enabled.
+	unmute() {
+		this._muted = false
+	}
+
+	// Mutes updates, invokes the function, then unmutes.
+	doMuted(func, ...args) {
+		this._muted = true
+		func(...args)
+		this._muted = false
+	}
+
 	// Notifies any registered listeners that a change has
 	// been made.
 	//
@@ -49,6 +77,8 @@ export default class Updateable {
 	// Beware: if overriding this function then always call
 	// super method to notify listeners.
 	updated() {
-		this._listeners.forEach((f) => f(this))
+		if (!this._muted) {
+			this._listeners.forEach((f) => f(this))
+		}
 	}
 }

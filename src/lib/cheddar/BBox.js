@@ -6,7 +6,8 @@ import Updateable from './Updateable.js'
 // a call to the update function won't do anything other
 // than notify listeners.
 //
-// TODO: grow and shrink functions.
+// TODO: rename 'set...' functions to 'moveTo' and
+//       'move...' functions to 'moveBy'.
 export default class BBox extends Updateable {
 	_left = 0
 	_top = 0

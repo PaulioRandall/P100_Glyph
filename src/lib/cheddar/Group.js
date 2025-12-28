@@ -59,9 +59,11 @@ export default class Group extends Elemental {
 	}
 
 	_moveX(dx) {
-		for (const elem of this._elementals) {
-			elem.moveX(dx)
-		}
+		this.doMuted(() => {
+			for (const e of this._elementals) {
+				e.moveX(dx)
+			}
+		})
 	}
 
 	// Moves the group by dy on the Y plane. dy may be
@@ -73,9 +75,11 @@ export default class Group extends Elemental {
 	}
 
 	_moveY(dy) {
-		for (const elem of this._elementals) {
-			elem.moveY(dy)
-		}
+		this.doMuted(() => {
+			for (const e of this._elementals) {
+				e.moveY(dy)
+			}
+		})
 	}
 
 	// Moves the group on the X and Y plane by dx and dy,

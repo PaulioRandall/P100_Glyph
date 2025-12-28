@@ -190,9 +190,11 @@ export default class Path extends Elemental {
 			return false
 		}
 
-		for (const cmd of this._commands) {
-			cmd.moveX(dx)
-		}
+		this.doMuted(() => {
+			for (const cmd of this._commands) {
+				cmd.moveX(dx)
+			}
+		})
 
 		return true
 	}
@@ -213,9 +215,11 @@ export default class Path extends Elemental {
 			return false
 		}
 
-		for (const cmd of this._commands) {
-			cmd.moveY(dy)
-		}
+		this.doMuted(() => {
+			for (const cmd of this._commands) {
+				cmd.moveY(dy)
+			}
+		})
 
 		return true
 	}
@@ -234,6 +238,43 @@ export default class Path extends Elemental {
 		return this
 	}
 
+	// Grows the path by the passed factor and origin coords.
+	growBy(factor, originX, originY) {
+		function scale(coord, origin) {
+			return (coord - origin) * factor + origin
+		}
+
+		this.doMuted(() => {
+			for (const cmd of this._commands) {
+				cmd.setXY(scale(cmd.x, originX), scale(cmd.y, originY))
+			}
+		})
+
+		this.updateElement()
+		this.updated()
+		return this
+	}
+
+	// Shrinks the path by the passed factor and origin
+	// coords.
+	shrinkBy(factor, originX, originY) {
+		factor = 1 / factor
+
+		function scale(coord, origin) {
+			return (coord - origin) * factor + origin
+		}
+
+		this.doMuted(() => {
+			for (const cmd of this._commands) {
+				cmd.setXY(scale(cmd.x, originX), scale(cmd.y, originY))
+			}
+		})
+
+		this.updateElement()
+		this.updated()
+		return this
+	}
+
 	// Updates the element's 'd' attribute with any changes.
 	// Done automatically when a command is added, modified,
 	// or removed.
@@ -246,6 +287,21 @@ export default class Path extends Elemental {
 		return this._commands.includes(cmd)
 	}
 
+	// Returns a depp copy of the path.
+	clone() {
+		const newPath = new Path()
+
+		for (const cmd of this._commands) {
+			const copyOfCmd = new Command(...cmd.params)
+			newPath._addCmd(copyOfCmd)
+		}
+
+		newPath.updateElement()
+		newPath.updated()
+
+		return newPath
+	}
+
 	// Returns a space separated list of stringified commands
 	// suitable for applying as the 'd' attribute of an SVG
 	// Path.
@@ -253,6 +309,13 @@ export default class Path extends Elemental {
 		return this._commands
 			.map((cmd) => cmd.toString()) //
 			.join(' ') //
+	}
+
+	// Override to surpress updates when iterating.
+	updated() {
+		if (!this._suppressUpdate) {
+			super.updated()
+		}
 	}
 
 	_generateElement() {

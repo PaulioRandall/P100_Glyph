@@ -124,6 +124,15 @@ export default class Circle extends Elemental {
 		return this
 	}
 
+	// Creates a deep copy of the circle.
+	clone() {
+		return new Circle(
+			this.attr('cx'), //
+			this.attr('cy'), //
+			this.attr('r') //
+		)
+	}
+
 	_generateElement() {
 		const circle = document.createElementNS(NAME_SPACE, 'circle')
 		this._setElement(circle)
