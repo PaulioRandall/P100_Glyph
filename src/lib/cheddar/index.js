@@ -6,7 +6,6 @@ import SVG from './SVG.js'
 import Group from './Group.js'
 
 import Path from './Path.js'
-import SubPath from './SubPath.js'
 import Command from './Command.js'
 
 import Circle from './Circle.js'
@@ -22,7 +21,6 @@ export default {
 
 	// Paths
 	Path,
-	SubPath,
 	Command,
 	PathMove: Command.move,
 	PathLine: Command.line,

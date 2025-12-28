@@ -2,12 +2,10 @@ import { NAME_SPACE } from './cheddar.js'
 import List from './List.js'
 import Elemental from './Elemental.js'
 import Command from './Command.js'
-import SubPath from './SubPath.js'
 
 // Class for drawing an SVG Path.
 export default class Path extends Elemental {
 	_commands = new List()
-	_subPaths = new List()
 	_closed = false
 
 	// Argument:
@@ -30,10 +28,6 @@ export default class Path extends Elemental {
 
 	get commands() {
 		return this._commands
-	}
-
-	get subPaths() {
-		return this._subPaths
 	}
 
 	get isClosed() {
@@ -229,22 +223,12 @@ export default class Path extends Elemental {
 			cmds.push(cmd)
 		}
 
-		if (cmd.type !== 'M' && cmd.type !== 'Z') {
-			const sp = new SubPath(this, cmd)
-			this._subPaths.push(sp)
-		}
-
 		cmd.onUpdate(this.updater)
 	}
 
 	_removeCmd(cmd) {
 		if (!this._commands.includes(cmd)) {
 			return false
-		}
-
-		const sp = this._subPaths.find((sp) => sp.command === cmd)
-		if (sp) {
-			this._subPaths.remove(sp)
 		}
 
 		cmd.offUpdate(this.updater)

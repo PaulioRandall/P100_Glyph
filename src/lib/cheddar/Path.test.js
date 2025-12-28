@@ -1,6 +1,5 @@
 import Path from './Path.js'
 import Command from './Command.js'
-import SubPath from './SubPath.js'
 
 import {
 	nu, //
@@ -28,7 +27,6 @@ describe('Path.js', () => {
 
 		p.clear()
 
-		expect(p.subPaths.length).toEqual(0)
 		expect(p.commands.length).toEqual(0)
 	})
 
@@ -142,31 +140,6 @@ describe('Path.js', () => {
 			Command.move(20, 20), //
 			Command.line(80, 20), //
 			Command.line(80, 80), //
-		])
-	})
-
-	test('subPaths() when not closed', () => {
-		const p = new Path()
-			.moveTo(20, 20) // [0]
-			.lineTo(80, 20) // [1]
-			.lineTo(80, 80) // [2]
-
-		expectUpdateables(p.subPaths, [
-			new SubPath(p, p.commands[1]), //
-			new SubPath(p, p.commands[2]), //
-		])
-	})
-
-	test('subPaths() when closed', () => {
-		const p = new Path()
-			.moveTo(20, 20) // [0]
-			.lineTo(80, 20) // [1]
-			.lineTo(80, 80) // [2]
-			.close() // [3]
-
-		expectUpdateables(p.subPaths, [
-			new SubPath(p, p.commands[1]),
-			new SubPath(p, p.commands[2]),
 		])
 	})
 
