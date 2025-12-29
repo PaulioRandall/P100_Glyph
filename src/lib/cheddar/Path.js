@@ -2,6 +2,7 @@ import { NAME_SPACE } from './cheddar.js'
 import List from './List.js'
 import Elemental from './Elemental.js'
 import Command from './Command.js'
+import BBox from './BBox.js'
 
 // Class for drawing an SVG Path.
 export default class Path extends Elemental {
@@ -21,6 +22,7 @@ export default class Path extends Elemental {
 
 	_commands = new List()
 	_closed = false
+	_bbox = new BBox()
 
 	// Argument:
 	// [0] X value for an initial move command.
@@ -51,6 +53,19 @@ export default class Path extends Elemental {
 	set closed(v) {
 		v ? this.close() : this.open()
 		return this._closed
+	}
+
+	// Returns a bounding box around the path, excluding
+	// any control points.
+	//
+	// Due to current SVG stroke mechanics, the stroke may
+	// not be visually contained within the box.
+	//
+	// You can receive notifications to box changes, but
+	// notifications are one way, i.e. changing box values
+	// does nothing and will be overwritten on next update.
+	get bbox() {
+		return this._bbox
 	}
 
 	// Append a command to the path.
@@ -250,6 +265,7 @@ export default class Path extends Elemental {
 	// or removed.
 	updateElement() {
 		this.attr('d', this.toString())
+		this._updateBBox()
 	}
 
 	// Returns true if the passed command is in the path.
@@ -293,6 +309,43 @@ export default class Path extends Elemental {
 		this._setElement(path)
 		this.updateElement()
 		this.updated()
+	}
+
+	// TODO: Tidy
+	_updateBBox() {
+		if (this._commands.length === 0) {
+			this.bbox.setEdges(0, 0, 0, 0)
+			return
+		}
+
+		let left = null
+		let top = null
+		let right = null
+		let bottom = null
+
+		for (const cmd of this._commands) {
+			if (cmd.x === null || cmd.y === null) {
+				continue
+			}
+
+			if (left === null || left > cmd.x) {
+				left = cmd.x
+			}
+
+			if (right === null || right < cmd.x) {
+				right = cmd.x
+			}
+
+			if (top === null || top > cmd.y) {
+				top = cmd.y
+			}
+
+			if (bottom === null || bottom < cmd.y) {
+				bottom = cmd.y
+			}
+		}
+
+		this.bbox.setEdges(left, top, right, bottom)
 	}
 
 	_addCmd(cmd) {

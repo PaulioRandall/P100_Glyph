@@ -22,30 +22,44 @@
 		Cheddar.circle(50, 50, 25)
 			.addTo(svg) //
 
-		// Slight offset because there's no inner stroke
+		const p1 = Cheddar.path(20, 20)
+			.lineTo(35, 30) //
+			.lineTo(50, 10) //
+			.lineTo(55, 55) //
+			.lineTo(30, 60) //
+			.lineTo(15, 35) //
+			.close() //
+			.addTo(svg)
+
+		// Clone of P1 by half the size.
+		const p2 = p1.clone()
+			.growBy(0.5, p1.bbox.centerX, p1.bbox.centerY) //
+			.addTo(svg) //
+
+		// Red dotted border around all content.
+		const p3 = Cheddar.rect(
+			svg.group.bbox.left,
+			svg.group.bbox.top,
+			svg.group.bbox.right,
+			svg.group.bbox.bottom,
+		).addTo(svg)
+			.attrs({
+				'stroke-dasharray': '1 1', //
+				'stroke': 'indianred', //
+			}) 
+
+// Slight offset because there's no inner stroke
 		// setting.
 		Cheddar.rect(0.5, 0.5, 99.5, 99.5)
  			.attrs({
 				'stroke-dasharray': '3 3', //
 			}) //
 			.addTo(svg) //
-
-		Cheddar.path(20, 20)
-			.lineTo(35, 30) //
-			.lineTo(50, 10) //
-			.lineTo(55, 55) //
-			.lineTo(30, 60) //
-			.lineTo(15, 35) //
-			.close()
-			.addTo(svg)
-			.clone()
-			.growBy(0.5, 0, 0)
-			.addTo(svg)
 		
 		await tick()
 
 		sizeToParent()
-		svg.attr('visibility', 'visible') 
+		svg.attr('visibility', 'visible')
 	})
 
 	function sizeToParent() {

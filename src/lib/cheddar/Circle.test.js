@@ -1,6 +1,15 @@
 import Circle from './Circle.js'
 
 describe('Circle.js', () => {
+	test('bbox', () => {
+		const c = new Circle(10, 20, 30)
+
+		expect(c.bbox.left).toEqual(-20)
+		expect(c.bbox.top).toEqual(-10)
+		expect(c.bbox.right).toEqual(40)
+		expect(c.bbox.bottom).toEqual(50)
+	})
+
 	test('setCenterX', () => {
 		const c = new Circle() //
 			.setCenterX(10)

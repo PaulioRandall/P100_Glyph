@@ -154,4 +154,17 @@ describe('Path.js', () => {
 			Command.line(140, 250), //
 		])
 	})
+
+	test('bbox()', () => {
+		const p = new Path(20, 30)
+			.lineTo(40, 50) //
+			.lineTo(-10, 200) //
+			.lineTo(-90, -60) //
+			.lineTo(15, -15) //
+
+		expect(p.bbox.left).toEqual(-90)
+		expect(p.bbox.right).toEqual(40)
+		expect(p.bbox.top).toEqual(-60)
+		expect(p.bbox.bottom).toEqual(200)
+	})
 })

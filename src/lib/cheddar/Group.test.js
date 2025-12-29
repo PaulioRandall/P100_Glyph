@@ -53,7 +53,7 @@ describe('Group.js', () => {
 		expect(g.size).toEqual(0)
 	})
 
-	test('moveBy', () => {
+	test('moveBy()', () => {
 		const c = new Circle(20, 30)
 		const p = new Path(40, 50).lineTo(60, 70)
 
@@ -70,5 +70,23 @@ describe('Group.js', () => {
 
 		expect(p.commands[1].x).toEqual(160)
 		expect(p.commands[1].y).toEqual(270)
+	})
+
+	test('bbox', () => {
+		const c = new Circle(0, 0, 80)
+		const p = new Path(20, 30)
+			.lineTo(40, 50) //
+			.lineTo(-10, 200) //
+			.lineTo(-90, -60) //
+			.lineTo(15, -15) //
+
+		const g = new Group() //
+			.add(c) //
+			.add(p) //
+
+		expect(g.bbox.left).toEqual(-90)
+		expect(g.bbox.right).toEqual(80)
+		expect(g.bbox.top).toEqual(-80)
+		expect(g.bbox.bottom).toEqual(200)
 	})
 })

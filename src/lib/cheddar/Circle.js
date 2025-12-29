@@ -1,12 +1,18 @@
 import { NAME_SPACE } from './cheddar.js'
 import Elemental from './Elemental.js'
+import BBox from './BBox.js'
 
 // An Elemental for drawing a standard SVG Circle.
+//
+// TODO: Store values as members, getting from map is too
+//       cumbersome and hard to read.
 export default class Circle extends Elemental {
 	// Same as constructing the Circle class directly.
 	static from(cx, cy, r) {
 		return new Circle(cx, cy, r)
 	}
+
+	_bbox = new BBox()
 
 	// Arguments:
 	// [0] center X (optional)
@@ -15,11 +21,15 @@ export default class Circle extends Elemental {
 	constructor(cx = 0, cy = 0, r = 0) {
 		super()
 
-		this.attr('stroke', 'black')
-		this.attr('fill', 'white')
-		this.attr('cx', cx)
-		this.attr('cy', cy)
-		this.attr('r', r)
+		this.doMuted(() => {
+			this.attrs({
+				stroke: 'black',
+				fill: 'white',
+				cx,
+				cy,
+				r,
+			})
+		})
 
 		this._generateElement()
 	}
@@ -51,32 +61,39 @@ export default class Circle extends Elemental {
 		return v
 	}
 
+	// Returns a bounding box around the circle.
+	//
+	// Due to current SVG stroke mechanics, the stroke may
+	// not be visually contained within the box.
+	//
+	// You can receive notifications to box changes, but
+	// notifications are one way, i.e. changing box values
+	// does nothing and will be overwritten on next update.
+	get bbox() {
+		return this._bbox
+	}
+
 	// Sets the X value of the circle center.
 	setCenterX(cx) {
 		this.attr('cx', cx)
-		this.updated()
 		return this
 	}
 
 	// Sets the Y value of the circle center.
 	setCenterY(cy) {
 		this.attr('cy', cy)
-		this.updated()
 		return this
 	}
 
 	// Sets the X and Y value of the circle center.
 	setCenter(cx, cy) {
-		this.attr('cx', cx)
-		this.attr('cy', cy)
-		this.updated()
+		this.attrs({ cx, cy })
 		return this
 	}
 
 	// Sets the circle radius.
 	setRadius(r) {
 		this.attr('r', r)
-		this.updated()
 		return this
 	}
 
@@ -105,8 +122,6 @@ export default class Circle extends Elemental {
 	// This does not apply a transform, It scales by directly
 	// adjusting the values defining the shape. This is why
 	// the function is not called 'scaleBy'.
-	//
-	// TODO: Allow user to pass in origin coords.
 	growBy(v) {
 		const r = this.radius + v / 2
 		this.setRadius(r)
@@ -122,9 +137,29 @@ export default class Circle extends Elemental {
 		)
 	}
 
+	updated() {
+		this._updateBBox()
+		super.updated()
+	}
+
 	_generateElement() {
 		const circle = document.createElementNS(NAME_SPACE, 'circle')
 		this._setElement(circle)
 		this.updated()
+	}
+
+	_updateBBox() {
+		const bbox = this._bbox
+
+		bbox.doMuted(() => {
+			bbox.setWidth(this.attr('r') * 2)
+			bbox.setHeight(this.attr('r') * 2)
+			bbox.setCenter(
+				this.attr('cx'), //
+				this.attr('cy') //
+			)
+		})
+
+		bbox.updated()
 	}
 }
