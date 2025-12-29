@@ -1,4 +1,4 @@
-import { NAME_SPACE } from './cheddar.js'
+import { NAME_SPACE, boundsOfCoords } from './cheddar.js'
 import List from './List.js'
 import Elemental from './Elemental.js'
 import Command from './Command.js'
@@ -311,41 +311,19 @@ export default class Path extends Elemental {
 		this.updated()
 	}
 
-	// TODO: Tidy
 	_updateBBox() {
 		if (this._commands.length === 0) {
 			this.bbox.setEdges(0, 0, 0, 0)
 			return
 		}
 
-		let left = null
-		let top = null
-		let right = null
-		let bottom = null
-
-		for (const cmd of this._commands) {
-			if (cmd.x === null || cmd.y === null) {
-				continue
-			}
-
-			if (left === null || left > cmd.x) {
-				left = cmd.x
-			}
-
-			if (right === null || right < cmd.x) {
-				right = cmd.x
-			}
-
-			if (top === null || top > cmd.y) {
-				top = cmd.y
-			}
-
-			if (bottom === null || bottom < cmd.y) {
-				bottom = cmd.y
-			}
-		}
-
-		this.bbox.setEdges(left, top, right, bottom)
+		const bounds = boundsOfCoords(this._commands)
+		this.bbox.setEdges(
+			bounds.left, //
+			bounds.top, //
+			bounds.right, //
+			bounds.bottom //
+		)
 	}
 
 	_addCmd(cmd) {

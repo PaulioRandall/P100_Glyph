@@ -3,9 +3,6 @@ import Elemental from './Elemental.js'
 import BBox from './BBox.js'
 
 // An Elemental for drawing a standard SVG Circle.
-//
-// TODO: Store values as members, getting from map is too
-//       cumbersome and hard to read.
 export default class Circle extends Elemental {
 	// Same as constructing the Circle class directly.
 	static from(cx, cy, r) {
@@ -107,12 +104,12 @@ export default class Circle extends Elemental {
 	}
 
 	_moveX(dx) {
-		const curr = this.attr('cx')
+		const curr = this.centerX
 		this.attr('cx', curr + dx)
 	}
 
 	_moveY(dy) {
-		const curr = this.attr('cy')
+		const curr = this.centerY
 		this.attr('cy', curr + dy)
 	}
 
@@ -131,9 +128,9 @@ export default class Circle extends Elemental {
 	// Creates a deep copy of the circle.
 	clone() {
 		return new Circle(
-			this.attr('cx'), //
-			this.attr('cy'), //
-			this.attr('r') //
+			this.centerX, //
+			this.centerY, //
+			this.radius //
 		)
 	}
 
@@ -152,11 +149,11 @@ export default class Circle extends Elemental {
 		const bbox = this._bbox
 
 		bbox.doMuted(() => {
-			bbox.setWidth(this.attr('r') * 2)
-			bbox.setHeight(this.attr('r') * 2)
+			bbox.setWidth(this.radius * 2)
+			bbox.setHeight(this.radius * 2)
 			bbox.setCenter(
-				this.attr('cx'), //
-				this.attr('cy') //
+				this.centerX, //
+				this.centerY //
 			)
 		})
 
