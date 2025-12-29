@@ -14,7 +14,8 @@
 			})
 
 		svg.viewbox //
-			.setEdges(0, 0, 100, 100) //
+			.setEdges(0, 0, 50, 50) //
+			.growBy(2, 'top left')
 
 		container.appendChild(svg.element)
 
@@ -25,7 +26,7 @@
 		// setting.
 		Cheddar.rect(0.5, 0.5, 99.5, 99.5)
  			.attrs({
-				'stroke-dasharray': '3 3',
+				'stroke-dasharray': '3 3', //
 			}) //
 			.addTo(svg) //
 

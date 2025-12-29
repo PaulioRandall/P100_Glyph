@@ -284,17 +284,25 @@ export default class BBox extends Updateable {
 		this._updateCenterY()
 	}
 
-	// Grows the box by the passed factor, anchored on the
-	// center. Negative values shrink the box.
+	// Grows the box by the passed factor. Negative values
+	// shrink the box.
+	//
+	// By default, the anchor is on the 'center center'
+	// ('height width') forcing the sides to expand or shrink
+	// evenly. It's also possible to anchor anchor height on
+	// 'top' or 'bottom' and width on 'left' or 'right'.
 	//
 	// This does not apply a transform, It scales by directly
 	// adjusting the values defining the shape. This is why
 	// the function is not called 'scale'.
-	//
-	// TODO: Allow user to pass in origin coords.
-	growBy(factor) {
-		this._setWidthAnchorCenter(this._w + factor)
-		this._setHeightAnchorCenter(this._h + factor)
+	growBy(factor, anchor = 'center center') {
+		const [hAnchor, wAnchor] = anchor.split(' ', 2)
+
+		this.doMuted(() => {
+			this.setWidth(this._w * factor, wAnchor)
+			this.setHeight(this._h * factor, hAnchor)
+		})
+
 		this.updated()
 		return this
 	}

@@ -20,10 +20,7 @@ export default class Elemental extends Updateable {
 		this._transforms.onUpdate(this.notifier)
 	}
 
-	get id() {
-		return this._attrs.get('id')
-	}
-
+	// Returns the underlying HTML element.
 	get element() {
 		return this._element
 	}
