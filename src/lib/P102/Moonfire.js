@@ -1,7 +1,7 @@
 // Invoke the specified function.
 //
 // If capture is true, the object's protoype implementation
-// is invoked first and thee root extended implementation is
+// is invoked first and the root extended implementation is
 // called last. This mimics the behaviour of Event's
 // capture-bubble API and mechanics.
 export function invoke(obj, criteria, capture = false) {

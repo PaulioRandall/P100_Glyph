@@ -1,9 +1,11 @@
 import Cheddar from '$cheddar'
+import Embed from '$embed'
 
 export default class Grid extends Cheddar.Group {
 	_size = 9
-	_cellWidth = 20
-	_cellHeight = 20
+	_cellWidth = 10
+	_cellHeight = 10
+	_cellSize = 1
 
 	size(v = undefined) {
 		if (v === undefined) {
@@ -11,7 +13,9 @@ export default class Grid extends Cheddar.Group {
 		}
 
 		this._size = v
+		this._updateCells()
 		this.updated()
+
 		return this
 	}
 
@@ -21,7 +25,9 @@ export default class Grid extends Cheddar.Group {
 		}
 
 		this._cellWidth = v
+		this._updateCells()
 		this.updated()
+
 		return this
 	}
 
@@ -31,32 +37,27 @@ export default class Grid extends Cheddar.Group {
 		}
 
 		this._cellHeight = v
+		this._updateCells()
 		this.updated()
+
 		return this
 	}
 
-	updated() {
-		// TODO
-	}
-
 	_updateCells() {
-		this.clear()
+		this.doMuted(() => {
+			this.clear()
 
-		// TODO
+			for (let col = 0; col < this._size; col++) {
+				for (let row = 0; row < this._size; row++) {
+					const x = col * this._cellWidth
+					const y = row * this._cellHeight
+					const circle = Cheddar.circle(x, y, this._cellSize).attr(
+						'fill',
+						'black'
+					)
+					this.add(circle)
+				}
+			}
+		})
 	}
 }
-/*
-function createGridCells(size, cellWidth, cellHeight) {
-	const canvasLength = Math.min(super.width, super.height)
-	const size = this._gridSize
-	const cellSpacing = canvasLength / (size - 1)
-
-	for (let row = 0; row < size; row++) {
-		for (let col = 0; col < size; col++) {
-			this._cells.add(
-				new GridCell(col, row, size, cellSpacing) //
-			)
-		}
-	}
-}
-*/
