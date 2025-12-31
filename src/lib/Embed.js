@@ -14,7 +14,7 @@
 // it's just an accessor to properties, not a property
 // itself. But you can store and pass the embedded props.
 export default function (classes = [], props = {}) {
-	class Embedded {
+	class BaseClazz {
 		constructor() {
 			for (const EmbedClazz of classes) {
 				this['_' + EmbedClazz.name] = new EmbedClazz()
@@ -27,17 +27,17 @@ export default function (classes = [], props = {}) {
 	}
 
 	for (const EmbedClazz of classes) {
-		embedClass(Embedded, EmbedClazz)
+		defineEmbedClazzProps(BaseClazz, EmbedClazz)
 	}
 
 	for (const propName in props) {
-		defineAccessorProp(Embedded, propName)
+		defineAccessorProp(BaseClazz, propName)
 	}
 
-	return Embedded
+	return BaseClazz
 }
 
-function embedClass(Embedded, EmbedClazz) {
+function defineEmbedClazzProps(BaseClazz, EmbedClazz) {
 	const propName = '_' + EmbedClazz.name
 	const subPropNames = Object.getOwnPropertyNames(
 		EmbedClazz.prototype //
@@ -55,12 +55,12 @@ function embedClass(Embedded, EmbedClazz) {
 		}
 
 		if (desc.hasGetter || desc.hasSetter) {
-			defineClazzAccessorProp(Embedded, desc)
+			defineClazzAccessorProp(BaseClazz, desc)
 			continue
 		}
 
 		if (desc.isFunc) {
-			defineFuncProp(Embedded, desc)
+			defineFuncProp(BaseClazz, desc)
 		}
 	}
 }
@@ -126,15 +126,15 @@ function makeSetter(hasSetter, name, subName) {
 
 function defineFuncProp(Clazz, desc) {
 	Object.defineProperty(Clazz.prototype, desc.subName, {
-		value: makeFunc(desc),
+		value: makeFunc(desc.name, desc.subName),
 		writable: true,
 		enumerable: false,
 		configurable: true,
 	})
 }
 
-function makeFunc(desc) {
+function makeFunc(name, subName) {
 	return function (...args) {
-		return this[desc.name][desc.subName](...args)
+		return this[name][subName](...args)
 	}
 }
