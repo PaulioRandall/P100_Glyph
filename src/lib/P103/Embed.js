@@ -5,14 +5,15 @@
 // It's basically a 'decorator' generator (see decorator
 // pattern).
 //
-// Embedding is an alternative to inheritance, and allows
+// Embedding is an alternative to inheritance and allows
 // for multiple embedded classes, unlike 'extends'. The
 // 'super' keyword will not work, however, you can access
-// the embedded class directly, e.g. 'this._myProp'.
+// the embedded class instance directly, e.g.
+// 'this._embeddedClassInstance'.
 //
 // You can't store or pass the value of 'super', because
-// it's just an accessor to properties, not a property
-// itself. But you can store and pass the embedded props.
+// it's just an accessor to properties. But you can store
+// and pass the embedded props.
 export default function (classes = [], props = {}) {
 	class BaseClazz {
 		constructor() {
