@@ -2,6 +2,11 @@ import Updateable from './Updateable.js'
 
 // Represents a bounding box or viewbox on a 2D plane.
 export default class BBox extends Updateable {
+	// Same as constructing the BBox class directly.
+	static from() {
+		return new BBox()
+	}
+
 	_left = 0
 	_top = 0
 	_right = 100
@@ -314,6 +319,16 @@ export default class BBox extends Updateable {
 	sizeToWindow() {
 		this.setEdges(0, 0, window.innerWidth, window.innerHeight)
 		return this
+	}
+
+	// Sets the edges to be the same as the passed BBox.
+	copy(bbox) {
+		return this.setEdges(
+			bbox.left, //
+			bbox.top, //
+			bbox.right, //
+			bbox.bottom //
+		)
 	}
 
 	// Returns true if the coords lay within or on the edge

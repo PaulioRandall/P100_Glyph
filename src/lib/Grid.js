@@ -1,63 +1,106 @@
 import Cheddar from '$cheddar'
 import Embed from '$embed'
+import GridPoint from './GridPoint.js'
 
 export default class Grid extends Cheddar.Group {
 	_size = 9
-	_cellWidth = 10
-	_cellHeight = 10
-	_cellSize = 1
+	_buffer = 7
+	_spacing = 25
+	_margin = 0.5
+	_pointSize = 3
+	_bufferPointSize = 2
+	_gridbox = Cheddar.bbox()
+
+	constructor() {
+		super()
+		this._updateCells()
+	}
+
+	get gridbox() {
+		return this._gridbox
+	}
 
 	size(v = undefined) {
-		if (v === undefined) {
-			return this._size
-		}
-
-		this._size = v
-		this._updateCells()
-		this.updated()
-
-		return this
+		return this._getOrSet('_size', v)
 	}
 
-	cellWidth(v = undefined) {
-		if (v === undefined) {
-			return this._cellWidth
-		}
-
-		this._cellWidth = v
-		this._updateCells()
-		this.updated()
-
-		return this
+	buffer(v = undefined) {
+		return this._getOrSet('_buffer', v)
 	}
 
-	cellHeight(v = undefined) {
-		if (v === undefined) {
-			return this._cellHeight
+	spacing(v = undefined) {
+		return this._getOrSet('_spacing', v)
+	}
+
+	margin(v = undefined) {
+		return this._getOrSet('_margin', v)
+	}
+
+	pointSize(v = undefined) {
+		return this._getOrSet('_pointSize', v)
+	}
+
+	bufferPointSize(v = undefined) {
+		return this._getOrSet('_bufferPointSize', v)
+	}
+
+	_getOrSet(name, value = undefined) {
+		if (value === undefined) {
+			return this[name]
 		}
 
-		this._cellHeight = v
+		this[name] = value
 		this._updateCells()
-		this.updated()
-
 		return this
 	}
 
 	_updateCells() {
-		this.doMuted(() => {
+		this.doUpdate(() => {
 			this.clear()
-
-			for (let col = 0; col < this._size; col++) {
-				for (let row = 0; row < this._size; row++) {
-					const x = col * this._cellWidth
-					const y = row * this._cellHeight
-					const circle = Cheddar.circle(x, y, this._cellSize).attr(
-						'fill',
-						'black'
-					)
-					this.add(circle)
-				}
-			}
+			this._generateCells()
+			this._updateGridbox()
 		})
 	}
+
+	_generateCells() {
+		const min = -this._buffer
+		const max = this._size + this._buffer
+
+		for (let col = min; col < max; col++) {
+			for (let row = min; row < max; row++) {
+				const x = col * this._spacing
+				const y = row * this._spacing
+				const isBP = isBufferPoint(col, row, this._size)
+				const pointSize = isBP ? this._bufferPointSize : this._pointSize
+
+				const gp = new GridPoint(x, y, pointSize, isBP)
+				this.add(gp)
+			}
+		}
+	}
+
+	_updateGridbox() {
+		const innerLen = this._spacing * (this._size - 1)
+		const outerLen = this._spacing * this._buffer
+		const marginLen = this._spacing * this._margin
+
+		this._gridbox.setEdges(
+			-outerLen - marginLen, //
+			-outerLen - marginLen, //
+			innerLen + outerLen + marginLen, //
+			innerLen + outerLen + marginLen //
+		)
+	}
+}
+
+function isBufferPoint(col, row, size) {
+	if (col < 0 || col >= size) {
+		return true
+	}
+
+	if (row < 0 || row >= size) {
+		return true
+	}
+
+	return false
 }

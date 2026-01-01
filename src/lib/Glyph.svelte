@@ -1,6 +1,7 @@
 <script>
 	import { onMount, tick } from 'svelte'
 	import Cheddar from '$cheddar'
+	import GridSVG from './GridSVG.js'
 	import Grid from './Grid.js'
 	
 	let container = null
@@ -8,30 +9,14 @@
 	let grid = null
 
 	onMount(async () => {
-		svg = Cheddar.svg()
-			.attr('visibility', 'hidden') //
-			.styles({
-				'width': 'min(100vw, 100vh)',
-				'height': 'min(100vw, 100vh)',
-			})
-
-		svg.viewbox //
-			.setEdges(0, 0, 100, 100) //
-
-		grid = new Grid() //
-			.size(5)
-			.cellWidth(100 / 4)
-			.cellHeight(100 / 4)
-			.addTo(svg) //
-
-
+		svg = new GridSVG()
 		container.appendChild(svg.element)
 		
 		await tick()
 
-		sizeToParent()
-
-		svg.attr('visibility', 'visible')
+		svg.grid.size(16)
+		svg.grid.buffer(4)
+		svg.showGrid()
 	})
 
 	function sizeToParent() {
@@ -77,12 +62,6 @@
 
 <style>
 	.glyph {
-		--unit-width: 160px;
-		--unit-height: 52px;
-		--overlay-gap: 24px;
-		--overlay-bg: rgba(0, 40, 120, 0.6);
-		--overlay-border-radius: 12px;
-
 		position: relative;
 
 		width: 100%;

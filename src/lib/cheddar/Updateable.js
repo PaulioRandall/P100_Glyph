@@ -71,6 +71,23 @@ export default class Updateable {
 		this._muted = wasMuted
 	}
 
+	// Invokes the function while muted then calls updated.
+	// The current mute state will remain after execution,
+	// i.e. if it was muted before, it will be muted after
+	// execution. If it was unmuted before it will be unmuted
+	// after execution.
+	doUpdate(func, ...args) {
+		const wasMuted = this._muted
+
+		this._muted = true
+		func(...args)
+
+		this._muted = false
+		this.updated()
+
+		this._muted = wasMuted
+	}
+
 	// Notifies any registered listeners that a change has
 	// been made.
 	//
