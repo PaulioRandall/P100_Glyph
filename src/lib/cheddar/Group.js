@@ -1,3 +1,4 @@
+import Moonfire from '$moonfire'
 import { NAME_SPACE } from './cheddar.js'
 import Elemental from './Elemental.js'
 import List from './List.js'
@@ -35,6 +36,7 @@ export default class Group extends Elemental {
 			this._elementals.push(e)
 			this.element.appendChild(e.element)
 			e.onUpdate(this.notifier)
+			e._registerEventors()
 		}
 
 		this.updated()
@@ -122,6 +124,7 @@ export default class Group extends Elemental {
 
 			this.element.removeChild(e.element)
 			this._elementals.remove(e)
+			e._unregisterEventors()
 		}
 	}
 }

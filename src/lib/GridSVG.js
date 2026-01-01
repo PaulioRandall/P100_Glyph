@@ -1,7 +1,8 @@
 import Cheddar from '$cheddar'
+import Moonfire from '$moonfire'
 import Grid from './Grid.js'
+import EventUtil from './EventUtil.js'
 
-// TODO: Pan and Zoom, snap to nearest grid point (+margin)
 export default class GridSVG extends Cheddar.SVG {
 	_grid = new Grid()
 
@@ -10,10 +11,10 @@ export default class GridSVG extends Cheddar.SVG {
 
 		this.hideGrid()
 
-		// TODO: Use 100% of parent instead.
 		this.styles({
-			width: 'min(100vw, 100vh)',
-			height: 'min(100vw, 100vh)',
+			width: '100cqmin',
+			height: '100cqmin',
+			background: 'white',
 		})
 
 		this.add(this._grid)
@@ -43,5 +44,68 @@ export default class GridSVG extends Cheddar.SVG {
 		})
 
 		super.updated()
+	}
+
+	__on__wheel(e) {
+		const factor = e.deltaY < 0 ? 0.1 : -0.1
+		const oldScale = this.group.transform('scale') || 1
+		const newScale = oldScale + factor
+
+		if (newScale >= 0.5 && newScale < 2) {
+			this.group.transform('scale', newScale)
+		}
+	}
+
+	__on__mousedown(e) {
+		if (EventUtil.isLeftButton(e)) {
+			this.callOn(this.__off__mousemove)
+			this.style('cursor', 'move')
+		}
+	}
+
+	__off__mousemove(e) {
+		const curr = this.group.transform('translate') || [0, 0]
+		const scale = this.group.transform('scale') || 1
+
+		const move = [
+			curr[0] + e.movementX, //
+			curr[1] + e.movementY, //
+		]
+
+		// TODO: Good but could be better by getting the
+		//       elements pos on the screen and...
+		//       - if the SVG fits on the screen then limit
+		//         so the grid is always visible on screen.
+		//       - if the SVG is wider or taller than the
+		//         screen then only allow the panning up to the
+		//         SVG edges.
+		const widthLimit = (this._grid.gridbox.width / 2) * scale
+		const heightLimit = (this._grid.gridbox.height / 2) * scale
+
+		if (move[0] < -widthLimit) {
+			move[0] = -widthLimit
+		} else if (move[0] > widthLimit) {
+			move[0] = widthLimit
+		}
+
+		if (move[1] < -heightLimit) {
+			move[1] = -heightLimit
+		} else if (move[1] > heightLimit) {
+			move[1] = heightLimit
+		}
+
+		this.group.transform('translate', move)
+	}
+
+	__on__mouseup(e) {
+		if (EventUtil.isLeftButton(e)) {
+			this.callOff(this.__off__mousemove)
+			this.style('cursor', 'auto')
+		}
+	}
+
+	__on__mouseleave(e) {
+		this.callOff(this.__off__mousemove)
+		this.style('cursor', 'auto')
 	}
 }

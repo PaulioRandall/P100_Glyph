@@ -1,6 +1,7 @@
 import { randomId } from './cheddar.js'
 import Updateable from './Updateable.js'
 import DirtyMap from './DirtyMap.js'
+import Moonfire from '$moonfire'
 
 // Classes extending Elemental map to a single HTML
 // element.
@@ -10,6 +11,7 @@ export default class Elemental extends Updateable {
 	_styles = new DirtyMap()
 	_transforms = new DirtyMap()
 	_updating = false
+	_eventors = []
 
 	constructor() {
 		super()
@@ -84,6 +86,46 @@ export default class Elemental extends Updateable {
 		return this
 	}
 
+	on(eventType, func) {
+		this.element.addEventListener(eventType, func)
+		return () => this.off(eventType, func)
+	}
+
+	off(eventType, func) {
+		this.element.removeEventListener(eventType, func)
+	}
+
+	callOn(func) {
+		const eventor = this._eventors.find((e) => {
+			return e.func === func
+		})
+
+		if (!eventor) {
+			throw new Error(`Unable to call on: Unknown eventor`)
+		}
+
+		if (eventor.unlisten) {
+			return // Already listening
+		}
+
+		eventor.unlisten = this.on(eventor.eventType, eventor.callback)
+	}
+
+	callOff(func) {
+		const eventor = this._eventors.find((e) => {
+			return e.func === func
+		})
+
+		if (!eventor) {
+			throw new Error(`Unable to call off: Unknown eventor`)
+		}
+
+		if (eventor.unlisten) {
+			eventor.unlisten()
+			eventor.unlisten = null
+		}
+	}
+
 	updated() {
 		if (this._updating) {
 			// To prevent calls triggered by this function.
@@ -156,5 +198,41 @@ export default class Elemental extends Updateable {
 
 	_transformPairToString([k, v]) {
 		return `${k}(${v})`
+	}
+
+	// TODO: Tidy
+	_registerEventors() {
+		for (const m of Moonfire.match(this, /__on__*/)) {
+			const eventType = m.name.slice('__on__'.length)
+			const callback = m.func.bind(m.context)
+			this._eventors.push({
+				...m,
+				eventType,
+				callback,
+				unlisten: this.on(eventType, callback),
+			})
+		}
+
+		for (const m of Moonfire.match(this, /__off__*/)) {
+			const eventType = m.name.slice('__off__'.length)
+			const callback = m.func.bind(m.context)
+			this._eventors.push({
+				...m,
+				eventType,
+				callback,
+				unlisten: null,
+			})
+		}
+	}
+
+	_unregisterEventors() {
+		for (const e of this._eventors) {
+			if (e.unlisten) {
+				e.unlisten()
+				e.unlisten = null
+			}
+		}
+
+		this._eventors.splice(0)
 	}
 }

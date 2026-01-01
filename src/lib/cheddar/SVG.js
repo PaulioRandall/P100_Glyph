@@ -21,6 +21,8 @@ export default class SVG extends Elemental {
 
 		this._group.onUpdate(this.notifier)
 		this._viewbox.onUpdate(this._viewboxNotifier)
+
+		this._registerEventors()
 	}
 
 	// Gets the root Group for holding Elementals. Updates to

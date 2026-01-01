@@ -9,13 +9,15 @@
 	let grid = null
 
 	onMount(async () => {
+		// NEXT: Zoom and Pan
+		
 		svg = new GridSVG()
 		container.appendChild(svg.element)
 		
 		await tick()
 
-		svg.grid.size(16)
-		svg.grid.buffer(4)
+		svg.grid.size(9)
+		svg.grid.buffer(5)
 		svg.showGrid()
 	})
 
@@ -66,8 +68,6 @@
 
 		width: 100%;
 		height: 100%;
-
-		background: #222222;
 	}
 
 	.canvas-container {
@@ -75,5 +75,7 @@
 
 		width: 100%;
 		height: 100%;
+
+		background: #222222;
 	}
 </style>
