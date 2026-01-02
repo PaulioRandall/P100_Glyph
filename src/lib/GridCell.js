@@ -22,6 +22,14 @@ export default class GridPoint extends Cheddar.Circle {
 		}
 	}
 
+	get x() {
+		return this.centerX
+	}
+
+	get y() {
+		return this.centerY
+	}
+
 	get type() {
 		return this._type
 	}

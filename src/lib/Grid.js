@@ -10,6 +10,7 @@ export default class Grid extends Cheddar.Group {
 	_pointSize = 3
 	_bufferPointSize = 2
 	_gridbox = Cheddar.bbox()
+	_hovered = null
 
 	constructor() {
 		super()
@@ -18,6 +19,10 @@ export default class Grid extends Cheddar.Group {
 
 	get gridbox() {
 		return this._gridbox
+	}
+
+	get hovered() {
+		return this._hovered
 	}
 
 	size(v = undefined) {
@@ -97,10 +102,14 @@ export default class Grid extends Cheddar.Group {
 
 		for (const child of this.children) {
 			if (child.cellbox.contains(...coords)) {
+				this._hovered = child
 				this._svg.dispatch('gridcellhover', { cell: child })
 				return
 			}
 		}
+
+		this._hovered = null
+		this._svg.dispatch('gridcellhover', { cell: null })
 	}
 }
 

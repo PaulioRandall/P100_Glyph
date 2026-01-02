@@ -103,15 +103,15 @@ export default class SVG extends Elemental {
 	}
 
 	_mapClientCoordToViewbox(
-		coord,
+		client,
 		ratio,
 		viewboxOffset,
 		translateOffset,
 		scale
 	) {
-		let result = coord * ratio
+		let result = client * ratio
+		result -= translateOffset * scale
 		result += viewboxOffset
-		result -= translateOffset
 		return result * (1 / scale)
 	}
 

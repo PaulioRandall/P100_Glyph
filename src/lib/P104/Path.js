@@ -46,6 +46,20 @@ export default class Path extends Elemental {
 		return this._commands
 	}
 
+	get firstCommand() {
+		if (this._commands.length > 0) {
+			return this._commands[0]
+		}
+		return null
+	}
+
+	get lastCommand() {
+		if (this._commands.length > 0) {
+			return this._commands[this._commands.length - 1]
+		}
+		return null
+	}
+
 	get closed() {
 		return this._closed
 	}

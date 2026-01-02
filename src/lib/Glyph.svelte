@@ -49,7 +49,7 @@
 	<div
 		role="application"
 		bind:this={container}
-
+		oncontextmenu={(e) => e.preventDefault()}
 		class="canvas-container">
 		<!-- InnerHTML handled by Two instance -->
 	</div>
