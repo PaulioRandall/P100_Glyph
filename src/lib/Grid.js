@@ -1,6 +1,6 @@
 import Cheddar from '$cheddar'
 import Embed from '$embed'
-import GridPoint from './GridPoint.js'
+import GridCell from './GridCell.js'
 
 export default class Grid extends Cheddar.Group {
 	_size = 9
@@ -73,8 +73,8 @@ export default class Grid extends Cheddar.Group {
 				const isBP = isBufferPoint(col, row, this._size)
 				const pointSize = isBP ? this._bufferPointSize : this._pointSize
 
-				const gp = new GridPoint(x, y, pointSize, isBP)
-				this.add(gp)
+				const cell = new GridCell(x, y, pointSize, this._spacing, isBP)
+				this.add(cell)
 			}
 		}
 	}
@@ -90,6 +90,17 @@ export default class Grid extends Cheddar.Group {
 			innerLen + outerLen + marginLen, //
 			innerLen + outerLen + marginLen //
 		)
+	}
+
+	__onsvg__mousemove(e) {
+		const coords = this._svg.mapClientToViewbox(e.clientX, e.clientY)
+
+		for (const child of this.children) {
+			if (child.cellbox.contains(...coords)) {
+				this._svg.dispatch('gridcellhover', { cell: child })
+				return
+			}
+		}
 	}
 }
 

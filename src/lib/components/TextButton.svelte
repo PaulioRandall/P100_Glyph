@@ -19,6 +19,11 @@
 
 		border-radius: 8px;
 
+		color: #f8f8f8;
+		background: #666666;
+
+		font-size: var(--font-size-md);
+
 		&:disabled {
 			cursor: not-allowed; 
 		}

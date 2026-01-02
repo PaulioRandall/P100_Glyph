@@ -3,14 +3,17 @@
 	import Cheddar from '$cheddar'
 	import GridSVG from './GridSVG.js'
 	import Grid from './Grid.js'
+	import CellHalo from './CellHalo.js'
+	import PathDrawer from './PathDrawer.js'
+	import { ButtonBar, TextButton } from './components'
 	
 	let container = null
 	let svg = null
 	let grid = null
+	let cellHalo = null
+	let pathDrawer = null
 
-	onMount(async () => {
-		// NEXT: Zoom and Pan
-		
+	onMount(async () => {		
 		svg = new GridSVG()
 		container.appendChild(svg.element)
 		
@@ -18,7 +21,11 @@
 
 		svg.grid.size(9)
 		svg.grid.buffer(5)
+
 		svg.showGrid()
+
+		cellHalo = new CellHalo()
+		svg.add(cellHalo)		
 	})
 
 	function sizeToParent() {
@@ -29,6 +36,11 @@
 
 	// Prevent right click:
 	// 		oncontextmenu={(e) => e.preventDefault()}
+
+	function beginPathDrawing() {
+		pathDrawer = new PathDrawer()
+		svg.add(pathDrawer)
+	}
 </script>
 
 <svelte:window onresize={sizeToParent} />
@@ -42,20 +54,18 @@
 		<!-- InnerHTML handled by Two instance -->
 	</div>
 
-<!--
+
 	<ButtonBar>
-		
-			TODO: Allow user to edit points on existing shape.
-			TODO: Allow user to select line join type.
-			TODO: Allow user to select line cap type.
-		
+		<TextButton onclick={beginPathDrawing}>Draw Path</TextButton>
+<!--
 		{#if canvas}
 			<ModeDisplay {canvas} />
 			<TogglePathClosure {canvas} />
 			<DeleteElementButton {canvas} />
 		{/if}
+		-->
 	</ButtonBar>
-
+<!--
 	{#if canvas}
 		<ElementList {canvas} />
 	{/if}

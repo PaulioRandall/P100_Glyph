@@ -60,6 +60,7 @@ export default class GridSVG extends Cheddar.SVG {
 		if (EventUtil.isLeftButton(e)) {
 			this.callOn(this.__off__mousemove)
 			this.style('cursor', 'move')
+			this.dispatch('panstart')
 		}
 	}
 
@@ -79,6 +80,7 @@ export default class GridSVG extends Cheddar.SVG {
 		//       - if the SVG is wider or taller than the
 		//         screen then only allow the panning up to the
 		//         SVG edges.
+		//       OR use mapClientToViewbox somehow
 		const widthLimit = (this._grid.gridbox.width / 2) * scale
 		const heightLimit = (this._grid.gridbox.height / 2) * scale
 
@@ -101,11 +103,13 @@ export default class GridSVG extends Cheddar.SVG {
 		if (EventUtil.isLeftButton(e)) {
 			this.callOff(this.__off__mousemove)
 			this.style('cursor', 'auto')
+			this.dispatch('panend')
 		}
 	}
 
 	__on__mouseleave(e) {
 		this.callOff(this.__off__mousemove)
 		this.style('cursor', 'auto')
+		this.dispatch('panend')
 	}
 }

@@ -1,11 +1,12 @@
 import { randomId } from './cheddar.js'
 import Updateable from './Updateable.js'
 import DirtyMap from './DirtyMap.js'
-import Moonfire from '$moonfire'
+import Moonfire from './moonfire'
 
 // Classes extending Elemental map to a single HTML
 // element.
 export default class Elemental extends Updateable {
+	_svg = null
 	_element = null
 	_attrs = new DirtyMap()
 	_styles = new DirtyMap()
@@ -22,9 +23,16 @@ export default class Elemental extends Updateable {
 		this._transforms.onUpdate(this.notifier)
 	}
 
-	// Returns the underlying HTML element.
+	get svg() {
+		return this._svg
+	}
+
 	get element() {
 		return this._element
+	}
+
+	_setSVG(svg) {
+		this._svg = svg
 	}
 
 	// Get or sets an element attribute. If value is
@@ -86,6 +94,16 @@ export default class Elemental extends Updateable {
 		return this
 	}
 
+	dispatch(type, detail = {}) {
+		const event = new CustomEvent(type, {
+			bubbles: false,
+			cancelable: false,
+			detail,
+		})
+
+		return this.element.dispatchEvent(event)
+	}
+
 	on(eventType, func) {
 		this.element.addEventListener(eventType, func)
 		return () => this.off(eventType, func)
@@ -108,7 +126,12 @@ export default class Elemental extends Updateable {
 			return // Already listening
 		}
 
-		eventor.unlisten = this.on(eventor.eventType, eventor.callback)
+		const target = eventor.svg ? this._svg : this
+
+		eventor.unlisten = target.on(
+			eventor.eventType, //
+			eventor.callback
+		)
 	}
 
 	callOff(func) {
@@ -201,12 +224,13 @@ export default class Elemental extends Updateable {
 	}
 
 	// TODO: Tidy
-	_registerEventors() {
+	_addedToGroup() {
 		for (const m of Moonfire.match(this, /__on__*/)) {
 			const eventType = m.name.slice('__on__'.length)
 			const callback = m.func.bind(m.context)
 			this._eventors.push({
 				...m,
+				svg: false,
 				eventType,
 				callback,
 				unlisten: this.on(eventType, callback),
@@ -218,14 +242,41 @@ export default class Elemental extends Updateable {
 			const callback = m.func.bind(m.context)
 			this._eventors.push({
 				...m,
+				svg: false,
 				eventType,
 				callback,
 				unlisten: null,
 			})
 		}
+
+		for (const m of Moonfire.match(this, /__onsvg__*/)) {
+			const eventType = m.name.slice('__onsvg__'.length)
+			const callback = m.func.bind(m.context)
+			this._eventors.push({
+				...m,
+				svg: true,
+				eventType,
+				callback,
+				unlisten: this._svg.on(eventType, callback),
+			})
+		}
+
+		for (const m of Moonfire.match(this, /__offsvg__*/)) {
+			const eventType = m.name.slice('__offsvg__'.length)
+			const callback = m.func.bind(m.context)
+			this._eventors.push({
+				...m,
+				svg: true,
+				eventType,
+				callback,
+				unlisten: null,
+			})
+		}
+
+		Moonfire.invoke(this, '__when__added_to_group')
 	}
 
-	_unregisterEventors() {
+	_removedFromGroup() {
 		for (const e of this._eventors) {
 			if (e.unlisten) {
 				e.unlisten()
@@ -234,5 +285,6 @@ export default class Elemental extends Updateable {
 		}
 
 		this._eventors.splice(0)
+		Moonfire.invoke(this, '__when__removed_to_group')
 	}
 }

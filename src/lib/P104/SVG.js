@@ -17,12 +17,15 @@ export default class SVG extends Elemental {
 	constructor() {
 		super()
 
+		this._setSVG(this)
+		this.group._setSVG(this)
+
 		this._generateElement()
 
 		this._group.onUpdate(this.notifier)
 		this._viewbox.onUpdate(this._viewboxNotifier)
 
-		this._registerEventors()
+		this._addedToGroup(this)
 	}
 
 	// Gets the root Group for holding Elementals. Updates to
@@ -78,7 +81,38 @@ export default class SVG extends Elemental {
 
 	mapClientToViewbox(clientX, clientY) {
 		const ratios = this.elementToViewbox()
-		return [clientX * ratios[0], clientY * ratios[1]]
+		const scale = this.group.transform('scale') || 1
+		const offset = this.group.transform('translate') || [0, 0]
+
+		return [
+			this._mapClientCoordToViewbox(
+				clientX,
+				ratios[0],
+				this.viewbox.left,
+				offset[0],
+				scale
+			),
+			this._mapClientCoordToViewbox(
+				clientY,
+				ratios[1],
+				this.viewbox.top,
+				offset[1],
+				scale
+			),
+		]
+	}
+
+	_mapClientCoordToViewbox(
+		coord,
+		ratio,
+		viewboxOffset,
+		translateOffset,
+		scale
+	) {
+		let result = coord * ratio
+		result += viewboxOffset
+		result -= translateOffset
+		return result * (1 / scale)
 	}
 
 	mapClientToViewboxPercent(clientX, clientY) {
