@@ -13,6 +13,11 @@
 	let cellHalo = null
 	let pathDrawer = null
 
+	// TODO: A Cheddar.Group called ModeManager. It handles
+	//       switching modes by changing what element is
+	//       added to the group, e.g. switching to 'draw'
+	//       mode will remove the current element then create
+	//       and add a PathDrawer to its internal group.
 	onMount(async () => {		
 		svg = new GridSVG()
 		container.appendChild(svg.element)
@@ -33,9 +38,6 @@
 			return
 		}
 	}
-
-	// Prevent right click:
-	// 		oncontextmenu={(e) => e.preventDefault()}
 
 	function beginPathDrawing() {
 		pathDrawer = new PathDrawer()

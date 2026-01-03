@@ -23,6 +23,7 @@ export default class Path extends Elemental {
 	_commands = new List()
 	_closed = false
 	_bbox = new BBox()
+	_onUpdateElement = this.updateElement.bind(this)
 
 	// Argument:
 	// [0] X value for an initial move command.
@@ -86,7 +87,6 @@ export default class Path extends Elemental {
 	addCommand(cmd) {
 		this._addCmd(cmd)
 		this.updateElement()
-		this.updated()
 		return this
 	}
 
@@ -94,7 +94,6 @@ export default class Path extends Elemental {
 	removeCommand(cmd) {
 		if (this._removeCmd(cmd)) {
 			this.updateElement()
-			this.updated()
 		}
 
 		return this
@@ -109,7 +108,6 @@ export default class Path extends Elemental {
 
 		if (removed) {
 			this.updateElement()
-			this.updated()
 		}
 
 		return this
@@ -119,7 +117,6 @@ export default class Path extends Elemental {
 	moveTo(x, y) {
 		this._addCmd(Command.moveBy(x, y))
 		this.updateElement()
-		this.updated()
 		return this
 	}
 
@@ -127,7 +124,6 @@ export default class Path extends Elemental {
 	lineTo(x, y) {
 		this._addCmd(Command.line(x, y))
 		this.updateElement()
-		this.updated()
 		return this
 	}
 
@@ -138,7 +134,6 @@ export default class Path extends Elemental {
 		this._addCmd(Command.line(x, y))
 		this._close()
 		this.updateElement()
-		this.updated()
 		return this
 	}
 
@@ -148,7 +143,6 @@ export default class Path extends Elemental {
 		const cmd = Command.quadratic(cp1X, cp1Y, x, y)
 		this._addCmd(cmd)
 		this.updateElement()
-		this.updated()
 		return this
 	}
 
@@ -159,7 +153,6 @@ export default class Path extends Elemental {
 		this._addCmd(Command.quadratic(cp1X, cp1Y, x, y))
 		this._close()
 		this.updateElement()
-		this.updated()
 		return this
 	}
 
@@ -169,7 +162,6 @@ export default class Path extends Elemental {
 		const cmd = Command.cubic(cp1X, cp1Y, cp2X, cp2Y, x, y)
 		this._addCmd(cmd)
 		this.updateElement()
-		this.updated()
 		return this
 	}
 
@@ -181,7 +173,6 @@ export default class Path extends Elemental {
 		this._addCmd(Command.cubic(cp1X, cp1Y, cp2X, cp2Y, x, y))
 		this._close()
 		this.updateElement()
-		this.updated()
 		return this
 	}
 
@@ -191,7 +182,6 @@ export default class Path extends Elemental {
 	close() {
 		if (this._close()) {
 			this.updateElement()
-			this.updated()
 		}
 
 		return this
@@ -202,7 +192,6 @@ export default class Path extends Elemental {
 	open() {
 		if (this._open()) {
 			this.updateElement()
-			this.updated()
 		}
 
 		return this
@@ -213,7 +202,6 @@ export default class Path extends Elemental {
 	moveBy(dx, dy) {
 		if (this._moveBy(dx, dy)) {
 			this.updateElement()
-			this.updated()
 		}
 
 		return this
@@ -250,7 +238,6 @@ export default class Path extends Elemental {
 		})
 
 		this.updateElement()
-		this.updated()
 		return this
 	}
 
@@ -265,21 +252,15 @@ export default class Path extends Elemental {
 
 		this.doMuted(() => {
 			for (const cmd of this._commands) {
-				cmd.setXY(scale(cmd.x, originX), scale(cmd.y, originY))
+				cmd.setXY(
+					scale(cmd.x, originX), //
+					scale(cmd.y, originY), //
+				)
 			}
 		})
 
 		this.updateElement()
-		this.updated()
 		return this
-	}
-
-	// Updates the element's 'd' attribute with any changes.
-	// Done automatically when a command is added, modified,
-	// or removed.
-	updateElement() {
-		this.attr('d', this.toString())
-		this._updateBBox()
 	}
 
 	// Returns true if the passed command is in the path.
@@ -297,8 +278,6 @@ export default class Path extends Elemental {
 		}
 
 		newPath.updateElement()
-		newPath.updated()
-
 		return newPath
 	}
 
@@ -311,18 +290,20 @@ export default class Path extends Elemental {
 			.join(' ') //
 	}
 
-	// Override to surpress updates when iterating.
-	updated() {
-		if (!this._suppressUpdate) {
-			super.updated()
-		}
-	}
-
 	_generateElement() {
 		const path = document.createElementNS(NAME_SPACE, 'path')
 		this._setElement(path)
 		this.updateElement()
-		this.updated()
+	}
+
+	// Updates the element's 'd' attribute with any changes.
+	// Done automatically when a command is added, modified,
+	// or removed.
+	updateElement() {
+		this.doUpdate(() => {
+			this.attr('d', this.toString())
+			this._updateBBox()
+		})
 	}
 
 	_updateBBox() {
@@ -349,7 +330,7 @@ export default class Path extends Elemental {
 			cmds.push(cmd)
 		}
 
-		cmd.onUpdate(this.notifier)
+		cmd.onUpdate(this._onUpdateElement)
 	}
 
 	_removeCmd(cmd) {
@@ -357,7 +338,7 @@ export default class Path extends Elemental {
 			return false
 		}
 
-		cmd.offUpdate(this.notifier)
+		cmd.offUpdate(this._onUpdateElement)
 		this._commands.remove(cmd)
 
 		return true

@@ -31,6 +31,10 @@ export default class Elemental extends Updateable {
 		return this._element
 	}
 
+	get dirty() {
+		return this._attrs.dirty || this._styles.dirty || this._transforms.dirty
+	}
+
 	_setSVG(svg) {
 		this._svg = svg
 	}

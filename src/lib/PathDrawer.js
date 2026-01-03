@@ -38,14 +38,6 @@ export default class PathDrawer extends Cheddar.Group {
 		this._path = Cheddar.path(hov.x, hov.y)
 		this._path.lineTo(hov.x, hov.y)
 		this._guideCmd = this._path.lastCommand
-		this._guideCmd.onUpdate(() => {
-			console.log(
-				this._path.element.getAttribute('d'),
-				' - ',
-				this._guideCmd.x,
-				this._guideCmd.y
-			)
-		})
 
 		this.add(this._path)
 	}
