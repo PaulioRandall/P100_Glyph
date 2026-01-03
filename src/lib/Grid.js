@@ -102,6 +102,10 @@ export default class Grid extends Cheddar.Group {
 
 		for (const child of this.children) {
 			if (child.cellbox.contains(...coords)) {
+				if (child === this._hovered) {
+					return
+				}
+
 				this._hovered = child
 				this._svg.dispatch('gridcellhover', { cell: child })
 				return

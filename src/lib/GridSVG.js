@@ -2,9 +2,11 @@ import Cheddar from '$cheddar'
 import Moonfire from '$moonfire'
 import Grid from './Grid.js'
 import EventUtil from './EventUtil.js'
+import CellHalo from './CellHalo.js'
 
 export default class GridSVG extends Cheddar.SVG {
 	_grid = new Grid()
+	_cellHalo = new CellHalo()
 
 	constructor() {
 		super()
@@ -18,6 +20,7 @@ export default class GridSVG extends Cheddar.SVG {
 		})
 
 		this.add(this._grid)
+		this.add(this._cellHalo)
 	}
 
 	get grid() {
@@ -83,17 +86,8 @@ export default class GridSVG extends Cheddar.SVG {
 		const widthLimit = (this._grid.gridbox.width / 2) * scale
 		const heightLimit = (this._grid.gridbox.height / 2) * scale
 
-		if (move[0] < -widthLimit) {
-			move[0] = -widthLimit
-		} else if (move[0] > widthLimit) {
-			move[0] = widthLimit
-		}
-
-		if (move[1] < -heightLimit) {
-			move[1] = -heightLimit
-		} else if (move[1] > heightLimit) {
-			move[1] = heightLimit
-		}
+		move[0] = limitValue(move[0], widthLimit)
+		move[1] = limitValue(move[1], heightLimit)
 
 		this.group.transform('translate', move)
 	}
@@ -111,4 +105,13 @@ export default class GridSVG extends Cheddar.SVG {
 		this.style('cursor', 'auto')
 		this.dispatch('panend')
 	}
+}
+
+function limitValue(value, limit) {
+	if (value < -limit) {
+		return -limit
+	} else if (value > limit) {
+		return limit
+	}
+	return value
 }

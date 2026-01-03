@@ -241,6 +241,12 @@ export default class Command extends Updateable {
 		}
 	}
 
+	// Returns true if the passed X & Y value equal the
+	// commands X & Y.
+	hasXY(x, y) {
+		return this._x === x && this._y === y
+	}
+
 	// Returns true if a call to straighten will modify the
 	// command, i.e. returns false if a move 'M', line 'L' or
 	// close 'Z' command.

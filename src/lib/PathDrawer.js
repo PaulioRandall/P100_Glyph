@@ -67,13 +67,11 @@ export default class PathDrawer extends Cheddar.Group {
 
 		p.removeCommand(this._guideCmd)
 
-		if (p.firstCommand.x === hov.x && p.firstCommand.y === hov.y) {
+		if (p.firstCommand.hasXY(hov.x, hov.y)) {
 			p.close()
 		}
 
-		// TODO: Where to put path?
-		//       Create Diagram class to house drawn components.
-
+		this.svg.dispatch('newpath', { path: this._path })
 		this._path = null
 
 		this.svg.dispatch('switchmode', {

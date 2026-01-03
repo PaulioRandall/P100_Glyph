@@ -3,25 +3,19 @@
 	import Cheddar from '$cheddar'
 	import GridSVG from './GridSVG.js'
 	import Grid from './Grid.js'
-	import CellHalo from './CellHalo.js'
-	import PathDrawer from './PathDrawer.js'
 	import ModeManager from './ModeManager.js'
+	import Diagram from './Diagram.js'
 	import { ButtonBar, TextButton } from './components'
 	
 	let container = null
 	let svg = null
-	let cellHalo = null
+	let diagram = null
 	let modeManager = null
 
-	// TODO: A Cheddar.Group called ModeManager. It handles
-	//       switching modes by changing what element is
-	//       added to the group, e.g. switching to 'draw'
-	//       mode will remove the current element then create
-	//       and add a PathDrawer to its internal group.
 	onMount(async () => {		
 		svg = new GridSVG()
 		modeManager = new ModeManager().addTo(svg)
-		cellHalo = new CellHalo()
+		diagram = new Diagram().addTo(svg)
 
 		container.appendChild(svg.element)
 		
@@ -31,7 +25,6 @@
 		svg.grid.buffer(5)
 
 		svg.showGrid()
-		svg.add(cellHalo)	
 	})
 
 	function sizeToParent() {
@@ -55,7 +48,6 @@
 		class="canvas-container">
 		<!-- InnerHTML handled by Two instance -->
 	</div>
-
 
 	<ButtonBar>
 		<TextButton onclick={beginPathDrawing}>Draw Path</TextButton>
