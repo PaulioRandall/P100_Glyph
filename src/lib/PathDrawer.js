@@ -71,6 +71,13 @@ export default class PathDrawer extends Cheddar.Group {
 			p.close()
 		}
 
+		// TODO: Where to put path?
+		//       Create Diagram class to house drawn components.
+
 		this._path = null
+
+		this.svg.dispatch('switchmode', {
+			mode: 'MODE_IDLE',
+		})
 	}
 }

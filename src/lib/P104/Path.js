@@ -254,7 +254,7 @@ export default class Path extends Elemental {
 			for (const cmd of this._commands) {
 				cmd.setXY(
 					scale(cmd.x, originX), //
-					scale(cmd.y, originY), //
+					scale(cmd.y, originY) //
 				)
 			}
 		})

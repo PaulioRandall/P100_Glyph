@@ -5,13 +5,13 @@
 	import Grid from './Grid.js'
 	import CellHalo from './CellHalo.js'
 	import PathDrawer from './PathDrawer.js'
+	import ModeManager from './ModeManager.js'
 	import { ButtonBar, TextButton } from './components'
 	
 	let container = null
 	let svg = null
-	let grid = null
 	let cellHalo = null
-	let pathDrawer = null
+	let modeManager = null
 
 	// TODO: A Cheddar.Group called ModeManager. It handles
 	//       switching modes by changing what element is
@@ -20,6 +20,9 @@
 	//       and add a PathDrawer to its internal group.
 	onMount(async () => {		
 		svg = new GridSVG()
+		modeManager = new ModeManager().addTo(svg)
+		cellHalo = new CellHalo()
+
 		container.appendChild(svg.element)
 		
 		await tick()
@@ -28,9 +31,7 @@
 		svg.grid.buffer(5)
 
 		svg.showGrid()
-
-		cellHalo = new CellHalo()
-		svg.add(cellHalo)		
+		svg.add(cellHalo)	
 	})
 
 	function sizeToParent() {
@@ -40,8 +41,7 @@
 	}
 
 	function beginPathDrawing() {
-		pathDrawer = new PathDrawer()
-		svg.add(pathDrawer)
+		modeManager.switchToDrawMode()
 	}
 </script>
 
