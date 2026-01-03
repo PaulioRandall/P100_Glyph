@@ -61,21 +61,45 @@ export default class SVG extends Elemental {
 		return this
 	}
 
+	// Resize the viewbox fit the browser window.
 	sizeToWindow() {
 		this._viewbox.sizeToWindow()
 		return this
 	}
 
+	// Resize the viewbox to match the underlying element's
+	// client bounding box.
 	sizeToElement() {
 		const rect = this.element.getBoundingClientRect()
 		this._viewbox.setEdges(0, 0, rect.width, rect.height)
 		return this
 	}
 
+	// Calculate the X & Y ratios between the viewbox size
+	// and element size, i.e. how much smaller is the
+	// viewbox dimensions than the element client dimensions?
+	//
+	// Note that a value greater than 1 means that the
+	// element client diemension is less than the viewbox
+	// while a value of 1 means they're both the same length.
 	elementToViewbox() {
 		return [
 			this.viewbox.width / this.element.clientWidth,
 			this.viewbox.height / this.element.clientHeight,
+		]
+	}
+
+	// Calculate the X & Y ratios between the element size
+	// and viewbox size, i.e. how much smaller is the
+	// element client dimensions than the viewbox dimensions?
+	//
+	// Note that a value greater than 1 means that the
+	// viewbox diemension is less than the element client
+	// while a value of 1 means they're both the same length.
+	viewboxToElement() {
+		return [
+			this.element.clientWidth / this.viewbox.width,
+			this.element.clientHeight / this.viewbox.height,
 		]
 	}
 
