@@ -80,7 +80,6 @@ export default class GridSVG extends Cheddar.SVG {
 		//       - if the SVG is wider or taller than the
 		//         screen then only allow the panning up to the
 		//         SVG edges.
-		//       OR use mapClientToViewbox somehow
 		const widthLimit = (this._grid.gridbox.width / 2) * scale
 		const heightLimit = (this._grid.gridbox.height / 2) * scale
 
