@@ -1,4 +1,4 @@
-import { NAME_SPACE } from './cheddar.js'
+import { NAME_SPACE } from './util.js'
 import Elemental from './Elemental.js'
 import BBox from './BBox.js'
 

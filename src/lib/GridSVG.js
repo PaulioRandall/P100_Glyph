@@ -1,12 +1,11 @@
 import Cheddar from '$cheddar'
 import Moonfire from '$moonfire'
-import Grid from './Grid.js'
 import EventUtil from './EventUtil.js'
-import CellHalo from './CellHalo.js'
+import { Grid, GridCellHalo } from './grid'
 
 export default class GridSVG extends Cheddar.SVG {
 	_grid = new Grid()
-	_cellHalo = new CellHalo()
+	_gridCellHalo = new GridCellHalo()
 
 	constructor() {
 		super()
@@ -20,7 +19,7 @@ export default class GridSVG extends Cheddar.SVG {
 		})
 
 		this.add(this._grid)
-		this.add(this._cellHalo)
+		this.add(this._gridCellHalo)
 	}
 
 	get grid() {

@@ -1,4 +1,4 @@
-import { NAME_SPACE, boundsOfCoords } from './cheddar.js'
+import { NAME_SPACE, boundsOfCoords } from './util.js'
 import ArrayUtil from '../P101'
 import Elemental from './Elemental.js'
 import Command from './Command.js'

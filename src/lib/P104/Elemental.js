@@ -1,5 +1,5 @@
 import Moonfire from '../P102'
-import { randomId } from './cheddar.js'
+import { randomId } from './util.js'
 import Updateable from './Updateable.js'
 import DirtyMap from './DirtyMap.js'
 

@@ -40,4 +40,5 @@ export function boundsOfCoords(iterable) {
 export default {
 	NAME_SPACE,
 	randomId,
+	boundsOfCoords,
 }

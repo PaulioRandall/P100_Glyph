@@ -12,6 +12,10 @@
 	let diagram = null
 	let modeManager = null
 
+	// TODO: Touch libraries:
+	//       - https://interactjs.io/
+	//       - https://zingchart.github.io/zingtouch/
+
 	onMount(async () => {		
 		svg = new GridSVG().add(new EventLogger())
 		modeManager = new ModeManager().addTo(svg)
