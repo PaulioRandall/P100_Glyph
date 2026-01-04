@@ -25,14 +25,14 @@ export default class ModeManager extends Cheddar.Group {
 		this.switchToMode(e.detail.mode)
 	}
 
-	switchToMode(mode) {
+	switchToMode(mode, ...args) {
 		switch (mode) {
 			case ModeManager.MODE_IDLE:
-				this.switchToIdleMode()
+				this.switchToIdleMode(...args)
 				return
 
 			case ModeManager.MODE_DRAW_PATH:
-				this.switchToDrawMode()
+				this.switchToDrawMode(...args)
 				return
 
 			default:
@@ -44,8 +44,16 @@ export default class ModeManager extends Cheddar.Group {
 		this._switchToMode(ModeManager.MODE_IDLE)
 	}
 
-	switchToDrawMode() {
-		this._switchToMode(ModeManager.MODE_DRAW_PATH, new PathDrawer())
+	switchToDrawMode(path) {
+		if (!path) {
+			path = Cheddar.path()
+			this.svg.dispatch('pathcreated', { path })
+		}
+
+		this._switchToMode(
+			ModeManager.MODE_DRAW_PATH, //
+			new PathDrawer(path) //
+		)
 	}
 
 	_switchToMode(newMode, newElem = null) {

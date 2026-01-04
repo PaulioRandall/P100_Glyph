@@ -61,6 +61,10 @@ export default class Command extends Updateable {
 		return this._type
 	}
 
+	get hasPoint() {
+		return this._x !== null
+	}
+
 	get x() {
 		return this._x
 	}

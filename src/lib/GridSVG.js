@@ -49,6 +49,7 @@ export default class GridSVG extends Cheddar.SVG {
 		super.updated()
 	}
 
+	/*
 	__on__wheel(e) {
 		const factor = e.deltaY < 0 ? 0.1 : -0.1
 		const oldScale = this.group.transform('scale') || 1
@@ -105,6 +106,7 @@ export default class GridSVG extends Cheddar.SVG {
 		this.style('cursor', 'auto')
 		this.dispatch('panend')
 	}
+	*/
 }
 
 function limitValue(value, limit) {

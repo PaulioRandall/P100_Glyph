@@ -47,6 +47,10 @@ export default class Path extends Elemental {
 		return this._commands
 	}
 
+	get pointCommands() {
+		return this._commands.filter((cmd) => cmd.hasPoint)
+	}
+
 	get firstCommand() {
 		if (this._commands.length > 0) {
 			return this._commands[0]
@@ -58,6 +62,18 @@ export default class Path extends Elemental {
 		if (this._commands.length > 0) {
 			return this._commands[this._commands.length - 1]
 		}
+		return null
+	}
+
+	// Returns the last command that has XY values.
+	get lastPointCommand() {
+		for (let i = this._commands.length - 1; i >= 0; i--) {
+			const cmd = this._commands[i]
+			if (cmd.hasPoint) {
+				return cmd
+			}
+		}
+
 		return null
 	}
 

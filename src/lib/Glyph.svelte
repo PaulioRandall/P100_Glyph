@@ -2,9 +2,9 @@
 	import { onMount, tick } from 'svelte'
 	import Cheddar from '$cheddar'
 	import GridSVG from './GridSVG.js'
-	import Grid from './Grid.js'
 	import ModeManager from './ModeManager.js'
 	import Diagram from './Diagram.js'
+	import EventLogger from './EventLogger.js'
 	import { ButtonBar, TextButton } from './components'
 	
 	let container = null
@@ -13,7 +13,7 @@
 	let modeManager = null
 
 	onMount(async () => {		
-		svg = new GridSVG()
+		svg = new GridSVG().add(new EventLogger())
 		modeManager = new ModeManager().addTo(svg)
 		diagram = new Diagram().addTo(svg)
 

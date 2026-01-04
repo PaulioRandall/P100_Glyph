@@ -7,7 +7,7 @@ export default class Diagram extends Cheddar.Group {
 		return [...this._shapes]
 	}
 
-	__onsvg__newpath(e) {
+	__onsvg__pathcreated(e) {
 		const path = e.detail.path
 		this._shapes.push(path)
 		this.add(path)

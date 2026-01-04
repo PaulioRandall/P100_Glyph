@@ -1,3 +1,4 @@
+import List from './List.js'
 import Updateable from './Updateable.js'
 import Elemental from './Elemental.js'
 import BBox from './BBox.js'
@@ -13,6 +14,7 @@ import Circle from './Circle.js'
 export default {
 	Updateable,
 	Elemental,
+	List,
 
 	// BBox
 	BBox,
