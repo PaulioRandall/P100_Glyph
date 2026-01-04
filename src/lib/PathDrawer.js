@@ -1,3 +1,4 @@
+import ArrayUtil from '$arrayutil'
 import Cheddar from '$cheddar'
 import EventUtil from './EventUtil.js'
 
@@ -106,7 +107,7 @@ export default class PathDrawer extends Cheddar.Group {
 		}
 
 		const refCmd = this._cmdMove || this._cmd
-		const priorPoint = Cheddar.List.itemBefore(cmds, refCmd)
+		const priorPoint = ArrayUtil.itemBefore(cmds, refCmd)
 
 		if (!priorPoint) {
 			return false

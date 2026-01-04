@@ -1,5 +1,5 @@
 import { NAME_SPACE, boundsOfCoords } from './cheddar.js'
-import List from './List.js'
+import ArrayUtil from '../P101'
 import Elemental from './Elemental.js'
 import Command from './Command.js'
 import BBox from './BBox.js'
@@ -20,7 +20,7 @@ export default class Path extends Elemental {
 			.lineToClose() //
 	}
 
-	_commands = new List()
+	_commands = []
 	_closed = false
 	_bbox = new BBox()
 	_onUpdateElement = this.updateElement.bind(this)
@@ -146,7 +146,7 @@ export default class Path extends Elemental {
 	// Creates a new line to the first commands X and Y
 	// values.
 	lineToClose() {
-		const { x, y } = this.commands[0]
+		const { x, y } = this._commands[0]
 		this._addCmd(Command.line(x, y))
 		this._close()
 		this.updateElement()
@@ -165,7 +165,7 @@ export default class Path extends Elemental {
 	// Creates a quadratic curve via the {cp1X,cp1Y}
 	// and ending the X and Y point of the first command.
 	quadraticToClose(cp1X, cp1Y) {
-		const { x, y } = this.commands[0]
+		const { x, y } = this._commands[0]
 		this._addCmd(Command.quadratic(cp1X, cp1Y, x, y))
 		this._close()
 		this.updateElement()
@@ -185,7 +185,7 @@ export default class Path extends Elemental {
 	// {cp2X,cp2Y} and ending the X and Y point of the first
 	// command.
 	cubicToClose(cp1X, cp1Y, cp2X, cp2Y) {
-		const { x, y } = this.commands[0]
+		const { x, y } = this._commands[0]
 		this._addCmd(Command.cubic(cp1X, cp1Y, cp2X, cp2Y, x, y))
 		this._close()
 		this.updateElement()
@@ -341,7 +341,7 @@ export default class Path extends Elemental {
 		const cmds = this._commands
 
 		if (this._closed) {
-			cmds.insertBefore(cmds.last(), cmd)
+			ArrayUtil.insertBefore(cmds, ArrayUtil.last(cmds), cmd)
 		} else {
 			cmds.push(cmd)
 		}
@@ -355,7 +355,7 @@ export default class Path extends Elemental {
 		}
 
 		cmd.offUpdate(this._onUpdateElement)
-		this._commands.remove(cmd)
+		ArrayUtil.remove(this._commands, cmd)
 
 		return true
 	}

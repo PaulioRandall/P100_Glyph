@@ -1,4 +1,4 @@
-import List from './List.js'
+import ArrayUtil from '../P101'
 
 // Intended for extension by objects that update when
 // specific parts of their state change.
@@ -12,7 +12,7 @@ import List from './List.js'
 // notified.
 export default class Updateable {
 	_notifier = this.updated.bind(this)
-	_listeners = new List()
+	_listeners = []
 	_muted = false
 
 	// Returns the notifier function that calls update with
@@ -44,7 +44,7 @@ export default class Updateable {
 
 	// Unregisters a function registered throught onUpdate.
 	offUpdate(func) {
-		this._listeners.remove(func)
+		ArrayUtil.remove(this._listeners, func)
 	}
 
 	// Prevents notifications from being sent on update.

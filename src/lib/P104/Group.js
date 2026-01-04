@@ -1,6 +1,6 @@
+import ArrayUtil from '../P101'
 import { NAME_SPACE } from './cheddar.js'
 import Elemental from './Elemental.js'
-import List from './List.js'
 import BBox from './BBox.js'
 
 // A standard SVG group for clustering a set of elements
@@ -11,7 +11,7 @@ export default class Group extends Elemental {
 		return new Group()
 	}
 
-	_elementals = new List()
+	_elementals = []
 	_bbox = new BBox()
 
 	// Returns the number of elementals in the group.
@@ -132,7 +132,7 @@ export default class Group extends Elemental {
 			e.offUpdate(this.notifier)
 
 			this.element.removeChild(e.element)
-			this._elementals.remove(e)
+			ArrayUtil.remove(this._elementals, e)
 			e._removedFromGroup()
 			e._setSVG(null)
 		}

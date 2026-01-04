@@ -1,7 +1,7 @@
+import Moonfire from '../P102'
 import { randomId } from './cheddar.js'
 import Updateable from './Updateable.js'
 import DirtyMap from './DirtyMap.js'
-import Moonfire from './moonfire'
 
 // Classes extending Elemental map to a single HTML
 // element.

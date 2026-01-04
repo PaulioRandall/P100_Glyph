@@ -1,10 +1,12 @@
+import ArrayUtil from '../P101'
+
 export function nu(updateable) {
 	if (updateable?._notifier) {
 		updateable._notifier = null
 	}
 
 	if (updateable?._listeners) {
-		updateable._listeners.clear()
+		ArrayUtil.clear(updateable._listeners)
 	}
 
 	return updateable
