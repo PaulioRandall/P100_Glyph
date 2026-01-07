@@ -1,4 +1,4 @@
-# Glyph (P100)
+# Glyph
 
 A simple tool for creating small icons.
 
@@ -9,8 +9,8 @@ A simple tool for creating small icons.
 ## Quick Setup
 
 ```bash
-git clone https://github.com/PaulioRandall/P100_Glyph.git
-cd P100_glyph
+git clone https://github.com/PaulioRandall/glyph.git
+cd glyph
 
 rm -f package-lock.json
 npm i
